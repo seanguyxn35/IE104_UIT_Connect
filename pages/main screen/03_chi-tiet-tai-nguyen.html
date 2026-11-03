@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EdgeVision-Traffic | UIT Connect</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            primary: '#1F4E78',
+            'primary-dark': '#163A59',
+            'primary-light': '#E6F0F7',
+            'neutral-dark': '#1A1A1A',
+            'neutral-muted': '#5F6368',
+            'border-subtle': '#E1E5EA',
+            'bg-page': '#F5F7FA',
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .tab-btn.active {
+      color: #1F4E78;
+      border-bottom-color: #1F4E78;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-bg-page font-sans text-neutral-dark text-[14px] leading-relaxed antialiased">
+<!-- ==================== 1. PUBLIC HEADER (TRANG CHỦ) ==================== -->
+<header class="sticky top-0 z-50 w-full h-[72px] bg-white border-b border-[#E1E5EA]">
+<div class="max-w-[1280px] h-full mx-auto px-6 flex items-center justify-between">
+<!-- Logo -->
+<a data-path="trang-chu" class="flex items-center gap-3 group" href="#">
+<div class="w-10 h-10 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight shadow-sm transition-transform group-hover:scale-105">UIT</div>
+<div class="flex flex-col">
+<span class="font-bold text-[18px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[12px] text-[#5F6368] font-medium leading-tight mt-1">Cổng Kết nối Nghiên cứu &amp; Hợp tác</span>
+</div>
+</a>
+<!-- Menu điều hướng -->
+<nav class="hidden md:flex items-center h-full gap-1 lg:gap-2">
+<a data-path="kham-pha-tai-nguyen" class="h-full flex items-center px-3 text-[14px] font-semibold text-[#1F4E78] border-b-2 border-[#1F4E78]" href="#">Khám phá tài nguyên</a>
+<a data-path="ghep-nhom" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Ghép nhóm</a>
+<a data-path="giang-vien" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Giảng viên</a>
+<a data-path="bai-toan-doanh-nghiep" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Bài toán doanh nghiệp</a>
+<a data-path="tai-tro" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Tài trợ</a>
+</nav>
+<!-- Đăng nhập / Đăng ký -->
+<div class="flex items-center gap-3">
+<a data-path="dang-nhap" class="px-4 py-2 text-[14px] font-semibold text-[#1F4E78] hover:bg-[#E6F0F7] rounded-[8px] transition-colors" href="#">Đăng nhập</a>
+<a data-path="dang-ky" class="px-5 py-2 text-[14px] font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-[8px] shadow-sm transition-colors" href="#">Đăng ký</a>
+</div>
+</div>
+</header>
+<!-- ==================== 2. MAIN CONTAINER ==================== -->
+<main class="max-w-[1280px] mx-auto px-6 py-6">
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 text-[12px] text-neutral-muted mb-6">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[15px]">home</span>
+<span>Trang chủ</span>
+</a>
+<span>/</span>
+<a class="hover:text-primary transition-colors" href="#">Kho tài nguyên</a>
+<span>/</span>
+<a class="hover:text-primary transition-colors" href="#">AI &amp; Thị giác máy tính</a>
+<span>/</span>
+<span class="text-neutral-dark font-medium">EdgeVision-Traffic</span>
+</nav>
+<!-- Header Đề tài (Hero Card) -->
+<section class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm mb-6">
+<!-- Eyebrow row: Badges & TRL Indicator -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+<div class="flex flex-wrap items-center gap-2.5">
+<span class="px-3 py-1 rounded-[6px] bg-emerald-50 text-emerald-700 text-[12px] font-semibold flex items-center gap-1.5 border border-emerald-200">
+<span class="material-symbols-outlined text-[16px]">memory</span>
+            Sản phẩm công nghệ
+          </span>
+<span class="px-3 py-1 rounded-[6px] bg-emerald-50 text-emerald-800 text-[12px] font-semibold flex items-center gap-1 border border-emerald-200">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+            Đã thẩm định bởi Giảng viên &amp; Hội đồng Khoa học UIT
+          </span>
+<span class="px-3 py-1 rounded-[6px] bg-slate-100 text-neutral-dark text-[12px] font-medium border border-border-subtle">
+            Mã đề tài: <span class="font-semibold">UIT-RD-2024-089</span>
+</span>
+</div>
+<!-- TRL Interactive Meter -->
+<div class="bg-slate-50 px-3.5 py-1.5 rounded-[8px] border border-border-subtle flex items-center gap-3">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-primary text-white font-mono text-[12px] font-bold">TRL 6 / 9</span>
+<span class="text-[12px] font-medium text-neutral-dark">Thử nghiệm môi trường thực tế</span>
+</div>
+<!-- 9-segment meter -->
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 1: Nguyên lý cơ bản"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 2: Khái niệm công nghệ"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 3: Minh chứng thực nghiệm"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 4: Xác thực tại phòng Lab"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 5: Tích hợp mô phỏng"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-primary" title="TRL 6: Thử nghiệm thực địa"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-slate-200" title="TRL 7: Nguyên mẫu vận hành"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-slate-200" title="TRL 8: Hoàn thiện hệ thống"></span>
+<span class="w-2.5 h-3.5 rounded-[2px] bg-slate-200" title="TRL 9: Triển khai ứng dụng"></span>
+</div>
+</div>
+</div>
+<!-- Tiêu đề H1 -->
+<h1 class="text-[32px] font-bold text-neutral-dark leading-snug mb-3">
+        Hệ thống AI Edge giám sát an toàn giao thông đô thị thông minh thời gian thực (EdgeVision-Traffic)
+      </h1>
+<!-- Metadata thông tin -->
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-neutral-muted mb-5">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+          Ngày công bố: 15/10/2024
+        </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">copyright</span>
+          Quyền SHTT: Đăng ký Cục Sở hữu Trí tuệ số <span class="font-semibold text-neutral-dark">4-2024-11892</span>
+</span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+          Đơn vị bảo trợ: Khoa Khoa học Máy tính - Lab CV&amp;PR UIT
+        </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+          Giấy phép mở: MIT Academic
+        </span>
+</div>
+<!-- Hàng nút hành động -->
+<div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border-subtle">
+<div class="flex flex-wrap items-center gap-3">
+<button class="px-5 py-2.5 rounded-[8px] bg-primary hover:bg-primary-dark text-white text-[14px] font-semibold flex items-center gap-2 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">handshake</span>
+<span>Kết nối Chuyển giao</span>
+</button>
+<button class="px-4 py-2.5 rounded-[8px] bg-primary-light hover:bg-slate-200 text-primary text-[14px] font-semibold flex items-center gap-2 transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">fork_right</span>
+<span>Kế thừa &amp; Phát triển đề tài</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-2.5">
+<a class="px-3.5 py-2 rounded-[8px] bg-slate-50 hover:bg-slate-100 text-neutral-dark text-[14px] font-medium flex items-center gap-2 transition-colors border border-border-subtle" href="#">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg>
+<span>Kho mã nguồn</span>
+<span class="text-[12px] px-1.5 py-0.5 rounded bg-slate-200 text-neutral-dark font-medium">142 sao</span>
+</a>
+<a class="px-3.5 py-2 rounded-[8px] bg-slate-50 hover:bg-slate-100 text-neutral-dark text-[14px] font-medium flex items-center gap-2 transition-colors border border-border-subtle" href="#">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+<span>Báo cáo kỹ thuật (PDF)</span>
+</a>
+</div>
+</div>
+</section>
+<!-- ==================== 3. TWO-COLUMN LAYOUT ==================== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- CỘT TRÁI (8 CỘT) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Navigation Tabs -->
+<div class="bg-white rounded-[12px] border border-border-subtle px-4 overflow-x-auto shadow-sm">
+<div class="flex items-center gap-6">
+<button class="tab-btn active py-3.5 text-[14px] text-neutral-muted hover:text-neutral-dark border-b-2 border-transparent transition-all flex items-center gap-2 whitespace-nowrap" onclick="switchMainTab('overview', this)">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span>Tổng quan &amp; Hiệu năng</span>
+</button>
+<button class="tab-btn py-3.5 text-[14px] text-neutral-muted hover:text-neutral-dark border-b-2 border-transparent transition-all flex items-center gap-2 whitespace-nowrap" onclick="switchMainTab('lineage', this)">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+<span>Phả hệ Kế thừa</span>
+<span class="px-1.5 py-0.5 rounded-full bg-primary-light text-primary text-[12px] font-semibold">3 cấp</span>
+</button>
+<button class="tab-btn py-3.5 text-[14px] text-neutral-muted hover:text-neutral-dark border-b-2 border-transparent transition-all flex items-center gap-2 whitespace-nowrap" onclick="switchMainTab('team', this)">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+<span>Đội ngũ tác giả &amp; GVHD</span>
+</button>
+<button class="tab-btn py-3.5 text-[14px] text-neutral-muted hover:text-neutral-dark border-b-2 border-transparent transition-all flex items-center gap-2 whitespace-nowrap" onclick="switchMainTab('contributions', this)">
+<span class="material-symbols-outlined text-[18px]">military_tech</span>
+<span>Đóng góp mới</span>
+</button>
+</div>
+</div>
+<!-- TAB PANEL 1: TỔNG QUAN & HIỆU NĂNG -->
+<div class="tab-panel active space-y-6" id="panel-overview">
+<!-- Khối Tóm tắt đề tài (Abstract) -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[20px] text-primary">subject</span>
+<h2 class="text-[24px] font-semibold text-neutral-dark">Tóm tắt đề tài</h2>
+</div>
+<p class="text-[14px] text-neutral-dark leading-relaxed mb-4 text-justify">
+              Ách tắc giao thông và vi phạm trật tự làn đường tại các đô thị trọng điểm đang đặt ra thách thức nghiêm trọng về độ trễ xử lý dữ liệu và băng thông truyền dẫn video về máy chủ trung tâm. Đề tài <span class="font-semibold text-primary">EdgeVision-Traffic</span> đề xuất giải pháp mạng nơ-ron tích chập tối ưu hóa chạy trực tiếp tại biên trên vi xử lý nhúng chuyên dụng. Hệ thống phân tích luồng camera độ phân giải cao theo thời gian thực với độ trễ xử lý thấp (dưới 25 mili-giây), phát hiện đồng thời 8 nhóm phương tiện, nhận diện tức thời các hành vi vi phạm: đi sai làn đường, vượt đèn tín hiệu, đi ngược chiều và không đội mũ bảo hiểm với độ chính xác đạt 96.4%.
+            </p>
+<div class="bg-primary-light/50 rounded-[8px] p-4 border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-[8px] bg-primary text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+</div>
+<div>
+<div class="text-[14px] font-semibold text-neutral-dark">Sẵn sàng tích hợp cổng kết nối ngoại vi</div>
+<div class="text-[12px] text-neutral-muted">Hỗ trợ giao thức truyền thông báo cảnh báo tự động về Trung tâm Giám sát Đô thị.</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-[6px] bg-white text-primary text-[12px] font-semibold border border-primary/30 shrink-0 self-start sm:self-auto">
+                Chuẩn kết nối mở
+              </span>
+</div>
+</div>
+<!-- Khối Chỉ số Benchmark Kỹ thuật -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">speed</span>
+<h2 class="text-[24px] font-semibold text-neutral-dark">Chỉ số thực nghiệm kỹ thuật</h2>
+</div>
+<span class="text-[12px] text-neutral-muted">Đo lường tại Phòng Lab CV&amp;PR UIT – Kiểm thử liên tục 72 giờ</span>
+</div>
+<!-- 4 Thẻ số liệu lớn -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+<div class="bg-slate-50 rounded-[8px] p-4 border border-border-subtle">
+<span class="text-[12px] text-neutral-muted block mb-1">Độ trễ xử lý</span>
+<div class="flex items-baseline gap-1 my-1">
+<span class="text-[24px] font-bold text-primary">22</span>
+<span class="text-[12px] text-neutral-muted font-medium">ms / khung</span>
+</div>
+<div class="text-[12px] text-emerald-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+<span>Giảm 38% độ trễ</span>
+</div>
+</div>
+<div class="bg-slate-50 rounded-[8px] p-4 border border-border-subtle">
+<span class="text-[12px] text-neutral-muted block mb-1">Tốc độ xử lý khung hình</span>
+<div class="flex items-baseline gap-1 my-1">
+<span class="text-[24px] font-bold text-primary">38.5</span>
+<span class="text-[12px] text-neutral-muted font-medium">khung/giây</span>
+</div>
+<div class="text-[12px] text-emerald-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Đạt chuẩn tức thời</span>
+</div>
+</div>
+<div class="bg-slate-50 rounded-[8px] p-4 border border-border-subtle">
+<span class="text-[12px] text-neutral-muted block mb-1">Độ chính xác trung bình</span>
+<div class="flex items-baseline gap-1 my-1">
+<span class="text-[24px] font-bold text-primary">96.4</span>
+<span class="text-[12px] text-neutral-muted font-medium">%</span>
+</div>
+<div class="text-[12px] text-neutral-dark font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+<span>Đo trên 45.000 mẫu</span>
+</div>
+</div>
+<div class="bg-slate-50 rounded-[8px] p-4 border border-border-subtle">
+<span class="text-[12px] text-neutral-muted block mb-1">Công suất điện tiêu thụ</span>
+<div class="flex items-baseline gap-1 my-1">
+<span class="text-[24px] font-bold text-primary">14.8</span>
+<span class="text-[12px] text-neutral-muted font-medium">Watts</span>
+</div>
+<div class="text-[12px] text-emerald-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>Tiết kiệm điện 82%</span>
+</div>
+</div>
+</div>
+<!-- Thanh đo so sánh FPS trực quan -->
+<div class="bg-slate-50 rounded-[8px] p-4 border border-border-subtle">
+<div class="text-[14px] font-semibold text-neutral-dark mb-3 flex items-center justify-between">
+<span>So sánh tốc độ xử lý giữa các thế hệ vi xử lý thử nghiệm</span>
+<span class="text-[12px] text-neutral-muted font-normal">Khung hình / giây (càng cao càng tốt)</span>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-[12px] mb-1">
+<span class="font-medium text-neutral-dark">Cấu hình biên tối ưu hiện tại (Đề tài đề xuất)</span>
+<span class="font-semibold text-primary">38.5 khung hình/giây</span>
+</div>
+<div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-2.5 rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[12px] mb-1">
+<span class="text-neutral-muted">Cấu hình vi xử lý nhúng thế hệ trước</span>
+<span class="text-neutral-dark font-medium">24.2 khung hình/giây</span>
+</div>
+<div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+<div class="bg-slate-400 h-2.5 rounded-full" style="width: 53%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[12px] mb-1">
+<span class="text-neutral-muted">Mô hình cơ sở năm 2022 (Đề tài tiền đề)</span>
+<span class="text-neutral-dark font-medium">9.1 khung hình/giây</span>
+</div>
+<div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+<div class="bg-slate-300 h-2.5 rounded-full" style="width: 20%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 2 Card: Kiến trúc xử lý & Tập dữ liệu -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Khối Kiến trúc xử lý pipeline -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[20px] text-primary">schema</span>
+<h3 class="text-[18px] font-semibold text-neutral-dark">Kiến trúc luồng xử lý</h3>
+</div>
+<p class="text-[14px] text-neutral-muted mb-4">
+                  Quy trình được cấu hình xử lý bất đồng bộ, chia sẻ bộ nhớ trực tiếp trên bo mạch chuyên dụng:
+                </p>
+<div class="space-y-2.5">
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle flex items-center gap-3">
+<span class="w-6 h-6 rounded-full bg-primary text-white text-[12px] font-bold flex items-center justify-center shrink-0">1</span>
+<span class="text-[14px] text-neutral-dark font-medium">Thu nhận luồng video camera giao thông trực tiếp</span>
+</div>
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle flex items-center gap-3">
+<span class="w-6 h-6 rounded-full bg-primary text-white text-[12px] font-bold flex items-center justify-center shrink-0">2</span>
+<span class="text-[14px] text-neutral-dark font-medium">Nhận diện phương tiện &amp; Phân vùng ranh giới làn</span>
+</div>
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle flex items-center gap-3">
+<span class="w-6 h-6 rounded-full bg-primary text-white text-[12px] font-bold flex items-center justify-center shrink-0">3</span>
+<span class="text-[14px] text-neutral-dark font-medium">Truy vết quỹ đạo &amp; So khớp vạch kẻ đường thực tế</span>
+</div>
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle flex items-center gap-3">
+<span class="w-6 h-6 rounded-full bg-primary text-white text-[12px] font-bold flex items-center justify-center shrink-0">4</span>
+<span class="text-[14px] text-neutral-dark font-medium">Kích hoạt trích xuất ảnh vi phạm và gửi cảnh báo tự động</span>
+</div>
+</div>
+</div>
+<div class="mt-4 p-2.5 bg-primary-light/40 rounded-[6px] border border-primary/20 text-center">
+<span class="text-[12px] text-primary font-medium flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                  Hệ thống kiểm nghiệm chạy ổn định, không rò rỉ tài nguyên bộ nhớ
+                </span>
+</div>
+</div>
+<!-- Khối Tập dữ liệu (Dataset) -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[20px] text-primary">dataset</span>
+<h3 class="text-[18px] font-semibold text-neutral-dark">Tập dữ liệu đặc thù đô thị</h3>
+</div>
+<p class="text-[14px] text-neutral-muted mb-3">
+                  Bộ dữ liệu bao gồm <strong>45.000 khung hình</strong> thu thập thực địa tại 4 nút giao thông trọng điểm quanh khu vực Đại học Quốc gia TP.HCM.
+                </p>
+<!-- Ảnh minh họa tập dữ liệu -->
+<div class="relative rounded-[8px] overflow-hidden h-36 mb-3 border border-border-subtle">
+<img alt="Ảnh thu thập thực tế tại giao lộ với các hộp bao nhận diện phương tiện" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy2XwLIEA1IWc2ExlS3EmPU0UO7830nsaDIvLJwXzoS6MbITUzgak99pfdX-2i1TwV6KJqoWjXFlp3OsTmaHGmbdO79LonVlRubnPQbAFPRRBAcrom-05BU1Ob7x_E8aMdYhYY0QFyZNq9Qu5MTI6SESQWdKZcSrgoXEg_UKUbRNU6iYI7NmZWcAMgjdmycLEGSuDbhnOUqgRxccfLbXVZYyeblnH_e643aYjU53U"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2.5">
+<span class="text-white text-[12px] font-medium">Ảnh gán nhãn: Xe máy, ô tô, xe buýt, hướng di chuyển và mũ bảo hiểm</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 text-[12px]">
+<div class="bg-slate-50 p-2.5 rounded-[6px] border border-border-subtle flex justify-between items-center">
+<span class="text-neutral-muted">Ảnh ban đêm &amp; mưa:</span>
+<span class="font-semibold text-neutral-dark">14.200 tấm</span>
+</div>
+<div class="bg-slate-50 p-2.5 rounded-[6px] border border-border-subtle flex justify-between items-center">
+<span class="text-neutral-muted">Số phân loại vật thể:</span>
+<span class="font-semibold text-neutral-dark">8 nhóm</span>
+</div>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between pt-2 border-t border-border-subtle text-[12px]">
+<span class="text-neutral-muted">Dung lượng: 28.4 GB</span>
+<a class="text-primary hover:underline font-semibold flex items-center gap-1" href="#">
+                  Tải dữ liệu mẫu phục vụ học thuật
+                  <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB PANEL 2: PHẢ HỆ KẾ THỪA -->
+<div class="tab-panel space-y-6" id="panel-lineage">
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-border-subtle">
+<div>
+<h2 class="text-[24px] font-semibold text-neutral-dark flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">account_tree</span>
+                  Phả hệ kế thừa học thuật
+                </h2>
+<p class="text-[12px] text-neutral-muted mt-1">
+                  Mô hình bảo tồn và kế thừa tri thức nghiên cứu khoa học qua các khóa sinh viên và phòng nghiên cứu tại UIT.
+                </p>
+</div>
+<div class="flex items-center gap-4 bg-slate-50 px-3 py-1.5 rounded-[8px] border border-border-subtle text-[12px] shrink-0">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+<span class="text-neutral-muted">Tiền đề</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="text-primary font-semibold">Hiện tại</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+<span class="text-emerald-700 font-semibold">Nhánh phát triển</span>
+</div>
+</div>
+</div>
+<!-- Sơ đồ Phả hệ UI thanh lịch -->
+<div class="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 before:top-4 before:bottom-6 before:w-0.5 before:bg-slate-200">
+<!-- CẤP 1: ĐỀ TÀI TIỀN ĐỀ -->
+<div class="relative">
+<span class="absolute -left-[27px] top-4 w-6 h-6 rounded-full bg-white border-2 border-slate-400 text-slate-500 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[14px]">history_edu</span>
+</span>
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle hover:border-slate-300 transition-colors">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[12px] font-semibold">
+                        ĐỀ TÀI TIỀN ĐỀ • NĂM 2022
+                      </span>
+<span class="px-2 py-0.5 rounded bg-white text-neutral-muted text-[12px] font-mono border border-border-subtle">
+                        TRL 4
+                      </span>
+</div>
+<span class="text-[12px] text-neutral-muted">Mã: UIT-RD-2022-041</span>
+</div>
+<h3 class="text-[16px] font-semibold text-neutral-dark mb-1">
+                    Nhận diện phương tiện giao thông đa góc nhìn trên máy chủ xử lý tập trung
+                  </h3>
+<div class="flex flex-wrap items-center gap-4 text-[12px] text-neutral-muted mb-3">
+<span>Tác giả: Nhóm Sinh viên Khóa 16</span>
+<span>GVHD: TS. Nguyễn Văn A</span>
+<span class="text-emerald-700 font-medium">Nghiệm thu Xuất sắc</span>
+</div>
+<div class="p-3 bg-white rounded-[6px] border-l-4 border-slate-400 text-[12px] text-neutral-dark">
+<strong>Đóng góp nền tảng cho đề tài hiện tại:</strong> Cung cấp bộ dữ liệu khởi điểm 10.000 ảnh chụp cổng trường UIT và mô hình cơ sở chạy trên máy chủ đồ họa rời.
+                  </div>
+</div>
+</div>
+<!-- CẤP 2: ĐỀ TÀI HIỆN TẠI (ACTIVE) -->
+<div class="relative">
+<span class="absolute -left-[29px] top-4 w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center shadow-md ring-4 ring-primary-light">
+<span class="material-symbols-outlined text-[16px]">stars</span>
+</span>
+<div class="bg-white rounded-[10px] p-5 border-2 border-primary shadow-sm relative">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded bg-primary text-white text-[12px] font-semibold">
+                        PHIÊN BẢN HIỆN TẠI • NĂM 2024
+                      </span>
+<span class="px-2 py-0.5 rounded bg-primary-light text-primary text-[12px] font-mono font-bold">
+                        TRL 6 / 9
+                      </span>
+</div>
+<span class="text-[12px] font-semibold text-primary">Mã: UIT-RD-2024-089</span>
+</div>
+<h3 class="text-[18px] font-semibold text-primary mb-2">
+                    Hệ thống AI Edge giám sát an toàn giao thông đô thị thông minh (EdgeVision-Traffic)
+                  </h3>
+<div class="flex flex-wrap items-center gap-4 text-[12px] text-neutral-dark mb-3">
+<span class="font-medium">Nhóm tác giả: Nhóm sinh viên K18</span>
+<span class="text-neutral-muted">GVHD: PGS.TS. Trần Văn C</span>
+</div>
+<div class="p-3.5 bg-slate-50 rounded-[8px] border border-border-subtle text-[12px] text-neutral-dark space-y-1.5">
+<div class="font-semibold text-primary mb-1">Những điểm đổi mới vượt bậc kế thừa:</div>
+<div class="flex items-start gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Chuyển dịch thành công toàn bộ mô hình từ máy chủ cồng kềnh sang bo mạch nhúng chuyên dụng với mức tiêu thụ điện thấp.</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Bổ sung module phân loại hành vi vi phạm: đi sai làn, vượt đèn tín hiệu và không đội mũ bảo hiểm theo luật giao thông Việt Nam.</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Mở rộng thêm 35.000 ảnh đặc thù thời tiết mưa bão và ban đêm, tăng độ tin cậy trong môi trường thực tế.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- CẤP 3: CÁC ĐỀ TÀI PHÂN NHÁNH MỚI TIẾP NỐI -->
+<div class="relative">
+<span class="absolute -left-[27px] top-4 w-6 h-6 rounded-full bg-emerald-100 border-2 border-emerald-500 text-emerald-700 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[14px]">call_split</span>
+</span>
+<div class="mb-2">
+<span class="px-2.5 py-0.5 rounded bg-emerald-50 text-emerald-800 text-[12px] font-semibold border border-emerald-200">
+                    CÁC ĐỀ TÀI TIẾP NỐI KẾ THỪA • NĂM 2025
+                  </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle hover:border-emerald-300 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2 py-0.5 rounded bg-white text-emerald-700 text-[12px] font-medium border border-border-subtle">Đang triển khai</span>
+<span class="text-[12px] font-mono text-neutral-muted">TRL 4</span>
+</div>
+<h4 class="text-[16px] font-semibold text-neutral-dark mb-1">
+                        EdgeVision-V2X: Giao tiếp cảnh báo xe tự hành qua mạng thế hệ mới
+                      </h4>
+<p class="text-[12px] text-neutral-muted mb-3">
+                        Kế thừa mô hình phát hiện vi phạm, mở rộng module gửi tín hiệu cảnh báo trực tiếp đến bảng điều khiển phương tiện thông minh.
+                      </p>
+</div>
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[12px]">
+<span class="text-neutral-dark font-medium">Nhóm Sinh viên Khóa 19</span>
+<a class="text-primary font-semibold hover:underline flex items-center gap-1" href="#">
+                        Chi tiết <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle hover:border-emerald-300 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2 py-0.5 rounded bg-white text-neutral-muted text-[12px] font-medium border border-border-subtle">Mới đăng ký</span>
+<span class="text-[12px] font-mono text-neutral-muted">TRL 3</span>
+</div>
+<h4 class="text-[16px] font-semibold text-neutral-dark mb-1">
+                        Hệ thống điều khiển pha đèn giao thông thích ứng theo mật độ thực tế
+                      </h4>
+<p class="text-[12px] text-neutral-muted mb-3">
+                        Khai thác số liệu đếm lưu lượng xe từ EdgeVision để huấn luyện thuật toán điều phối thời lượng chu kỳ đèn thông minh tại nút giao.
+                      </p>
+</div>
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[12px]">
+<span class="text-neutral-dark font-medium">Nhóm Sinh viên Khóa 19</span>
+<a class="text-primary font-semibold hover:underline flex items-center gap-1" href="#">
+                        Chi tiết <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Lời mời kế thừa đề tài -->
+<div class="mt-4 p-4 rounded-[8px] bg-white border border-dashed border-primary/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[24px]">alt_route</span>
+<div>
+<div class="text-[14px] font-semibold text-neutral-dark">Bạn muốn phát triển tiếp đề tài này cho khóa luận hoặc NCKH?</div>
+<div class="text-[12px] text-neutral-muted">Đăng ký kế thừa để nhận mã nguồn, mô hình huấn luyện và hỗ trợ từ nhóm tác giả.</div>
+</div>
+</div>
+<button class="px-4 py-2 rounded-[6px] bg-primary hover:bg-primary-dark text-white text-[12px] font-semibold transition-colors shrink-0">
+                    Đăng ký Kế thừa
+                  </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB PANEL 3: ĐỘI NGŨ TÁC GIẢ & GVHD -->
+<div class="tab-panel space-y-6" id="panel-team">
+<!-- Giảng viên hướng dẫn -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[20px] text-primary">workspace_premium</span>
+<h2 class="text-[24px] font-semibold text-neutral-dark">Giảng viên hướng dẫn khoa học</h2>
+</div>
+<div class="flex flex-col sm:flex-row gap-5 p-4 rounded-[10px] bg-slate-50 border border-border-subtle">
+<div class="w-20 h-20 rounded-full overflow-hidden shrink-0 border-2 border-primary mx-auto sm:mx-0">
+<img alt="Chân dung giảng viên hướng dẫn" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdZXGx_iY3_0xcvLP9QxczjuyQLaQX6si-o3mAjpXfOwSxR0YzlQUNt0cJTX5IE84EiQpi66_z83BlWgQGN7-wfxT8sv9b4xzguq6w9tN5C3BhxupGgY0Bc2iLyNxi51oOyPSO3UrYSyENgnpCSGlNaz19mGBt76cKDXt21jqJTzcoA_E0431GVbStJ7948jnBf-bwzVZqycywUZq3QMTUM21Phvcj-NEEsNgr9VI"/>
+</div>
+<div class="flex flex-col justify-between flex-grow text-center sm:text-left">
+<div>
+<div class="flex flex-wrap items-center justify-center sm:justify-between gap-2 mb-1">
+<div class="flex items-center gap-1.5">
+<h3 class="text-[18px] font-semibold text-neutral-dark">PGS.TS. Trần Văn C</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="px-2.5 py-0.5 rounded bg-primary-light text-primary text-[12px] font-semibold">Giảng viên Hướng dẫn</span>
+</div>
+<p class="text-[12px] text-neutral-muted mb-3">
+                    Trưởng Phòng Thí nghiệm Thị giác Máy tính &amp; Đa phương tiện – Trường Đại học Công nghệ Thông tin, ĐHQG-HCM
+                  </p>
+<p class="p-3 bg-white rounded-[6px] border-l-4 border-primary text-[14px] text-neutral-dark italic">
+                    "Đề tài đạt mức độ hoàn thiện kỹ thuật rất tốt, giải quyết trọn vẹn bài toán nén mô hình trên phần cứng nhúng biên và hoàn toàn đáp ứng yêu cầu triển khai thử nghiệm tại các nút giao thông đô thị thông minh."
+                  </p>
+</div>
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-3 text-[12px] text-neutral-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">mail</span> ctv@uit.edu.vn</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">location_on</span> Văn phòng Lab E4.12, UIT</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">school</span> Khoa Khoa học Máy tính</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Nhóm tác giả sinh viên -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">groups</span>
+<h2 class="text-[24px] font-semibold text-neutral-dark">Nhóm tác giả sinh viên</h2>
+</div>
+<span class="text-[12px] text-neutral-muted">Khoa Khoa học Máy tính</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Thành viên 1 -->
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-11 h-11 rounded-full overflow-hidden bg-primary-light shrink-0">
+<img alt="Ảnh sinh viên" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaf8Qq5lZwN_i15xdK1MIxa5WwQ4RiX9a3E_huqsHux7n8-WREObzZwaV4rRTQujnPRy-ocwqPSCCMhQqpxVQnn976i6Kd3NDD0nrWgYchPYUPcwv2CY5jdF2wg9U5TarYURQFyue9cUyodrgKfvIU9vNVqkltdhnJMIEdwYXkAfhDBg-WgfoP6Cd-T7Q5tHuzXEJBQk7vJMlTLD05eiDfSrYnlxw5YGQf1T98vqY"/>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold text-neutral-dark">Sinh viên Trần Văn D</h4>
+<span class="text-[12px] text-neutral-muted block">Trưởng nhóm nghiên cứu</span>
+</div>
+</div>
+<p class="text-[12px] text-neutral-muted mb-3">
+                    Phụ trách kiến trúc mô hình học sâu, tối ưu hóa lượng tử hóa dữ liệu và đo kiểm chỉ số hiệu năng trên bo mạch nhúng.
+                  </p>
+</div>
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[12px] text-neutral-muted">
+<span>Khoa KHMT</span>
+<span class="text-primary font-medium">Khóa 18</span>
+</div>
+</div>
+<!-- Thành viên 2 -->
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-11 h-11 rounded-full overflow-hidden bg-primary-light shrink-0">
+<img alt="Ảnh sinh viên" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjjlUU0D8XCzpAWD17pjK1cOBufIfHOJi36YCzCotnmCsUH66gPTNvmTpwcvq7p6fFIvkllK0lCrVNjytJqGv9FiROqwqbazWcVajXDyVB0ZG-xYgpA2ge91u9M2ZftFmpDRTFDk5g5SO01z6_cxjLTR08Rdtq93AtXywZdW0r_f0dbnPRxF-GI1X6D4WTdvGar6pM2xNFg6K-Truk58HNRnA-vJb8MuCzF_verFo"/>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold text-neutral-dark">Sinh viên Nguyễn Văn E</h4>
+<span class="text-[12px] text-neutral-muted block">Thành viên R&amp;D</span>
+</div>
+</div>
+<p class="text-[12px] text-neutral-muted mb-3">
+                    Phụ trách thu thập, làm sạch và gán nhãn tập dữ liệu giao thông thực tế, phát triển pipeline tự động hóa huấn luyện.
+                  </p>
+</div>
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[12px] text-neutral-muted">
+<span>Khoa KHMT</span>
+<span class="text-primary font-medium">Khóa 18</span>
+</div>
+</div>
+<!-- Thành viên 3 -->
+<div class="bg-slate-50 rounded-[10px] p-4 border border-border-subtle flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-11 h-11 rounded-full overflow-hidden bg-primary-light shrink-0">
+<img alt="Ảnh sinh viên" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLjiK5swAXr6EUr9ufog2DQ5S5V1Iqm1naLOuO6QwpWw8l7k94iaiNc91P21m-5KWhSv2TP7qv3HnwtxgnLA-mpgUzW6TMQ8VFaQBc_gZmNz76r_ANjEBiQTRCyzvQzG2EfwP-I1HLrUOq3gCiUWFUVymDIa0oB0PlRP7BnPEwEnTM66LgW4Jri3_DKYZeyzMU88HhK_IQbx27noxbrwebvySLad7OKF7-0-r7jXc"/>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold text-neutral-dark">Sinh viên Lê Thị F</h4>
+<span class="text-[12px] text-neutral-muted block">Thành viên R&amp;D</span>
+</div>
+</div>
+<p class="text-[12px] text-neutral-muted mb-3">
+                    Triển khai tích hợp bo mạch thực địa, thiết kế cổng truyền dữ liệu cảnh báo và giao diện bảng điều khiển giám sát vi phạm.
+                  </p>
+</div>
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[12px] text-neutral-muted">
+<span>Khoa KHMT</span>
+<span class="text-primary font-medium">Khóa 18</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB PANEL 4: ĐÓNG GÓP MỚI -->
+<div class="tab-panel space-y-6" id="panel-contributions">
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[20px] text-primary">military_tech</span>
+<h2 class="text-[24px] font-semibold text-neutral-dark">Giá trị đóng góp khoa học và thực tiễn</h2>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-[8px] bg-slate-50 border border-border-subtle">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<h3 class="text-[16px] font-semibold text-neutral-dark">1. Kiến trúc tối ưu hóa tài nguyên biên</h3>
+</div>
+<p class="text-[14px] text-neutral-muted">
+                  Đề tài giải quyết thành công bài toán nghẽn băng thông và giảm chi phí hạ tầng mạng khi không cần truyền liên tục video dung lượng lớn về trung tâm dữ liệu. Toàn bộ quá trình phân tích video diễn ra trực tiếp ngay tại vị trí cột camera.
+                </p>
+</div>
+<div class="p-4 rounded-[8px] bg-slate-50 border border-border-subtle">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<h3 class="text-[16px] font-semibold text-neutral-dark">2. Khả năng thích ứng với điều kiện thời tiết phức tạp</h3>
+</div>
+<p class="text-[14px] text-neutral-muted">
+                  Mô hình được huấn luyện đặc thù cho các tình huống mưa lớn, ban đêm chói đèn pha xe cộ và mật độ phương tiện đan xen dày đặc, vốn là thách thức lớn đối với các giải pháp thị giác máy tính nhập khẩu từ nước ngoài.
+                </p>
+</div>
+<div class="p-4 rounded-[8px] bg-slate-50 border border-border-subtle">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<h3 class="text-[16px] font-semibold text-neutral-dark">3. Khả năng chuyển giao và nhân rộng</h3>
+</div>
+<p class="text-[14px] text-neutral-muted">
+                  Sản phẩm được đóng gói hoàn chỉnh dưới dạng giải pháp phần mềm nhúng sẵn sàng liên kết với các hệ thống camera giao thông sẵn có mà không đòi hỏi thay thế hạ tầng quang học hiện hữu của thành phố.
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- CỘT PHẢI (4 CỘT SIDEBAR) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- THẺ 1: Thông tin Phòng Lab CV&PR UIT -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-[10px] bg-primary text-white flex items-center justify-center font-bold text-[18px]">
+              VL
+            </div>
+<div>
+<h3 class="text-[16px] font-semibold text-neutral-dark">Phòng Lab CV&amp;PR UIT</h3>
+<span class="text-[12px] text-neutral-muted">Khoa Khoa học Máy tính</span>
+</div>
+</div>
+<div class="px-3 py-1.5 rounded-[6px] bg-emerald-50 border border-emerald-200 text-emerald-800 text-[12px] font-medium flex items-center gap-2 mb-4">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Đang mở tiếp nhận tài trợ &amp; hợp tác thử nghiệm</span>
+</div>
+<div class="space-y-2.5 text-[12px] mb-5">
+<div class="flex justify-between py-1 border-b border-border-subtle">
+<span class="text-neutral-muted">Đề tài đã hoàn thành:</span>
+<span class="font-semibold text-neutral-dark">4 đề tài trọng điểm</span>
+</div>
+<div class="flex justify-between py-1 border-b border-border-subtle">
+<span class="text-neutral-muted">Công bố khoa học liên quan:</span>
+<span class="font-semibold text-neutral-dark">2 bài báo hội thảo quốc tế</span>
+</div>
+<div class="flex justify-between py-1 border-b border-border-subtle">
+<span class="text-neutral-muted">Địa chỉ phòng thí nghiệm:</span>
+<span class="text-neutral-dark font-medium">Phòng E4.12, UIT</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-neutral-muted">Thư điện tử:</span>
+<a class="text-primary font-medium hover:underline" href="mailto:cvpr-lab@uit.edu.vn">cvpr-lab@uit.edu.vn</a>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-[8px] bg-slate-50 hover:bg-slate-100 text-primary text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 border border-border-subtle">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>Đặt lịch trao đổi với Trưởng Lab</span>
+</button>
+</div>
+<!-- THẺ 2: Bản quyền & Sở hữu trí tuệ -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[20px] text-primary">verified_user</span>
+<h3 class="text-[16px] font-semibold text-neutral-dark">Bản quyền &amp; Sở hữu trí tuệ</h3>
+</div>
+<div class="space-y-3 text-[12px] mb-4">
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle">
+<div class="font-semibold text-neutral-dark flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">verified</span>
+<span>Giấy phép học thuật: MIT Academic</span>
+</div>
+<p class="text-neutral-muted leading-relaxed">
+                Mã nguồn mở miễn phí phục vụ học tập, nghiên cứu khoa học phi lợi nhuận và kế thừa sinh viên.
+              </p>
+</div>
+<div class="p-3 rounded-[8px] bg-slate-50 border border-border-subtle">
+<div class="font-semibold text-neutral-dark flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary text-[16px]">business_center</span>
+<span>Thương mại hóa &amp; Chuyển giao:</span>
+</div>
+<p class="text-neutral-muted leading-relaxed">
+                Quyền sở hữu thuộc ĐHQG-HCM và Nhóm tác giả. Hỗ trợ hợp đồng cấp phép độc quyền hoặc phi độc quyền cho doanh nghiệp vận hành giao thông.
+              </p>
+</div>
+</div>
+<div class="p-3 rounded-[8px] bg-primary-light/40 border border-primary/20 text-[12px] text-neutral-dark flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">info</span>
+<span>Được bảo trợ chuyển giao công nghệ bởi Trung tâm Sở hữu Trí tuệ &amp; Chuyển giao Công nghệ ĐHQG-HCM.</span>
+</div>
+</div>
+<!-- THẺ 3: Tài nguyên cùng lĩnh vực -->
+<div class="bg-white rounded-[12px] p-6 border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">recommend</span>
+<h3 class="text-[16px] font-semibold text-neutral-dark">Tài nguyên cùng lĩnh vực</h3>
+</div>
+<a class="text-[12px] text-primary hover:underline font-medium" href="#">Xem tất cả</a>
+</div>
+<div class="space-y-3">
+<!-- Đề tài cùng lĩnh vực 1 -->
+<a class="block p-3 rounded-[8px] bg-slate-50 hover:bg-slate-100 transition-colors border border-border-subtle group" href="#">
+<div class="flex items-center justify-between mb-1">
+<span class="px-2 py-0.5 rounded bg-white text-primary text-[12px] font-mono font-bold border border-border-subtle">TRL 7</span>
+<span class="text-[12px] text-neutral-muted">Khoa Kỹ thuật Máy tính</span>
+</div>
+<h4 class="text-[14px] font-semibold text-neutral-dark group-hover:text-primary transition-colors leading-snug">
+                Kiến trúc vi mạch AI tăng tốc xử lý tín hiệu Radar trên thiết bị bay không người lái
+              </h4>
+<p class="text-[12px] text-neutral-muted mt-1 line-clamp-2">
+                Mô-đun phần cứng chuyên dụng phát hiện vật cản tầm thấp trong mọi điều kiện thời tiết.
+              </p>
+</a>
+<!-- Đề tài cùng lĩnh vực 2 -->
+<a class="block p-3 rounded-[8px] bg-slate-50 hover:bg-slate-100 transition-colors border border-border-subtle group" href="#">
+<div class="flex items-center justify-between mb-1">
+<span class="px-2 py-0.5 rounded bg-white text-neutral-dark text-[12px] font-mono font-bold border border-border-subtle">TRL 5</span>
+<span class="text-[12px] text-neutral-muted">Phòng Lab AI Giáo dục</span>
+</div>
+<h4 class="text-[14px] font-semibold text-neutral-dark group-hover:text-primary transition-colors leading-snug">
+                Mô hình ngôn ngữ lớn thu gọn phục vụ trợ lý học tập kỹ thuật số cá nhân hóa
+              </h4>
+<p class="text-[12px] text-neutral-muted mt-1 line-clamp-2">
+                Huấn luyện tinh chỉnh tiếng Việt chuyên sâu cho chương trình đào tạo công nghệ tại UIT.
+              </p>
+</a>
+<!-- Đề tài cùng lĩnh vực 3 -->
+<a class="block p-3 rounded-[8px] bg-slate-50 hover:bg-slate-100 transition-colors border border-border-subtle group" href="#">
+<div class="flex items-center justify-between mb-1">
+<span class="px-2 py-0.5 rounded bg-white text-neutral-muted text-[12px] font-mono font-bold border border-border-subtle">TRL 4</span>
+<span class="text-[12px] text-neutral-muted">Lab Công nghệ Y tế</span>
+</div>
+<h4 class="text-[14px] font-semibold text-neutral-dark group-hover:text-primary transition-colors leading-snug">
+                Nền tảng học liên kết phân tán bảo mật thông tin chẩn đoán hình ảnh y tế
+              </h4>
+<p class="text-[12px] text-neutral-muted mt-1 line-clamp-2">
+                Phân tích dữ liệu X-Quang liên bệnh viện không chia sẻ thông tin bệnh nhân nguyên bản.
+              </p>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- ==================== 4. PUBLIC FOOTER (TRANG CHỦ) ==================== -->
+<footer class="bg-primary-dark text-white mt-16 pt-12 pb-8 border-t border-slate-800">
+<div class="max-w-[1280px] mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/10">
+<!-- Cột 1: Về UIT Connect -->
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded-lg bg-white text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+</div>
+<span class="font-bold text-[18px] text-white tracking-tight">UIT CONNECT</span>
+</div>
+<p class="text-[14px] text-slate-300 leading-relaxed mb-4">
+            Nền tảng kết nối tri thức nghiên cứu khoa học, phả hệ đề tài học thuật và cầu nối chuyển giao công nghệ giữa sinh viên, giảng viên và doanh nghiệp.
+          </p>
+<div class="text-[12px] text-slate-400">
+            Trường Đại học Công nghệ Thông tin – ĐHQG-HCM
+          </div>
+</div>
+<!-- Cột 2: Khám phá -->
+<div>
+<h3 class="text-[16px] font-semibold text-white mb-4">Khám phá tài nguyên</h3>
+<ul class="space-y-2.5 text-[14px] text-slate-300">
+<li><a class="hover:text-white transition-colors" href="#">Kho tài nguyên số công nghệ</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Phả hệ kế thừa đề tài khoa học</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Đề tài nghiệm thu xuất sắc</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Sản phẩm công nghệ sẵn sàng chuyển giao</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Bộ dữ liệu học thuật mở</a></li>
+</ul>
+</div>
+<!-- Cột 3: Hỗ trợ -->
+<div>
+<h3 class="text-[16px] font-semibold text-white mb-4">Dành cho cộng đồng</h3>
+<ul class="space-y-2.5 text-[14px] text-slate-300">
+<li><a class="hover:text-white transition-colors" href="#">Hướng dẫn đăng ký kế thừa đề tài</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Quy trình thẩm định hội đồng khoa học</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo hộ sở hữu trí tuệ</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Cổng dành cho doanh nghiệp đặt hàng</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Câu hỏi thường gặp (FAQ)</a></li>
+</ul>
+</div>
+<!-- Cột 4: Liên hệ -->
+<div>
+<h3 class="text-[16px] font-semibold text-white mb-4">Thông tin liên hệ</h3>
+<div class="space-y-3 text-[14px] text-slate-300">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 mt-0.5">location_on</span>
+<span>Khu phố 6, P. Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400">mail</span>
+<a class="hover:text-white transition-colors" href="mailto:support@uit.edu.vn">support@uit.edu.vn</a>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400">call</span>
+<span>(028) 372 52002</span>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400">language</span>
+<span>www.uit.edu.vn</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dòng bản quyền dưới cùng -->
+<div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px] text-slate-400">
+<div>
+          © 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM. Bảo lưu mọi quyền.
+        </div>
+<div class="flex items-center gap-6">
+<a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a>
+<a class="hover:text-white transition-colors" href="#">Chính sách bảo mật</a>
+<a class="hover:text-white transition-colors" href="#">Quy chế chuyển giao công nghệ</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Script điều khiển chuyển tab đơn giản & mượt mà -->
+<script>
+    function switchMainTab(tabKey, triggerElement) {
+      // 1. Ẩn tất cả panels
+      const panels = document.querySelectorAll('.tab-panel');
+      panels.forEach(p => p.classList.remove('active'));
+
+      // 2. Bỏ trạng thái active của tất cả nút tab
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.add('text-neutral-muted');
+      });
+
+      // 3. Hiện tab được chọn
+      const targetPanel = document.getElementById('panel-' + tabKey);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      // 4. Kích hoạt nút tương ứng
+      triggerElement.classList.remove('text-neutral-muted');
+      triggerElement.classList.add('active');
+    }
+  </script>
+<script src="router.js"></script>
+</body></html>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cổng Kết nối R&amp;D Doanh nghiệp &amp; Quỹ Tài trợ - UIT Connect</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#1F4E78',
+              dark: '#163A59',
+              accent: '#2E86AB',
+              light: '#E6F0F7',
+              border: '#E1E5EA',
+              bg: '#F5F7FA',
+              text: '#1A1A1A',
+              secondary: '#5F6368'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1A1A1A;
+      background-color: #F5F7FA;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#F5F7FA] text-[#1A1A1A] antialiased min-h-screen flex flex-col">
+<!-- 1. HEADER: Single-row public sticky header (height 72px, white bg, border-bottom #E1E5EA) -->
+<header class="sticky top-0 z-50 w-full h-[72px] bg-white border-b border-[#E1E5EA]">
+<div class="max-w-[1280px] h-full mx-auto px-6 flex items-center justify-between">
+<!-- Logo -->
+<a data-path="trang-chu" class="flex items-center gap-3 group" href="#">
+<div class="w-10 h-10 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight shadow-sm transition-transform group-hover:scale-105">UIT</div>
+<div class="flex flex-col">
+<span class="font-bold text-[18px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[12px] text-[#5F6368] font-medium leading-tight mt-1">Cổng Kết nối Nghiên cứu &amp; Hợp tác</span>
+</div>
+</a>
+<!-- Menu điều hướng -->
+<nav class="hidden md:flex items-center h-full gap-1 lg:gap-2">
+<a data-path="kham-pha-tai-nguyen" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Khám phá tài nguyên</a>
+<a data-path="ghep-nhom" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Ghép nhóm</a>
+<a data-path="giang-vien" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Giảng viên</a>
+<a data-path="bai-toan-doanh-nghiep" class="h-full flex items-center px-3 text-[14px] font-semibold text-[#1F4E78] border-b-2 border-[#1F4E78]" href="#">Bài toán doanh nghiệp</a>
+<a data-path="tai-tro" class="h-full flex items-center px-3 text-[14px] font-medium text-[#5F6368] border-b-2 border-transparent hover:text-[#1F4E78] transition-colors" href="#">Tài trợ</a>
+</nav>
+<!-- Đăng nhập / Đăng ký -->
+<div class="flex items-center gap-3">
+<a data-path="dang-nhap" class="px-4 py-2 text-[14px] font-semibold text-[#1F4E78] hover:bg-[#E6F0F7] rounded-[8px] transition-colors" href="#">Đăng nhập</a>
+<a data-path="dang-ky" class="px-5 py-2 text-[14px] font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-[8px] shadow-sm transition-colors" href="#">Đăng ký</a>
+</div>
+</div>
+</header>
+<!-- MAIN BODY -->
+<main class="flex-1 w-full pb-16">
+<!-- TOP BANNER & HERO SECTION -->
+<section class="w-full bg-[#E6F0F7]/40 border-b border-[#E1E5EA] pt-6 pb-10">
+<div class="max-w-[1280px] mx-auto px-6 flex flex-col gap-6">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-[12px] text-[#5F6368]">
+<a class="hover:text-[#1F4E78] transition-colors" href="#">Trang chủ</a>
+<span>/</span>
+<a class="hover:text-[#1F4E78] transition-colors" href="#">Cổng Doanh nghiệp &amp; R&amp;D</a>
+<span>/</span>
+<span class="font-medium text-[#1A1A1A]">Đặt hàng nghiên cứu &amp; Tài trợ học thuật</span>
+</nav>
+<!-- Main Title & Academic-Corporate Statement -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+<div class="max-w-3xl flex flex-col gap-2.5">
+<!-- Eyebrow Pill -->
+<div class="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-[#E6F0F7] border border-[#1F4E78]/20 text-[#1F4E78] text-[12px] font-semibold">
+<span class="material-symbols-outlined text-[16px] text-[#1F4E78]">corporate_fare</span>
+<span>Cổng R&amp;D Doanh nghiệp &amp; Quỹ tài trợ</span>
+</div>
+<h1 class="text-[32px] leading-tight text-[#1F4E78] font-bold tracking-tight">
+              Cổng Kết nối R&amp;D Doanh nghiệp &amp; Quỹ Tài trợ Nghiên cứu
+            </h1>
+<p class="text-[14px] leading-relaxed text-[#5F6368]">
+              Nơi các doanh nghiệp công nghệ hàng đầu đặt hàng giải pháp từ sinh viên &amp; giảng viên UIT, cùng mạng lưới quỹ học bổng, tài trợ thiết bị và thương mại hóa đề tài chuyên sâu.
+            </p>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
+<button class="px-4 py-2.5 rounded-[8px] bg-white border border-[#E1E5EA] text-[#1F4E78] hover:bg-[#F5F7FA] text-[14px] font-semibold flex items-center gap-2 transition-all shadow-sm" onclick="switchTab('tab-proposal-detail')">
+<span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+<span>Đề xuất tiêu biểu</span>
+</button>
+<button class="px-4 py-2.5 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[14px] font-semibold flex items-center gap-2 shadow-sm transition-all" onclick="document.getElementById('proposalModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+<span>Nộp Proposal Giải pháp</span>
+</button>
+</div>
+</div>
+<!-- Stat cards: 4 cards with #E6F0F7 icon box, numbers and labels baseline-aligned. Replace "100% NDA" with "Bảo mật thỏa thuận NDA" -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+<div class="p-4 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-[8px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">terminal</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[20px] font-bold text-[#1F4E78] leading-none">85+</span>
+</div>
+<span class="text-[12px] text-[#5F6368] mt-1 truncate">Bài toán thực tế đang mở</span>
+</div>
+</div>
+<div class="p-4 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-[8px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">payments</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[20px] font-bold text-[#1F4E78] leading-none">12.4 Tỷ</span>
+</div>
+<span class="text-[12px] text-[#5F6368] mt-1 truncate">Tổng ngân sách R&amp;D</span>
+</div>
+</div>
+<div class="p-4 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-[8px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">corporate_fare</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[20px] font-bold text-[#1F4E78] leading-none">34 Đơn vị</span>
+</div>
+<span class="text-[12px] text-[#5F6368] mt-1 truncate">Đối tác chiến lược (Verified)</span>
+</div>
+</div>
+<div class="p-4 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-[8px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[15px] font-bold text-[#1F4E78] leading-none">Bảo mật thỏa thuận NDA</span>
+</div>
+<span class="text-[12px] text-[#5F6368] mt-1 truncate">Bảo hộ Bản quyền &amp; SHTT</span>
+</div>
+</div>
+</div>
+<!-- Core Tab Navigation Switches -->
+<div class="flex items-center gap-6 overflow-x-auto no-scrollbar pt-2 border-b border-[#E1E5EA]">
+<button class="tab-button flex items-center gap-2 pb-3 text-[14px] font-semibold text-[#1F4E78] border-b-2 border-[#1F4E78] transition-all whitespace-nowrap" id="btn-tab-problems" onclick="switchTab('tab-problems')">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+<span>A. Bài toán R&amp;D Doanh nghiệp đặt hàng (85)</span>
+</button>
+<button class="tab-button flex items-center gap-2 pb-3 text-[14px] font-medium text-[#5F6368] hover:text-[#1F4E78] transition-all whitespace-nowrap" id="btn-tab-detail" onclick="switchTab('tab-proposal-detail')">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+<span>B. Chi tiết bài toán tiêu biểu &amp; Nộp Proposal</span>
+</button>
+<button class="tab-button flex items-center gap-2 pb-3 text-[14px] font-medium text-[#5F6368] hover:text-[#1F4E78] transition-all whitespace-nowrap" id="btn-tab-campaigns" onclick="switchTab('tab-campaigns')">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>C. Bảng gọi Tài trợ &amp; Học bổng Nghiên cứu (12)</span>
+</button>
+</div>
+</div>
+</section>
+<!-- CONTENT VIEWPORTS WRAPPER (spacing 64px from sections, max-width 1280px) -->
+<div class="max-w-[1280px] w-full mx-auto px-6 mt-8 flex flex-col gap-10">
+<!-- ========================================== -->
+<!-- TAB A: BUSINESS PROBLEM LIST (MAIN VIEW)   -->
+<!-- ========================================== -->
+<div class="tab-content flex flex-col gap-6" id="tab-problems">
+<!-- Search & Smart Filter Toolbar (44px height inputs, radius 6px, blue focus ring) -->
+<div class="p-5 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<!-- Main Search row -->
+<div class="flex flex-col lg:flex-row gap-3 items-center">
+<div class="relative w-full lg:flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-3 text-[#5F6368] text-[20px]">search</span>
+<input class="w-full h-[44px] pl-10 pr-4 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78] focus:border-transparent transition-all" placeholder="Tìm kiếm bài toán công nghệ, AI, IoT, Vi mạch, Đơn vị đặt hàng..." type="text"/>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap gap-3 w-full lg:w-auto">
+<!-- Field Dropdown -->
+<select class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78] focus:border-transparent cursor-pointer">
+<option value="">Tất cả lĩnh vực</option>
+<option value="ai">AI &amp; Computer Vision</option>
+<option value="ic">Vi mạch bán dẫn &amp; Hardware</option>
+<option value="sec">An ninh mạng &amp; Mật mã học</option>
+<option value="fin">Fintech &amp; Phân tích dữ liệu lớn</option>
+<option value="iot">IoT &amp; Embedded Systems</option>
+</select>
+<!-- Budget Level Dropdown -->
+<select class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78] focus:border-transparent cursor-pointer">
+<option value="">Mức Ngân sách</option>
+<option value="50">Dưới 50 Triệu VNĐ</option>
+<option value="150">50 - 150 Triệu VNĐ</option>
+<option value="500">150 - 500 Triệu VNĐ</option>
+<option value="over500">Trên 500 Triệu VNĐ</option>
+</select>
+<!-- Sort By -->
+<select class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78] focus:border-transparent cursor-pointer">
+<option value="deadline">Hạn chót gần nhất</option>
+<option value="budget">Ngân sách cao nhất</option>
+<option value="newest">Bài toán mới nhất</option>
+<option value="popular">Quan tâm nhiều nhất</option>
+</select>
+</div>
+</div>
+<!-- Filter Tags Bar (Skill Chips) -->
+<div class="flex flex-wrap items-center gap-2 pt-1 border-t border-[#E1E5EA]/60">
+<span class="text-[12px] text-[#5F6368] mr-1 flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[16px]">tune</span> Kỹ năng trọng tâm:
+            </span>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#1F4E78] text-white">Tất cả</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">PyTorch</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">Verilog / RISC-V</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">ROS2 &amp; Autonomous</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">AUTOSAR &amp; CAN-Bus</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">Neo4j &amp; GNN</button>
+<button class="px-2.5 py-1 rounded-[6px] text-[12px] font-medium bg-[#F5F7FA] border border-[#E1E5EA] text-[#5F6368] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors">LoRaWAN / ESP32</button>
+</div>
+</div>
+<!-- Grid of Business Problem Cards with Fictional Names -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- CARD 1: Công ty TNHH ABC AI Technologies -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<!-- Header card: Org info & Status -->
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    ABC
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">Công ty TNHH ABC</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đã xác thực">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">AI Solutions &amp; Cloud Platform</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-medium inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1F4E78]"></span> Đang mở
+                </span>
+</div>
+<!-- Problem Title (card title 16px semibold) -->
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Tối ưu hóa mô hình LLM Tiếng Việt phục vụ Chatbot CSKH đa ngôn ngữ chạy On-Premise
+              </a>
+<!-- Summary -->
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Yêu cầu mô hình suy luận độ trễ dưới 200ms trên GPU đơn A10G, nộp POC kèm báo cáo benchmark trên tập ngữ liệu hỗ trợ dịch vụ khách hàng 500k queries.
+              </p>
+<!-- Skill chips: max 3 skill chips + "+N" on a single line (no wrap) -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">LLaMA-3</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">vLLM</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">PyTorch</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+3</span>
+</div>
+</div>
+<!-- Footer card: Budget, Deadline, Action -->
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">180.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-[#2E86AB] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Còn 12 ngày (15/11)
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">8 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 2: Tập đoàn Công nghệ XYZ -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    XYZ
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">Tập đoàn XYZ</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đối tác chiến lược">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">Vi mạch &amp; Mạng truyền dẫn</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-medium inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1F4E78]"></span> Đang mở
+                </span>
+</div>
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Thiết kế lõi IP tăng tốc mã hóa mật mã hậu lượng tử (PQC - Dilithium) trên FPGA
+              </a>
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Tối ưu diện tích LUT và tần số hoạt động &gt;250MHz trên dòng Kintex UltraScale+, hỗ trợ bàn giao mã nguồn SystemVerilog, module AXI4 &amp; testbench kiểm thử toàn diện.
+              </p>
+<!-- Single-line chips -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">Verilog</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">FPGA Xilinx</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">Cryptography</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+2</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">350.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-[#2E86AB] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Còn 25 ngày
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">4 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 3: Công ty TNHH SmartMobility Việt Nam -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    SM
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">SmartMobility VN</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đã xác thực">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">Autonomous Vision Lab</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-medium inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1F4E78]"></span> Đang mở
+                </span>
+</div>
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Thuật toán ước lượng chiều sâu 3D đơn mục (Monocular Depth) thời gian thực
+              </a>
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Mô hình nhẹ tối ưu trên nền tảng Jetson AGX Orin &gt;45 FPS, xử lý nhiễu điều kiện thời tiết mưa đêm tại giao thông đô thị Việt Nam.
+              </p>
+<!-- Single-line chips -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">PyTorch</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">TensorRT</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">Point Cloud</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+1</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">220.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-[#2E86AB] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Còn 18 ngày
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">11 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 4: Công ty Cổ phần AutoSoft Toàn Cầu -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    AS
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">AutoSoft Toàn Cầu</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đã xác thực">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">Automotive Systems Unit</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-red-50 text-red-700 text-[11px] font-semibold inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Gấp - Còn 5 ngày
+                </span>
+</div>
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Hệ thống phát hiện xâm nhập mạng nội bộ xe hơi dựa trên chuẩn AUTOSAR &amp; CAN-Bus
+              </a>
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Phát hiện giả mạo gói tin DoS/Spoofing thời gian thực với độ chính xác F1-score &gt;98%, thời gian phản hồi ngắt xử lý &lt;5ms.
+              </p>
+<!-- Single-line chips -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">CANoe</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">C/C++</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">AUTOSAR</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+1</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">120.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-red-600 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">alarm</span> Còn 5 ngày
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">6 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 5: Công ty FinTech SafePay -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    SP
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">SafePay FinTech</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đã xác thực">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">Risk &amp; Anti-Fraud Core</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-medium inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1F4E78]"></span> Đang mở
+                </span>
+</div>
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Giải pháp phát hiện giao dịch gian lận thời gian thực sử dụng Đồ thị tri thức (GNN)
+              </a>
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Xây dựng pipeline phân tích đồ thị quan hệ tài khoản đa chiều với luồng dữ liệu Kafka hàng chục ngàn transactions/giây, cảnh báo lừa đảo tài chính.
+              </p>
+<!-- Single-line chips -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">PyG (Geometric)</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">Neo4j</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">Kafka</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+1</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">150.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-[#2E86AB] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Còn 30 ngày
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">7 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 6: Tập đoàn Công nghệ Đô thị Delta -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-[8px] bg-[#E6F0F7] flex items-center justify-center font-bold text-[#1F4E78] text-[13px] shrink-0 border border-[#E1E5EA]">
+                    DL
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="text-[14px] font-semibold text-[#1A1A1A] truncate">Tập đoàn Delta</span>
+<span class="material-symbols-outlined text-[16px] text-[#2E86AB]" title="Đã xác thực">verified</span>
+</div>
+<span class="text-[12px] text-[#5F6368]">Smart City &amp; IoT Lab</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-medium inline-flex items-center gap-1 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1F4E78]"></span> Đang mở
+                </span>
+</div>
+<a class="text-[16px] leading-snug text-[#1F4E78] hover:text-[#2E86AB] font-semibold transition-colors line-clamp-2" href="javascript:void(0)" onclick="switchTab('tab-proposal-detail')">
+                Hệ thống Mesh LoRaWAN giám sát ngập lụt đô thị tiêu thụ năng lượng siêu thấp
+              </a>
+<p class="text-[14px] leading-relaxed text-[#5F6368] line-clamp-3">
+                Yêu cầu thời lượng pin trên 24 tháng với 1 cell pin 18650, truyền xa &gt;3km trong nội đô, tích hợp giao thức bảo mật lớp AES-128 chuẩn công nghiệp.
+              </p>
+<!-- Single-line chips -->
+<div class="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">ESP32</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">LoRaWAN</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368] truncate">FreeRTOS</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[11px] font-medium text-[#5F6368] shrink-0">+1</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-4 mt-4 border-t border-[#E1E5EA]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[12px] text-[#5F6368]">Ngân sách R&amp;D</span>
+<span class="text-[14px] text-[#1F4E78] font-bold">80.000.000 VNĐ</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[12px] text-[#5F6368]">Hạn nộp proposal</span>
+<span class="text-[12px] text-[#2E86AB] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Còn 40 ngày
+                  </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[12px] text-[#5F6368]">3 đề xuất đã gửi</span>
+<button class="px-3 py-1.5 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] hover:bg-[#1F4E78] hover:text-white text-[13px] font-semibold transition-all flex items-center gap-1" onclick="switchTab('tab-proposal-detail')">
+<span>Chi tiết &amp; Nộp</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination toolbar -->
+<div class="flex items-center justify-between p-4 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm">
+<span class="text-[12px] text-[#5F6368]">Hiển thị 6 trong 85 bài toán R&amp;D đang nhận hồ sơ</span>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-[6px] flex items-center justify-center text-[#5F6368] hover:bg-[#F5F7FA] transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-[6px] bg-[#1F4E78] text-white text-[13px] font-semibold">1</button>
+<button class="w-8 h-8 rounded-[6px] text-[#1A1A1A] hover:bg-[#F5F7FA] text-[13px]">2</button>
+<button class="w-8 h-8 rounded-[6px] text-[#1A1A1A] hover:bg-[#F5F7FA] text-[13px]">3</button>
+<span class="px-1 text-[#5F6368] text-[12px]">...</span>
+<button class="w-8 h-8 rounded-[6px] text-[#1A1A1A] hover:bg-[#F5F7FA] text-[13px]">15</button>
+<button class="w-8 h-8 rounded-[6px] flex items-center justify-center text-[#5F6368] hover:bg-[#F5F7FA] transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- TAB B: PROBLEM DETAIL VIEW & INLINE SUBMIT PROPOSAL FORM -->
+<!-- ======================================================== -->
+<div class="tab-content hidden flex flex-col gap-6" id="tab-proposal-detail">
+<!-- Problem Header Bar -->
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+<div class="flex items-start gap-4">
+<div class="w-14 h-14 rounded-[10px] bg-[#1F4E78] text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-sm">
+              ABC
+            </div>
+<div class="flex flex-col gap-1.5">
+<div class="flex flex-wrap items-center gap-2">
+<span class="text-[16px] font-bold text-[#1A1A1A]">Công ty TNHH ABC AI Technologies</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E6F0F7] text-[#1F4E78] text-[12px] font-semibold">
+<span class="material-symbols-outlined text-[14px]">verified</span> Đối tác Chiến lược UIT
+                </span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#F5F7FA] border border-[#E1E5EA] text-[12px] text-[#5F6368]">Mã đề tài: RD-ABC-2026-031</span>
+</div>
+<h2 class="text-[24px] text-[#1F4E78] font-semibold leading-snug">
+                Tối ưu hóa mô hình LLM Tiếng Việt phục vụ Chatbot CSKH đa ngôn ngữ chạy On-Premise
+              </h2>
+<div class="flex flex-wrap items-center gap-5 text-[#5F6368] text-[12px] pt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-[#1F4E78]">payments</span> Ngân sách: <b class="text-[#1F4E78] font-bold ml-1">180.000.000 VNĐ</b></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-[#2E86AB]">calendar_clock</span> Hạn chót: <b class="text-[#1A1A1A] ml-1">15/11/2026 (Còn 12 ngày)</b></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-[#1F4E78]">check_circle</span> Đã tiếp nhận: <b class="text-[#1A1A1A] ml-1">8 Proposal</b></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto shrink-0">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[14px] font-semibold flex items-center justify-center gap-2 shadow-sm transition-all" onclick="document.getElementById('proposalModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>Nộp Proposal Giải pháp</span>
+</button>
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] hover:bg-[#E6F0F7] text-[14px] font-medium flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+<span>Lưu theo dõi</span>
+</button>
+</div>
+</div>
+<!-- Problem Detail Main Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left: Specification -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<div class="flex items-center gap-2 text-[#1F4E78] text-[18px] font-semibold">
+<span class="material-symbols-outlined">help_center</span>
+<span>1. Bối cảnh &amp; Mục tiêu thực tế (Problem Statement)</span>
+</div>
+<p class="text-[14px] text-[#5F6368] leading-relaxed">
+                Các mô hình ngôn ngữ lớn (LLM) hiện đại đem lại hiệu năng vượt trội trong việc tự động hóa phản hồi người dùng. Tuy nhiên, khi triển khai thực tế trên hạ tầng bảo mật On-Premise của doanh nghiệp trong nước, các rào cản lớn gồm: chi phí phần cứng GPU đắt đỏ, độ trễ phản hồi cao khi xử lý đồng thời (concurrent users), và hiện tượng ảo giác (hallucination) trong các thuật ngữ nghiệp vụ tiếng Việt.
+              </p>
+<div class="p-4 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex flex-col gap-2">
+<span class="text-[14px] text-[#1F4E78] font-semibold">Chỉ tiêu kỹ thuật trọng yếu (KPIs Bắt buộc):</span>
+<ul class="list-disc list-inside text-[14px] text-[#5F6368] flex flex-col gap-1.5 pl-1">
+<li>Độ trễ suy luận (Inference Latency): &lt; 200ms với first-token, &gt; 45 tokens/second trên 01 GPU NVIDIA A10G 24GB.</li>
+<li>Bộ nhớ GPU VRAM sử dụng không vượt quá 18GB trong chế độ phục vụ đồng thời tối thiểu 20 luồng tương tác.</li>
+<li>Điểm chuẩn đánh giá năng lực Tiếng Việt (VMLU benchmark) đạt tối thiểu 62 điểm trong các task đọc hiểu.</li>
+<li>Tỷ lệ Hallucination được kiểm soát &lt; 3.5% thông qua kỹ thuật RAG hybrid search tích hợp.</li>
+</ul>
+</div>
+</div>
+<!-- Deliverables -->
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<div class="flex items-center gap-2 text-[#1F4E78] text-[18px] font-semibold">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>2. Đầu ra kỳ vọng (Expected Deliverables &amp; Roadmap)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-4 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex items-start gap-3">
+<div class="w-8 h-8 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">code</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[14px] text-[#1A1A1A] font-semibold">Mã nguồn hoàn chỉnh</span>
+<span class="text-[12px] text-[#5F6368] mt-0.5">Kho Git kèm pipeline huấn luyện, fine-tune LoRA/QLoRA và engine serving đã đóng gói.</span>
+</div>
+</div>
+<div class="p-4 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex items-start gap-3">
+<div class="w-8 h-8 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[14px] text-[#1A1A1A] font-semibold">Báo cáo Benchmark chi tiết</span>
+<span class="text-[12px] text-[#5F6368] mt-0.5">Đánh giá thực nghiệm so sánh với LLaMA-3-8B gốc và PhoGPT trên tập kiểm thử độc lập.</span>
+</div>
+</div>
+<div class="p-4 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex items-start gap-3">
+<div class="w-8 h-8 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[14px] text-[#1A1A1A] font-semibold">Docker Image triển khai</span>
+<span class="text-[12px] text-[#5F6368] mt-0.5">Containerized image có thể chạy độc lập On-Premise không phụ thuộc kết nối bên ngoài.</span>
+</div>
+</div>
+<div class="p-4 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex items-start gap-3">
+<div class="w-8 h-8 rounded-[6px] bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">co_present</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[14px] text-[#1A1A1A] font-semibold">Bảo vệ PoC kỹ thuật</span>
+<span class="text-[12px] text-[#5F6368] mt-0.5">Buổi demo trực tiếp trước Hội đồng Công nghệ ABC &amp; Ban Đào tạo UIT để nghiệm thu từng phase.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rights & Incentives Card -->
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<div class="flex items-center gap-2 text-[#1F4E78] text-[18px] font-semibold">
+<span class="material-symbols-outlined">stars</span>
+<span>3. Quyền lợi nhóm nghiên cứu &amp; Cam kết tài trợ</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#2E86AB] text-[20px] shrink-0">check_circle</span>
+<span class="text-[14px] text-[#5F6368]"><b>Kinh phí tài trợ giai đoạn:</b> Chi trả 3 mốc: 30% khi ký thỏa thuận, 40% sau PoC, 30% bàn giao.</span>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#2E86AB] text-[20px] shrink-0">check_circle</span>
+<span class="text-[14px] text-[#5F6368]"><b>Tài trợ tài nguyên GPU:</b> Cấp credit cụm máy chủ NVIDIA A100 trên Cloud phục vụ huấn luyện.</span>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#2E86AB] text-[20px] shrink-0">check_circle</span>
+<span class="text-[14px] text-[#5F6368]"><b>Cơ hội việc làm:</b> Tuyển dụng trực tiếp kỹ sư AI xuất sắc và ký hợp đồng nghiên cứu dài hạn.</span>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#2E86AB] text-[20px] shrink-0">check_circle</span>
+<span class="text-[14px] text-[#5F6368]"><b>Quyền tác giả học thuật:</b> Nhóm SV và GVHD được đồng tác giả bài báo khoa học quốc tế.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Profile & Evaluation -->
+<div class="flex flex-col gap-6">
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="text-[12px] font-semibold text-[#5F6368]">Đầu mối Doanh nghiệp</span>
+<span class="px-2 py-0.5 rounded-[4px] bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-semibold">Tier-1 Partner</span>
+</div>
+<div class="flex items-center gap-3.5 pt-1">
+<div class="w-12 h-12 rounded-full bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center font-bold text-base border border-[#E1E5EA] shrink-0">
+                  ĐT
+                </div>
+<div class="flex flex-col">
+<span class="text-[14px] text-[#1A1A1A] font-semibold">TS. Đỗ Thanh Bình</span>
+<span class="text-[12px] text-[#5F6368]">R&amp;D Director • ABC Technologies</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 text-[13px] text-[#5F6368] pt-2 border-t border-[#E1E5EA]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#1F4E78]">location_on</span>
+<span>Tòa nhà ABC Tower, Q. Cầu Giấy, Hà Nội &amp; Chi nhánh TP.HCM</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#1F4E78]">mail</span>
+<span>rnd-partner@abctech.vn</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#1F4E78]">school</span>
+<span>Điều phối viên UIT: Ban Hợp tác Doanh nghiệp</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-[8px] bg-[#E6F0F7] hover:bg-[#1F4E78] hover:text-white text-[#1F4E78] text-[13px] font-semibold transition-colors flex items-center justify-center gap-2" onclick="document.getElementById('proposalModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Liên hệ Cố vấn Doanh nghiệp</span>
+</button>
+</div>
+<!-- Evaluation Timeline Box -->
+<div class="p-6 rounded-[12px] bg-white border border-[#E1E5EA] shadow-sm flex flex-col gap-4">
+<span class="text-[16px] text-[#1F4E78] font-semibold">Quy trình Thẩm định 3 Vòng</span>
+<div class="flex flex-col gap-4">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-[#1F4E78] text-white text-[12px] font-bold flex items-center justify-center shrink-0">1</div>
+<div class="flex flex-col">
+<span class="text-[13px] text-[#1A1A1A] font-medium">Sơ duyệt Proposal &amp; Hồ sơ năng lực</span>
+<span class="text-[12px] text-[#5F6368]">Đánh giá tính khả thi và nền tảng kiến trúc sơ bộ (3 ngày từ hạn chót).</span>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-[#1F4E78] text-white text-[12px] font-bold flex items-center justify-center shrink-0">2</div>
+<div class="flex flex-col">
+<span class="text-[13px] text-[#1A1A1A] font-medium">Hội đồng Phỏng vấn Kỹ thuật Trực tiếp</span>
+<span class="text-[12px] text-[#5F6368]">Trình bày phương pháp luận và giải đáp thắc mắc cùng Tech Lead.</span>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-[#2E86AB] text-white text-[12px] font-bold flex items-center justify-center shrink-0">3</div>
+<div class="flex flex-col">
+<span class="text-[13px] text-[#1A1A1A] font-medium">Ký kết Thỏa thuận &amp; Cấp tài nguyên GPU</span>
+<span class="text-[12px] text-[#5F6368]">Giải ngân đợt 1 và phân bổ hạ tầng nghiên cứu cho nhóm đề tài.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- NDA Agreement Note -->
+<div class="p-4 rounded-[12px] bg-[#E6F0F7]/60 border border-[#E1E5EA] flex flex-col gap-1.5 text-[#5F6368]">
+<div class="flex items-center gap-1.5 text-[#1F4E78] text-[13px] font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Cam kết Sở hữu Trí tuệ (IP) &amp; Bảo mật</span>
+</div>
+<p class="text-[12px] leading-relaxed">
+                Mọi tài liệu nộp qua Cổng UIT Connect được mã hóa end-to-end và ràng buộc bởi Thỏa thuận Bảo mật Thông tin (NDA) tiêu chuẩn giữa Doanh nghiệp và Trường ĐH Công nghệ Thông tin.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- TAB C: SCHOLARSHIP & R&D FUNDING CAMPAIGN BOARD           -->
+<!-- ======================================================== -->
+<div class="tab-content hidden flex flex-col gap-6" id="tab-campaigns">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+<div class="max-w-3xl flex flex-col gap-2">
+<div class="inline-flex items-center gap-1 text-[#2E86AB] text-[12px] font-semibold">
+<span class="material-symbols-outlined text-[16px]">handshake</span>
+<span>UIT ACADEMIC CROWDFUNDING &amp; LAB SPONSORSHIP</span>
+</div>
+<h2 class="text-[24px] text-[#1F4E78] font-bold">
+              Chiến dịch Gọi Vốn Nghiên cứu &amp; Học bổng Tài trợ từ Doanh nghiệp
+            </h2>
+<p class="text-[14px] text-[#5F6368]">
+              Các đề tài NCKH, phòng Lab và Đội ngũ sinh viên xuất sắc đang kêu gọi doanh nghiệp tài trợ kinh phí nghiên cứu, linh kiện phần cứng hoặc quỹ học bổng phát triển sản phẩm.
+            </p>
+</div>
+<button class="px-4 py-2.5 rounded-[8px] bg-white border border-[#E1E5EA] text-[#1F4E78] hover:bg-[#F5F7FA] text-[14px] font-semibold flex items-center gap-2 shrink-0 shadow-sm transition-all">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Đăng ký Chiến dịch gây quỹ</span>
+</button>
+</div>
+<!-- Campaign Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- CAMPAIGN CARD 1 -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded-[4px] bg-[#E6F0F7] text-[#1F4E78] text-[12px] font-semibold">
+                  Tài trợ Phần cứng &amp; Kit Nhúng
+                </span>
+<span class="font-mono text-[12px] text-[#1F4E78] font-bold bg-[#F5F7FA] border border-[#E1E5EA] px-2 py-0.5 rounded">TRL 5</span>
+</div>
+<h3 class="text-[16px] text-[#1F4E78] font-semibold leading-snug line-clamp-2">
+                Tài trợ bộ kit vi xử lý nhúng Nvidia Jetson Orin &amp; Drone kiểm tra đường dây điện
+              </h3>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center font-bold text-[12px] border border-[#E1E5EA]">
+                  AD
+                </div>
+<div class="flex flex-col min-w-0">
+<span class="text-[13px] text-[#1A1A1A] font-semibold truncate">Autonomous Drone Vision (K18 KHMT)</span>
+<span class="text-[12px] text-[#5F6368]">GVHD: TS. Nguyễn Hoàng Hải</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-[12px]">
+<span class="text-[#5F6368]">Đã gọi được: <b class="text-[#1F4E78] font-bold">56.000.000 VNĐ</b></span>
+<span class="text-[#1F4E78] font-bold">70%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-[#E6F0F7] overflow-hidden">
+<div class="h-full bg-[#1F4E78] rounded-full" style="width: 70%"></div>
+</div>
+<div class="flex items-center justify-between text-[12px] text-[#5F6368]">
+<span>Mục tiêu: 80.000.000 VNĐ</span>
+<span>Còn 14 ngày</span>
+</div>
+</div>
+<div class="p-3 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex flex-col gap-1 text-[12px] text-[#5F6368]">
+<div class="flex items-center gap-1 font-semibold text-[#1F4E78]">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>Đề tài: EdgeVision-Traffic (UIT-RD-2026-089)</span>
+</div>
+<p class="leading-relaxed">
+<b>Quyền lợi DN:</b> Đặt logo trên drone thử nghiệm, ưu tiên tuyển dụng 4 kỹ sư nhóm và tiếp nhận báo cáo kỹ thuật.
+                </p>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#E1E5EA]">
+<button class="w-full py-2.5 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[13px] font-semibold transition-all flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>Xem chiến dịch &amp; Tài trợ ngay</span>
+</button>
+</div>
+</div>
+<!-- CAMPAIGN CARD 2 -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded-[4px] bg-[#E6F0F7] text-[#1F4E78] text-[12px] font-semibold">
+                  Quỹ Nghiên cứu Vi mạch
+                </span>
+<span class="font-mono text-[12px] text-[#1F4E78] font-bold bg-[#F5F7FA] border border-[#E1E5EA] px-2 py-0.5 rounded">TRL 7</span>
+</div>
+<h3 class="text-[16px] text-[#1F4E78] font-semibold leading-snug line-clamp-2">
+                Quỹ ươm mầm thiết kế vi mạch băng thông rộng RISC-V mã nguồn mở cho IoT y tế
+              </h3>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center font-bold text-[12px] border border-[#E1E5EA]">
+                  CE
+                </div>
+<div class="flex flex-col min-w-0">
+<span class="text-[13px] text-[#1A1A1A] font-semibold truncate">Lab CE-Robotics &amp; Vi mạch UIT</span>
+<span class="text-[12px] text-[#5F6368]">GVHD: PGS.TS. Trần Quốc Dũng</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-[12px]">
+<span class="text-[#5F6368]">Đã gọi được: <b class="text-[#1F4E78] font-bold">120.000.000 VNĐ</b></span>
+<span class="text-[#1F4E78] font-bold">80%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-[#E6F0F7] overflow-hidden">
+<div class="h-full bg-[#1F4E78] rounded-full" style="width: 80%"></div>
+</div>
+<div class="flex items-center justify-between text-[12px] text-[#5F6368]">
+<span>Mục tiêu: 150.000.000 VNĐ</span>
+<span>Còn 21 ngày</span>
+</div>
+</div>
+<div class="p-3 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex flex-col gap-1 text-[12px] text-[#5F6368]">
+<div class="flex items-center gap-1 font-semibold text-[#1F4E78]">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>Đề tài: AI NPU Radar SoC (TRL 7)</span>
+</div>
+<p class="leading-relaxed">
+<b>Doanh nghiệp đồng hành:</b> Tập đoàn ABC (50M), Công ty XYZ (70M). Tiếp tục nhận đồng tài trợ thiết bị đo kiểm.
+                </p>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#E1E5EA]">
+<button class="w-full py-2.5 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[13px] font-semibold transition-all flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>Xem chiến dịch &amp; Tài trợ ngay</span>
+</button>
+</div>
+</div>
+<!-- CAMPAIGN CARD 3 -->
+<div class="flex flex-col justify-between rounded-[12px] bg-white border border-[#E1E5EA] p-5 shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded-[4px] bg-[#E6F0F7] text-[#1F4E78] text-[12px] font-semibold">
+                  Tài trợ Hạ tầng Máy chủ AI
+                </span>
+<span class="font-mono text-[12px] text-[#1F4E78] font-bold bg-[#F5F7FA] border border-[#E1E5EA] px-2 py-0.5 rounded">TRL 4</span>
+</div>
+<h3 class="text-[16px] text-[#1F4E78] font-semibold leading-snug line-clamp-2">
+                Tài trợ GPU Server huấn luyện mô hình Federated Learning chẩn đoán hình ảnh phổi
+              </h3>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center font-bold text-[12px] border border-[#E1E5EA]">
+                  HT
+                </div>
+<div class="flex flex-col min-w-0">
+<span class="text-[13px] text-[#1A1A1A] font-semibold truncate">HealthTech Lab UIT</span>
+<span class="text-[12px] text-[#5F6368]">GVHD: PGS.TS. Đỗ Văn Hoà</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-[12px]">
+<span class="text-[#5F6368]">Đã gọi được: <b class="text-[#1F4E78] font-bold">95.000.000 VNĐ</b></span>
+<span class="text-[#1F4E78] font-bold">47.5%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-[#E6F0F7] overflow-hidden">
+<div class="h-full bg-[#1F4E78] rounded-full" style="width: 47.5%"></div>
+</div>
+<div class="flex items-center justify-between text-[12px] text-[#5F6368]">
+<span>Mục tiêu: 200.000.000 VNĐ</span>
+<span>Còn 35 ngày</span>
+</div>
+</div>
+<div class="p-3 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] flex flex-col gap-1 text-[12px] text-[#5F6368]">
+<div class="flex items-center gap-1 font-semibold text-[#1F4E78]">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>Đề tài: Federated Healthcare Data Platform</span>
+</div>
+<p class="leading-relaxed">
+<b>Quyền lợi DN:</b> Được thử nghiệm giải pháp trên môi trường sản phẩm thực tế và ưu tiên sở hữu bản quyền phái sinh.
+                </p>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#E1E5EA]">
+<button class="w-full py-2.5 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[13px] font-semibold transition-all flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>Xem chiến dịch &amp; Tài trợ ngay</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MODAL: PROPOSAL SUBMISSION MODAL FORM -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" id="proposalModal">
+<div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[12px] bg-white border border-[#E1E5EA] shadow-2xl flex flex-col">
+<!-- Modal Header -->
+<div class="p-5 flex items-center justify-between bg-[#F5F7FA] border-b border-[#E1E5EA] sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-[8px] bg-[#1F4E78] text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">send_time_extension</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[16px] text-[#1F4E78] font-bold">Nộp Đề Xuất Giải Pháp R&amp;D</span>
+<span class="text-[12px] text-[#5F6368]">Đề tài: Tối ưu LLM On-Premise (Công ty TNHH ABC)</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full hover:bg-[#E1E5EA] flex items-center justify-center text-[#5F6368] hover:text-[#1A1A1A] transition-colors" onclick="document.getElementById('proposalModal').classList.add('hidden')">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body Form -->
+<form class="p-6 flex flex-col gap-4" id="proposalForm" onsubmit="handleProposalSubmit(event)">
+<div class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#1A1A1A]">1. Nhóm Nghiên cứu / Phòng Lab đại diện <span class="text-red-500">*</span></label>
+<select class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" required="">
+<option value="team1">NLP Research Group (SV K18 KHMT) • 4 thành viên</option>
+<option value="team2">Phòng Thí nghiệm Trí tuệ Nhân tạo UIT (AILab)</option>
+<option value="team3">Nộp với tư cách Nhóm Nghiên cứu Cá nhân mới</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#1A1A1A]">2. Tên Giải pháp / Đề xuất Kỹ thuật <span class="text-red-500">*</span></label>
+<input class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" placeholder="VD: Kiến trúc AWQ-vLLM lai ghép RAG Vector tiếng Việt tối ưu độ trễ &lt;150ms" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#1A1A1A]">3. Minh chứng Năng lực từ Portfolio UIT Connect</label>
+<select class="h-[44px] px-3.5 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]">
+<option value="p1">[Đề tài NCKH] Nghiên cứu Fine-tuning Mô hình LLaMA trên dữ liệu y tế (TRL 5)</option>
+<option value="p2">[Khóa luận] Xây dựng Vector Search Engine tốc độ cao bằng C++ (Điểm 9.8)</option>
+<option value="none">Không liên kết đề tài cũ (Hồ sơ mới hoàn toàn)</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#1A1A1A]">4. Tệp đính kèm Slide &amp; Bản thuyết minh Kỹ thuật <span class="text-red-500">*</span></label>
+<div class="p-6 rounded-[8px] bg-[#F5F7FA] border border-dashed border-[#1F4E78]/40 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#E6F0F7]/50 transition-colors">
+<span class="material-symbols-outlined text-[36px] text-[#1F4E78]">cloud_upload</span>
+<span class="text-[14px] font-medium text-[#1A1A1A] pt-1">Kéo thả tệp Proposal hoặc bấm để chọn tệp</span>
+<span class="text-[12px] text-[#5F6368] mt-0.5">Định dạng hỗ trợ: PDF, DOCX, ZIP tối đa 25MB (Slide pitch deck &amp; sơ đồ kiến trúc)</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#1A1A1A]">5. Tóm tắt Phương pháp tiếp cận &amp; Mốc bàn giao (Milestones) <span class="text-red-500">*</span></label>
+<textarea class="p-3 rounded-[6px] bg-[#F5F7FA] border border-[#E1E5EA] text-[14px] text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" placeholder="Trình bày ngắn gọn: Công nghệ sử dụng, giải pháp nén mô hình, kế hoạch 3 mốc thời gian..." required="" rows="3"></textarea>
+</div>
+<div class="flex items-start gap-2.5 pt-1">
+<input class="mt-1 w-4 h-4 text-[#1F4E78] rounded border-[#E1E5EA] focus:ring-[#1F4E78]" id="ndaCheck" required="" type="checkbox"/>
+<label class="text-[12px] text-[#5F6368] leading-relaxed cursor-pointer" for="ndaCheck">
+              Nhóm cam kết tuân thủ Thỏa thuận Bảo mật Thông tin (NDA), quyền sở hữu trí tuệ học thuật của ĐHQG-HCM và các điều khoản hợp tác nghiên cứu cùng Doanh nghiệp.
+            </label>
+</div>
+<div class="flex items-center justify-end gap-3 pt-3 border-t border-[#E1E5EA]">
+<button class="px-4 py-2 rounded-[8px] bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] hover:bg-[#E1E5EA] text-[14px] font-medium transition-colors" onclick="document.getElementById('proposalModal').classList.add('hidden')" type="button">
+              Hủy bỏ
+            </button>
+<button class="px-5 py-2 rounded-[8px] bg-[#1F4E78] hover:bg-[#163A59] text-white text-[14px] font-semibold transition-all shadow-sm flex items-center gap-1.5" type="submit">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Gửi Đề Xuất Giải Pháp Ngay</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- TOAST NOTIFICATION -->
+<div class="hidden fixed bottom-6 right-6 z-50 flex items-center gap-3 p-4 rounded-[10px] bg-[#1F4E78] text-white shadow-xl transition-all" id="toastSuccess">
+<span class="material-symbols-outlined text-[24px] text-[#2E86AB]">task_alt</span>
+<div class="flex flex-col">
+<span class="text-[14px] font-bold">Thành công!</span>
+<span class="text-[12px] text-gray-200">Đã gửi đề xuất thành công tới Hội đồng R&amp;D Doanh nghiệp. Mã: #PR-8924.</span>
+</div>
+</div>
+</main>
+<!-- 5. FOOTER: 4 columns in #163A59 bg from TRANG CHỦ. Copyright: "© 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM" -->
+<footer class="w-full bg-[#163A59] text-white pt-16 pb-8 border-t border-[#1F4E78]">
+<div class="max-w-[1280px] mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+<!-- Col 1: About -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-white text-[#163A59] flex items-center justify-center font-bold text-base">
+              UIT
+            </div>
+<span class="font-bold text-lg text-white">UIT CONNECT</span>
+</div>
+<p class="text-[14px] text-gray-300 leading-relaxed">
+            Nền tảng kết nối năng lực học thuật, nghiên cứu khoa học và nhu cầu tuyển dụng, đổi mới sáng tạo giữa Trường Đại học Công nghệ Thông tin và doanh nghiệp công nghệ.
+          </p>
+<div class="flex items-center gap-3 pt-1 text-gray-300">
+<a class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">public</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</a>
+</div>
+</div>
+<!-- Col 2: Dành cho Doanh nghiệp -->
+<div class="flex flex-col gap-3.5">
+<h4 class="text-[16px] font-semibold text-white">Dành cho Doanh nghiệp</h4>
+<ul class="flex flex-col gap-2.5 text-[14px] text-gray-300">
+<li><a class="hover:text-white transition-colors" href="#">Đặt hàng bài toán R&amp;D</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tài trợ Quỹ nghiên cứu &amp; Lab</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tìm kiếm tài năng sinh viên</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tài trợ học bổng học thuật</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Quy trình ký kết hợp tác NDA</a></li>
+</ul>
+</div>
+<!-- Col 3: Sinh viên & Giảng viên -->
+<div class="flex flex-col gap-3.5">
+<h4 class="text-[16px] font-semibold text-white">Sinh viên &amp; Giảng viên</h4>
+<ul class="flex flex-col gap-2.5 text-[14px] text-gray-300">
+<li><a class="hover:text-white transition-colors" href="#">Khám phá đề tài &amp; Portfolio</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Đăng ký Proposal giải pháp</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Ghép nhóm nghiên cứu liên ngành</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Danh bạ Giảng viên hướng dẫn</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Biểu mẫu thuyết minh &amp; Nghiệm thu</a></li>
+</ul>
+</div>
+<!-- Col 4: Thông tin liên hệ -->
+<div class="flex flex-col gap-3.5">
+<h4 class="text-[16px] font-semibold text-white">Thông tin liên hệ</h4>
+<div class="flex flex-col gap-2.5 text-[14px] text-gray-300">
+<p class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#2E86AB] shrink-0 mt-0.5">location_on</span>
+<span>Khu phố 6, P. Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+</p>
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#2E86AB] shrink-0">phone</span>
+<span>(028) 372 52002</span>
+</p>
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#2E86AB] shrink-0">mail</span>
+<span>qhdoanhnghiep@uit.edu.vn</span>
+</p>
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#2E86AB] shrink-0">verified</span>
+<span>Văn phòng Hợp tác Doanh nghiệp UIT</span>
+</p>
+</div>
+</div>
+</div>
+<div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-[12px] text-gray-400 gap-3">
+<p>© 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM</p>
+<div class="flex items-center gap-6">
+<a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a>
+<a class="hover:text-white transition-colors" href="#">Chính sách bảo mật</a>
+<a class="hover:text-white transition-colors" href="#">Sở hữu trí tuệ</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    function switchTab(tabId) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.add('hidden'));
+
+      const buttons = document.querySelectorAll('.tab-button');
+      buttons.forEach(btn => {
+        btn.classList.remove('text-[#1F4E78]', 'font-semibold', 'border-b-2', 'border-[#1F4E78]');
+        btn.classList.add('text-[#5F6368]', 'font-medium');
+      });
+
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+      }
+
+      let activeBtnId = 'btn-tab-problems';
+      if (tabId === 'tab-proposal-detail') activeBtnId = 'btn-tab-detail';
+      if (tabId === 'tab-campaigns') activeBtnId = 'btn-tab-campaigns';
+
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) {
+        activeBtn.classList.add('text-[#1F4E78]', 'font-semibold', 'border-b-2', 'border-[#1F4E78]');
+        activeBtn.classList.remove('text-[#5F6368]', 'font-medium');
+      }
+
+      window.scrollTo({ top: 320, behavior: 'smooth' });
+    }
+
+    function handleProposalSubmit(event) {
+      event.preventDefault();
+      document.getElementById('proposalModal').classList.add('hidden');
+      
+      const toast = document.getElementById('toastSuccess');
+      toast.classList.remove('hidden');
+      
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4500);
+    }
+  </script>
+<script src="router.js"></script>
+</body></html>

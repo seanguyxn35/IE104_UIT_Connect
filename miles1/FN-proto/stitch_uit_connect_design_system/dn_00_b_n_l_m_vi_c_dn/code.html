@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "tertiary-container": "#00573b",
+          "secondary-container": "#87d6fe",
+          "brand-navy-dark": "#163A59",
+          "primary-container": "#1f4e78",
+          "surface-dim": "#d7dae0",
+          "secondary-fixed-dim": "#81d0f8",
+          "on-tertiary-fixed": "#002114",
+          "primary-fixed": "#d0e4ff",
+          "on-surface-variant": "#42474e",
+          "surface-container-low": "#f1f4fa",
+          "on-primary-fixed-variant": "#194973",
+          "surface-container-highest": "#dfe3e8",
+          "secondary-fixed": "#c1e8ff",
+          "error-container": "#ffdad6",
+          "on-tertiary-fixed-variant": "#005137",
+          "inverse-surface": "#2d3135",
+          "on-background": "#181c20",
+          "surface-container": "#ebeef4",
+          "tertiary-fixed": "#85f8c4",
+          "on-tertiary-container": "#5cd19f",
+          "surface-container-lowest": "#ffffff",
+          "outline": "#72777f",
+          "background": "#f7f9ff",
+          "on-primary": "#ffffff",
+          "brand-light-blue": "#E6F0F7",
+          "surface": "#f7f9ff",
+          "error": "#ba1a1a",
+          "brand-hero-mid": "#1E3A5F",
+          "brand-active-text": "#001D35",
+          "on-secondary-fixed": "#001e2b",
+          "inverse-primary": "#a0cafb",
+          "text-muted": "#8A8F98",
+          "on-tertiary": "#ffffff",
+          "text-main": "#1A1A1A",
+          "surface-bright": "#f7f9ff",
+          "surface-container-high": "#e5e8ee",
+          "primary-fixed-dim": "#a0cafb",
+          "status-warning": "#F59E0B",
+          "secondary": "#006687",
+          "on-secondary-fixed-variant": "#004d67",
+          "on-secondary-container": "#005d7c",
+          "on-error-container": "#93000a",
+          "brand-hero-dark": "#0F2744",
+          "on-error": "#ffffff",
+          "outline-variant": "#c2c7cf",
+          "surface-tint": "#35618c",
+          "primary": "#00375e",
+          "brand-active-pill": "#D3E3FD",
+          "on-primary-container": "#95bff0",
+          "brand-surface": "#F5F7FA",
+          "inverse-on-surface": "#eef1f7",
+          "on-secondary": "#ffffff",
+          "surface-variant": "#dfe3e8",
+          "border-subtle": "#E1E5EA",
+          "tertiary-fixed-dim": "#68dba9",
+          "tertiary": "#003d29",
+          "status-error": "#DC2626",
+          "on-surface": "#181c20",
+          "on-primary-fixed": "#001d35"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-md": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-lg": "1rem",
+          "space-xl": "1.5rem",
+          "gutter-mobile": "1rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-2xl": "2rem"
+        },
+        "fontFamily": {
+          "headline-md": ["Inter"],
+          "display-lg": ["Inter"],
+          "title-md": ["Inter"],
+          "label-sm": ["Inter"],
+          "label-md": ["Inter"],
+          "headline-sm": ["Inter"],
+          "body-sm": ["Inter"],
+          "headline-lg": ["Inter"],
+          "display-lg-mobile": ["Inter"],
+          "code-sm": ["JetBrains Mono"],
+          "body-lg": ["Inter"],
+          "body-md": ["Inter"]
+        },
+        "fontSize": {
+          "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "display-lg": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+          "title-md": ["15px", {"lineHeight": "22px", "fontWeight": "600"}],
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+          "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+          "headline-sm": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "700"}],
+          "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+          "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+          "display-lg-mobile": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "800"}],
+          "code-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+          "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+          "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+        }
+      }
+    }
+  };</script></head><body class="bg-brand-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 h-16 z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-lg"><button aria-label="Thu gọn thanh điều hướng" class="p-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button><a class="flex items-center gap-space-sm group" href="#"><div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-xs"><span class="material-symbols-outlined text-[20px]">hub</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">UIT CONNECT</span><span class="px-1.5 py-0.5 rounded-full bg-brand-light-blue text-primary font-label-sm text-label-sm uppercase">Doanh nghiệp</span></div><span class="font-label-sm text-label-sm text-on-surface-variant -mt-0.5">Đại học Công nghệ Thông tin</span></div></a></div><div class="flex-1 max-w-2xl mx-space-xl hidden md:block"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">search</span><input class="w-full h-11 pl-11 pr-space-xl bg-surface-container-low rounded-full font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs transition-all" placeholder="Tìm kiếm nhà khoa học, đề tài R&amp;D, sinh viên tài năng, học bổng..." type="search"/></div></div><div class="flex items-center gap-space-md"><button aria-label="Hộp thư thông báo" class="relative p-space-sm rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-error ring-2 ring-surface-container-lowest"></span></button><button aria-label="Tin nhắn đối thoại" class="p-space-sm rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors hidden sm:flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[22px]">forum</span></button><div class="h-6 w-px bg-surface-container-highest mx-space-xs hidden sm:block"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-title-md text-title-md tracking-wider shadow-xs select-none">VT</div><div class="hidden xl:flex flex-col text-left"><span class="font-title-md text-title-md text-on-surface leading-tight">Tập đoàn Viettel</span><span class="font-label-sm text-label-sm text-on-surface-variant">Đối tác Chiến lược</span></div><span class="material-symbols-outlined text-on-surface-variant text-[18px] hidden xl:block">expand_more</span></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex flex-col justify-between overflow-y-auto"><div class="p-space-lg flex flex-col gap-space-lg"><div class="relative group"><button class="w-full h-12 bg-primary-container text-on-primary rounded-xl font-title-md text-title-md flex items-center justify-between px-space-lg shadow-xs hover:bg-brand-navy-dark hover:text-on-primary transition-all" type="button"><span class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">add_circle</span><span>Tạo mới</span></span><span class="material-symbols-outlined text-[18px]">expand_more</span></button><div class="hidden group-hover:flex flex-col absolute left-0 right-0 top-full mt-1 bg-surface-container-lowest rounded-xl shadow-lg p-1.5 z-50"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="dang-bai-toan-rd" href="#"><span class="material-symbols-outlined text-[18px] text-primary">science</span>Đăng bài toán R&amp;D</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="tao-hoc-bong" href="#"><span class="material-symbols-outlined text-[18px] text-secondary">school</span>Tạo học bổng</a></div></div><nav class="flex flex-col gap-space-xl" data-active-classes="bg-brand-light-blue text-primary font-title-md"><div class="flex flex-col gap-1"><span class="px-space-md font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Tổng quan</span><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="ban-lam-viec" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md group-hover:font-title-md">Bàn làm việc</span></div><span class="w-1.5 h-1.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></span></a><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="ho-so-doanh-nghiep" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">domain</span><span class="font-body-md text-body-md">Hồ sơ doanh nghiệp</span></div></a></div><div class="flex flex-col gap-1"><span class="px-space-md font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Kết nối R&amp;D</span><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="bai-toan-rd" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">biotech</span><span class="font-body-md text-body-md">Bài toán R&amp;D</span></div></a><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="san-nhan-tai" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">person_search</span><span class="font-body-md text-body-md">Săn nhân tài</span></div></a><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="hop-thu-ket-noi" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">mark_email_unread</span><span class="font-body-md text-body-md">Hộp thư kết nối</span></div><span class="px-2 py-0.5 rounded-full bg-status-error text-on-primary font-label-sm text-label-sm leading-none">5</span></a><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="khong-gian-dam-phan" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">handshake</span><span class="font-body-md text-body-md">Không gian đàm phán</span></div><span class="px-2 py-0.5 rounded-full bg-brand-light-blue text-primary font-label-sm text-label-sm leading-none">2</span></a></div><div class="flex flex-col gap-1"><span class="px-space-md font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Tài trợ</span><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="hoc-bong-tai-tro" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">workspace_premium</span><span class="font-body-md text-body-md">Học bổng &amp; Tài trợ</span></div></a></div><div class="flex flex-col gap-1"><span class="px-space-md font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Cài đặt</span><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="kho-da-luu" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">Kho đã lưu</span></div></a><a class="h-10 px-space-md rounded-xl flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="cai-dat-tai-khoan" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">manage_accounts</span><span class="font-body-md text-body-md">Cài đặt tài khoản</span></div></a></div></nav></div><div class="p-space-lg flex flex-col gap-1 bg-surface-container-low"><a class="h-10 px-space-md rounded-xl flex items-center gap-space-md text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-colors" data-path="tro-giup-ho-tro" href="#"><span class="material-symbols-outlined text-[20px]">help_outline</span><span class="font-body-md text-body-md">Trợ giúp &amp; Hỗ trợ</span></a><a class="h-10 px-space-md rounded-xl flex items-center gap-space-md text-error hover:bg-error-container hover:text-on-surface transition-colors" data-path="dang-xuat" href="#"><span class="material-symbols-outlined text-[20px]">logout</span><span class="font-title-md text-title-md">Đăng xuất</span></a></div></aside><div class="pl-64 flex flex-col min-h-screen"><main class="relative pt-16 flex-1 bg-brand-surface w-full max-w-[1440px] mx-auto px-space-2xl py-space-2xl"><div class="flex flex-col w-full gap-space-xl">
+<!-- 1. BANNER XÁC MINH (VERIFICATION BANNER) -->
+<section aria-label="Thông báo trạng thái xác minh tài khoản" class="w-full bg-[#FFF7E6] rounded-xl p-space-lg shadow-xs border-l-4 border-status-warning flex flex-col xl:flex-row xl:items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-full bg-status-warning/15 flex items-center justify-center shrink-0 text-status-warning">
+<span class="material-symbols-outlined text-[24px]">hourglass_top</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-amber-950 font-bold tracking-tight">Hồ sơ doanh nghiệp đang chờ xác minh</h2>
+<span class="px-2 py-0.5 rounded-full bg-status-warning/20 text-amber-900 font-label-sm text-label-sm">Đang duyệt hồ sơ</span>
+</div>
+<p class="font-body-md text-body-md text-amber-900/90 max-w-3xl">
+          Bạn có thể soạn thảo bài toán R&amp;D trong nội bộ, nhưng chỉ có thể đăng công khai và gửi lời mời sau khi ban quản trị xác minh thành công. Thời gian xử lý dự kiến: <strong class="font-semibold">1 - 3 ngày làm việc</strong>.
+        </p>
+</div>
+</div>
+<!-- Stepper & Action -->
+<div class="flex items-center gap-space-xl self-end xl:self-center shrink-0">
+<div class="hidden md:flex items-center gap-space-sm bg-white/70 px-space-md py-1.5 rounded-full">
+<!-- Bước 1: Đã nộp -->
+<div class="flex items-center gap-1 text-tertiary-container font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container font-bold">check_circle</span>
+<span>1. Đã nộp</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[14px]">chevron_right</span>
+<!-- Bước 2: Đang xem xét -->
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-status-warning/20 text-amber-950 font-label-md text-label-md">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-warning opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-status-warning"></span>
+</span>
+<span class="font-bold">2. Đang xem xét</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[14px]">chevron_right</span>
+<!-- Bước 3: Đã xác minh -->
+<div class="flex items-center gap-1 text-text-muted font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-text-muted">radio_button_unchecked</span>
+<span>3. Đã xác minh</span>
+</div>
+</div>
+<a class="h-9 px-space-lg rounded-xl bg-surface-container-lowest text-amber-900 font-title-md text-title-md hover:bg-amber-100/60 shadow-xs flex items-center justify-center transition-colors" href="#">
+        Xem hồ sơ
+      </a>
+</div>
+</section>
+<!-- 2. TIÊU ĐỀ TRANG (PAGE HEADER) -->
+<header class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-xs">
+<div class="flex flex-col gap-0.5">
+<h1 class="font-display-lg text-display-lg text-brand-hero-dark tracking-tight">Xin chào, V-Tech Global</h1>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Hôm nay, Thứ Tư, 15/10/2026</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant mx-1"></span>
+<span class="font-medium text-primary">Kỳ I Năm học 2026 - 2027</span>
+</div>
+</div>
+<!-- Action with Lock indicator -->
+<div class="relative group self-start sm:self-auto">
+<button class="h-11 px-space-xl bg-primary text-on-primary rounded-xl font-title-md text-title-md flex items-center gap-space-sm shadow-xs hover:bg-brand-navy-dark transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Đăng bài toán R&amp;D</span>
+<span class="material-symbols-outlined text-[16px] opacity-80 ml-0.5">lock</span>
+</button>
+<!-- Tooltip -->
+<div class="absolute right-0 top-full mt-2 hidden group-hover:flex flex-col items-end z-30 pointer-events-none">
+<div class="bg-inverse-surface text-inverse-on-surface font-label-sm text-label-sm px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+          Cần hoàn tất xác minh để đăng công khai
+        </div>
+</div>
+</div>
+</header>
+<!-- 3. VIỆC CẦN XỬ LÝ (ROW 4 THẺ) -->
+<section aria-label="Các đầu việc cần xử lý" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Thẻ 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-status-error/10 text-status-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">inbox</span>
+</div>
+<span class="font-display-lg text-display-lg font-bold text-status-error">3</span>
+</div>
+<div class="mt-space-md">
+<div class="font-title-md text-title-md text-on-surface">Proposal mới chờ phản hồi</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Từ các nhóm sinh viên và phòng Lab</p>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between">
+<a class="font-label-md text-label-md text-primary group-hover:text-secondary flex items-center gap-1 font-semibold transition-colors" href="#">
+<span>Xử lý</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Thẻ 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">person_check</span>
+</div>
+<span class="font-display-lg text-display-lg font-bold text-secondary">2</span>
+</div>
+<div class="mt-space-md">
+<div class="font-title-md text-title-md text-on-surface">Lời mời SV đã phản hồi</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Sinh viên đồng ý tiếp nhận trao đổi</p>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between">
+<a class="font-label-md text-label-md text-primary group-hover:text-secondary flex items-center gap-1 font-semibold transition-colors" href="#">
+<span>Xử lý</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Thẻ 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-brand-light-blue text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">handshake</span>
+</div>
+<span class="font-display-lg text-display-lg font-bold text-primary">1</span>
+</div>
+<div class="mt-space-md">
+<div class="font-title-md text-title-md text-on-surface">Đàm phán chờ bạn xác nhận</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Điều khoản hợp tác NDA &amp; IP</p>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between">
+<a class="font-label-md text-label-md text-primary group-hover:text-secondary flex items-center gap-1 font-semibold transition-colors" href="#">
+<span>Xử lý</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Thẻ 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-status-warning/15 text-status-warning flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">pending_actions</span>
+</div>
+<span class="font-display-lg text-display-lg font-bold text-status-warning">1</span>
+</div>
+<div class="mt-space-md">
+<div class="font-title-md text-title-md text-on-surface">Bài toán chờ Admin duyệt</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Cần phê duyệt trước khi mở nhận hồ sơ</p>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between">
+<a class="font-label-md text-label-md text-primary group-hover:text-secondary flex items-center gap-1 font-semibold transition-colors" href="#">
+<span>Xử lý</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- 4. BỐ CỤC 2 CỘT (TWO COLUMNS) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- CỘT TRÁI (65% width approx -> 8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-xl">
+<!-- Khối 1: Bài toán R&D của tôi -->
+<section aria-labelledby="heading-my-challenges" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">biotech</span>
+<h2 class="font-headline-sm text-headline-sm text-brand-hero-dark" id="heading-my-challenges">Bài toán R&amp;D của tôi</h2>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-0.5 font-semibold" href="#">
+<span>Xem tất cả</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Hàng 1 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1 min-w-0 flex-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-status-warning/15 text-amber-900 font-label-sm text-label-sm">Chờ duyệt</span>
+<h3 class="font-title-md text-title-md text-on-surface truncate">Hệ thống Edge-AI tích hợp cảm biến LiDAR cho xe tự hành</h3>
+</div>
+<div class="flex items-center gap-space-lg text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>0 proposal</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">event</span>
+<span>Hạn: 20/05/2026</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="h-8 px-space-md rounded-xl bg-surface-container-lowest hover:bg-brand-light-blue text-primary font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Chỉnh sửa
+              </button>
+</div>
+</article>
+<!-- Hàng 2 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1 min-w-0 flex-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">Bản nháp</span>
+<h3 class="font-title-md text-title-md text-on-surface truncate">Tối ưu hóa mô hình LLM phục vụ y tế dự phòng trên thiết bị biên</h3>
+</div>
+<div class="flex items-center gap-space-lg text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>0 proposal</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>Đang soạn thảo</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="h-8 px-space-md rounded-xl bg-surface-container-lowest hover:bg-brand-light-blue text-primary font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Tiếp tục soạn
+              </button>
+</div>
+</article>
+<!-- Hàng 3 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1 min-w-0 flex-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm">Đang mở</span>
+<h3 class="font-title-md text-title-md text-on-surface truncate">Phát hiện bất thường và tấn công DDoS tầng ứng dụng bằng eBPF</h3>
+</div>
+<div class="flex items-center gap-space-lg text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1 text-primary font-medium">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>4 proposal đã nộp</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">event</span>
+<span>Hạn: 30/05/2026</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="h-8 px-space-md rounded-xl bg-primary text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Xem hồ sơ
+              </button>
+</div>
+</article>
+</div>
+</section>
+<!-- Khối 2: Proposal mới nhất -->
+<section aria-labelledby="heading-latest-proposals" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">folder_special</span>
+<h2 class="font-headline-sm text-headline-sm text-brand-hero-dark" id="heading-latest-proposals">Proposal mới nhất</h2>
+<span class="px-2 py-0.5 rounded-full bg-brand-light-blue text-primary font-label-sm text-label-sm font-semibold">3 mới</span>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-0.5 font-semibold" href="#">
+<span>Quản lý hồ sơ</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Proposal 1 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<!-- Avatar stack 3 -->
+<div class="flex -space-x-2 shrink-0 pt-0.5">
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Chân dung nhà nghiên cứu trẻ sinh viên ngành Khoa học Máy tính UIT đeo kính mỉm cười trong phòng lab hiện đại" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYlfxU6dTNZ4bBNTFvbFH9A2fU1isZqodQyOwC57z10ioBmbjvBrY2ODr05DYQxvViXOKXy0VfznrVYvDJILpP_A0XpyWu6dLEtrJvI6g3rykWxh8BJf9rZ7VSuJjezjQiqNnVAvJZYDo1UxWfoJVx-pyohZhtXYYCZ4nODlzcqDpVMaqkwnQyKGvz097_qxsAUKJDrZTAWzBpR6sqT85EX3T5RrCjOiOcv3EIeJU"/>
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Chân dung nữ sinh viên nghiên cứu viên khoa Mạng máy tính và Truyền thông UIT với phong thái học thuật" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOq3tpSvob87UtHgS6-2UYL-AyTfq_n6-1X6HBRgtajT4W-tTNZPcD0oJZWLaM7H_nC0k1n-e_KvIlVwRN-dHN_dzI5L6JRroT1XcFZLYW7f1ji4jwP77whvqFmwRzFvFrbleyngWgAUAX36VGg38YQ54GSIDsRuAbIVAwvVw0oc3NbMvwg5Z4so8CPEUTgwQ8PJnS7PmrDlPha5CVhhWtkkeih_FwfW9i2IRCQyA"/>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-code-sm text-code-sm flex items-center justify-center ring-2 ring-surface-container-lowest font-semibold">
+                  +1
+                </div>
+</div>
+<div class="flex flex-col gap-0.5 min-w-0">
+<div class="flex items-center gap-space-sm">
+<span class="font-title-md text-title-md text-brand-hero-dark font-semibold">Nhóm sinh viên VisionLab UIT</span>
+<span class="w-1.5 h-1.5 rounded-full bg-status-error"></span>
+</div>
+<p class="font-body-md text-body-md text-on-surface truncate">
+                  Đề xuất giải pháp: <span class="font-medium text-primary">Phát hiện bất thường và tấn công DDoS tầng ứng dụng bằng eBPF</span>
+</p>
+<span class="font-label-sm text-label-sm text-text-muted">2 giờ trước</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 self-end md:self-center">
+<button class="h-8 px-space-md rounded-xl bg-surface-container-lowest text-primary hover:bg-brand-light-blue font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Xem proposal
+              </button>
+</div>
+</article>
+<!-- Proposal 2 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<!-- Avatar stack 2 -->
+<div class="flex -space-x-2 shrink-0 pt-0.5">
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Chân dung nghiên cứu sinh nam ngành An toàn thông tin UIT trong không gian thư viện đại học" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYdv59WVfxkr6eE09HshNnp1haEn_JvLQJJKm38lmKecdy3w8icTvj795uJCSpGGJ86gQ3-GtuiGYktqjvnM08U4utEYLFRzVEPjpHeOik6vDZiM2NZfT4tGCz5NospZbZneEhEATMUBN0Qmklj4NUsH4IWpqxMiZiCrfjcztZxrIXM9cEzuutV3xRzHGcfXBMzf3mflcy0Xyj_0ZTOZWkgp6-G7ILgPhAfPX5nNc"/>
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Chân dung sinh viên khoa Kỹ thuật Máy tính UIT đang thực nghiệm mạch nhúng" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBfQGKEoqXGSf_Br-YDnJz6loEpAJb5YiCpG0vDuOzr9we0VzhkJRjvLFOMxvtReB3HwXqTEqrP7emvZCfQQqQvwJj4Di-wDPGHytJVpqhBrMb5wvhQQE580oCx9CoAlmqGndHHAAkjSheAqBDMmAXohhsKa_oVG7-0wuMGa45BQPUN34Q26l8Z8uYF_j6cO4Gmfp_VA3w7mBckqmXIJ2PDOl5r0aZi5PosQQR9AI"/>
+</div>
+<div class="flex flex-col gap-0.5 min-w-0">
+<div class="flex items-center gap-space-sm">
+<span class="font-title-md text-title-md text-brand-hero-dark font-semibold">Nhóm SecLab Fellows UIT</span>
+<span class="w-1.5 h-1.5 rounded-full bg-status-error"></span>
+</div>
+<p class="font-body-md text-body-md text-on-surface truncate">
+                  Đề xuất giải pháp: <span class="font-medium text-primary">Phát hiện bất thường và tấn công DDoS tầng ứng dụng bằng eBPF</span>
+</p>
+<span class="font-label-sm text-label-sm text-text-muted">5 giờ trước</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 self-end md:self-center">
+<button class="h-8 px-space-md rounded-xl bg-surface-container-lowest text-primary hover:bg-brand-light-blue font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Xem proposal
+              </button>
+</div>
+</article>
+<!-- Proposal 3 -->
+<article class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<!-- Avatar stack 3 -->
+<div class="flex -space-x-2 shrink-0 pt-0.5">
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Nữ chuyên viên nghiên cứu Trí tuệ nhân tạo y tế UIT đang trao đổi đồ án" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7GxkiDq7KXXqkfokLM44VfmtPkhADJomHL0V7IWK3-z0rASFMC4_ed_hkf4Pk9zxKvdHC4MhaMxd6wkZ2DL206zAwJ_PDqM3EBcEGRnk0qSCrwKJXrVJuFxTXrM0H_7nvr5q7zVun6rC7bSckbT0_ylIj-Ccr9fi6WxuW9oGkM_4dLV3x5EaL2tmCc8Af1f683xQeeklL8xAuK6_EsV0NSaiIxYJXqFU4VDWC67M"/>
+<img class="w-8 h-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Nam kỹ sư phần mềm trẻ tốt nghiệp thủ khoa UIT trong trang phục công sở đĩnh đạc" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxxEl8UodiQKmIjH2BI2HUo1-ORk0oxOy8WfX2qZoqkwhaLyDMpyEj_FgTLIFklk2726RGHcAFQWmDiWepag1U4nvEVNijShLRo96WRm-MpbEiwC8zmTTp62Z5wFqPRZJfSvECeLINhWVhldze_aPd2DXIcsT-SbAdw5fY6Ml7jcf5Qh6vmjjW7Etew8b08kN3lP-dC2aI_iQvloAzPhwQih4htWC_tstgoK9nN34"/>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-code-sm text-code-sm flex items-center justify-center ring-2 ring-surface-container-lowest font-semibold">
+                  +1
+                </div>
+</div>
+<div class="flex flex-col gap-0.5 min-w-0">
+<div class="flex items-center gap-space-sm">
+<span class="font-title-md text-title-md text-brand-hero-dark font-semibold">Nhóm AI HealthTech</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface truncate">
+                  Đề xuất giải pháp: <span class="font-medium text-primary">Tối ưu hóa mô hình LLM phục vụ y tế dự phòng</span>
+</p>
+<span class="font-label-sm text-label-sm text-text-muted">1 ngày trước</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 self-end md:self-center">
+<button class="h-8 px-space-md rounded-xl bg-surface-container-lowest text-primary hover:bg-brand-light-blue font-label-md text-label-md shadow-xs transition-colors" type="button">
+                Xem proposal
+              </button>
+</div>
+</article>
+</div>
+</section>
+</div>
+<!-- CỘT PHẢI (35% width approx -> 4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-xl">
+<!-- Khối 1: Không gian đàm phán -->
+<section aria-labelledby="heading-negotiation" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">forum</span>
+<h2 class="font-headline-sm text-headline-sm text-brand-hero-dark" id="heading-negotiation">Không gian đàm phán</h2>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">Tất cả (2)</a>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Mục 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-2">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-brand-hero-dark font-semibold">PGS.TS. Trần Quốc Dũng</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Trưởng nhóm Lab AI • Dự án Edge-AI LiDAR</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm shrink-0">Đang trao đổi</span>
+</div>
+<div class="flex items-center justify-end">
+<a class="font-label-md text-label-md text-primary hover:text-secondary flex items-center gap-0.5 font-semibold" href="#">
+<span>Mở</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Mục 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-2">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-brand-hero-dark font-semibold">SecLab Fellows UIT</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Bản thỏa thuận bảo mật NDA &amp; Quyền SHTT</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-status-warning/15 text-amber-900 font-label-sm text-label-sm shrink-0">Chờ xác nhận</span>
+</div>
+<div class="flex items-center justify-end">
+<a class="font-label-md text-label-md text-primary hover:text-secondary flex items-center gap-0.5 font-semibold" href="#">
+<span>Mở</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Khối 2: Sinh viên phù hợp gợi ý -->
+<section aria-labelledby="heading-suggested-students" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">psychology</span>
+<h2 class="font-headline-sm text-headline-sm text-brand-hero-dark" id="heading-suggested-students">Sinh viên gợi ý</h2>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">Xem thêm</a>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- SV 1 -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-primary font-title-md text-title-md flex items-center justify-center font-bold shrink-0">
+                NA
+              </div>
+<div class="flex flex-col min-w-0">
+<div class="font-title-md text-title-md text-on-surface font-semibold truncate">Nguyễn Văn An</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Khoa KHMT • GPA 8.65 • TRL 5-6</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">PyTorch</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">TensorRT</span>
+</div>
+</div>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline shrink-0 pt-0.5 font-semibold" href="#">Xem hồ sơ →</a>
+</div>
+<!-- SV 2 -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed text-secondary font-title-md text-title-md flex items-center justify-center font-bold shrink-0">
+                HN
+              </div>
+<div class="flex flex-col min-w-0">
+<div class="font-title-md text-title-md text-on-surface font-semibold truncate">Đặng Hoàng Nam</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Khoa KTMT • GPA 8.45</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Jetson Orin</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">ROS2</span>
+</div>
+</div>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline shrink-0 pt-0.5 font-semibold" href="#">Xem hồ sơ →</a>
+</div>
+<!-- SV 3 -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed text-tertiary font-title-md text-title-md flex items-center justify-center font-bold shrink-0">
+                TN
+              </div>
+<div class="flex flex-col min-w-0">
+<div class="font-title-md text-title-md text-on-surface font-semibold truncate">Vũ Thảo Nhi</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Khoa MMT&amp;TT • GPA 8.60</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">eBPF</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Network Sec</span>
+</div>
+</div>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline shrink-0 pt-0.5 font-semibold" href="#">Xem hồ sơ →</a>
+</div>
+</div>
+</section>
+<!-- Khối 3: Hoàn thiện hồ sơ -->
+<section aria-labelledby="heading-profile-completion" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">verified_user</span>
+<h2 class="font-headline-sm text-headline-sm text-brand-hero-dark" id="heading-profile-completion">Hoàn thiện hồ sơ</h2>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">70%</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden my-space-xs">
+<div class="bg-primary h-full rounded-full" style="width: 70%;"></div>
+</div>
+<!-- Checklist -->
+<ul class="flex flex-col gap-2 my-space-md" role="list">
+<li class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check_circle</span>
+<span>Logo doanh nghiệp</span>
+</li>
+<li class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check_circle</span>
+<span>Giấy phép ĐKKD</span>
+</li>
+<li class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check_circle</span>
+<span>Mô tả doanh nghiệp</span>
+</li>
+<li class="flex items-center gap-space-sm font-body-sm text-body-sm text-text-muted">
+<span class="material-symbols-outlined text-outline-variant text-[18px]">cancel</span>
+<span>Website công ty</span>
+</li>
+<li class="flex items-center gap-space-sm font-body-sm text-body-sm text-text-muted">
+<span class="material-symbols-outlined text-outline-variant text-[18px]">cancel</span>
+<span>Hình ảnh văn phòng &amp; R&amp;D Lab</span>
+</li>
+</ul>
+<div class="p-space-sm rounded-lg bg-surface-container-low text-on-surface-variant font-body-sm text-body-sm leading-relaxed mb-space-md">
+          Bổ sung đầy đủ thông tin giúp tăng độ uy tín khi làm việc với các Nhà khoa học và Lab UIT.
+        </div>
+<button class="w-full h-9 rounded-xl bg-brand-light-blue hover:bg-brand-active-pill text-brand-active-text font-title-md text-title-md transition-colors flex items-center justify-center" type="button">
+          Cập nhật hồ sơ ngay
+        </button>
+</section>
+</div>
+</div>
+</div></main><footer class="w-full bg-brand-hero-dark text-on-primary py-space-2xl"><div class="max-w-[1440px] mx-auto px-space-2xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-space-2xl"><div class="flex flex-col gap-space-sm"><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[18px]">hub</span></div><span class="font-headline-sm text-headline-sm text-on-primary">UIT CONNECT</span></div><p class="font-body-sm text-body-sm text-surface-variant">Cổng thông tin xúc tiến hợp tác nghiên cứu phát triển và chuyển giao công nghệ giữa Trường ĐH Công nghệ Thông tin và cộng đồng doanh nghiệp số.</p></div><div class="flex flex-col gap-space-sm"><span class="font-title-md text-title-md text-on-primary uppercase tracking-wider">Khám phá</span><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Phòng thí nghiệm trọng điểm</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Nhóm nghiên cứu chuyên sâu</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Sáng chế &amp; Giải pháp phần mềm</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Danh bạ chuyên gia UIT</a></div><div class="flex flex-col gap-space-sm"><span class="font-title-md text-title-md text-on-primary uppercase tracking-wider">Hỗ trợ</span><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Chính sách sở hữu trí tuệ</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Quy trình tài trợ &amp; Đặt hàng R&amp;D</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Biểu mẫu ký kết thỏa thuận</a><a class="font-body-sm text-body-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Trung tâm trợ giúp doanh nghiệp</a></div><div class="flex flex-col gap-space-sm"><span class="font-title-md text-title-md text-on-primary uppercase tracking-wider">Liên hệ</span><p class="font-body-sm text-body-sm text-surface-variant">Khu phố 6, P. Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</p><p class="font-body-sm text-body-sm text-surface-variant">Email: hoptacdoanhnghiep@uit.edu.vn</p><p class="font-body-sm text-body-sm text-surface-variant">Điện thoại: (028) 372 52002</p></div></div><div class="pt-space-lg text-center font-body-sm text-body-sm text-surface-variant">© 2026 Trường Đại học Công nghệ Thông tin - ĐHQG-HCM. Bảo lưu mọi quyền.</div></div></footer></div></body></html>

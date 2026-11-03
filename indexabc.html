@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>So sánh trước / sau | UIT Connect</title>
+<!-- Mở indexabc.html để xem song song bản trước (pages, bản gốc) và sau (miles2, giống miles1 đã cập nhật) của CHỈ những trang đã chỉnh sửa -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1F4E78; --primary-dark: #163A59; --surface: #F5F7FA; --pill: #D3E3FD;
+    --text: #1A1A1A; --muted: #5F6368; --border: #E1E5EA;
+    --before: #B45309; --before-bg: #FEF3C7; --after: #047857; --after-bg: #D1FAE5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font-family: Inter, system-ui, sans-serif; color: var(--text); background: var(--surface); display: flex; flex-direction: column; }
+
+  header { height: 64px; flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; padding: 0 20px; }
+  .logo { width: 36px; height: 36px; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 800; font-size: 13px; display: grid; place-items: center; }
+  header h1 { font-size: 16px; margin: 0; }
+  header p { font-size: 12px; margin: 2px 0 0; color: var(--muted); }
+  .spacer { flex: 1; }
+  .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 3px; }
+  .seg button { border: 0; background: transparent; font: 600 12px Inter, sans-serif; color: var(--muted); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+  .seg button.on { background: var(--primary); color: #fff; }
+
+  .layout { flex: 1; min-height: 0; display: flex; }
+  aside { width: 300px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--border); overflow-y: auto; padding: 16px 12px; }
+  .group { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 14px 12px 6px; }
+  .group:first-child { margin-top: 0; }
+  .item { display: block; width: 100%; text-align: left; border: 0; background: transparent; border-radius: 12px; padding: 9px 12px; cursor: pointer; font: inherit; color: var(--text); }
+  .item:hover { background: #F1F4FA; }
+  .item.on { background: var(--pill); }
+  .item b { display: block; font-size: 13px; font-weight: 600; }
+  .item span { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+  .tag { font-style: normal; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: #E6F0F7; color: var(--primary); }
+  .tag.code { background: #F1F5F9; color: var(--muted); }
+  .tag.mark { background: #FEF3C7; color: #B45309; }
+  .toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .toggle input { accent-color: #F59E0B; width: 16px; height: 16px; }
+
+  main { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 20px 20px; gap: 12px; }
+  .info { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .info h2 { margin: 0 0 4px; font-size: 18px; }
+  .info ul { margin: 6px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.55; }
+  .info .note { margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .panes { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .panes.only-before .pane.after, .panes.only-after .pane.before { display: none; }
+  .panes.only-before, .panes.only-after { grid-template-columns: 1fr; }
+  .pane { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .pane-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .badge { font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .before .badge { background: var(--before-bg); color: var(--before); }
+  .after .badge { background: var(--after-bg); color: var(--after); }
+  .pane-head code { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pane-head a { margin-left: auto; color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .pane-head a:hover { text-decoration: underline; }
+  .viewport { flex: 1; min-height: 0; position: relative; overflow: hidden; background: #F1F4FA; }
+  /* Trang hiển thị ở bề rộng desktop 1440px rồi thu nhỏ cho vừa khung */
+  .viewport iframe { position: absolute; top: 0; left: 0; width: 1440px; border: 0; background: #fff; transform-origin: 0 0; }
+
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; }
+    aside { width: auto; max-height: 220px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .panes { grid-template-columns: 1fr; grid-auto-rows: minmax(420px, 1fr); overflow-y: auto; }
+    header p { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">UIT</div>
+  <div>
+    <h1>So sánh trước / sau chỉnh sửa</h1>
+    <p>16 trang đã thay đổi · Trước = pages (bản gốc) · Sau = miles1 / miles2 (đã sửa 4 lỗi mức Cao)</p>
+  </div>
+  <div class="spacer"></div>
+  <label class="toggle"><input type="checkbox" id="marks" checked> Đánh dấu thay đổi</label>
+  <div class="seg" id="mode">
+    <button data-mode="both" class="on">Song song</button>
+    <button data-mode="only-before">Chỉ trước</button>
+    <button data-mode="only-after">Chỉ sau</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="list"></aside>
+  <main>
+    <section class="info" id="info"></section>
+    <section class="panes" id="panes">
+      <div class="pane before">
+        <div class="pane-head"><span class="badge">Trước</span><code id="path-before"></code><a id="open-before" target="_blank">Mở tab mới ↗</a></div>
+        <div class="viewport"><iframe id="frame-before" title="Phiên bản trước"></iframe></div>
+      </div>
+      <div class="pane after">
+        <div class="pane-head"><span class="badge">Sau</span><code id="path-after"></code><a id="open-after" target="_blank">Mở tab mới ↗</a></div>
+        <div class="viewport"><iframe id="frame-after" title="Phiên bản sau"></iframe></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Các lỗi mức Cao đã sửa (xem miles2/CHANGELOG.md)
+var FIX = {
+  1: 'Ô mật khẩu mới và xác nhận mật khẩu được che (type="password"), icon nút con mắt đổi đúng trạng thái.',
+  2: 'Ảnh không còn lấy từ link tạm của Stitch: ảnh còn sống tải về FN-proto/assets/img/, ảnh đã hết hạn thay bằng ảnh minh họa SVG.',
+  3: 'Thanh nút Từ chối / Hẹn gặp / Chấp nhận dính đáy, phủ kín bề ngang panel, nền đặc và có bóng đổ, không còn đè lên thư ngỏ.',
+  4: 'Trang tài liệu dùng font Noto Serif có đủ dấu tiếng Việt (trước đó Georgia làm lệch dấu).',
+  5: 'Phiếu thẩm định cao vừa nội dung, dính cạnh khung PDF; danh sách ghi chú hiện đủ, không còn khoảng trắng thừa.'
+};
+// visual: false = ảnh trước đây vẫn tải được nên giao diện trông giống nhau, chỉ khác ở mã nguồn
+var PAGES = [
+  { group: 'Đăng nhập', id: 'login-08', name: 'Login-08 · Quên MK – Đặt lại mật khẩu', path: 'Login/08_quen-mat-khau-b2-dat-lai-mat-khau.html', fixes: [1], visual: true },
+
+  { group: 'Sinh viên', id: 'sv-01', name: 'SV-01 · Trang chủ', path: 'FN-proto/SV/01_trang-chu.html', fixes: [2], visual: true, marks: true },
+  { group: 'Sinh viên', id: 'sv-03', name: 'SV-03 · Chi tiết tài nguyên', path: 'FN-proto/SV/03_chi-tiet-tai-nguyen.html', fixes: [4], visual: true },
+  { group: 'Sinh viên', id: 'sv-04', name: 'SV-04 · Hồ sơ năng lực & CV', path: 'FN-proto/SV/04_ho-so-nang-luc-cv.html', fixes: [2], visual: true, marks: true },
+  { group: 'Sinh viên', id: 'sv-05', name: 'SV-05 · Đề tài của tôi', path: 'FN-proto/SV/05_de-tai-cua-toi.html', fixes: [2], visual: false },
+  { group: 'Sinh viên', id: 'sv-08', name: 'SV-08 · Danh bạ GV cố vấn', path: 'FN-proto/SV/08_danh-ba-giang-vien-co-van.html', fixes: [2], visual: false },
+  { group: 'Sinh viên', id: 'sv-09', name: 'SV-09 · Cổng doanh nghiệp & R&D', path: 'FN-proto/SV/09_cong-doanh-nghiep-rd.html', fixes: [2], visual: false },
+  { group: 'Sinh viên', id: 'sv-10', name: 'SV-10 · Học bổng & Tài trợ', path: 'FN-proto/SV/10_hoc-bong-tai-tro.html', fixes: [2], visual: false },
+
+  { group: 'Giảng viên', id: 'gv-01', name: 'GV-01 · Trang chủ', path: 'FN-proto/GV/01_trang-chu.html', fixes: [2], visual: true },
+  { group: 'Giảng viên', id: 'gv-02', name: 'GV-02 · Hồ sơ khoa học', path: 'FN-proto/GV/02_ho-so-khoa-hoc.html', fixes: [2], visual: false },
+  { group: 'Giảng viên', id: 'gv-04', name: 'GV-04 · Tuyển sinh viên', path: 'FN-proto/GV/04_tuyen-sinh-vien.html', fixes: [2], visual: true },
+  { group: 'Giảng viên', id: 'gv-05', name: 'GV-05 · Yêu cầu hướng dẫn', path: 'FN-proto/GV/05_yeu-cau-huong-dan.html', fixes: [3], visual: true, marks: true },
+  { group: 'Giảng viên', id: 'gv-07', name: 'GV-07 · Chi tiết thẩm định', path: 'FN-proto/GV/07_chi-tiet-tham-dinh.html', fixes: [4, 5], visual: true },
+  { group: 'Giảng viên', id: 'gv-10', name: 'GV-10 · Chi tiết tài liệu', path: 'FN-proto/GV/10_chi-tiet-tai-lieu.html', fixes: [4], visual: true },
+  { group: 'Giảng viên', id: 'gv-12', name: 'GV-12 · Bài toán DN & R&D', path: 'FN-proto/GV/12_bai-toan-doanh-nghiep-rd.html', fixes: [2], visual: false },
+  { group: 'Giảng viên', id: 'gv-13', name: 'GV-13 · Học bổng & Tài trợ', path: 'FN-proto/GV/13_hoc-bong-tai-tro.html', fixes: [2], visual: false }
+];
+var LABEL = { 1: '#1 Mật khẩu', 2: '#2 Ảnh', 3: '#3 Thanh nút', 4: '#4 Font', 5: '#4 Ghi chú' };
+
+var list = document.getElementById('list');
+var info = document.getElementById('info');
+var panes = document.getElementById('panes');
+var marksOn = true;
+var current = '';
+
+function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+var lastGroup = '';
+PAGES.forEach(function (p) {
+  if (p.group !== lastGroup) {
+    var g = document.createElement('div');
+    g.className = 'group'; g.textContent = p.group;
+    list.appendChild(g); lastGroup = p.group;
+  }
+  var b = document.createElement('button');
+  b.className = 'item'; b.dataset.id = p.id;
+  b.innerHTML = '<b>' + esc(p.name) + '</b><span>' +
+    p.fixes.map(function (f) { return '<em class="tag">' + LABEL[f] + '</em>'; }).join('') +
+    (p.visual ? '' : '<em class="tag code">chỉ mã nguồn</em>') +
+    (p.marks ? '<em class="tag mark">có đánh dấu</em>' : '') + '</span>';
+  b.addEventListener('click', function () { location.hash = p.id; });
+  list.appendChild(b);
+});
+
+function show(id) {
+  var p = PAGES.filter(function (x) { return x.id === id; })[0] || PAGES[0];
+  current = p.id;
+  list.querySelectorAll('.item').forEach(function (el) { el.classList.toggle('on', el.dataset.id === p.id); });
+  info.innerHTML = '<h2>' + esc(p.name) + '</h2><ul>' +
+    p.fixes.map(function (f) { return '<li>' + esc(FIX[f]) + '</li>'; }).join('') + '</ul>' +
+    (p.marks ? '<div class="note">Khung <b>Sau</b>: vùng viền vàng phát sáng là chỗ đã sửa.</div>' : '') +
+    (p.visual ? '' : '<div class="note">Ảnh của trang này trước đây vẫn tải được nên hai bản trông giống nhau; khác biệt nằm ở mã nguồn (ảnh lấy từ file cục bộ thay vì link ngoài).</div>');
+  ['before', 'after'].forEach(function (side) {
+    // miles1 đã được cập nhật giống miles2, nên bản gốc lấy từ pages/
+    var url = (side === 'before' ? 'pages/' : 'miles2/') + p.path;
+    // Bản sau của trang có đánh dấu: thêm ?diff=1 để miles2/FN-proto/diff-marker.js tô các chỗ đã thay đổi
+    if (side === 'after' && p.marks && marksOn) url += '?diff=1';
+    document.getElementById('frame-' + side).src = url;
+    document.getElementById('open-' + side).href = url;
+    document.getElementById('path-' + side).textContent = url;
+  });
+  fit();
+}
+
+// Thu nhỏ trang 1440px cho vừa bề rộng khung, giữ chiều cao lấp đầy khung
+function fit() {
+  document.querySelectorAll('.viewport').forEach(function (vp) {
+    var f = vp.querySelector('iframe');
+    var s = vp.clientWidth / 1440;
+    if (!s) return;
+    f.style.transform = 'scale(' + s + ')';
+    f.style.height = (vp.clientHeight / s) + 'px';
+  });
+}
+
+document.getElementById('mode').addEventListener('click', function (e) {
+  var btn = e.target.closest('button');
+  if (!btn) return;
+  this.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b === btn); });
+  panes.className = 'panes' + (btn.dataset.mode === 'both' ? '' : ' ' + btn.dataset.mode);
+  fit();
+});
+
+document.getElementById('marks').addEventListener('change', function () {
+  marksOn = this.checked;
+  show(current);
+});
+
+window.addEventListener('resize', fit);
+window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+show(location.hash.slice(1));
+</script>
+</body>
+</html>

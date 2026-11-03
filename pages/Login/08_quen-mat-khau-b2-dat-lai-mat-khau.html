@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"surface-bright":"#f7f9ff","tertiary-fixed":"#8df7c2","primary-fixed-dim":"#a0cafb","on-primary-fixed-variant":"#194973","tertiary-fixed-dim":"#71daa7","surface-container":"#ebeef4","secondary-container":"#87d6fe","on-tertiary-container":"#66d09d","surface-variant":"#dfe3e8","on-surface":"#181c20","on-secondary-fixed-variant":"#004d67","on-error-container":"#93000a","surface-tint":"#35618c","on-primary-container":"#95bff0","outline-variant":"#c2c7cf","on-secondary":"#ffffff","surface":"#f7f9ff","error-container":"#ffdad6","on-tertiary-fixed-variant":"#005235","primary":"#00375e","surface-container-lowest":"#ffffff","error":"#ba1a1a","surface-dim":"#d7dae0","surface-container-high":"#e5e8ee","tertiary":"#003d27","on-tertiary":"#ffffff","secondary-fixed":"#c1e8ff","on-error":"#ffffff","surface-container-highest":"#dfe3e8","secondary-fixed-dim":"#81d0f8","on-primary":"#ffffff","outline":"#72777f","on-surface-variant":"#42474e","primary-container":"#1f4e78","secondary":"#006687","background":"#f7f9ff","primary-fixed":"#d0e4ff","inverse-primary":"#a0cafb","inverse-on-surface":"#eef1f7","surface-container-low":"#f1f4fa","on-primary-fixed":"#001d35","inverse-surface":"#2d3135","tertiary-container":"#005739","on-secondary-container":"#005d7c","on-tertiary-fixed":"#002113","on-background":"#181c20","on-secondary-fixed":"#001e2b"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin":"1.5rem","space-xxl":"3rem","margin-mobile":"1rem","space-sm":"0.5rem","space-md":"1rem","space-xl":"2rem","space-lg":"1.5rem","space-xs":"0.25rem","gutter":"1.5rem"},"fontFamily":{"label-md":["Inter"],"body-lg":["Inter"],"headline-xl-mobile":["Inter"],"headline-lg":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"body-md":["Inter"],"caption":["Inter"],"headline-xl":["Inter"],"caption-code":["JetBrains Mono"],"body-md-medium":["Inter"]},"fontSize":{"label-md":["14px",{"lineHeight":"20px","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","fontWeight":"700"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-xl":["32px",{"lineHeight":"40px","fontWeight":"700"}],"caption-code":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-md-medium":["14px",{"lineHeight":"20px","fontWeight":"500"}]}}}};</script><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../FN-proto/ux-effects.css">
+</head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col justify-between"><header class="fixed top-0 left-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary font-headline-md text-headline-md tracking-wider">U</div><div class="flex flex-col"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">UIT Connect</span><span class="font-caption text-caption text-on-surface-variant">Cổng Kết nối Nghiên cứu &amp; Hợp tác</span></div></div><a class="inline-flex items-center gap-space-xs text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" data-path="trang-chu" href="#"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span class="">Về trang chủ</span></a></div></header><main class="w-full flex-1 flex flex-col items-center justify-center pt-16 px-margin py-space-xl bg-surface"><div class="w-full max-w-md mx-auto flex flex-col items-center justify-center"><div class="flex flex-col w-full">
+<div class="w-full max-w-[540px] mx-auto">
+<!-- Visual Step Switcher Pill Bar -->
+<div class="bg-surface-container-high p-space-xs rounded-full flex items-center justify-between mb-space-lg shadow-sm">
+<button class="flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:text-on-surface" id="tab-step-1" onclick="switchStep(1)" type="button" data-screen-id="SCREEN_54">
+<span class="w-5 h-5 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center text-[11px] font-bold">1</span>
+<span class="">Gửi link xác thực</span>
+</button>
+<button class="flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-all" id="tab-step-2" onclick="switchStep(2)" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary/20 text-on-primary flex items-center justify-center text-[11px] font-bold">2</span>
+<span class="">Đặt lại mật khẩu</span>
+</button>
+</div>
+<!-- Main Card Container -->
+<div class="bg-surface-container-lowest rounded-full p-space-xl md:p-space-xl shadow-xl relative overflow-hidden transition-all duration-300">
+<!-- STEP 2 VIEW (ACTIVE DEFAULT AS REQUESTED) -->
+<section class="flex flex-col" id="step-2-content">
+<!-- Header with Lock Badge -->
+<div class="flex flex-col items-center text-center mb-space-lg">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center text-primary-container mb-space-md shadow-sm">
+<span class="material-symbols-outlined text-[32px]">lock_reset</span>
+</div>
+<div class="inline-flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm mb-space-xs"><span class="material-symbols-outlined text-[14px] text-tertiary-container">verified_user</span>
+<span class="">Bước 2 / 2: Đặt mật khẩu mới</span></div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">
+            Thiết lập mật khẩu mới
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs max-w-sm">
+            Nhập mật khẩu mới cho tài khoản email trường <span class="font-body-md-medium text-body-md-medium text-on-surface font-semibold">nguyen****@gm.uit.edu.vn</span>
+</p>
+</div>
+<!-- Form Fields -->
+<form class="flex flex-col gap-space-md" onsubmit="event.preventDefault(); handlePasswordReset();">
+<!-- Input 1: New Password -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between">
+<span class="">Mật khẩu mới <span class="text-error">*</span></span>
+<span class="font-caption text-caption text-on-surface-variant">Tối thiểu 8 ký tự</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px] pointer-events-none">lock</span>
+<input class="w-full h-11 pl-10 pr-10 bg-surface-container-low rounded-lg font-caption-code text-body-md text-on-surface outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all placeholder:text-outline" id="password-input" placeholder="Nhập mật khẩu mới" type="text" value="UitSecure#2025">
+<button class="absolute right-3 text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" onclick="togglePasswordVisibility('password-input', this)" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Strength Meter & Checklist Container -->
+<div class="bg-surface-container-low p-space-md rounded-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">Độ an toàn mật khẩu:</span>
+<span class="font-label-sm text-label-sm text-tertiary-container font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+                Rất mạnh / An toàn
+              </span>
+</div>
+<!-- 4-Stage Strength Bar (All Active for current sample) -->
+<div class="grid grid-cols-4 gap-1.5 h-1.5 w-full">
+<div class="bg-tertiary-container rounded-full h-full"></div>
+<div class="bg-tertiary-container rounded-full h-full"></div>
+<div class="bg-tertiary-container rounded-full h-full"></div>
+<div class="bg-tertiary-container rounded-full h-full"></div>
+</div>
+<!-- 4 Verification Criteria Checklist Pills -->
+<div class="grid grid-cols-2 gap-x-space-md gap-y-1.5 pt-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-tertiary-container font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+<span class="">Tối thiểu 8 ký tự</span>
+</div>
+<div class="flex items-center gap-1.5 font-caption text-caption text-tertiary-container font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+<span class="">Có chữ hoa &amp; thường</span>
+</div>
+<div class="flex items-center gap-1.5 font-caption text-caption text-tertiary-container font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+<span class="">Có ít nhất 1 chữ số</span>
+</div>
+<div class="flex items-center gap-1.5 font-caption text-caption text-tertiary-container font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+<span class="">Ký tự đặc biệt (!@#$%)</span>
+</div>
+</div>
+</div>
+<!-- Input 2: Confirm Password -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between">
+<span class="">Xác nhận mật khẩu mới <span class="text-error">*</span></span>
+<span class="font-caption text-caption text-tertiary-container flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Khớp chính xác
+              </span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px] pointer-events-none">lock</span>
+<input class="w-full h-11 pl-10 pr-10 bg-surface-container-low rounded-lg font-caption-code text-body-md text-on-surface outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all placeholder:text-outline" id="confirm-password-input" placeholder="Nhập lại mật khẩu mới" type="text" value="UitSecure#2025">
+<span class="material-symbols-outlined absolute right-3 text-tertiary-container text-[20px] pointer-events-none">check_circle</span>
+</div>
+</div>
+<!-- Primary Submit CTA -->
+<button class="w-full h-11 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-md text-label-md flex items-center justify-center gap-space-xs shadow-md transition-colors mt-space-xs cursor-pointer" type="submit">
+<span class="material-symbols-outlined text-[20px]">lock_reset</span>
+<span class="">Đặt lại mật khẩu</span>
+</button>
+</form>
+<!-- Auxiliary Reference Panel for Step 1 Request -->
+<div class="mt-space-lg p-space-md rounded-lg bg-surface-container-low flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">forward_to_inbox</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface">Bạn cần gửi lại mã xác nhận?</span>
+<span class="font-caption text-caption text-on-surface-variant">Chưa nhận được đường dẫn trong hộp thư?</span>
+</div>
+</div>
+<button class="text-secondary hover:text-primary font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest shadow-sm hover:shadow transition-all whitespace-nowrap" onclick="switchStep(1)" type="button">
+            Gửi lại link
+          </button>
+</div>
+<!-- Back to Login Navigation -->
+<div class="mt-space-lg pt-space-md flex items-center justify-center">
+<a class="inline-flex items-center gap-space-xs font-label-md text-label-md text-secondary hover:text-primary transition-colors" data-path="dang-nhap" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="">Quay lại trang Đăng nhập</span>
+</a>
+</div>
+</section>
+<!-- STEP 1 VIEW (MINI-STATE / SWITCHABLE) -->
+<section class="hidden flex flex-col" id="step-1-content">
+<!-- Step 1 Header -->
+<div class="flex flex-col items-center text-center mb-space-lg">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary mb-space-md shadow-sm">
+<span class="material-symbols-outlined text-[32px]">mark_email_read</span>
+</div>
+<div class="inline-flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm mb-space-xs">
+<span class="material-symbols-outlined text-[14px] text-secondary">mail</span>
+<span class="">Bước 1 / 2: Yêu cầu khôi phục</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">
+            Quên mật khẩu UIT Connect
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs max-w-sm">
+            Nhập email tài khoản học tập hoặc công vụ để nhận liên kết khôi phục mật khẩu.
+          </p>
+</div>
+<!-- Step 1 Form -->
+<form class="flex flex-col gap-space-md" onsubmit="event.preventDefault(); simulateSentEmail();">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">
+              Email trường cấp <span class="text-error">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px] pointer-events-none">mail</span>
+<input class="w-full h-11 pl-10 pr-4 bg-surface-container-low rounded-lg font-body-md text-body-md text-on-surface outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all placeholder:text-outline" id="reset-email-input" placeholder="name@gm.uit.edu.vn hoặc @uit.edu.vn" type="email" value="nguyenvana@gm.uit.edu.vn">
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-secondary">info</span>
+<span class="font-caption text-caption text-on-surface-variant">Chỉ chấp nhận đuôi @gm.uit.edu.vn hoặc @uit.edu.vn</span>
+</div>
+</div>
+<!-- Sent Feedback Banner -->
+<div class="p-space-md rounded-lg bg-surface-container flex items-start gap-space-sm transition-all" id="email-sent-badge">
+<span class="material-symbols-outlined text-tertiary-container text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Đã gửi liên kết khôi phục</span>
+<span class="font-caption text-caption text-on-surface-variant">Vui lòng kiểm tra hộp thư đến (hoặc hòm thư Spam) và nhấp vào link trong vòng 15 phút.</span>
+</div>
+</div>
+<button class="w-full h-11 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-md text-label-md flex items-center justify-center gap-space-xs shadow-md transition-colors mt-space-xs cursor-pointer" type="submit">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span class="">Gửi link đặt lại mật khẩu</span>
+</button>
+</form>
+<!-- Proceed to Step 2 Prompt -->
+<div class="mt-space-lg p-space-md rounded-lg bg-secondary-fixed/30 flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-primary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface">Đã có mã xác thực từ email?</span>
+<span class="font-caption text-caption text-on-surface-variant">Tiếp tục tới bước cấu hình mật khẩu mới</span>
+</div>
+</div>
+<button class="text-on-primary bg-primary hover:bg-primary-container font-label-sm text-label-sm px-3 py-1.5 rounded-full shadow transition-all whitespace-nowrap" onclick="switchStep(2)" type="button">
+            Bước 2 →
+          </button>
+</div>
+<!-- Back to Login Navigation -->
+<div class="mt-space-lg pt-space-md flex items-center justify-center">
+<a class="inline-flex items-center gap-space-xs font-label-md text-label-md text-secondary hover:text-primary transition-colors" data-path="dang-nhap" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="">Quay lại trang Đăng nhập</span>
+</a>
+</div>
+</section>
+</div>
+<!-- Security Footnote Badge -->
+<div class="flex items-center justify-center gap-space-xs text-on-surface-variant font-caption text-caption mt-space-md">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">shield</span>
+<span class="">Bảo mật theo tiêu chuẩn xác thực SSO ĐHQG-HCM</span>
+</div>
+</div>
+<!-- Interactive Logic -->
+<script>
+    function switchStep(stepNumber) {
+      const step1View = document.getElementById('step-1-content');
+      const step2View = document.getElementById('step-2-content');
+      const tab1 = document.getElementById('tab-step-1');
+      const tab2 = document.getElementById('tab-step-2');
+
+      if (stepNumber === 1) {
+        step1View.classList.remove('hidden');
+        step2View.classList.add('hidden');
+
+        tab1.className = 'flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-all';
+        tab1.querySelector('span:first-child').className = 'w-5 h-5 rounded-full bg-on-primary/20 text-on-primary flex items-center justify-center text-[11px] font-bold';
+
+        tab2.className = 'flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:text-on-surface';
+        tab2.querySelector('span:first-child').className = 'w-5 h-5 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center text-[11px] font-bold';
+      } else {
+        step2View.classList.remove('hidden');
+        step1View.classList.add('hidden');
+
+        tab2.className = 'flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-all';
+        tab2.querySelector('span:first-child').className = 'w-5 h-5 rounded-full bg-on-primary/20 text-on-primary flex items-center justify-center text-[11px] font-bold';
+
+        tab1.className = 'flex-1 py-2 px-3 rounded-full flex items-center justify-center gap-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:text-on-surface';
+        tab1.querySelector('span:first-child').className = 'w-5 h-5 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center text-[11px] font-bold';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility_off';
+      }
+    }
+
+    function handlePasswordReset() {
+      alert('Mật khẩu tài khoản UIT của bạn đã được cập nhật thành công! Vui lòng đăng nhập lại.');
+      window.location.href = window.LOGIN_PAGE_URL || '01_dang-nhap-email.html';
+    }
+
+    function simulateSentEmail() {
+      const badge = document.getElementById('email-sent-badge');
+      badge.classList.remove('bg-surface-container');
+      badge.classList.add('bg-tertiary-fixed/20');
+      alert('Đã gửi liên kết xác thực tới email trường của bạn.');
+    }
+  </script>
+</div></div></main><footer class="w-full bg-surface-container-low py-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-7xl mx-auto px-margin text-center flex flex-col items-center gap-space-xs"><p class="font-body-md text-body-md text-on-surface-variant">© 2026 Trường Đại học Công nghệ Thông tin - ĐHQG-HCM. Bảo lưu mọi quyền.</p><div class="flex items-center gap-space-md text-on-surface-variant font-caption text-caption"><span class="">Hệ thống Xác thực Người dùng</span><span class="">•</span><span class="">UIT Connect Auth</span></div></div></footer>
+
+<script src="../FN-proto/ux-effects.js"></script>
+<script src="router.js"></script>
+</body></html>

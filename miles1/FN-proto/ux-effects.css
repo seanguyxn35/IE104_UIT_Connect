@@ -1,0 +1,39 @@
+/* Hiệu ứng nút dùng chung cho mọi trang (SV, GV, Login) – đi kèm ux-effects.js */
+button:not(:disabled), [role="button"], [role="switch"], [role="tab"] { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+
+/* Viền focus khi dùng bàn phím (Tab) */
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
+[role="switch"]:focus-visible, [role="tab"]:focus-visible {
+  outline: 2px solid #1F4E78;
+  outline-offset: 2px;
+}
+
+/* Lún nhẹ khi nhấn: dùng thuộc tính "scale" riêng nên không đè các class translate/transform sẵn có.
+   Thẻ / hàng lớn lún ít hơn để không bị giật. */
+.ux-press { animation: ux-press 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ux-press-soft { animation: ux-press-soft 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes ux-press { 0% { scale: 1; } 35% { scale: 0.96; } 100% { scale: 1; } }
+@keyframes ux-press-soft { 0% { scale: 1; } 35% { scale: 0.99; } 100% { scale: 1; } }
+
+/* Gợn sóng lan ra từ chỗ nhấn: lớp bọc cắt theo bo góc của nút, không đổi overflow của nút */
+.ux-ripple-host {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.ux-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  transform: scale(0);
+  animation: ux-ripple 550ms ease-out forwards;
+}
+@keyframes ux-ripple { to { transform: scale(4); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ux-press, .ux-press-soft, .ux-ripple { animation: none; }
+  .ux-ripple { display: none; }
+}

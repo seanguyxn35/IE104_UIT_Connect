@@ -1,0 +1,15 @@
+/* App shell dùng chung cho các màn "main screen 2" (theo bản mẫu 01_trang-chu.html) */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Sidebar thu gọn (desktop): chỉ còn icon */
+#sidebar.collapsed { width: 72px !important; }
+#sidebar.collapsed .sidebar-label,
+#sidebar.collapsed .sidebar-text,
+#sidebar.collapsed .sidebar-badge,
+#sidebar.collapsed .user-info { display: none !important; }
+#sidebar.collapsed .sidebar-group-title { opacity: 0; height: 0; margin-top: 12px; margin-bottom: 0; overflow: hidden; }
+#sidebar.collapsed .user-card { justify-content: center; padding: 6px 0; }
+#sidebar.collapsed .nav-item { justify-content: center; padding-left: 0; padding-right: 0; }
+#sidebar.collapsed .nav-item .material-symbols-outlined { margin: 0; }

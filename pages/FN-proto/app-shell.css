@@ -1,0 +1,82 @@
+/* App shell dùng chung cho các trang FN-proto (theo bản mẫu 01_trang-chu.html):
+   header trên cùng, sidebar kiểu Gmail, footer xanh đậm. Hiệu ứng nút nằm ở ux-effects.css. */
+@layer base {
+  html, body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; color: #1A1A1A; }
+  body { overscroll-behavior: none; }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Không dùng overflow-hidden để các khối "sticky" trong nội dung vẫn bám theo khi cuộn */
+.app-body { overflow-x: clip; }
+
+/* ---------- Sidebar ---------- */
+#sidebar {
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), padding 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Thu gọn (desktop): chỉ còn icon */
+#sidebar.collapsed {
+  width: 72px !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+#sidebar.collapsed .sidebar-label,
+#sidebar.collapsed .sidebar-text,
+#sidebar.collapsed .sidebar-badge,
+#sidebar.collapsed .user-info {
+  display: none !important;
+}
+#sidebar.collapsed .sidebar-group-title {
+  opacity: 0;
+  height: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 8px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+#sidebar.collapsed .nav-item {
+  width: 44px !important;
+  height: 44px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 9999px !important;
+  justify-content: center !important;
+  position: relative;
+}
+#sidebar.collapsed .nav-item .material-symbols-outlined { margin: 0 !important; }
+/* Chấm báo hiệu thay cho số badge khi thu gọn */
+#sidebar.collapsed .has-badge::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #1F4E78;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+/* Mobile (< 768px): sidebar thành ngăn kéo trượt từ trái */
+@media (max-width: 767px) {
+  #sidebar {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    bottom: 0;
+    height: auto;
+    z-index: 50;
+    transform: translateX(-100%);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  #sidebar.is-open { transform: translateX(0); }
+}

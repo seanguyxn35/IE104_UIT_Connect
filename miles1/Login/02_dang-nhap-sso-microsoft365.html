@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="vi" style="width: 1280px; height: 880px; overflow: hidden; position: relative;"><head><title>1. ĐĂNGNHẬP-SSO</title><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-tertiary":"#ffffff","on-secondary":"#ffffff","on-secondary-fixed-variant":"#004d67","on-secondary-container":"#005d7c","surface-variant":"#dfe3e8","on-primary-fixed":"#001d35","surface-container-high":"#e5e8ee","inverse-primary":"#a0cafb","primary":"#00375e","on-background":"#181c20","outline-variant":"#c2c7cf","primary-container":"#1f4e78","on-tertiary-fixed":"#002113","tertiary-fixed-dim":"#71daa7","tertiary-fixed":"#8df7c2","primary-fixed-dim":"#a0cafb","secondary-fixed":"#c1e8ff","surface-tint":"#35618c","inverse-on-surface":"#eef1f7","secondary":"#006687","surface-dim":"#d7dae0","surface-container":"#ebeef4","on-tertiary-fixed-variant":"#005235","on-primary-container":"#95bff0","secondary-container":"#87d6fe","surface-bright":"#f7f9ff","on-primary-fixed-variant":"#194973","on-primary":"#ffffff","tertiary-container":"#005739","surface-container-low":"#f1f4fa","on-secondary-fixed":"#001e2b","on-tertiary-container":"#66d09d","error-container":"#ffdad6","on-error":"#ffffff","on-surface-variant":"#42474e","surface-container-highest":"#dfe3e8","on-error-container":"#93000a","inverse-surface":"#2d3135","surface-container-lowest":"#ffffff","outline":"#72777f","primary-fixed":"#d0e4ff","surface":"#f7f9ff","secondary-fixed-dim":"#81d0f8","background":"#f7f9ff","tertiary":"#003d27","error":"#ba1a1a","on-surface":"#181c20"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-md":"1rem","margin-mobile":"1rem","space-xl":"2rem","space-xxl":"3rem","margin":"1.5rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter":"1.5rem","space-lg":"1.5rem"},"fontFamily":{"caption":["Inter"],"body-lg":["Inter"],"body-md":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"headline-lg":["Inter"],"label-md":["Inter"],"headline-xl":["Inter"],"caption-code":["JetBrains Mono"],"headline-xl-mobile":["Inter"],"body-md-medium":["Inter"]},"fontSize":{"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","fontWeight":"600"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"600"}],"label-md":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-xl":["32px",{"lineHeight":"40px","fontWeight":"700"}],"caption-code":["12px",{"lineHeight":"16px","fontWeight":"500"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","fontWeight":"700"}],"body-md-medium":["14px",{"lineHeight":"20px","fontWeight":"500"}]}}}}</script><link rel="stylesheet" href="../FN-proto/ux-effects.css">
+</head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col justify-between" data-mode="connect"><header class="fixed top-0 left-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin flex items-center justify-between"><a class="flex items-center gap-space-sm" data-path="trang-chu" href="#"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">hub</span></div><span class="font-headline-md text-headline-md text-primary tracking-tight">UIT Connect</span></a><a class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="trang-chu" href="#"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span class="">Về trang chủ</span></a></div></header><main class="w-full pt-16 flex-1 flex flex-col items-center justify-center max-w-7xl mx-auto px-margin"><div class="flex flex-col w-full py-space-md">
+<div class="w-[1000px] h-[640px] mx-auto rounded-xl shadow-xl overflow-hidden bg-surface-container-lowest flex flex-row relative">
+<!-- LEFT BRAND PANEL (Fixed w-[400px]) -->
+<div class="w-[400px] h-full shrink-0 bg-primary-container p-8 text-on-primary flex flex-col justify-between relative overflow-hidden">
+  <!-- Ambient Graphic Blobs -->
+  <div class="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-secondary/20 blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-28 -right-20 w-88 h-88 rounded-full bg-secondary-container/15 blur-3xl pointer-events-none"></div>
+  <!-- Top Branding -->
+  <div class="relative z-10 flex flex-col gap-space-xs">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-md">
+        <span class="material-symbols-outlined text-primary text-[24px]">hub</span>
+      </div>
+      <div>
+        <div class="font-headline-md text-headline-md tracking-tight leading-none text-surface-container-lowest">UIT Connect</div>
+        <div class="font-caption text-caption text-secondary-fixed opacity-90 mt-0.5">ĐHQG-HCM • NCKH &amp; Doanh nghiệp</div>
+      </div>
+    </div>
+    <div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 mt-space-xs rounded-full bg-primary/40 backdrop-blur-sm w-fit font-caption text-caption text-secondary-fixed">
+      <span class="material-symbols-outlined text-[14px]">verified</span>
+      <span class="">Đại học Công nghệ Thông tin</span>
+    </div>
+  </div>
+  <!-- Center Value Proposition -->
+  <div class="relative z-10 flex flex-col gap-space-md">
+    <div>
+      <span class="font-caption-code text-caption-code uppercase tracking-wider text-secondary-fixed bg-primary/60 px-space-xs py-0.5 rounded">Hệ sinh thái tri thức số</span>
+      <h2 class="font-headline-lg text-headline-lg font-bold text-surface-container-lowest leading-snug mt-space-xs">Nền tảng Kết nối &amp; Chuyển giao Tri thức Học thuật UIT.</h2>
+    </div>
+    <!-- 3 Value Bullets -->
+    <div class="space-y-space-sm pt-space-xs">
+      <div class="flex items-start gap-space-sm bg-primary/25 p-space-sm rounded-lg backdrop-blur-xs">
+        <div class="w-7 h-7 rounded-md bg-secondary-fixed/20 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-secondary-fixed text-[18px]">verified_user</span>
+        </div>
+        <div class="font-body-md text-body-md text-surface-container-lowest">
+          <strong class="font-semibold text-secondary-fixed">1,280+ đề tài &amp; mã nguồn</strong> được bảo vệ sở hữu trí tuệ và công khai chỉ số TRL.
+        </div>
+      </div>
+      <div class="flex items-start gap-space-sm bg-primary/25 p-space-sm rounded-lg backdrop-blur-xs">
+        <div class="w-7 h-7 rounded-md bg-secondary-fixed/20 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-secondary-fixed text-[18px]">school</span>
+        </div>
+        <div class="font-body-md text-body-md text-surface-container-lowest">
+          <strong class="font-semibold text-secondary-fixed">Cố vấn chuyên sâu</strong> từ các Giáo sư, Tiến sĩ hàng đầu trong lĩnh vực CNTT.
+        </div>
+      </div>
+      <div class="flex items-start gap-space-sm bg-primary/25 p-space-sm rounded-lg backdrop-blur-xs">
+        <div class="w-7 h-7 rounded-md bg-secondary-fixed/20 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-secondary-fixed text-[18px]">domain_add</span>
+        </div>
+        <div class="font-body-md text-body-md text-surface-container-lowest">
+          <strong class="font-semibold text-secondary-fixed">Cầu nối việc làm</strong> &amp; đề bài giải quyết thách thức kỹ thuật thực tế từ doanh nghiệp.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bottom Accreditation -->
+  <div class="relative z-10">
+    <div class="p-space-sm rounded-lg bg-primary/40 backdrop-blur-md flex items-center justify-between gap-space-sm">
+      <div class="flex items-center gap-space-sm">
+        <div class="w-8 h-8 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary-fixed">
+          <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
+        </div>
+        <div class="font-caption text-caption text-surface-container-high leading-tight">
+          Hệ sinh thái Đổi mới sáng tạo &amp; Hợp tác Doanh nghiệp UIT © 2025
+        </div>
+      </div>
+      <span class="font-caption-code text-caption-code px-1.5 py-0.5 rounded bg-primary text-secondary-fixed shrink-0">v2.4</span>
+    </div>
+  </div>
+</div>
+<!-- RIGHT FORM CARD (Fixed w-[600px]) -->
+<div class="w-[600px] h-full px-[40px] pt-[32px] pb-[32px] bg-surface-container-lowest flex flex-col justify-between overflow-hidden">
+  <!-- Top Content Area -->
+  <div class="flex flex-col w-full">
+    <!-- Tab Switcher (h-[40px], rounded-[8px], mb-[24px]) -->
+    <div class="h-[40px] p-1 bg-surface-container rounded-[8px] flex items-center gap-1 border border-outline-variant/40 mb-[24px]">
+      <button type="button" class="flex-1 h-full rounded-md bg-surface-container-lowest shadow-sm text-[#1F4E78] font-medium text-[13px] flex items-center justify-center gap-1.5 transition-all cursor-default">
+        <span class="material-symbols-outlined text-[16px] text-[#1F4E78]">school</span>
+        <span class="">UIT SSO (Sinh viên / GV)</span>
+      </button>
+      <a href="#" data-path="dang-nhap" class="flex-1 h-full rounded-md text-[#5F6368] hover:text-on-surface font-medium text-[13px] flex items-center justify-center gap-1.5 transition-all hover:bg-surface-container-low">
+        <span class="material-symbols-outlined text-[16px]">mail</span>
+        <span class="">Email &amp; Mật khẩu</span>
+      </a>
+    </div>
+    <!-- Header / Title Section -->
+    <div>
+      <!-- Badge: 11px semibold, letter-spacing 0.02em, color #2E86AB, dot 6px, mb-[8px] -->
+      <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.02em] text-[#2E86AB] bg-surface-container-low px-space-sm py-1 rounded-full mb-[8px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#2E86AB] animate-pulse"></span>
+        <span class="">CỔNG XÁC THỰC TẬP TRUNG • UIT SSO</span>
+      </div>
+      <!-- Title: 28px bold, line-height 1.25, color #1A1A1A, mb-[4px] -->
+      <h1 class="text-[28px] font-bold text-[#1A1A1A] leading-[1.25] tracking-tight mb-[4px]">
+        Đăng nhập bằng UIT SSO
+      </h1>
+      <!-- Subtext: 13px regular, line-height 1.5, color #5F6368, truncate/whitespace-nowrap, mb-[24px] -->
+      <p class="text-[13px] leading-[1.5] text-[#5F6368] whitespace-nowrap truncate mb-[24px]">
+        Dùng tài khoản do Nhà trường cấp cho Sinh viên và Giảng viên.
+      </p>
+    </div>
+    <!-- Form Inputs -->
+    <form onsubmit="event.preventDefault(); handleLogin();">
+      <!-- Field 1: Username / MSSV -->
+      <div class="mb-[16px]">
+        <label class="block text-[13px] font-semibold text-[#1A1A1A] mb-[6px]" for="username">
+          Tài khoản UIT <span class="text-[#D64545]">*</span>
+        </label>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3 text-[16px] text-[#8A8F98] pointer-events-none">account_circle</span>
+          <input id="username" type="text" placeholder="MSSV / Mã GV hoặc email @gm.uit.edu.vn" class="w-full h-[44px] pl-[40px] pr-3 rounded-[6px] border border-[#E1E5EA] bg-surface-container-lowest text-[14px] text-on-surface placeholder-[#8A8F98] focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all" required="">
+        </div>
+      </div>
+      <!-- Field 2: Password -->
+      <div class="mb-[16px]">
+        <div class="flex items-center justify-between mb-[6px]">
+          <label class="text-[13px] font-semibold text-[#1A1A1A]" for="password">
+            Mật khẩu <span class="text-[#D64545]">*</span>
+          </label>
+          <a href="#" data-path="quen-mk-1" class="text-[12px] font-semibold text-[#2E86AB] hover:underline">Quên mật khẩu?</a>
+        </div>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3 text-[16px] text-[#8A8F98] pointer-events-none">lock</span>
+          <input id="password" type="password" placeholder="••••••••" value="" class="w-full h-[44px] pl-[40px] pr-10 rounded-[6px] border border-[#E1E5EA] bg-surface-container-lowest text-[14px] text-on-surface placeholder-[#8A8F98] focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all" required="">
+          <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 text-[#8A8F98] hover:text-on-surface transition-colors cursor-pointer flex items-center justify-center">
+            <span id="password-eye-icon" class="material-symbols-outlined text-[16px]">visibility</span>
+          </button>
+        </div>
+      </div>
+      <!-- Checkbox Row (mb-[24px]) -->
+      <div class="flex items-center gap-2 mb-[24px]">
+        <input id="remember-me" type="checkbox" class="w-4 h-4 rounded-[4px] border-outline-variant text-primary focus:ring-secondary cursor-pointer" checked="">
+        <label for="remember-me" class="text-[12px] text-[#5F6368] cursor-pointer select-none">
+          Ghi nhớ đăng nhập trên thiết bị này (30 ngày)
+        </label>
+      </div>
+      <!-- Submit Button (h-[44px], rounded-[8px], bg-[#1F4E78], text-[14px] font-semibold text-white) -->
+      <div>
+        <button id="btn-submit" type="submit" class="w-full h-[44px] rounded-[8px] bg-[#1F4E78] text-white text-[14px] font-semibold shadow-sm hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-1 cursor-pointer">
+          <span class="">Đăng nhập UIT SSO →</span>
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- Bottom Area: mt-auto, link row (12px, #5F6368, semibold #1F4E78), mb-[12px], security pill (11px, #5F6368) -->
+  <div class="mt-auto flex flex-col items-center">
+    <div class="text-center text-[12px] text-[#5F6368] mb-[12px]">
+      Chưa có tài khoản? <a href="#" data-path="dang-ky-buoc-1" class="text-[#1F4E78] font-semibold hover:underline">Đăng ký tài khoản mới</a>
+    </div>
+    <div class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container text-[11px] text-[#5F6368]">
+      <span class="material-symbols-outlined text-[14px] text-tertiary">lock</span>
+      <span class="">Kết nối được mã hóa SSL 256-bit theo chuẩn an toàn thông tin ĐHQG-HCM</span>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('password-eye-icon');
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+      }
+    }
+
+    function handleLogin() {
+      const submitBtn = document.getElementById('btn-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span>Đang xác thực...</span>';
+      
+      // Đăng nhập thành công -> vào không gian làm việc sinh viên FN-proto (đích khai báo trong router.js)
+      setTimeout(() => {
+        window.location.href = window.LOGIN_SUCCESS_URL || '../FN-proto/SV/01_trang-chu.html';
+      }, 900);
+    }
+
+    function handleSSO() {
+      alert('Đang kết nối đến Cổng xác thực đơn ĐHQG-HCM (CAS UIT)...');
+    }
+  </script>
+</div></main><footer class="w-full py-space-lg bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-7xl mx-auto px-margin flex flex-col sm:flex-row items-center justify-between gap-space-sm font-caption text-caption text-on-surface-variant"><span class="">© 2026 Đại học Công nghệ Thông tin - ĐHQG-HCM (UIT). Bản quyền được bảo lưu.</span><div class="flex items-center gap-space-md"><a class="hover:text-on-surface transition-colors" href="mailto:support@uit.edu.vn">Hỗ trợ kỹ thuật: support@uit.edu.vn</a><span class="text-outline-variant">|</span><a class="hover:text-on-surface transition-colors" data-path="dieu-khoan-su-dung" href="#">Điều khoản &amp; Chính sách</a></div></div></footer>
+
+
+
+
+
+
+<script src="../FN-proto/ux-effects.js"></script>
+<script src="router.js"></script>
+</body></html>
