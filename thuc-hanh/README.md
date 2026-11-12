@@ -46,6 +46,8 @@ Toàn bộ là dữ liệu giả, ID cố định dải 9xxx ([database/seed.sql
 dữ liệu "trước".
 
 Kiểm thử giao diện tự động (tùy chọn): `node thuc-hanh/tests/run_ui_tests.mjs` khi máy chủ đang chạy.
+Kiểm thử tầng CSDL (tùy chọn): chạy `reset.sql`, rồi chạy `database/test_supabase.sql` trong SQL Editor → bảng PASS/FAIL
+(21 điểm: lược đồ, dữ liệu thử, logic R2/R3, ràng buộc UNIQUE/CHECK/FK). Script không thay đổi dữ liệu.
 
 ## Các tệp do tôi tạo / sửa
 
@@ -57,7 +59,7 @@ Kiểm thử giao diện tự động (tùy chọn): `node thuc-hanh/tests/run_u
 | `backend/src/services/labApplicationService.js`                             | Mới – nghiệp vụ R1, R2, R3                                     |
 | `frontend/assets/js/lab-application.js`                                     | Mới – gửi yêu cầu, trạng thái nút, hộp thông báo               |
 | `frontend/pages/sv/07_cho-ghep-nhom.html`                                   | Sửa – thêm `data-topic-id` cho 3 nút, nạp `lab-application.js` |
-| `database/seed.sql`, `database/reset.sql`                                   | Mới – dữ liệu thử, đặt lại dữ liệu                             |
+| `database/seed.sql`, `database/reset.sql`, `database/test_supabase.sql` | Mới – dữ liệu thử, đặt lại dữ liệu, kiểm thử tầng CSDL |
 | `database/README.md`, `backend/README.md`                                   | Sửa – mô tả                                                    |
 | `thuc-hanh/`                                                                | Mới – DESIGN.md, TEST_REPORT.md, evidence/, tests/             |
 
