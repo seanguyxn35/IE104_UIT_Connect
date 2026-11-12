@@ -1,0 +1,19 @@
+{
+  "name": "uit-connect-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API UIT Connect – chức năng SV ứng tuyển đề tài Lab (bài thực hành Web)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --env-file=.env src/server.js",
+    "dev": "node --env-file=.env --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=20.6"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "case": "TC03",
+  "rule": "R3",
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:3000/api/lab-applications",
+    "body": "{\"topicId\":9003}"
+  },
+  "response": {
+    "status": 409,
+    "body": {
+      "code": "TOPIC_FULL",
+      "message": "Đề tài đã đủ người."
+    }
+  },
+  "ui": {
+    "button": "Ứng tuyển ngay\narrow_forward",
+    "toast": "Đề tài đã đủ người."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "case": "TC01",
+  "rule": "R1",
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:3000/api/lab-applications",
+    "body": "{\"topicId\":9001}"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "applicationId": 6,
+      "topicId": 9001,
+      "studentId": 9101,
+      "status": "Pending",
+      "appliedAt": "2026-11-12T03:24:11+00:00"
+    }
+  },
+  "ui": {
+    "button": "Đã ứng tuyển\narrow_forward",
+    "toast": "Ứng tuyển thành công! Giảng viên sẽ phản hồi sớm. (Mã đơn #6)"
+  }
+}
