@@ -62,38 +62,37 @@ Dữ liệu thử: [database/seed.sql](../database/seed.sql) (chạy 1 lần), [
 
 ```mermaid
 sequenceDiagram
-    autonumber
     actor SV as Sinh viên
     participant UI as Giao diện SV-07
     participant API as Route POST /api/lab-applications
     participant SVC as labApplicationService
     participant DB as Supabase (PostgreSQL)
 
-    SV->>UI: Bấm "Ứng tuyển ngay" (đề tài X)
-    UI->>UI: Khóa nút, hiện "Đang gửi…"
-    UI->>API: POST { topicId: X }
-    API->>API: Kiểm tra topicId hợp lệ; studentId = TEST_STUDENT_ID (máy chủ)
-    API->>SVC: apply(studentId, topicId)
-    SVC->>DB: Đọc đề tài X (slots)
+    SV->>UI: (1) Bấm "Ứng tuyển ngay" (đề tài X)
+    UI->>UI: (2) Khóa nút, hiện "Đang gửi…"
+    UI->>API: (3) POST, body topicId = X
+    API->>API: (4) Kiểm tra topicId, lấy studentId từ máy chủ
+    API->>SVC: applyToTopic(studentId, topicId)
+    SVC->>DB: (5) Đọc đề tài X (slots)
     alt Không có đề tài X
-        SVC-->>API: TOPIC_NOT_FOUND
+        SVC-->>API: TOPIC_NOT_FOUND, dừng
         API-->>UI: 404
     end
-    SVC->>DB: Tìm đơn (topic_id = X, student_id)
+    SVC->>DB: (6) Tìm đơn của cặp (X, studentId)
     alt ĐIỂM TỪ CHỐI 1 – R2: đã có đơn
-        SVC-->>API: ALREADY_APPLIED (không ghi)
+        SVC-->>API: ALREADY_APPLIED, dừng, không ghi
         API-->>UI: 409 ALREADY_APPLIED
     end
-    SVC->>DB: Đếm đơn Accepted của đề tài X
-    alt ĐIỂM TỪ CHỐI 2 – R3: Accepted >= slots
-        SVC-->>API: TOPIC_FULL (không ghi)
+    SVC->>DB: (7) Đếm đơn Accepted của đề tài X
+    alt ĐIỂM TỪ CHỐI 2 – R3: số đơn Accepted ≥ slots
+        SVC-->>API: TOPIC_FULL, dừng, không ghi
         API-->>UI: 409 TOPIC_FULL
     end
-    SVC->>DB: INSERT lab_application (X, studentId, 'Pending')
+    SVC->>DB: (8) INSERT lab_application (X, studentId, Pending)
     DB-->>SVC: application_id
     SVC-->>API: Đơn mới
-    API-->>UI: 201 { applicationId, ... }
-    UI->>SV: Hiển thị thông báo theo kết quả
+    API-->>UI: (9) 201 kèm applicationId
+    UI->>SV: (10) Hiển thị thông báo theo kết quả
 ```
 
 Mô tả bằng bước đánh số (khớp sơ đồ):
