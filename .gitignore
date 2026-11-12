@@ -1,3 +1,15 @@
+# Hệ điều hành / editor
 Thumbs.db
 desktop.ini
+.DS_Store
 .vscode/
+.idea/
+
+# File tạm của Word / Excel
+~$*
+
+# Backend (khi có)
+node_modules/
+.env
+*.log
+dist/

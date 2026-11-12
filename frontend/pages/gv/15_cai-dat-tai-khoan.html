@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cài đặt tài khoản | UIT Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  "darkMode": "class",
+  "theme": {
+    "extend": {
+      "colors": {
+        "on-secondary": "#ffffff",
+        "on-error": "#ffffff",
+        "badge-red": "#DC2626",
+        "primary-container": "#1f4e78",
+        "on-tertiary-container": "#5cd19f",
+        "outline": "#72777f",
+        "on-secondary-fixed-variant": "#004d67",
+        "secondary-container": "#87d6fe",
+        "primary-fixed": "#d0e4ff",
+        "error-container": "#ffdad6",
+        "brand-blue-hover": "#163A59",
+        "surface-container-lowest": "#ffffff",
+        "brand-light": "#E6F0F7",
+        "text-main": "#1A1A1A",
+        "surface-container-highest": "#dfe3e8",
+        "text-secondary": "#5F6368",
+        "outline-variant": "#c2c7cf",
+        "nav-active-bg": "#D3E3FD",
+        "surface-container-low": "#f1f4fa",
+        "secondary": "#006687",
+        "surface-dim": "#d7dae0",
+        "on-tertiary": "#ffffff",
+        "secondary-fixed": "#c1e8ff",
+        "on-tertiary-fixed-variant": "#005137",
+        "on-primary-fixed-variant": "#194973",
+        "secondary-fixed-dim": "#81d0f8",
+        "on-surface-variant": "#42474e",
+        "tertiary": "#003d29",
+        "primary-fixed-dim": "#a0cafb",
+        "on-background": "#181c20",
+        "error": "#ba1a1a",
+        "surface-container": "#ebeef4",
+        "nav-active-text": "#001D35",
+        "surface-bright": "#f7f9ff",
+        "on-primary-fixed": "#001d35",
+        "border-color": "#E1E5EA",
+        "on-primary-container": "#95bff0",
+        "inverse-on-surface": "#eef1f7",
+        "surface-container-high": "#e5e8ee",
+        "on-surface": "#181c20",
+        "primary": "#00375e",
+        "tertiary-fixed": "#85f8c4",
+        "surface-tint": "#35618c",
+        "surface": "#f7f9ff",
+        "tertiary-fixed-dim": "#68dba9",
+        "brand-bg": "#F5F7FA",
+        "on-secondary-container": "#005d7c",
+        "inverse-primary": "#a0cafb",
+        "inverse-surface": "#2d3135",
+        "on-error-container": "#93000a",
+        "surface-variant": "#dfe3e8",
+        "on-secondary-fixed": "#001e2b",
+        "background": "#f7f9ff",
+        "on-tertiary-fixed": "#002114",
+        "on-primary": "#ffffff",
+        "tertiary-container": "#00573b",
+        "brand-blue": "#1F4E78",
+        "brand-cyan": "#2E86AB"
+      },
+      "fontFamily": {
+        "sans": [
+          "Inter",
+          "sans-serif"
+        ],
+        "mono": [
+          "JetBrains Mono",
+          "monospace"
+        ]
+      }
+    }
+  }
+};
+</script>
+<!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<style>
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+</style>
+</head>
+<body class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased selection:bg-[#E6F0F7] selection:text-[#1F4E78]">
+<!-- MOBILE BACKDROP OVERLAY -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden transition-opacity md:hidden" id="sidebar-backdrop"></div>
+<div class="min-h-screen flex flex-col w-full bg-[#F5F7FA]">
+<!-- TOP BAR -->
+<header class="sticky top-0 z-40 w-full h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 w-[240px] shrink-0">
+<button aria-label="Thu gọn hoặc mở menu" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer" id="hamburger-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">menu</span>
+</button>
+<a class="flex items-center gap-2.5 group" href="01_trang-chu.html">
+<div class="w-9 h-9 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight shadow-xs transition-transform group-hover:scale-105">
+          UIT
+        </div>
+<div class="hidden sm:flex flex-col">
+<span class="font-bold text-[17px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[11px] text-[#5F6368] font-medium leading-none mt-1">Cổng Kết Nối Tri Thức UIT</span>
+</div>
+</a>
+</div>
+<!-- Center: Global Search Bar (Pill style Gmail) -->
+<div class="flex-1 max-w-[720px] mx-auto">
+</div>
+<!-- Right: Bell badge & avatar only -->
+<div class="flex items-center gap-3 shrink-0"><button aria-label="Thông báo" class="relative w-10 h-10 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2 right-2 w-4 h-4 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs">3</span></button><div class="flex items-center gap-2.5 cursor-pointer pl-1 pr-2 rounded-lg" onclick="openLogoutModal()"><div class="w-9 h-9 rounded-full bg-[#1F4E78] text-white flex items-center justify-center font-bold text-xs shadow-xs hover:ring-2 hover:ring-[#1F4E78]/30 transition-all">NA</div><div class="hidden md:flex flex-col text-left"><span class="text-xs font-bold text-[#1A1A1A] leading-tight">TS. Nguyễn Văn A</span><span class="text-[11px] text-[#5F6368] leading-tight mt-0.5">Khoa MMT &amp; TT · GV01024</span></div></div></div>
+</header>
+<!-- MAIN APP BODY: Sidebar + Content -->
+<div class="app-body flex-1 flex w-full relative">
+<!-- SIDEBAR -->
+<aside class="w-[260px] bg-white border-r border-slate-200 flex flex-col justify-between py-4 px-3 shrink-0 transition-all duration-300 ease-in-out overflow-y-auto" id="sidebar">
+<div class="flex flex-col">
+<nav class="flex flex-col space-y-1" aria-label="Điều hướng chính">
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-3 pb-1 transition-all duration-200">Tổng quan &amp; Học thuật</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="01_trang-chu.html" title="Trang chủ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">home</span>
+<span class="sidebar-text truncate">Trang chủ</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="09_kho-tai-lieu.html" title="Kho tài liệu">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">folder</span>
+<span class="sidebar-text truncate">Kho tài liệu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="02_ho-so-khoa-hoc.html" title="Hồ sơ khoa học">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">badge</span>
+<span class="sidebar-text truncate">Hồ sơ khoa học</span>
+</a>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="03_de-tai-huong-dan.html" title="Đề tài &amp; Hướng dẫn">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">science</span>
+<span class="sidebar-text truncate">Đề tài &amp; Hướng dẫn</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">3</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="11_nhom-nghien-cuu-lab.html" title="Nhóm nghiên cứu &amp; Lab">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">groups</span>
+<span class="sidebar-text truncate">Nhóm nghiên cứu &amp; Lab</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Kết nối &amp; Hợp tác</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="04_tuyen-sinh-vien.html" title="Tuyển sinh viên">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">person_search</span>
+<span class="sidebar-text truncate">Tuyển sinh viên</span>
+</a>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="05_yeu-cau-huong-dan.html" title="Yêu cầu hướng dẫn">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">assignment_ind</span>
+<span class="sidebar-text truncate">Yêu cầu hướng dẫn</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">5</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="12_bai-toan-doanh-nghiep-rd.html" title="Bài toán DN &amp; R&amp;D">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">corporate_fare</span>
+<span class="sidebar-text truncate">Bài toán DN &amp; R&amp;D</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="13_hoc-bong-tai-tro.html" title="Học bổng &amp; Tài trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">payments</span>
+<span class="sidebar-text truncate">Học bổng &amp; Tài trợ</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Thẩm định</div>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="06_hang-cho-tham-dinh.html" title="Hàng chờ thẩm định">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">fact_check</span>
+<span class="sidebar-text truncate">Hàng chờ thẩm định</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">4</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="08_lich-su-tham-dinh.html" title="Lịch sử thẩm định">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">history</span>
+<span class="sidebar-text truncate">Lịch sử thẩm định</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Tài liệu &amp; Cài đặt</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="14_kho-tai-nguyen-da-luu.html" title="Kho tài nguyên đã lưu">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">bookmark</span>
+<span class="sidebar-text truncate">Kho tài nguyên đã lưu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full bg-[#d3e3fd] text-[#001d35] font-semibold text-[14px] transition-colors gap-3" href="15_cai-dat-tai-khoan.html" title="Cài đặt tài khoản" aria-current="page">
+<span class="material-symbols-outlined text-[20px] text-[#001d35] shrink-0">settings</span>
+<span class="sidebar-text truncate">Cài đặt tài khoản</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Anchored Options -->
+<div class="pt-3 mt-4 border-t border-slate-100 flex flex-col space-y-1">
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="#" title="Trợ giúp &amp; Hỗ trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">help</span>
+<span class="sidebar-text truncate">Trợ giúp &amp; Hỗ trợ</span>
+</a>
+<button class="nav-item group flex items-center w-full text-left h-9 px-4 rounded-full text-[#DC2626] hover:bg-red-50 font-medium text-[14px] transition-colors gap-3 cursor-pointer" onclick="openLogoutModal()" title="Đăng xuất" type="button">
+<span class="material-symbols-outlined text-[20px] text-[#DC2626] shrink-0">logout</span>
+<span class="sidebar-text truncate">Đăng xuất</span>
+</button>
+</div>
+</aside>
+<!-- CONTENT AREA WRAPPER -->
+<div class="flex-1 flex flex-col min-w-0 bg-[#F5F7FA]" id="main-wrapper">
+<main class="w-full bg-[#F5F7FA] p-4 sm:p-6 lg:p-8">
+<!-- ===== NỘI DUNG TRANG: Cài đặt tài khoản ===== -->
+<div class="max-w-[1280px] mx-auto w-full">
+<div class="max-w-5xl mx-auto space-y-6"><!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-xs md:text-sm text-[#5F6368]">
+  <a class="hover:text-[#1F4E78] transition-colors" href="01_trang-chu.html">Trang chủ</a>
+  <span class="">/</span>
+  <span class="text-[#101519] font-medium">Cài đặt tài khoản</span>
+</div>
+
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+  <div>
+    <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Cài đặt tài khoản</h1>
+    <p class="text-sm text-slate-500 mt-1">Quản lý mật khẩu và tùy chọn thông báo</p>
+  </div>
+  <div>
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200 shadow-sm">
+      <span class="material-symbols-outlined text-base text-slate-500">mail</span>
+      Đăng nhập bằng: Email
+    </span>
+  </div>
+</div>
+
+<!-- Layout container: max-w-[760px] single-column -->
+<div class="max-w-[760px] space-y-6">
+  <!-- CARD 1: Đổi mật khẩu -->
+  <section class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2.5 pb-4 border-b border-slate-100 mb-5">
+      <div class="size-9 rounded bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">lock</span>
+      </div>
+      <h2 class="text-lg font-bold text-slate-900">Đổi mật khẩu</h2>
+    </div>
+
+    <form class="space-y-4" onsubmit="return false;">
+      <!-- Mật khẩu hiện tại -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Mật khẩu hiện tại</label>
+        <div class="relative flex items-center">
+          <input class="w-full bg-white text-slate-800 text-sm font-medium px-3.5 py-2.5 rounded border border-slate-300 focus:border-[#1F4E78] focus:ring-2 focus:ring-[#D3E3FD] outline-none transition-all pr-10" placeholder="••••••••••••" type="password" value="currentpassword123">
+          <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors" aria-label="Hiện/ẩn mật khẩu">
+            <span class="material-symbols-outlined text-lg">visibility</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mật khẩu mới -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Mật khẩu mới</label>
+        <div class="relative flex items-center">
+          <input class="w-full bg-white text-slate-800 text-sm font-medium px-3.5 py-2.5 rounded border border-slate-300 focus:border-[#1F4E78] focus:ring-2 focus:ring-[#D3E3FD] outline-none transition-all pr-10" placeholder="Nhập mật khẩu mới" type="password" value="UITsecure2026">
+          <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors" aria-label="Hiện/ẩn mật khẩu">
+            <span class="material-symbols-outlined text-lg">visibility</span>
+          </button>
+        </div>
+
+        <!-- Strength meter: 4 segments -->
+        <div class="pt-2 space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-500 font-medium">Độ mạnh mật khẩu</span>
+            <span class="font-semibold text-emerald-600">Mạnh</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5 h-1.5 w-full">
+            <div class="h-full rounded-xl bg-emerald-500"></div>
+            <div class="h-full rounded-xl bg-emerald-500"></div>
+            <div class="h-full rounded-xl bg-emerald-500"></div>
+            <div class="h-full rounded-xl bg-slate-200"></div>
+          </div>
+        </div>
+
+        <!-- Requirement checklist -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+          <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+            <span class="material-symbols-outlined text-sm">check_circle</span>
+            <span class="">Ít nhất 8 ký tự</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+            <span class="material-symbols-outlined text-sm">check_circle</span>
+            <span class="">Chữ hoa &amp; chữ thường</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+            <span class="material-symbols-outlined text-sm">check_circle</span>
+            <span class="">Có số</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
+            <span class="material-symbols-outlined text-sm">radio_button_unchecked</span>
+            <span class="">Có ký tự đặc biệt</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Xác nhận mật khẩu mới -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Xác nhận mật khẩu mới</label>
+        <div class="relative flex items-center">
+          <input class="w-full bg-white text-slate-800 text-sm font-medium px-3.5 py-2.5 rounded border border-slate-300 focus:border-[#1F4E78] focus:ring-2 focus:ring-[#D3E3FD] outline-none transition-all pr-10" placeholder="Xác nhận lại mật khẩu" type="password" value="UITsecure2026">
+          <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors" aria-label="Hiện/ẩn mật khẩu">
+            <span class="material-symbols-outlined text-lg">visibility</span>
+          </button>
+        </div>
+        <p class="flex items-center gap-1 text-xs font-medium text-emerald-600 pt-0.5">
+          <span class="material-symbols-outlined text-sm">check</span>
+          Mật khẩu khớp
+        </p>
+      </div>
+
+      <!-- Card Footer Actions -->
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors">
+          Hủy
+        </button>
+        <button type="submit" class="bg-[#1F4E78] hover:bg-[#163A59] text-white px-5 py-2.5 rounded text-sm font-semibold shadow-sm transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">key</span>
+          Cập nhật mật khẩu
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- CARD 2: Thông báo -->
+  <section class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100 mb-4">
+      <div class="size-9 rounded bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">notifications</span>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-slate-900">Thông báo</h2>
+        <p class="text-xs text-slate-500">Chọn loại thông báo bạn muốn nhận</p>
+      </div>
+    </div>
+
+    <!-- 4 Notification Rows -->
+    <div class="divide-y divide-slate-100">
+      <!-- Row 1: Kết nối -->
+      <div class="py-3.5 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="size-9 rounded bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">handshake</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-800">Kết nối</h3>
+            <p class="text-xs text-slate-500">Lời mời, proposal, trạng thái đàm phán</p>
+          </div>
+        </div>
+        <!-- Toggle switch ON -->
+        <button type="button" role="switch" aria-checked="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-xl border-2 border-transparent bg-[#1F4E78] transition-colors duration-200 ease-in-out focus:outline-none">
+          <span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-xl bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+        </button>
+      </div>
+
+      <!-- Row 2: Thẩm định -->
+      <div class="py-3.5 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="size-9 rounded bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">verified</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-800">Thẩm định</h3>
+            <p class="text-xs text-slate-500">Tài liệu mới chờ thẩm định, hạn phản hồi</p>
+          </div>
+        </div>
+        <!-- Toggle switch ON -->
+        <button type="button" role="switch" aria-checked="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-xl border-2 border-transparent bg-[#1F4E78] transition-colors duration-200 ease-in-out focus:outline-none">
+          <span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-xl bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+        </button>
+      </div>
+
+      <!-- Row 3: Nhóm -->
+      <div class="py-3.5 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="size-9 rounded bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">groups</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-800">Nhóm &amp; Lab</h3>
+            <p class="text-xs text-slate-500">Đơn xin vào Lab, yêu cầu hướng dẫn mới</p>
+          </div>
+        </div>
+        <!-- Toggle switch ON -->
+        <button type="button" role="switch" aria-checked="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-xl border-2 border-transparent bg-[#1F4E78] transition-colors duration-200 ease-in-out focus:outline-none">
+          <span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-xl bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+        </button>
+      </div>
+
+      <!-- Row 4: Hệ thống -->
+      <div class="py-3.5 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="size-9 rounded bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">shield</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-800">Hệ thống</h3>
+            <p class="text-xs text-slate-500">Kiểm duyệt từ Admin, thông báo chung</p>
+          </div>
+        </div>
+        <!-- Toggle switch OFF -->
+        <button type="button" role="switch" aria-checked="false" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-xl border-2 border-transparent bg-slate-300 transition-colors duration-200 ease-in-out focus:outline-none">
+          <span class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-xl bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom automatic save note -->
+    <div class="flex items-center gap-1.5 text-xs text-slate-400 mt-4 pt-3 border-t border-slate-100">
+      <span class="material-symbols-outlined text-sm">sync</span>
+      <span class="">Thay đổi được lưu tự động</span>
+    </div>
+  </section>
+</div></div>
+</div>
+<!-- ===== HẾT NỘI DUNG TRANG ===== -->
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-[#163A59] text-white py-12 px-8 md:px-12 mt-12 border-t border-[#1F4E78]">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Column 1: Brand & Overview -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2 font-bold text-white text-xl">
+<div class="w-8 h-8 rounded-lg bg-white text-[#163A59] flex items-center justify-center font-extrabold text-sm shadow-xs">
+          UIT
+        </div>
+<span class="">UIT Connect</span>
+</div>
+<p class="text-sm text-slate-300 mt-3 leading-relaxed">
+        Nền tảng kết nối năng lực nghiên cứu, chuyển giao công nghệ và hợp tác doanh nghiệp của Trường Đại học Công nghệ Thông tin – ĐHQG-HCM.
+      </p>
+<div class="flex items-center gap-2 text-xs text-emerald-400 mt-4 font-medium">
+<span class="material-symbols-outlined text-[18px] text-emerald-400">verified</span>
+<span class="">Hệ thống quản lý nghiên cứu chính thức</span>
+</div>
+</div>
+<!-- Column 2: Khám phá -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Khám phá</h4>
+<ul class="space-y-2.5 text-sm text-slate-300">
+<li class=""><a class="hover:text-white transition-colors" href="09_kho-tai-lieu.html">Kho tài nguyên số</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="09_kho-tai-lieu.html">Công trình nghiên cứu khoa học</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Sản phẩm chuyển giao công nghệ</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="02_ho-so-khoa-hoc.html">Hồ sơ năng lực giảng viên</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="12_bai-toan-doanh-nghiep-rd.html">Đề tài doanh nghiệp đặt hàng</a></li>
+</ul>
+</div>
+<!-- Column 3: Hỗ trợ -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Hỗ trợ</h4>
+<ul class="space-y-2.5 text-sm text-slate-300">
+<li class=""><a class="hover:text-white transition-colors" href="#">Quy trình công bố tài nguyên</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Thang đo mức sẵn sàng TRL</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Chính sách bảo hộ sở hữu trí tuệ</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Câu hỏi thường gặp (FAQ)</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Hướng dẫn sử dụng API</a></li>
+</ul>
+</div>
+<!-- Column 4: Liên hệ -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Liên hệ</h4>
+<ul class="space-y-3 text-sm text-slate-300">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">location_on</span>
+<span class="">Khu phố 6, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+</li>
+<li class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">mail</span>
+<a class="hover:text-white transition-colors" href="mailto:support@uit.edu.vn">support@uit.edu.vn</a>
+</li>
+<li class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">call</span>
+<a class="hover:text-white transition-colors" href="tel:02837252002">(028) 372 52002</a>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bottom divider and row -->
+<div class="border-t border-slate-700/60 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+<div class="">
+      © 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM
+    </div>
+<div class="flex items-center gap-4 flex-wrap">
+<a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a>
+<span class="">·</span>
+<a class="hover:text-white transition-colors" href="#">Chính sách bảo mật</a>
+<span class="">·</span>
+<a class="hover:text-white transition-colors" href="#">Quy chế hoạt động</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" id="logout-modal">
+<div class="fixed inset-0" id="logout-modal-backdrop" onclick="closeLogoutModal()"></div>
+<div class="relative w-full max-w-md bg-white rounded-xl shadow-md border border-[#E1E5EA] p-6 z-10 transform transition-all duration-300 scale-95" id="logout-modal-card">
+<!-- Header -->
+<div class="flex items-start justify-between pb-3 border-b border-[#E1E5EA]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#DC2626] shrink-0">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-tight">Xác nhận đăng xuất</h3>
+<p class="text-xs text-[#5F6368] mt-0.5">Phiên làm việc: TS. Nguyễn Văn A (Khoa MMT &amp; TT · GV01024)</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#5F6368] hover:bg-[#F5F7FA] hover:text-[#1A1A1A] transition-colors" onclick="closeLogoutModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Content body -->
+<div class="py-4 text-xs text-[#5F6368] leading-relaxed">
+<p class="">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc sinh viên? Sau khi đăng xuất, bạn có thể đăng nhập lại qua cổng xác thực SSO hoặc chuyển đổi sang tài khoản mới.</p>
+</div>
+<!-- Quick Action / Navigation Pods -->
+<div class="flex flex-col gap-2 pt-2 border-t border-[#E1E5EA]">
+<button class="w-full h-10 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs" onclick="window.location.href='../auth/02_dang-nhap-sso-microsoft365.html?role=gv'">
+<span class="material-symbols-outlined text-[18px]">login</span>
+<span class="">Đăng nhập lại (SSO UIT)</span>
+</button>
+<button class="w-full h-10 rounded-lg bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center justify-center gap-2 transition-colors" onclick="window.location.href='../auth/03_dang-ky-b1-chon-vai-tro.html?role=gv'">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span class="">Đăng ký tài khoản mới</span>
+</button>
+<button class="w-full h-9 rounded-lg text-slate-700 hover:bg-[#F5F7FA] text-xs font-medium flex items-center justify-center transition-colors mt-1" onclick="closeLogoutModal()">
+<span class="">Hủy / Ở lại phiên làm việc</span>
+</button>
+</div>
+</div>
+</div>
+<script src="../../assets/js/app-shell.js"></script>
+<script src="../../assets/js/ux-effects.js"></script>
+</body>
+</html>

@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kho tài nguyên đã lưu | UIT Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  "darkMode": "class",
+  "theme": {
+    "extend": {
+      "colors": {
+        "on-tertiary-fixed": "#002114",
+        "surface-tint": "#35618c",
+        "on-secondary": "#ffffff",
+        "background": "#f7f9ff",
+        "text-muted": "#8A8F98",
+        "brand-active-text": "#001D35",
+        "primary-fixed": "#d0e4ff",
+        "tertiary-fixed-dim": "#68dba9",
+        "on-background": "#181c20",
+        "surface-container-lowest": "#ffffff",
+        "brand-hero-dark": "#0F2744",
+        "on-surface": "#181c20",
+        "status-error": "#DC2626",
+        "primary": "#00375e",
+        "surface-variant": "#dfe3e8",
+        "on-tertiary-container": "#5cd19f",
+        "on-surface-variant": "#42474e",
+        "tertiary": "#003d29",
+        "on-secondary-container": "#005d7c",
+        "tertiary-container": "#00573b",
+        "secondary-container": "#87d6fe",
+        "brand-hero-mid": "#1E3A5F",
+        "surface-container-low": "#f1f4fa",
+        "on-tertiary": "#ffffff",
+        "on-secondary-fixed-variant": "#004d67",
+        "outline": "#72777f",
+        "on-primary-fixed": "#001d35",
+        "brand-navy-dark": "#163A59",
+        "brand-active-pill": "#D3E3FD",
+        "border-subtle": "#E1E5EA",
+        "on-tertiary-fixed-variant": "#005137",
+        "surface-dim": "#d7dae0",
+        "on-primary-container": "#95bff0",
+        "text-main": "#1A1A1A",
+        "primary-fixed-dim": "#a0cafb",
+        "error-container": "#ffdad6",
+        "secondary-fixed-dim": "#81d0f8",
+        "error": "#ba1a1a",
+        "surface-container-high": "#e5e8ee",
+        "brand-surface": "#F5F7FA",
+        "surface-container": "#ebeef4",
+        "primary-container": "#1f4e78",
+        "tertiary-fixed": "#85f8c4",
+        "surface-container-highest": "#dfe3e8",
+        "inverse-primary": "#a0cafb",
+        "inverse-on-surface": "#eef1f7",
+        "on-error-container": "#93000a",
+        "on-primary-fixed-variant": "#194973",
+        "on-error": "#ffffff",
+        "surface": "#f7f9ff",
+        "secondary": "#006687",
+        "surface-bright": "#f7f9ff",
+        "on-secondary-fixed": "#001e2b",
+        "on-primary": "#ffffff",
+        "outline-variant": "#c2c7cf",
+        "brand-light-blue": "#E6F0F7",
+        "inverse-surface": "#2d3135",
+        "secondary-fixed": "#c1e8ff",
+        "status-warning": "#F59E0B",
+        "brand-blue": "#1F4E78",
+        "brand-blue-hover": "#163A59",
+        "brand-cyan": "#2E86AB",
+        "brand-light": "#E6F0F7",
+        "brand-bg": "#F5F7FA",
+        "text-secondary": "#5F6368",
+        "border-color": "#E1E5EA"
+      },
+      "spacing": {
+        "space-lg": "1rem",
+        "gutter": "1.5rem",
+        "space-xl": "1.5rem",
+        "space-xs": "0.25rem",
+        "space-2xl": "2rem",
+        "gutter-mobile": "1rem",
+        "space-sm": "0.5rem",
+        "margin": "2rem",
+        "space-md": "0.75rem",
+        "margin-mobile": "1rem"
+      },
+      "fontFamily": {
+        "body-md": [
+          "Inter"
+        ],
+        "title-md": [
+          "Inter"
+        ],
+        "headline-sm": [
+          "Inter"
+        ],
+        "body-lg": [
+          "Inter"
+        ],
+        "headline-md": [
+          "Inter"
+        ],
+        "display-lg-mobile": [
+          "Inter"
+        ],
+        "label-sm": [
+          "Inter"
+        ],
+        "code-sm": [
+          "JetBrains Mono"
+        ],
+        "headline-lg": [
+          "Inter"
+        ],
+        "display-lg": [
+          "Inter"
+        ],
+        "body-sm": [
+          "Inter"
+        ],
+        "label-md": [
+          "Inter"
+        ],
+        "sans": [
+          "Inter",
+          "sans-serif"
+        ],
+        "mono": [
+          "JetBrains Mono",
+          "monospace"
+        ]
+      },
+      "fontSize": {
+        "body-md": [
+          "13px",
+          {
+            "lineHeight": "18px",
+            "fontWeight": "400"
+          }
+        ],
+        "title-md": [
+          "15px",
+          {
+            "lineHeight": "22px",
+            "fontWeight": "600"
+          }
+        ],
+        "headline-sm": [
+          "16px",
+          {
+            "lineHeight": "24px",
+            "letterSpacing": "0",
+            "fontWeight": "700"
+          }
+        ],
+        "body-lg": [
+          "14px",
+          {
+            "lineHeight": "20px",
+            "fontWeight": "400"
+          }
+        ],
+        "headline-md": [
+          "20px",
+          {
+            "lineHeight": "28px",
+            "letterSpacing": "-0.01em",
+            "fontWeight": "700"
+          }
+        ],
+        "display-lg-mobile": [
+          "20px",
+          {
+            "lineHeight": "28px",
+            "letterSpacing": "-0.01em",
+            "fontWeight": "800"
+          }
+        ],
+        "label-sm": [
+          "11px",
+          {
+            "lineHeight": "14px",
+            "letterSpacing": "0.04em",
+            "fontWeight": "600"
+          }
+        ],
+        "code-sm": [
+          "11px",
+          {
+            "lineHeight": "14px",
+            "fontWeight": "500"
+          }
+        ],
+        "headline-lg": [
+          "24px",
+          {
+            "lineHeight": "32px",
+            "letterSpacing": "-0.015em",
+            "fontWeight": "700"
+          }
+        ],
+        "display-lg": [
+          "26px",
+          {
+            "lineHeight": "32px",
+            "letterSpacing": "-0.02em",
+            "fontWeight": "800"
+          }
+        ],
+        "body-sm": [
+          "12px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "400"
+          }
+        ],
+        "label-md": [
+          "12px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "600"
+          }
+        ]
+      }
+    }
+  }
+};
+</script>
+<!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<style>
+main > :first-child { margin-top: 0 !important; }
+main > :last-child { margin-bottom: 0 !important; }
+
+/* ---------- Thanh công cụ (gợn sóng / lún khi nhấn dùng chung ở app-shell) ---------- */
+/* Số đếm nảy lên khi thay đổi */
+.tb-pop { animation: tb-pop 260ms ease-out; }
+@keyframes tb-pop { 0% { transform: scale(0.6); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+/* Dropdown mở / đóng */
+.tb-panel { transition: opacity 160ms ease, transform 160ms ease, visibility 160ms; }
+.tb-panel:not(.is-open) { opacity: 0; transform: translateY(-6px) scale(0.97); visibility: hidden; pointer-events: none; }
+[data-tb-menu].is-open .tb-toggle { background: #E6F0F7; border-color: rgba(31, 78, 120, 0.35); color: #1F4E78; }
+[data-tb-menu].is-open .tb-chevron { transform: rotate(180deg); }
+/* Nút xoá trong ô tìm kiếm */
+#search-clear.is-visible { transform: translateY(-50%) scale(1); opacity: 1; }
+
+/* ---------- Lưới / danh sách ---------- */
+#saved-grid { transition: opacity 180ms ease, transform 180ms ease; }
+#saved-grid.is-switching { opacity: 0; transform: translateY(6px); }
+#saved-grid.list-view { grid-template-columns: minmax(0, 1fr) !important; }
+@media (min-width: 640px) {
+  #saved-grid.list-view .saved-card { flex-direction: row; }
+  #saved-grid.list-view .saved-card > div:first-child { display: flex; flex: 1; min-width: 0; }
+  #saved-grid.list-view .saved-card > div:first-child > div:first-child { width: 220px; height: auto; min-height: 140px; flex-shrink: 0; }
+  #saved-grid.list-view .saved-card > div:first-child > div:last-child { flex: 1; min-width: 0; }
+  #saved-grid.list-view .saved-card > div:last-child { flex-direction: column; justify-content: center; gap: 0.5rem; border-left: 1px solid #E1E5EA; }
+}
+</style>
+</head>
+<body class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased selection:bg-[#E6F0F7] selection:text-[#1F4E78]">
+<!-- MOBILE BACKDROP OVERLAY -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden transition-opacity md:hidden" id="sidebar-backdrop"></div>
+<div class="min-h-screen flex flex-col w-full bg-[#F5F7FA]">
+<!-- TOP BAR -->
+<header class="sticky top-0 z-40 w-full h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 w-[240px] shrink-0">
+<button aria-label="Thu gọn hoặc mở menu" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer" id="hamburger-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">menu</span>
+</button>
+<a class="flex items-center gap-2.5 group" href="01_trang-chu.html">
+<div class="w-9 h-9 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight shadow-xs transition-transform group-hover:scale-105">
+          UIT
+        </div>
+<div class="hidden sm:flex flex-col">
+<span class="font-bold text-[17px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[11px] text-[#5F6368] font-medium leading-none mt-1">Cổng Kết Nối Tri Thức UIT</span>
+</div>
+</a>
+</div>
+<!-- Center: Global Search Bar (Pill style Gmail) -->
+<div class="flex-1 max-w-[720px] mx-auto">
+
+</div>
+<!-- Right: Bell badge & avatar only -->
+<div class="flex items-center gap-3 shrink-0">
+<button aria-label="Thông báo" class="relative w-10 h-10 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-2 right-2 w-4 h-4 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs">3</span>
+</button>
+<div class="w-9 h-9 rounded-full bg-[#1F4E78] text-white flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer hover:ring-2 hover:ring-[#1F4E78]/30 transition-all" onclick="openLogoutModal()">
+        AN
+      </div>
+</div>
+</header>
+<!-- MAIN APP BODY: Sidebar + Content -->
+<div class="app-body flex-1 flex w-full relative">
+<!-- SIDEBAR -->
+<aside class="w-[260px] bg-white border-r border-slate-200 flex flex-col justify-between py-4 px-3 shrink-0 transition-all duration-300 ease-in-out overflow-y-auto" id="sidebar">
+<div class="flex flex-col">
+<nav class="flex flex-col space-y-1" aria-label="Điều hướng chính">
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-3 pb-1 transition-all duration-200">Tổng quan &amp; Học thuật</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="01_trang-chu.html" title="Trang chủ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">home</span>
+<span class="sidebar-text truncate">Trang chủ</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="02_kho-tai-nguyen-hoc-thuat.html" title="Kho tài liệu">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">folder</span>
+<span class="sidebar-text truncate">Kho tài liệu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="04_ho-so-nang-luc-cv.html" title="Hồ sơ năng lực &amp; CV">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">badge</span>
+<span class="sidebar-text truncate">Hồ sơ năng lực &amp; CV</span>
+</a>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="05_de-tai-cua-toi.html" title="Đề tài của tôi">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">science</span>
+<span class="sidebar-text truncate">Đề tài của tôi</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">4</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="06_quan-tri-nhom-portfolio.html" title="Nhóm nghiên cứu &amp; Lab">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">groups</span>
+<span class="sidebar-text truncate">Nhóm nghiên cứu &amp; Lab</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Kết nối &amp; Ứng tuyển</div>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="07_cho-ghep-nhom.html" title="Chợ ghép nhóm">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">diversity_3</span>
+<span class="sidebar-text truncate">Chợ ghép nhóm</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">2</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="08_danh-ba-giang-vien-co-van.html" title="Đề xuất cố vấn">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">psychology</span>
+<span class="sidebar-text truncate">Đề xuất cố vấn</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="09_cong-doanh-nghiep-rd.html" title="Bài toán DN &amp; R&amp;D">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">corporate_fare</span>
+<span class="sidebar-text truncate">Bài toán DN &amp; R&amp;D</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="10_hoc-bong-tai-tro.html" title="Học bổng &amp; Tài trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">payments</span>
+<span class="sidebar-text truncate">Học bổng &amp; Tài trợ</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Tài liệu &amp; Cài đặt</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full bg-[#d3e3fd] text-[#001d35] font-semibold text-[14px] transition-colors gap-3" href="12_kho-tai-nguyen-da-luu.html" title="Kho tài nguyên đã lưu" aria-current="page">
+<span class="material-symbols-outlined text-[20px] text-[#001d35] shrink-0">bookmark</span>
+<span class="sidebar-text truncate">Kho tài nguyên đã lưu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="11_cai-dat-tai-khoan.html" title="Cài đặt tài khoản">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">settings</span>
+<span class="sidebar-text truncate">Cài đặt tài khoản</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Anchored Options -->
+<div class="pt-3 mt-4 border-t border-slate-100 flex flex-col space-y-1">
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="#" title="Trợ giúp &amp; Hỗ trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">help</span>
+<span class="sidebar-text truncate">Trợ giúp &amp; Hỗ trợ</span>
+</a>
+<button class="nav-item group flex items-center w-full text-left h-9 px-4 rounded-full text-[#DC2626] hover:bg-red-50 font-medium text-[14px] transition-colors gap-3 cursor-pointer" onclick="openLogoutModal()" title="Đăng xuất" type="button">
+<span class="material-symbols-outlined text-[20px] text-[#DC2626] shrink-0">logout</span>
+<span class="sidebar-text truncate">Đăng xuất</span>
+</button>
+</div>
+</aside>
+<!-- CONTENT AREA WRAPPER -->
+<div class="flex-1 flex flex-col min-w-0 bg-[#F5F7FA]" id="main-wrapper">
+<main class="w-full bg-[#F5F7FA] p-4 sm:p-6 lg:p-8">
+<!-- ===== NỘI DUNG TRANG: Kho tài nguyên đã lưu ===== -->
+<div class="max-w-[1280px] mx-auto w-full">
+<div class="flex flex-col w-full">
+          <!-- PAGE HEADER & BREADCRUMB -->
+          <div class="pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="flex flex-col gap-1.5">
+              <!-- Breadcrumb -->
+              <nav aria-label="Breadcrumb" class="flex items-center gap-2 font-label-sm text-label-sm text-text-muted">
+                <a class="hover:text-primary transition-colors flex items-center gap-1" href="01_trang-chu.html">
+                  <span class="material-symbols-outlined text-[15px]">home</span>
+                  Trang chủ
+                </a>
+                <span class="material-symbols-outlined text-[13px] text-outline-variant">chevron_right</span>
+                <span class="text-primary font-semibold">Kho tài nguyên đã lưu</span>
+              </nav>
+              <!-- Title & Description -->
+              <div class="flex flex-col">
+                <h1 class="text-2xl font-bold text-[#1A1A1A] tracking-tight">
+                  Kho tài nguyên đã lưu
+                </h1>
+                <p class="font-body-md text-body-md text-on-surface-variant">
+                  Các bài báo, đề tài và tài liệu học tập bạn đã đánh dấu để đọc
+                  và tham khảo.
+                </p>
+              </div>
+            </div>
+            <!-- Create Collection CTA -->
+            <button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#1F4E78] text-[#1F4E78] font-label-md text-label-md shadow-xs hover:bg-[#E6F0F7] transition-all shrink-0 self-start md:self-auto" type="button">
+              <span class="material-symbols-outlined text-[19px]">create_new_folder</span>
+              <span>Tạo bộ sưu tập mới</span>
+            </button>
+          </div>
+          <!-- MAIN TWO-COLUMN WORKSPACE CONTAINER -->
+          <div class="pt-2">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
+              <!-- COLUMN 1: LEFT SIDEBAR (Collections Manager) -->
+              <aside class="w-full lg:w-60 shrink-0 bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col gap-4">
+                <div class="flex items-center justify-between px-1">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">folder_special</span>
+                    <span class="font-title-md text-title-md text-on-surface">Bộ sưu tập của tôi</span>
+                  </div>
+                  <span class="font-label-sm text-label-sm text-text-muted">5 mục</span>
+                </div>
+                <!-- Collections List -->
+                <nav aria-label="Danh mục bộ sưu tập" class="flex flex-col gap-1.5">
+                  <!-- Active Pill -->
+                  <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-brand-light-blue text-brand-active-text font-title-md text-body-md transition-all" href="#">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-primary text-[19px]" style="font-variation-settings: &quot;FILL&quot; 1">folder</span>
+                      <span class="truncate">Tất cả đã lưu</span>
+                    </div>
+                    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded-xl bg-primary text-on-primary font-bold ml-1.5">24</span>
+                  </a>
+                  <!-- Inactive Items -->
+                  <a class="flex items-center justify-between px-3.5 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-all group" href="#">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-outline text-[19px] group-hover:text-primary transition-colors">schedule</span>
+                      <span class="truncate">Đọc sau</span>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-text-muted group-hover:text-on-surface ml-1.5">6</span>
+                  </a>
+                  <a class="flex items-center justify-between px-3.5 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-all group" href="#">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-outline text-[19px] group-hover:text-primary transition-colors">folder</span>
+                      <span class="truncate">Đồ án Computer Vision</span>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-text-muted group-hover:text-on-surface ml-1.5">8</span>
+                  </a>
+                  <a class="flex items-center justify-between px-3.5 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-all group" href="#">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-outline text-[19px] group-hover:text-primary transition-colors">menu_book</span>
+                      <span class="truncate">Tham khảo luận văn</span>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-text-muted group-hover:text-on-surface ml-1.5">5</span>
+                  </a>
+                  <a class="flex items-center justify-between px-3.5 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-all group" href="#">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-outline text-[19px] group-hover:text-primary transition-colors">school</span>
+                      <span class="truncate">Ôn tập môn học</span>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-text-muted group-hover:text-on-surface ml-1.5">5</span>
+                  </a>
+                </nav>
+                <!-- Storage Quota Widget -->
+                <div class="mt-2 p-3 bg-surface-container-low rounded-lg flex flex-col gap-2">
+                  <div class="flex items-center justify-between font-label-sm text-label-sm">
+                    <span class="text-on-surface-variant">Dung lượng ngoại tuyến</span>
+                    <span class="font-bold text-primary">1.2 / 5 GB</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-surface-variant rounded-xl overflow-hidden">
+                    <div class="h-full bg-primary rounded-xl" style="width: 24%"></div>
+                  </div>
+                  <span class="font-code-sm text-code-sm text-text-muted">Đồng bộ đám mây UIT Cloud</span>
+                </div>
+                <!-- Add Collection Link Button -->
+                <button class="w-full pt-2 flex items-center justify-center gap-1.5 py-2 rounded text-primary hover:bg-brand-light-blue font-label-md text-label-md transition-colors" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                  <span>Bộ sưu tập mới</span>
+                </button>
+              </aside>
+              <!-- COLUMN 2: MAIN WORKSPACE (Content Stream & Grid) -->
+              <div class="flex-1 min-w-0 w-full flex flex-col gap-4">
+                <!-- a. TYPE TABS (Underline tab strip) -->
+                <div class="bg-white rounded-xl border border-slate-200 px-4 pt-1 shadow-xs overflow-x-auto">
+                  <div class="flex items-center gap-6 min-w-max">
+                    <button class="type-tab pb-3 pt-2 font-headline-sm text-body-lg text-primary relative flex items-center gap-2" data-type="" type="button">
+                      <span>Tất cả</span>
+                      <span class="tab-count px-2 py-0.5 rounded-xl bg-brand-light-blue text-primary font-bold text-label-sm">24</span>
+                      <span class="tab-line absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-xl"></span>
+                    </button>
+                    <button class="type-tab pb-3 pt-2 font-body-lg text-body-lg text-on-surface-variant hover:text-primary relative flex items-center gap-2 transition-colors" data-type="bai-bao" type="button">
+                      <span>Bài báo – Luận văn</span>
+                      <span class="tab-count px-2 py-0.5 rounded-xl bg-surface-container text-text-muted text-label-sm">10</span>
+                      <span class="tab-line absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-xl hidden"></span>
+                    </button>
+                    <button class="type-tab pb-3 pt-2 font-body-lg text-body-lg text-on-surface-variant hover:text-primary relative flex items-center gap-2 transition-colors" data-type="de-tai" type="button">
+                      <span>Đề tài NCKH</span>
+                      <span class="tab-count px-2 py-0.5 rounded-xl bg-surface-container text-text-muted text-label-sm">6</span>
+                      <span class="tab-line absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-xl hidden"></span>
+                    </button>
+                    <button class="type-tab pb-3 pt-2 font-body-lg text-body-lg text-on-surface-variant hover:text-primary relative flex items-center gap-2 transition-colors" data-type="san-pham" type="button">
+                      <span>Sản phẩm công nghệ</span>
+                      <span class="tab-count px-2 py-0.5 rounded-xl bg-surface-container text-text-muted text-label-sm">4</span>
+                      <span class="tab-line absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-xl hidden"></span>
+                    </button>
+                    <button class="type-tab pb-3 pt-2 font-body-lg text-body-lg text-on-surface-variant hover:text-primary relative flex items-center gap-2 transition-colors" data-type="giao-trinh" type="button">
+                      <span>Giáo trình &amp; Slide</span>
+                      <span class="tab-count px-2 py-0.5 rounded-xl bg-surface-container text-text-muted text-label-sm">4</span>
+                      <span class="tab-line absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-xl hidden"></span>
+                    </button>
+                  </div>
+                </div>
+                <!-- b. TOOLBAR (Search, Filters, View Modes) -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <!-- Search box (icon đổi màu khi focus, nút xoá, phím tắt "/") -->
+                  <div class="group relative w-full sm:w-80">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px] transition-all duration-200 group-focus-within:text-[#1F4E78] group-focus-within:scale-110">search</span>
+                    <input id="saved-search" class="w-full h-10 pl-9 pr-16 rounded-xl bg-white border border-slate-200 hover:border-slate-300 focus:border-[#1F4E78] text-on-surface font-body-sm text-body-sm shadow-xs placeholder:text-text-muted focus:ring-4 focus:ring-[#1F4E78]/10 transition-all duration-200 outline-none" placeholder="Tìm trong tài liệu đã lưu..." type="text">
+                    <kbd class="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 font-mono text-[10px] text-slate-500 transition-opacity duration-200 group-focus-within:opacity-0 pointer-events-none" id="search-kbd">/</kbd>
+                    <button aria-label="Xoá từ khoá" class="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-[#1A1A1A] transition-all duration-200 scale-0 opacity-0" id="search-clear" type="button">
+                      <span class="material-symbols-outlined text-[16px]">close</span>
+                    </button>
+                  </div>
+                  <!-- Controls Stack -->
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <!-- Filter Dropdown: Lĩnh vực (danh sách tự sinh từ nhãn lĩnh vực trên các thẻ) -->
+                    <div class="relative" data-tb-menu="field">
+                      <button aria-expanded="false" class="tb-toggle h-10 px-3.5 bg-white border border-slate-200 rounded-xl font-label-md text-label-md text-on-surface flex items-center gap-2 shadow-xs hover:bg-surface-container hover:border-slate-300 transition-all duration-150" type="button">
+                        <span class="material-symbols-outlined text-[17px] text-on-surface-variant">category</span>
+                        <span>Lĩnh vực</span>
+                        <span class="hidden min-w-[18px] h-[18px] px-1 rounded-full bg-[#1F4E78] text-white text-[10px] font-bold leading-[18px] text-center" id="field-badge">0</span>
+                        <span class="tb-chevron material-symbols-outlined text-[16px] text-outline transition-transform duration-200">expand_more</span>
+                      </button>
+                      <div class="tb-panel absolute left-0 top-full mt-2 w-64 origin-top-left bg-white rounded-xl border border-slate-200 shadow-lg z-30 overflow-hidden">
+                        <div class="px-4 pt-3 pb-2 flex items-center justify-between border-b border-slate-100">
+                          <span class="text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em]">Lọc theo lĩnh vực</span>
+                          <button class="text-[11px] font-semibold text-[#1F4E78] hover:underline disabled:opacity-40 disabled:no-underline" id="field-reset" type="button">Bỏ chọn</button>
+                        </div>
+                        <ul class="max-h-64 overflow-y-auto py-1.5" id="field-list"></ul>
+                      </div>
+                    </div>
+                    <!-- Sort Dropdown -->
+                    <div class="relative" data-tb-menu="sort">
+                      <button aria-expanded="false" class="tb-toggle h-10 px-3.5 bg-white border border-slate-200 rounded-xl font-label-md text-label-md text-on-surface flex items-center gap-2 shadow-xs hover:bg-surface-container hover:border-slate-300 transition-all duration-150" type="button">
+                        <span class="material-symbols-outlined text-[17px] text-on-surface-variant">swap_vert</span>
+                        <span id="sort-label">Lưu gần nhất</span>
+                        <span class="tb-chevron material-symbols-outlined text-[16px] text-outline transition-transform duration-200">expand_more</span>
+                      </button>
+                      <div class="tb-panel absolute right-0 top-full mt-2 w-56 origin-top-right bg-white rounded-xl border border-slate-200 shadow-lg z-30 overflow-hidden">
+                        <div class="px-4 pt-3 pb-2 border-b border-slate-100">
+                          <span class="text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em]">Sắp xếp theo</span>
+                        </div>
+                        <ul class="py-1.5" id="sort-list">
+                          <li><button class="sort-opt w-full flex items-center gap-3 px-4 py-2 text-left text-[13px] text-slate-700 hover:bg-slate-50 transition-colors" data-sort="newest" type="button"><span class="material-symbols-outlined text-[18px] text-slate-400">schedule</span><span class="flex-1">Lưu gần nhất</span><span class="sort-check material-symbols-outlined text-[18px] text-[#1F4E78]">check</span></button></li>
+                          <li><button class="sort-opt w-full flex items-center gap-3 px-4 py-2 text-left text-[13px] text-slate-700 hover:bg-slate-50 transition-colors" data-sort="oldest" type="button"><span class="material-symbols-outlined text-[18px] text-slate-400">history</span><span class="flex-1">Lưu cũ nhất</span><span class="sort-check material-symbols-outlined text-[18px] text-[#1F4E78]">check</span></button></li>
+                          <li><button class="sort-opt w-full flex items-center gap-3 px-4 py-2 text-left text-[13px] text-slate-700 hover:bg-slate-50 transition-colors" data-sort="title" type="button"><span class="material-symbols-outlined text-[18px] text-slate-400">sort_by_alpha</span><span class="flex-1">Tên tài liệu (A → Z)</span><span class="sort-check material-symbols-outlined text-[18px] text-[#1F4E78]">check</span></button></li>
+                          <li><button class="sort-opt w-full flex items-center gap-3 px-4 py-2 text-left text-[13px] text-slate-700 hover:bg-slate-50 transition-colors" data-sort="pages" type="button"><span class="material-symbols-outlined text-[18px] text-slate-400">auto_stories</span><span class="flex-1">Số trang nhiều nhất</span><span class="sort-check material-symbols-outlined text-[18px] text-[#1F4E78]">check</span></button></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <!-- Grid / List Switcher (ô nền trượt theo chế độ đang chọn) -->
+                    <div class="relative flex items-center bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
+                      <span class="absolute top-1 left-1 w-8 h-8 rounded-xl bg-brand-light-blue transition-transform duration-300 ease-out" id="view-indicator"></span>
+                      <button aria-label="Xem dạng lưới" aria-pressed="true" class="view-btn relative z-10 w-8 h-8 rounded-xl text-primary flex items-center justify-center transition-colors" data-view="grid" type="button">
+                        <span class="material-symbols-outlined text-[18px]">grid_view</span>
+                      </button>
+                      <button aria-label="Xem dạng danh sách" aria-pressed="false" class="view-btn relative z-10 w-8 h-8 rounded-xl text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors" data-view="list" type="button">
+                        <span class="material-symbols-outlined text-[18px]">view_list</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- c. BULK ACTION BAR (2 Items Selected Banner) -->
+                <div id="bulk-bar" class="bg-brand-light-blue rounded-xl border border-[#1F4E78]/15 px-4 py-2.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-xs">
+                  <div class="flex items-center gap-3">
+                    <button aria-label="Chọn tất cả tài liệu đang hiển thị" class="w-5 h-5 rounded-sm bg-primary text-on-primary flex items-center justify-center cursor-pointer" id="bulk-all" type="button">
+                      <span class="material-symbols-outlined text-[16px] font-bold">check</span>
+                    </button>
+                    <span class="font-headline-sm text-headline-sm text-primary tracking-tight" id="bulk-count">Đã chọn 2 tài liệu</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline" id="bulk-size">• Tổng dung lượng: 28.4 MB</span>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <button class="px-3 py-1.5 rounded bg-surface-container-lowest text-primary hover:bg-surface-container-low font-label-md text-label-md shadow-xs flex items-center gap-1.5 transition-colors" type="button">
+                      <span class="material-symbols-outlined text-[16px]">drive_file_move</span>
+                      <span>Chuyển bộ sưu tập</span>
+                    </button>
+                    <button class="px-3 py-1.5 rounded bg-surface-container-lowest text-primary hover:bg-surface-container-low font-label-md text-label-md shadow-xs flex items-center gap-1.5 transition-colors" type="button">
+                      <span class="material-symbols-outlined text-[16px]">download</span>
+                      <span>Tải xuống (ZIP)</span>
+                    </button>
+                    <button id="bulk-remove" class="px-3 py-1.5 rounded bg-surface-container-lowest text-status-error hover:bg-error-container font-label-md text-label-md shadow-xs flex items-center gap-1.5 transition-colors" type="button">
+                      <span class="material-symbols-outlined text-[16px]">bookmark_remove</span>
+                      <span>Bỏ lưu</span>
+                    </button>
+                    <button id="bulk-clear" class="px-2.5 py-1.5 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm underline transition-colors" type="button">
+                      Hủy chọn
+                    </button>
+                  </div>
+                </div>
+                <!-- d. 3x3 ACADEMIC CARDS GRID -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="saved-grid">
+                  <!-- CARD 1 (Selected + Note) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <!-- PDF Preview Cover -->
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-hero-dark via-primary to-secondary p-3 flex flex-col justify-between">
+                        <!-- SVG geometric texture -->
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <circle class="text-tertiary-fixed" cx="260" cy="20" r="80" stroke="currentColor" stroke-width="1.5"></circle>
+                          <path class="text-secondary-fixed" d="M-20 120 L80 20 L180 120" stroke="currentColor" stroke-width="1.2"></path>
+                        </svg>
+                        <!-- Top controls -->
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="true" class="card-check w-5 h-5 rounded-sm bg-primary-fixed text-primary flex items-center justify-center cursor-pointer shadow-xs" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Bài báo khoa học
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <!-- Abstract bottom indicator inside banner -->
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>IEEE Access 2026</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            14 trang
+                          </span>
+                        </div>
+                      </div>
+                      <!-- Body Details -->
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          EdgeVision-Traffic: Hệ thống AI Edge giám sát an toàn
+                          giao thông đô thị
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          VisionLab UIT • GVHD: TS. Nguyễn Văn A
+                        </p>
+                        <!-- Field chip & date -->
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-primary font-label-sm text-label-sm">
+                            Thị giác máy tính
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            12/10/2026
+                          </span>
+                        </div>
+                        <!-- Personal Note Bar -->
+                        <div class="mt-1 p-2.5 rounded bg-surface-container-low flex items-start gap-2">
+                          <span class="material-symbols-outlined text-[16px] text-status-warning shrink-0">edit_note</span>
+                          <p class="font-body-sm text-body-sm text-on-surface italic line-clamp-2">
+                            Dùng tài liệu này cho chương 2 luận văn tốt nghiệp.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Card Footer -->
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 2 (Selected) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-tertiary via-tertiary-container to-secondary p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <rect class="text-tertiary-fixed" height="100" rx="20" stroke="currentColor" stroke-width="1.5" width="100" x="180" y="20"></rect>
+                          <circle class="text-secondary-fixed" cx="40" cy="90" r="45" stroke="currentColor" stroke-width="1.2"></circle>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="true" class="card-check w-5 h-5 rounded-sm bg-primary-fixed text-primary flex items-center justify-center cursor-pointer shadow-xs" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-tertiary-container font-bold">
+                              Đề tài NCKH
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>Cấp ĐHQG-HCM</span>
+                          <span class="flex items-center gap-1 font-semibold text-tertiary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            48 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Federated Learning bảo mật quyền riêng tư dữ liệu y tế
+                          đa trung tâm
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Nhóm HealthTech • TS. Lê B • UIT MedLab
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+                            Y tế số &amp; AI
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            10/10/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 3 (Unselected + Note) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-hero-mid via-primary to-brand-hero-dark p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <path class="text-secondary-fixed" d="M10 130 Q 150 10 290 130" stroke="currentColor" stroke-width="2"></path>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Bài báo khoa học
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>CVPR Workshop</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            10 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Nén mô hình học sâu Vision Transformers cho thiết bị
+                          phần cứng biên
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Phòng Lab AIoT • ThS. Trần Hoàng Nam
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-primary font-label-sm text-label-sm">
+                            Thị giác máy tính
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            08/10/2026
+                          </span>
+                        </div>
+                        <!-- Note -->
+                        <div class="mt-1 p-2.5 rounded bg-surface-container-low flex items-start gap-2">
+                          <span class="material-symbols-outlined text-[16px] text-status-warning shrink-0">edit_note</span>
+                          <p class="font-body-sm text-body-sm text-on-surface italic line-clamp-2">
+                            Tham khảo kỹ thuật quantization INT8 và TensorRT.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 4 (Curriculum Textbook) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-navy-dark via-primary to-surface-tint p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <circle class="text-secondary-fixed" cx="230" cy="110" r="70" stroke="currentColor" stroke-width="1.5"></circle>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Giáo trình
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>NXB ĐHQG-HCM</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">auto_stories</span>
+                            320 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Giáo trình Thị giác máy tính ứng dụng &amp; Xử lý ảnh
+                          nâng cao
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Bộ môn Trí tuệ Nhân tạo • Khoa KHMT
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-primary font-label-sm text-label-sm">
+                            Thị giác máy tính
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            05/10/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 5 (Slides) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-primary via-primary-container to-brand-hero-mid p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <line class="text-primary-fixed" stroke="currentColor" stroke-width="1.5" x1="20" x2="280" y1="20" y2="120"></line>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Slide bài giảng
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>Học phần CS231</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">slideshow</span>
+                            72 slides
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Slide bài giảng: Học sâu nâng cao và Mạng nơ-ron tích
+                          chập đa tầng
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Bộ môn Khoa học Dữ liệu • UIT
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-primary font-label-sm text-label-sm">
+                            Thị giác máy tính
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            03/10/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 6 (Hardware / RISC-V) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-hero-dark via-primary to-surface-tint p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <rect class="text-tertiary-fixed" height="80" stroke="currentColor" stroke-width="1.5" width="80" x="30" y="30"></rect>
+                          <circle class="text-primary-fixed" cx="210" cy="70" r="40" stroke="currentColor" stroke-width="1.5"></circle>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Đề tài NCKH
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>Lab CE-IC</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            22 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Nghiên cứu kiến trúc vi mạch mã nguồn mở RISC-V tăng
+                          tốc mật mã
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          IC-Lab UIT • TS. Đặng Minh Quân
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-amber-50 text-status-warning font-label-sm text-label-sm font-semibold">
+                            Thiết kế vi mạch
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            28/09/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 7 (NLP) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-hero-mid via-secondary to-primary-container p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <path class="text-secondary-fixed" d="M40 30 Q 150 120 260 30" stroke="currentColor" stroke-width="1.8"></path>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Bài báo khoa học
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>EMNLP Proceedings</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            16 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Xử lý ngôn ngữ tự nhiên tiếng Việt chuyên sâu với
+                          PhoBERT và LLMs
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Computational Linguistics Lab • UIT
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-purple-50 text-primary font-label-sm text-label-sm">
+                            NLP tiếng Việt
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            25/09/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 8 (Security) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-brand-hero-dark via-tertiary to-brand-hero-mid p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <polygon class="text-tertiary-fixed" points="150,15 220,55 220,115 150,135 80,115 80,55" stroke="currentColor" stroke-width="1.2"></polygon>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Bài báo khoa học
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>InSecLab Research</span>
+                          <span class="flex items-center gap-1 font-semibold text-tertiary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            19 trang
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Kiến trúc phòng thủ và an toàn thông tin chuyên sâu
+                          cho hệ sinh thái IoT
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Phòng thí nghiệm An toàn thông tin InSecLab
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-red-50 text-status-error font-label-sm text-label-sm">
+                            An toàn thông tin
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            22/09/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                  <!-- CARD 9 (Robotics) -->
+                  <article class="saved-card bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
+                    <div>
+                      <div class="h-36 relative overflow-hidden bg-gradient-to-br from-primary-container via-surface-tint to-secondary p-3 flex flex-col justify-between">
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" fill="none" viewBox="0 0 300 140">
+                          <circle class="text-secondary-fixed" cx="150" cy="70" r="50" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1.5"></circle>
+                          <circle class="text-secondary-fixed/30" cx="150" cy="70" fill="currentColor" r="20"></circle>
+                        </svg>
+                        <div class="relative z-10 flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <button aria-label="Chọn tài liệu" aria-pressed="false" class="card-check w-5 h-5 rounded-sm bg-surface-container-lowest/80 text-transparent flex items-center justify-center cursor-pointer shadow-xs hover:bg-surface-container-lowest" type="button"><span class="material-symbols-outlined text-[15px] font-bold">check</span></button>
+                            <span class="px-2 py-0.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-xs font-label-sm text-label-sm text-primary font-bold">
+                              Sản phẩm TRL 6
+                            </span>
+                          </div>
+                          <button aria-label="Đã lưu" class="text-secondary-container hover:text-surface-bright transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[22px]" style="
+                                font-variation-settings: &quot;FILL&quot; 1;
+                              ">bookmark</span>
+                          </button>
+                        </div>
+                        <div class="relative z-10 flex items-center justify-between text-on-primary/80 font-code-sm text-code-sm">
+                          <span>Robotics UIT &amp; LogiTech</span>
+                          <span class="flex items-center gap-1 font-semibold text-secondary-fixed">
+                            <span class="material-symbols-outlined text-[14px]">devices</span>
+                            Báo cáo KT
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-4 flex flex-col gap-2.5">
+                        <h3 class="font-title-md text-title-md text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                          Giải pháp định vị và điều hướng Robot tự hành (AGV)
+                          trong kho vận
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted truncate">
+                          Nhóm Nghiên cứu Tự động hóa • Khoa KTTT
+                        </p>
+                        <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+                          <span class="px-2.5 py-0.5 rounded-md bg-teal-50 text-tertiary-container font-label-sm text-label-sm font-semibold">
+                            Robotics &amp; AI
+                          </span>
+                          <span class="font-body-sm text-[11px] text-text-muted flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">history</span>
+                            18/09/2026
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-surface-container-low/50 flex items-center justify-between">
+                      <a class="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center gap-1.5 transition-colors shadow-xs" href="03_chi-tiet-tai-nguyen.html">
+                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                        <span>Đọc PDF</span>
+                      </a>
+                      <button aria-label="Tuỳ chọn" class="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                      </button>
+                    </div>
+                  </article>
+                </div>
+                <!-- Trạng thái rỗng -->
+                <div class="hidden bg-white rounded-xl border border-dashed border-slate-300 py-12 px-6 text-center" id="saved-empty">
+                  <span class="material-symbols-outlined text-[40px] text-slate-400">bookmarks</span>
+                  <p class="mt-2 text-sm font-semibold text-[#1A1A1A]">Không có tài liệu phù hợp</p>
+                  <p class="mt-1 text-xs text-slate-500">Thử chọn loại tài liệu khác hoặc đổi từ khóa tìm kiếm.</p>
+                </div>
+                <!-- e. PAGINATION SECTION -->
+                <div class="mt-4 bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Hiển thị
+                    <span class="font-bold text-on-surface" id="saved-range">1 – 9</span> trên
+                    tổng số
+                    <span class="font-bold text-on-surface" id="saved-total">24</span> tài liệu
+                    đã lưu
+                  </p>
+                  <nav aria-label="Phân trang danh sách tài liệu" class="flex items-center gap-1.5">
+                    <!-- Previous Button -->
+                    <button class="h-9 px-3 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md flex items-center gap-1 transition-colors disabled:opacity-40" disabled="" type="button">
+                      <span class="material-symbols-outlined text-[17px]">chevron_left</span>
+                      <span>Trước</span>
+                    </button>
+                    <!-- Page 1 (Active) -->
+                    <button class="w-9 h-9 rounded bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shadow-xs" type="button">
+                      1
+                    </button>
+                    <!-- Page 2 -->
+                    <button class="w-9 h-9 rounded text-on-surface hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors" type="button">
+                      2
+                    </button>
+                    <!-- Page 3 -->
+                    <button class="w-9 h-9 rounded text-on-surface hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors" type="button">
+                      3
+                    </button>
+                    <!-- Next Button -->
+                    <button class="h-9 px-3 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md flex items-center gap-1 transition-colors" type="button">
+                      <span>Sau</span>
+                      <span class="material-symbols-outlined text-[17px]">chevron_right</span>
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+<!-- ===== HẾT NỘI DUNG TRANG ===== -->
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-[#163A59] text-white py-12 px-8 md:px-12 mt-12 border-t border-[#1F4E78]">
+<div class="max-w-[1280px] mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- Column 1: Brand & Overview -->
+    <div class="flex flex-col">
+      <div class="flex items-center gap-2 font-bold text-white text-xl">
+        <div class="w-8 h-8 rounded-lg bg-white text-[#163A59] flex items-center justify-center font-extrabold text-sm shadow-xs">
+          UIT
+        </div>
+        <span class="">UIT Connect</span>
+      </div>
+      <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+        Nền tảng kết nối năng lực nghiên cứu, chuyển giao công nghệ và hợp tác doanh nghiệp của Trường Đại học Công nghệ Thông tin – ĐHQG-HCM.
+      </p>
+      <div class="flex items-center gap-2 text-xs text-emerald-400 mt-4 font-medium">
+        <span class="material-symbols-outlined text-[18px] text-emerald-400">verified</span>
+        <span class="">Hệ thống quản lý nghiên cứu chính thức</span>
+      </div>
+    </div>
+
+    <!-- Column 2: Khám phá -->
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-base">Khám phá</h4>
+      <ul class="space-y-2.5 text-sm text-slate-300">
+        <li class=""><a href="02_kho-tai-nguyen-hoc-thuat.html" class="hover:text-white transition-colors">Kho tài nguyên số</a></li>
+        <li class=""><a href="02_kho-tai-nguyen-hoc-thuat.html" class="hover:text-white transition-colors">Công trình nghiên cứu khoa học</a></li>
+        <li class=""><a href="#" class="hover:text-white transition-colors">Sản phẩm chuyển giao công nghệ</a></li>
+        <li class=""><a href="08_danh-ba-giang-vien-co-van.html" class="hover:text-white transition-colors">Hồ sơ năng lực giảng viên</a></li>
+        <li class=""><a href="09_cong-doanh-nghiep-rd.html" class="hover:text-white transition-colors">Đề tài doanh nghiệp đặt hàng</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 3: Hỗ trợ -->
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-base">Hỗ trợ</h4>
+      <ul class="space-y-2.5 text-sm text-slate-300">
+        <li class=""><a href="#" class="hover:text-white transition-colors">Quy trình công bố tài nguyên</a></li>
+        <li class=""><a href="#" class="hover:text-white transition-colors">Thang đo mức sẵn sàng TRL</a></li>
+        <li class=""><a href="#" class="hover:text-white transition-colors">Chính sách bảo hộ sở hữu trí tuệ</a></li>
+        <li class=""><a href="#" class="hover:text-white transition-colors">Câu hỏi thường gặp (FAQ)</a></li>
+        <li class=""><a href="#" class="hover:text-white transition-colors">Hướng dẫn sử dụng API</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 4: Liên hệ -->
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-base">Liên hệ</h4>
+      <ul class="space-y-3 text-sm text-slate-300">
+        <li class="flex items-start gap-2.5">
+          <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">location_on</span>
+          <span class="">Khu phố 6, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">mail</span>
+          <a href="mailto:support@uit.edu.vn" class="hover:text-white transition-colors">support@uit.edu.vn</a>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">call</span>
+          <a href="tel:02837252002" class="hover:text-white transition-colors">(028) 372 52002</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bottom divider and row -->
+  <div class="border-t border-slate-700/60 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+    <div class="">
+      © 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM
+    </div>
+    <div class="flex items-center gap-4 flex-wrap">
+      <a href="#" class="hover:text-white transition-colors">Điều khoản dịch vụ</a>
+      <span class="">·</span>
+      <a href="#" class="hover:text-white transition-colors">Chính sách bảo mật</a>
+      <span class="">·</span>
+      <a href="#" class="hover:text-white transition-colors">Quy chế hoạt động</a>
+    </div>
+  </div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" id="logout-modal">
+<div class="fixed inset-0" id="logout-modal-backdrop" onclick="closeLogoutModal()"></div>
+<div class="relative w-full max-w-md bg-white rounded-xl shadow-md border border-[#E1E5EA] p-6 z-10 transform transition-all duration-300 scale-95" id="logout-modal-card">
+<!-- Header -->
+<div class="flex items-start justify-between pb-3 border-b border-[#E1E5EA]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#DC2626] shrink-0">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-tight">Xác nhận đăng xuất</h3>
+<p class="text-xs text-[#5F6368] mt-0.5">Phiên làm việc: Nguyễn Văn An (K18 KHMT)</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#5F6368] hover:bg-[#F5F7FA] hover:text-[#1A1A1A] transition-colors" onclick="closeLogoutModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Content body -->
+<div class="py-4 text-xs text-[#5F6368] leading-relaxed">
+<p class="">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc sinh viên? Sau khi đăng xuất, bạn có thể đăng nhập lại qua cổng xác thực SSO hoặc chuyển đổi sang tài khoản mới.</p>
+</div>
+<!-- Quick Action / Navigation Pods -->
+<div class="flex flex-col gap-2 pt-2 border-t border-[#E1E5EA]">
+<button class="w-full h-10 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs" onclick="window.location.href='../auth/02_dang-nhap-sso-microsoft365.html'">
+<span class="material-symbols-outlined text-[18px]">login</span>
+<span class="">Đăng nhập lại (SSO UIT)</span>
+</button>
+<button class="w-full h-10 rounded-lg bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center justify-center gap-2 transition-colors" onclick="window.location.href='../auth/03_dang-ky-b1-chon-vai-tro.html'">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span class="">Đăng ký tài khoản mới</span>
+</button>
+<button class="w-full h-9 rounded-lg text-slate-700 hover:bg-[#F5F7FA] text-xs font-medium flex items-center justify-center transition-colors mt-1" onclick="closeLogoutModal()">
+<span class="">Hủy / Ở lại phiên làm việc</span>
+</button>
+</div>
+</div>
+</div>
+<script src="../../assets/js/app-shell.js"></script>
+<script src="../../assets/js/ux-effects.js"></script>
+<script>
+// Kho tài nguyên đã lưu: tab loại tài liệu, ô tìm kiếm, chọn nhiều thẻ, bỏ lưu.
+// Số đếm trên tab / bộ sưu tập / phân trang được tính lại từ các thẻ thực có trên trang.
+(function () {
+  var PER_PAGE = 9;
+  var MB_PER_PAGE = 0.458; // ước lượng dung lượng PDF theo số trang
+  var TAB_ON = ['font-headline-sm', 'text-primary'];
+  var TAB_OFF = ['font-body-lg', 'text-on-surface-variant', 'hover:text-primary'];
+  var COUNT_ON = ['bg-brand-light-blue', 'text-primary', 'font-bold'];
+  var COUNT_OFF = ['bg-surface-container', 'text-text-muted'];
+  var CHECK_ON = ['bg-primary-fixed', 'text-primary'];
+  var CHECK_OFF = ['bg-surface-container-lowest/80', 'text-transparent', 'hover:bg-surface-container-lowest'];
+
+  var grid = document.getElementById('saved-grid');
+  var tabs = document.querySelectorAll('.type-tab');
+  var search = document.getElementById('saved-search');
+  var bulkBar = document.getElementById('bulk-bar');
+  var currentType = '';
+  var activeFields = []; // lĩnh vực đang tích trong dropdown "Lĩnh vực"
+
+  function swap(el, on, onList, offList) {
+    onList.forEach(function (c) { el.classList.toggle(c, on); });
+    offList.forEach(function (c) { el.classList.toggle(c, !on); });
+  }
+  function cards() { return Array.prototype.slice.call(grid.querySelectorAll('.saved-card')); }
+
+  // Loại tài liệu đọc từ nhãn trên ảnh bìa (ngay sau ô chọn)
+  function typeOf(card) {
+    var t = card.querySelector('.card-check + span').textContent.trim();
+    if (/^(Bài báo|Luận văn)/.test(t)) return 'bai-bao';
+    if (/^Đề tài/.test(t)) return 'de-tai';
+    if (/^Sản phẩm/.test(t)) return 'san-pham';
+    if (/^(Giáo trình|Slide)/.test(t)) return 'giao-trinh';
+    return '';
+  }
+  function pagesOf(card) {
+    var m = card.textContent.match(/(\d+)\s*(trang|slides)/);
+    return m ? +m[1] : 0;
+  }
+  function isSelected(card) { return card.querySelector('.card-check').getAttribute('aria-pressed') === 'true'; }
+  function setSelected(card, on) {
+    var box = card.querySelector('.card-check');
+    box.setAttribute('aria-pressed', on);
+    swap(box, on, CHECK_ON, CHECK_OFF);
+    card.classList.toggle('ring-2', on);
+    card.classList.toggle('ring-[#1F4E78]/40', on);
+  }
+
+  function updateCounts() {
+    var all = cards();
+    document.querySelectorAll('.type-tab').forEach(function (tab) {
+      var t = tab.getAttribute('data-type');
+      tab.querySelector('.tab-count').textContent = all.filter(function (c) { return !t || typeOf(c) === t; }).length;
+    });
+    // Bộ sưu tập "Tất cả đã lưu"
+    var pill = document.querySelector('aside nav a .bg-primary');
+    if (pill) pill.textContent = all.length;
+    buildFieldList();
+  }
+
+  // Lĩnh vực = nhãn màu dưới tên tài liệu; ngày lưu = dòng có icon "history"
+  function fieldOf(card) {
+    var chip = card.querySelector('span.rounded-md.font-label-sm');
+    return chip ? chip.textContent.trim() : '';
+  }
+  function dateOf(card) {
+    var m = card.textContent.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? new Date(+m[3], m[2] - 1, +m[1]).getTime() : 0;
+  }
+  function titleOf(card) { return card.querySelector('h3').textContent.trim(); }
+
+  function updateBulk() {
+    var sel = cards().filter(isSelected);
+    bulkBar.classList.toggle('hidden', sel.length === 0);
+    document.getElementById('bulk-count').textContent = 'Đã chọn ' + sel.length + ' tài liệu';
+    var mb = sel.reduce(function (sum, c) { return sum + pagesOf(c) * MB_PER_PAGE; }, 0);
+    document.getElementById('bulk-size').textContent = '• Tổng dung lượng: ' + mb.toFixed(1).replace('.', ',') + ' MB';
+  }
+
+  function render() {
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    cards().forEach(function (card) {
+      var ok = (!currentType || typeOf(card) === currentType)
+        && (!activeFields.length || activeFields.indexOf(fieldOf(card)) !== -1)
+        && (!q || card.textContent.toLowerCase().indexOf(q) !== -1);
+      card.classList.toggle('hidden', !ok);
+      if (ok) shown++;
+    });
+    document.getElementById('saved-empty').classList.toggle('hidden', shown > 0);
+    document.getElementById('saved-range').textContent = shown ? '1 – ' + Math.min(shown, PER_PAGE) : '0';
+    document.getElementById('saved-total').textContent = shown;
+    var pages = Math.max(1, Math.ceil(shown / PER_PAGE));
+    document.querySelectorAll('nav[aria-label="Phân trang danh sách tài liệu"] button').forEach(function (b) {
+      var n = parseInt(b.textContent, 10);
+      if (n) b.classList.toggle('hidden', n > pages);
+      else if (/Sau/.test(b.textContent)) b.disabled = pages <= 1;
+    });
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      currentType = tab.getAttribute('data-type');
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        swap(t, on, TAB_ON, TAB_OFF);
+        swap(t.querySelector('.tab-count'), on, COUNT_ON, COUNT_OFF);
+        t.querySelector('.tab-line').classList.toggle('hidden', !on);
+      });
+      render();
+    });
+  });
+  search.addEventListener('input', render);
+
+  // Chọn từng thẻ
+  grid.addEventListener('click', function (e) {
+    var box = e.target.closest('.card-check');
+    if (box) {
+      var card = box.closest('.saved-card');
+      setSelected(card, !isSelected(card));
+      updateBulk();
+      return;
+    }
+    // Nút bookmark trên ảnh bìa = bỏ lưu riêng thẻ đó
+    var mark = e.target.closest('button[aria-label="Đã lưu"]');
+    if (mark) removeCards([mark.closest('.saved-card')]);
+  });
+
+  // Ô chọn trên thanh hàng loạt: chọn / bỏ chọn toàn bộ thẻ đang hiển thị
+  document.getElementById('bulk-all').addEventListener('click', function () {
+    var visible = cards().filter(function (c) { return !c.classList.contains('hidden'); });
+    var allOn = visible.every(isSelected);
+    visible.forEach(function (c) { setSelected(c, !allOn); });
+    updateBulk();
+  });
+  document.getElementById('bulk-clear').addEventListener('click', function () {
+    cards().forEach(function (c) { setSelected(c, false); });
+    updateBulk();
+  });
+  document.getElementById('bulk-remove').addEventListener('click', function () {
+    removeCards(cards().filter(isSelected));
+  });
+
+  function removeCards(list) {
+    list.forEach(function (c) {
+      c.style.transition = 'opacity 200ms, transform 200ms';
+      c.style.opacity = '0';
+      c.style.transform = 'scale(0.97)';
+    });
+    setTimeout(function () {
+      list.forEach(function (c) { c.remove(); });
+      updateCounts();
+      updateBulk();
+      render();
+    }, 200);
+  }
+
+  // ==================== THANH CÔNG CỤ: hiệu ứng & dropdown ====================
+
+  function pop(el) {
+    el.classList.remove('tb-pop');
+    void el.offsetWidth; // chạy lại animation
+    el.classList.add('tb-pop');
+  }
+
+  // Ô tìm kiếm: nút xoá hiện khi có chữ, phím "/" để focus, Esc để xoá
+  var clearBtn = document.getElementById('search-clear');
+  var kbd = document.getElementById('search-kbd');
+  function syncClear() {
+    var has = search.value.length > 0;
+    clearBtn.classList.toggle('is-visible', has);
+    kbd.classList.toggle('hidden', has);
+  }
+  search.addEventListener('input', syncClear);
+  clearBtn.addEventListener('click', function () {
+    search.value = '';
+    syncClear();
+    render();
+    search.focus();
+  });
+  search.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && search.value) { e.stopPropagation(); clearBtn.click(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    var typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+    if (e.key === '/' && !typing) { e.preventDefault(); search.focus(); }
+  });
+
+  // Mở / đóng dropdown (chỉ một cái mở tại một thời điểm)
+  var menus = document.querySelectorAll('[data-tb-menu]');
+  function setMenu(menu, open) {
+    menu.classList.toggle('is-open', open);
+    menu.querySelector('.tb-panel').classList.toggle('is-open', open);
+    menu.querySelector('.tb-toggle').setAttribute('aria-expanded', open);
+  }
+  menus.forEach(function (menu) {
+    menu.querySelector('.tb-toggle').addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = !menu.classList.contains('is-open');
+      menus.forEach(function (m) { setMenu(m, false); });
+      setMenu(menu, open);
+    });
+    menu.querySelector('.tb-panel').addEventListener('click', function (e) { e.stopPropagation(); });
+  });
+  document.addEventListener('click', function () { menus.forEach(function (m) { setMenu(m, false); }); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') menus.forEach(function (m) { setMenu(m, false); });
+  });
+
+  // Dropdown "Lĩnh vực": ô tích + số tài liệu, lọc ngay khi tích
+  var fieldList = document.getElementById('field-list');
+  var fieldBadge = document.getElementById('field-badge');
+  var fieldReset = document.getElementById('field-reset');
+  function buildFieldList() {
+    var counts = {};
+    cards().forEach(function (c) { var f = fieldOf(c); if (f) counts[f] = (counts[f] || 0) + 1; });
+    activeFields = activeFields.filter(function (f) { return counts[f]; });
+    fieldList.innerHTML = Object.keys(counts).sort().map(function (f) {
+      var on = activeFields.indexOf(f) !== -1;
+      return '<li><label class="flex items-center gap-3 px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">'
+        + '<input type="checkbox" class="field-opt w-4 h-4 rounded border-slate-300 text-[#1F4E78] focus:ring-[#1F4E78]/30 transition" value="' + f.replace(/"/g, '&quot;') + '"' + (on ? ' checked' : '') + '>'
+        + '<span class="flex-1 truncate">' + f.replace(/&/g, '&amp;') + '</span>'
+        + '<span class="text-[11px] font-mono text-slate-500">' + counts[f] + '</span></label></li>';
+    }).join('');
+    syncFieldBadge();
+  }
+  function syncFieldBadge() {
+    fieldBadge.textContent = activeFields.length;
+    fieldBadge.classList.toggle('hidden', !activeFields.length);
+    fieldReset.disabled = !activeFields.length;
+  }
+  fieldList.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('field-opt')) return;
+    var f = e.target.value;
+    if (e.target.checked) activeFields.push(f);
+    else activeFields = activeFields.filter(function (x) { return x !== f; });
+    syncFieldBadge();
+    pop(fieldBadge);
+    render();
+  });
+  fieldReset.addEventListener('click', function () {
+    activeFields = [];
+    fieldList.querySelectorAll('.field-opt').forEach(function (c) { c.checked = false; });
+    syncFieldBadge();
+    render();
+  });
+
+  // Dropdown "Sắp xếp": các thẻ trượt tới vị trí mới (kỹ thuật FLIP)
+  var SORTERS = {
+    newest: function (a, b) { return dateOf(b) - dateOf(a); },
+    oldest: function (a, b) { return dateOf(a) - dateOf(b); },
+    title: function (a, b) { return titleOf(a).localeCompare(titleOf(b), 'vi'); },
+    pages: function (a, b) { return pagesOf(b) - pagesOf(a); }
+  };
+  function animateReorder(apply) {
+    var list = cards();
+    var before = list.map(function (c) { return c.getBoundingClientRect(); });
+    apply();
+    list.forEach(function (c, i) {
+      var after = c.getBoundingClientRect();
+      var dx = before[i].left - after.left, dy = before[i].top - after.top;
+      if (!dx && !dy) return;
+      c.style.transition = 'none';
+      c.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          c.style.transition = 'transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1)';
+          c.style.transform = '';
+        });
+      });
+    });
+  }
+  function setSort(key) {
+    document.querySelectorAll('.sort-opt').forEach(function (b) {
+      var on = b.getAttribute('data-sort') === key;
+      b.classList.toggle('bg-[#E6F0F7]', on);
+      b.classList.toggle('text-[#1F4E78]', on);
+      b.classList.toggle('font-semibold', on);
+      b.querySelector('.sort-check').classList.toggle('invisible', !on);
+    });
+  }
+  document.querySelectorAll('.sort-opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var key = b.getAttribute('data-sort');
+      setSort(key);
+      var label = document.getElementById('sort-label');
+      label.textContent = b.querySelector('.flex-1').textContent;
+      pop(label);
+      setMenu(b.closest('[data-tb-menu]'), false);
+      animateReorder(function () {
+        cards().sort(SORTERS[key]).forEach(function (c) { grid.appendChild(c); });
+      });
+    });
+  });
+  setSort('newest');
+
+  // Lưới / danh sách: ô nền trượt, lưới mờ đi rồi hiện lại ở bố cục mới
+  var indicator = document.getElementById('view-indicator');
+  document.querySelectorAll('.view-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var view = btn.getAttribute('data-view');
+      if (btn.getAttribute('aria-pressed') === 'true') return;
+      document.querySelectorAll('.view-btn').forEach(function (b) {
+        var on = b === btn;
+        b.setAttribute('aria-pressed', on);
+        b.classList.toggle('text-primary', on);
+        b.classList.toggle('text-on-surface-variant', !on);
+      });
+      indicator.style.transform = view === 'list' ? 'translateX(2rem)' : '';
+      grid.classList.add('is-switching');
+      setTimeout(function () {
+        grid.classList.toggle('list-view', view === 'list');
+        grid.classList.remove('is-switching');
+      }, 180);
+    });
+  });
+
+  cards().forEach(function (c) { setSelected(c, isSelected(c)); });
+  updateCounts();
+  updateBulk();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trang chủ giảng viên | UIT Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  "darkMode": "class",
+  "theme": {
+    "extend": {
+      "colors": {
+        "brand-blue": "#1F4E78",
+        "brand-blue-hover": "#163A59",
+        "brand-cyan": "#2E86AB",
+        "brand-light": "#E6F0F7",
+        "brand-bg": "#F5F7FA",
+        "text-main": "#1A1A1A",
+        "text-secondary": "#5F6368",
+        "border-color": "#E1E5EA"
+      },
+      "fontFamily": {
+        "sans": [
+          "Inter",
+          "sans-serif"
+        ],
+        "mono": [
+          "JetBrains Mono",
+          "monospace"
+        ]
+      }
+    }
+  }
+};
+</script>
+<!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<style>
+/* Hiệu ứng thẻ "Cơ hội mới nhất" */
+.opportunity-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+.opportunity-card.hidden-card { display: none !important; }
+</style>
+</head>
+<body class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased selection:bg-[#E6F0F7] selection:text-[#1F4E78]">
+<!-- MOBILE BACKDROP OVERLAY -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden transition-opacity md:hidden" id="sidebar-backdrop"></div>
+<div class="min-h-screen flex flex-col w-full bg-[#F5F7FA]">
+<!-- TOP BAR -->
+<header class="sticky top-0 z-40 w-full h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 w-[240px] shrink-0">
+<button aria-label="Thu gọn hoặc mở menu" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer" id="hamburger-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">menu</span>
+</button>
+<a class="flex items-center gap-2.5 group" href="01_trang-chu.html">
+<div class="w-9 h-9 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight shadow-xs transition-transform group-hover:scale-105">
+          UIT
+        </div>
+<div class="hidden sm:flex flex-col">
+<span class="font-bold text-[17px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[11px] text-[#5F6368] font-medium leading-none mt-1">Cổng Kết Nối Tri Thức UIT</span>
+</div>
+</a>
+</div>
+<!-- Center: Global Search Bar (Pill style Gmail) -->
+<div class="flex-1 max-w-[720px] mx-auto">
+</div>
+<!-- Right: Bell badge & avatar only -->
+<div class="flex items-center gap-3 shrink-0"><button aria-label="Thông báo" class="relative w-10 h-10 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2 right-2 w-4 h-4 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs">3</span></button><div class="flex items-center gap-2.5 cursor-pointer pl-1 pr-2 rounded-lg" onclick="openLogoutModal()"><div class="w-9 h-9 rounded-full bg-[#1F4E78] text-white flex items-center justify-center font-bold text-xs shadow-xs hover:ring-2 hover:ring-[#1F4E78]/30 transition-all">NA</div><div class="hidden md:flex flex-col text-left"><span class="text-xs font-bold text-[#1A1A1A] leading-tight">TS. Nguyễn Văn A</span><span class="text-[11px] text-[#5F6368] leading-tight mt-0.5">Khoa MMT &amp; TT · GV01024</span></div></div></div>
+</header>
+<!-- MAIN APP BODY: Sidebar + Content -->
+<div class="app-body flex-1 flex w-full relative">
+<!-- SIDEBAR -->
+<aside class="w-[260px] bg-white border-r border-slate-200 flex flex-col justify-between py-4 px-3 shrink-0 transition-all duration-300 ease-in-out overflow-y-auto" id="sidebar">
+<div class="flex flex-col">
+<nav class="flex flex-col space-y-1" aria-label="Điều hướng chính">
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-3 pb-1 transition-all duration-200">Tổng quan &amp; Học thuật</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full bg-[#d3e3fd] text-[#001d35] font-semibold text-[14px] transition-colors gap-3" href="01_trang-chu.html" title="Trang chủ" aria-current="page">
+<span class="material-symbols-outlined text-[20px] text-[#001d35] shrink-0">home</span>
+<span class="sidebar-text truncate">Trang chủ</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="09_kho-tai-lieu.html" title="Kho tài liệu">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">folder</span>
+<span class="sidebar-text truncate">Kho tài liệu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="02_ho-so-khoa-hoc.html" title="Hồ sơ khoa học">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">badge</span>
+<span class="sidebar-text truncate">Hồ sơ khoa học</span>
+</a>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="03_de-tai-huong-dan.html" title="Đề tài &amp; Hướng dẫn">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">science</span>
+<span class="sidebar-text truncate">Đề tài &amp; Hướng dẫn</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">3</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="11_nhom-nghien-cuu-lab.html" title="Nhóm nghiên cứu &amp; Lab">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">groups</span>
+<span class="sidebar-text truncate">Nhóm nghiên cứu &amp; Lab</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Kết nối &amp; Hợp tác</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="04_tuyen-sinh-vien.html" title="Tuyển sinh viên">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">person_search</span>
+<span class="sidebar-text truncate">Tuyển sinh viên</span>
+</a>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="05_yeu-cau-huong-dan.html" title="Yêu cầu hướng dẫn">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">assignment_ind</span>
+<span class="sidebar-text truncate">Yêu cầu hướng dẫn</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">5</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="12_bai-toan-doanh-nghiep-rd.html" title="Bài toán DN &amp; R&amp;D">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">corporate_fare</span>
+<span class="sidebar-text truncate">Bài toán DN &amp; R&amp;D</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="13_hoc-bong-tai-tro.html" title="Học bổng &amp; Tài trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">payments</span>
+<span class="sidebar-text truncate">Học bổng &amp; Tài trợ</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Thẩm định</div>
+<a class="nav-item has-badge group flex items-center justify-between h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors" href="06_hang-cho-tham-dinh.html" title="Hàng chờ thẩm định">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">fact_check</span>
+<span class="sidebar-text truncate">Hàng chờ thẩm định</span>
+</div>
+<span class="sidebar-badge text-[12px] font-bold text-slate-800">4</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="08_lich-su-tham-dinh.html" title="Lịch sử thẩm định">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">history</span>
+<span class="sidebar-text truncate">Lịch sử thẩm định</span>
+</a>
+<div class="sidebar-group-title text-[11px] font-semibold text-[#8A8F98] uppercase tracking-[0.04em] px-3 pt-4 pb-1 transition-all duration-200">Tài liệu &amp; Cài đặt</div>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="14_kho-tai-nguyen-da-luu.html" title="Kho tài nguyên đã lưu">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">bookmark</span>
+<span class="sidebar-text truncate">Kho tài nguyên đã lưu</span>
+</a>
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="15_cai-dat-tai-khoan.html" title="Cài đặt tài khoản">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">settings</span>
+<span class="sidebar-text truncate">Cài đặt tài khoản</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Anchored Options -->
+<div class="pt-3 mt-4 border-t border-slate-100 flex flex-col space-y-1">
+<a class="nav-item group flex items-center h-9 px-4 rounded-full text-slate-700 hover:bg-slate-100 font-medium text-[14px] transition-colors gap-3" href="#" title="Trợ giúp &amp; Hỗ trợ">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:text-slate-800 transition-colors shrink-0">help</span>
+<span class="sidebar-text truncate">Trợ giúp &amp; Hỗ trợ</span>
+</a>
+<button class="nav-item group flex items-center w-full text-left h-9 px-4 rounded-full text-[#DC2626] hover:bg-red-50 font-medium text-[14px] transition-colors gap-3 cursor-pointer" onclick="openLogoutModal()" title="Đăng xuất" type="button">
+<span class="material-symbols-outlined text-[20px] text-[#DC2626] shrink-0">logout</span>
+<span class="sidebar-text truncate">Đăng xuất</span>
+</button>
+</div>
+</aside>
+<!-- CONTENT AREA WRAPPER -->
+<div class="flex-1 flex flex-col min-w-0 bg-[#F5F7FA]" id="main-wrapper">
+<main class="w-full bg-[#F5F7FA] p-4 sm:p-6 lg:p-8">
+<!-- ===== NỘI DUNG TRANG: Trang chủ giảng viên ===== -->
+<div class="max-w-[1280px] mx-auto space-y-8">
+<!-- 1. HERO BAND (inspired by recruitment portal banners) -->
+<!-- VIỆC CẦN XỬ LÝ (Lecturer Action Center Cards) --><div class="w-full space-y-3"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-sm bg-red-600"></span><h3 class="text-base font-bold text-[#1A1A1A] tracking-tight">Việc cần xử lý</h3><span class="px-2 py-0.5 rounded-full bg-red-50 text-red-600 text-xs font-bold border border-red-100">3 thông báo quan trọng</span></div><span class="text-xs text-[#5F6368]">Cập nhật lúc 08:30 hôm nay</span></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><!-- Action Card 1: Yêu cầu hướng dẫn --><div class="bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:border-[#1F4E78] hover:shadow-md transition-all flex items-start gap-3.5"><div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F4E78] flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">group_add</span></div><div class="flex-1 min-w-0 flex flex-col"><h4 class="text-sm font-bold text-[#1A1A1A] leading-tight">5 yêu cầu hướng dẫn</h4><p class="text-xs text-[#5F6368] mt-1 leading-snug line-clamp-1">3 từ sinh viên đề tài tốt nghiệp, 2 NCKH</p><a class="inline-flex items-center gap-1 text-xs font-semibold text-[#1F4E78] hover:text-[#163A59] mt-2.5 transition-colors" href="05_yeu-cau-huong-dan.html"><span>Xử lý</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></div></div><!-- Action Card 2: Chờ thẩm định --><div class="bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:border-amber-400 hover:shadow-md transition-all flex items-start gap-3.5"><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">assignment_late</span></div><div class="flex-1 min-w-0 flex flex-col"><h4 class="text-sm font-bold text-[#1A1A1A] leading-tight">4 đề tài chờ thẩm định</h4><p class="text-xs text-[#5F6368] mt-1 leading-snug line-clamp-1">Hạn chót thẩm định hội đồng trong 3 ngày</p><a class="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 hover:text-amber-900 mt-2.5 transition-colors" href="06_hang-cho-tham-dinh.html"><span>Xử lý</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></div></div><!-- Action Card 3: Đơn vào Lab --><div class="bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:border-emerald-500 hover:shadow-md transition-all flex items-start gap-3.5"><div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">biotech</span></div><div class="flex-1 min-w-0 flex flex-col"><h4 class="text-sm font-bold text-[#1A1A1A] leading-tight">2 đơn xin vào Lab</h4><p class="text-xs text-[#5F6368] mt-1 leading-snug line-clamp-1">Ứng tuyển Lab AI &amp; Thị giác máy tính</p><a class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-800 mt-2.5 transition-colors" href="04_tuyen-sinh-vien.html"><span>Xử lý</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></div></div></div></div><div class="relative w-full rounded-b-2xl bg-gradient-to-r from-[#1E3A5F] to-[#0F2744] p-8 shadow-sm overflow-hidden text-white">
+<!-- Subtle large chevron / diagonal background accents -->
+<div class="absolute inset-y-0 left-0 w-72 pointer-events-none opacity-10 flex items-center overflow-hidden">
+<svg class="h-full w-full" fill="none" preserveAspectRatio="none" viewBox="0 0 200 400">
+<path d="M-50 0 L100 200 L-50 400 L0 400 L150 200 L0 0 Z" fill="white"></path>
+<path d="M20 0 L170 200 L20 400 L70 400 L220 200 L70 0 Z" fill="white"></path>
+</svg>
+</div>
+<div class="absolute inset-y-0 right-0 w-72 pointer-events-none opacity-10 flex items-center justify-end overflow-hidden">
+<svg class="h-full w-full" fill="none" preserveAspectRatio="none" viewBox="0 0 200 400">
+<path d="M250 0 L100 200 L250 400 L200 400 L50 200 L200 0 Z" fill="white"></path>
+<path d="M180 0 L30 200 L180 400 L130 400 L-20 200 L130 0 Z" fill="white"></path>
+</svg>
+</div>
+<div class="relative z-10 flex flex-col space-y-5">
+<!-- Large White Search Bar (56px tall, fully rounded) -->
+<div class="w-full h-14 bg-white rounded-full shadow-lg p-1.5 flex items-center gap-2 text-slate-700">
+<!-- Sector dropdown button -->
+<button class="h-full px-4 rounded-full hover:bg-slate-100 flex items-center gap-1.5 text-xs font-semibold text-slate-700 whitespace-nowrap transition-colors shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px] text-[#1F4E78]">menu</span>
+<span class="">Lĩnh vực</span>
+<span class="material-symbols-outlined text-[16px] text-slate-400">expand_more</span>
+</button>
+<div class="w-px h-6 bg-slate-200 shrink-0"></div>
+<!-- Search input -->
+<div class="flex-1 min-w-0 flex items-center px-2">
+<input class="w-full bg-transparent border-0 ring-0 focus:outline-none focus:ring-0 text-[14px] text-[#1A1A1A] placeholder:text-slate-400 px-1 py-1" placeholder="Tìm tài liệu, đề tài, giảng viên, doanh nghiệp..." type="text">
+</div>
+<div class="w-px h-6 bg-slate-200 shrink-0 hidden sm:block"></div>
+<!-- Department / Lab dropdown button -->
+<button class="h-full px-4 rounded-full hover:bg-slate-100 hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-700 whitespace-nowrap transition-colors shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px] text-red-500">location_on</span>
+<span class="">Khoa / Lab</span>
+<span class="material-symbols-outlined text-[16px] text-slate-400">expand_more</span>
+</button>
+<!-- Primary Search Button -->
+<button class="h-full px-6 rounded-full bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center gap-2 shadow-xs transition-colors shrink-0 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[18px]">search</span>
+<span class="hidden xs:inline">Tìm kiếm</span>
+</button>
+</div>
+<!-- Xu hướng hashtag chips in glassmorphism style -->
+<div class="flex flex-wrap items-center gap-2 text-xs">
+<span class="font-semibold text-white/90 flex items-center gap-1.5 mr-1">
+<span class="material-symbols-outlined text-[16px] text-amber-400">trending_up</span> Xu hướng:
+      </span>
+<a class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/95 backdrop-blur-md font-medium text-xs transition-colors" href="#">#AI-Semiconductor</a>
+<a class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/95 backdrop-blur-md font-medium text-xs transition-colors" href="#">#ChuyểnGiaoCongNghe</a>
+<a class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/95 backdrop-blur-md font-medium text-xs transition-colors" href="#">#HocBongR&amp;D</a>
+<a class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/95 backdrop-blur-md font-medium text-xs transition-colors" href="#">#ViMach-FPGA</a>
+<a class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/95 backdrop-blur-md font-medium text-xs transition-colors" href="#">#ComputerVision</a>
+</div>
+<!-- 2. HERO BANNER CARD (inside the band, below the search bar & hashtags) -->
+<div class="w-full bg-gradient-to-r from-[#EBF5FF] to-white rounded-2xl border border-blue-100 shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch mt-6 text-[#1A1A1A]">
+<!-- Left 45% (col-span-5): Cut-out image of 2 smiling UIT students blending smoothly -->
+<div class="lg:col-span-5 relative min-h-[300px] lg:min-h-full overflow-hidden flex items-end justify-center bg-gradient-to-tr from-blue-100/60 to-white">
+<img alt="Two friendly smiling Vietnamese university students and young tech researchers in a modern high-tech laboratory" class="w-full h-full object-cover object-top filter contrast-105" src="../../assets/img/hero-uit-lab.svg">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/40 lg:to-white/90"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent"></div>
+</div>
+<!-- Right 55% (col-span-7, padding 32px): Editorial Content & CTA -->
+<div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+<div class="space-y-3">
+<!-- Small badge 'Tiêu điểm tuần này' -->
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-white text-[11px] font-bold tracking-wider uppercase shadow-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+              Tiêu điểm tuần này
+            </span>
+<span class="text-xs font-semibold text-emerald-700 flex items-center gap-1.5 ml-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đang nhận hồ sơ
+            </span>
+</div>
+<!-- Big bold UPPERCASE headline on 2 lines -->
+<h2 class="text-xl sm:text-2xl lg:text-[26px] font-extrabold leading-tight tracking-tight">
+<span class="block text-[#1E3A5F]">QUỸ TÀI TRỢ 15 TỶ ĐỒNG</span>
+<span class="block text-[#2E86AB]">CHO DỰ ÁN AI &amp; VI MẠCH</span>
+</h2>
+<!-- Subtitle -->
+<p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            Mở ra hơn 40 đề tài nghiên cứu chuyển giao cùng doanh nghiệp đối tác
+          </p>
+<!-- Row of 3 small white feature cards (icon + title + 1 gray line) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+<!-- Feature Card 1 -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-3 shadow-xs hover:border-blue-200 transition-all flex flex-col">
+<div class="w-7 h-7 rounded-lg bg-blue-50 text-[#1F4E78] flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-[17px]">paid</span>
+</div>
+<h4 class="text-xs font-bold text-[#1A1A1A] leading-tight">Tài trợ đến 500 triệu</h4>
+<p class="text-[11px] text-[#5F6368] mt-1 leading-snug">Hỗ trợ kinh phí &amp; GPU A100</p>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-3 shadow-xs hover:border-blue-200 transition-all flex flex-col">
+<div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-[17px]">psychology</span>
+</div>
+<h4 class="text-xs font-bold text-[#1A1A1A] leading-tight">Cố vấn chuyên gia</h4>
+<p class="text-[11px] text-[#5F6368] mt-1 leading-snug">Đồng hành bởi các PGS/TS UIT</p>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-3 shadow-xs hover:border-blue-200 transition-all flex flex-col">
+<div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-[17px]">handshake</span>
+</div>
+<h4 class="text-xs font-bold text-[#1A1A1A] leading-tight">Kết nối doanh nghiệp</h4>
+<p class="text-[11px] text-[#5F6368] mt-1 leading-snug">Hợp đồng R&amp;D &amp; bao tiêu đầu ra</p>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="pt-5 flex items-center gap-3">
+<a class="flex-1 inline-flex items-center justify-center gap-2 bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold py-2.5 px-4 rounded-xl shadow-xs transition-colors" href="13_hoc-bong-tai-tro.html">
+<span class="">Xem chi tiết</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<a class="flex-1 inline-flex items-center justify-center gap-2 bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold py-2.5 px-4 rounded-xl shadow-xs transition-colors" href="13_hoc-bong-tai-tro.html">
+<span class="">Nộp đề xuất</span>
+<span class="material-symbols-outlined text-[18px]">send</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. PROMO STRIP (below the band) -->
+<div class="border-t border-slate-200 my-8"></div>
+<!-- 4. SECTION: TIN TỨC & CƠ HỘI NỔI BẬT (3-column grid) -->
+<section class="w-full">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-3">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#1F4E78]"></span>
+<span class="text-xs font-semibold text-[#1F4E78] uppercase tracking-wider">Tin tiêu điểm học thuật</span>
+</div>
+<h2 class="text-2xl font-bold text-[#1A1A1A] tracking-tight">Tin tức &amp; cơ hội nổi bật</h2>
+<p class="text-sm text-slate-700 mt-0.5">Cập nhật tiến độ lab nghiên cứu, sáng chế mới và diễn đàn kết nối doanh nghiệp sinh viên.</p>
+</div>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-[#1F4E78] hover:text-[#163A59] transition-colors shrink-0" href="#">
+                Xem tất cả tin tức
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<article class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all group">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-slate-100">
+<img alt="Microchip semiconductor design cleanroom engineering lab" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="../../assets/img/img-22-chip.svg">
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#1F4E78]/90 backdrop-blur-xs text-white text-[11px] font-bold tracking-wide uppercase">
+                      VI MẠCH &amp; BÁN DẪN
+                    </span>
+</div>
+<div class="p-5 space-y-2.5">
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug line-clamp-2 group-hover:text-[#1F4E78] transition-colors cursor-pointer">
+                      Khai trương phòng thử nghiệm chiplet và bộ vi xử lý RISC-V thế hệ mới
+                    </h3>
+<p class="text-xs text-slate-700 leading-relaxed line-clamp-2">
+                      Cơ sở kiểm thử vi mạch hiện đại phục vụ đo đạc băng thông bộ nhớ HBM và xác thực thiết kế vi điều khiển mã nguồn mở.
+                    </p>
+</div>
+</div>
+<div class="px-5 pb-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-700">
+<span class="flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px] text-slate-500">event</span> 16/03/2026
+                  </span>
+<div class="flex items-center gap-3 font-medium">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">visibility</span> 1.4k</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">chat_bubble_outline</span> 32</span>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all group">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-slate-100">
+<img alt="Cybersecurity operations command center screens" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="../../assets/img/img-21-shield.svg">
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded bg-emerald-700/90 backdrop-blur-xs text-white text-[11px] font-bold tracking-wide uppercase">
+                      AN NINH MẠNG
+                    </span>
+</div>
+<div class="p-5 space-y-2.5">
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug line-clamp-2 group-hover:text-[#1F4E78] transition-colors cursor-pointer">
+                      Diễn tập phòng thủ mạng đô thị thông minh: Tìm kiếm 15 thực tập sinh an ninh mạng
+                    </h3>
+<p class="text-xs text-slate-700 leading-relaxed line-clamp-2">
+                      Chương trình mô phỏng xử lý tấn công APT diện rộng, bảo vệ hạ tầng dữ liệu y tế và mạng lưới IoT giao thông thành phố.
+                    </p>
+</div>
+</div>
+<div class="px-5 pb-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-700">
+<span class="flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px] text-slate-500">event</span> 15/03/2026
+                  </span>
+<div class="flex items-center gap-3 font-medium">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">visibility</span> 980</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">chat_bubble_outline</span> 24</span>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all group">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-slate-100">
+<img alt="Healthcare AI diagnostics and medical imaging screen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="../../assets/img/img-28-health.svg">
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded bg-indigo-700/90 backdrop-blur-xs text-white text-[11px] font-bold tracking-wide uppercase">
+                      AI Y TẾ &amp; DỮ LIỆU
+                    </span>
+</div>
+<div class="p-5 space-y-2.5">
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug line-clamp-2 group-hover:text-[#1F4E78] transition-colors cursor-pointer">
+                      Hợp tác chẩn đoán hình ảnh y khoa ứng dụng học sâu cùng bệnh viện ĐHQG
+                    </h3>
+<p class="text-xs text-slate-700 leading-relaxed line-clamp-2">
+                      Triển khai mô hình phát hiện tổn thương phổi và khối u tự động từ ảnh chụp CT scan, hỗ trợ bác sĩ giảm 50% thời gian hội chẩn.
+                    </p>
+</div>
+</div>
+<div class="px-5 pb-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-700">
+<span class="flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px] text-slate-500">event</span> 14/03/2026
+                  </span>
+<div class="flex items-center gap-3 font-medium">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">visibility</span> 2.1k</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-500">chat_bubble_outline</span> 48</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<div class="border-t border-slate-200 my-8"></div>
+<!-- 6. SECTION: DOANH NGHIỆP ĐỐI TÁC NỔI BẬT -->
+<section class="w-full">
+<div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+<div>
+<h2 class="text-xl font-bold text-[#1A1A1A] tracking-tight">Doanh nghiệp đối tác nổi bật</h2>
+<p class="text-xs text-slate-700 mt-0.5">Mạng lưới các tập đoàn công nghệ ký kết hợp đồng R&amp;D chính thức cùng UIT</p>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold flex items-center gap-1.5 border border-emerald-200">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
+                Đã xác minh qua cổng BQT UIT
+              </span>
+</div>
+<!-- Row of 5 Minimalist Logo Cards -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+<!-- Partner Card 1: V-Tech Global -->
+<div class="h-[200px] bg-white rounded-xl border border-slate-200 p-4 relative flex flex-col justify-between group hover:border-[#1F4E78] hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+<div class="w-full flex items-center justify-start">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold tracking-wide border border-slate-200/80">
+<svg class="w-2.5 h-2.5 fill-amber-500" viewBox="0 0 24 24">
+<polygon points="12,2 22,8.5 18,22 6,22 2,8.5"></polygon>
+</svg>
+        TOP
+      </span>
+</div>
+<div class="w-full max-w-[70%] mx-auto flex flex-col items-center justify-center my-auto text-center gap-2.5">
+<div class="w-12 h-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 shadow-xs group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M4 4l8 16 8-16"></path>
+<path d="M9 4l3 7 3-7"></path>
+</svg>
+</div>
+<span class="font-extrabold text-[12px] tracking-wider text-slate-900 group-hover:text-orange-600 transition-colors uppercase leading-tight">V-TECH GLOBAL</span>
+</div>
+<div></div>
+</div>
+<!-- Partner Card 2: Nexus Semi -->
+<div class="h-[200px] bg-white rounded-xl border border-slate-200 p-4 relative flex flex-col justify-between group hover:border-[#1F4E78] hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+<div class="w-full flex items-center justify-start">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold tracking-wide border border-slate-200/80">
+<svg class="w-2.5 h-2.5 fill-amber-500" viewBox="0 0 24 24">
+<polygon points="12,2 22,8.5 18,22 6,22 2,8.5"></polygon>
+</svg>
+        TOP
+      </span>
+</div>
+<div class="w-full max-w-[70%] mx-auto flex flex-col items-center justify-center my-auto text-center gap-2.5">
+<div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-xs group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<rect height="12" rx="2" width="12" x="6" y="6"></rect>
+<path d="M9 1v5M15 1v5M9 18v5M15 18v5M1 9h5M1 15h5M18 9h5M18 15h5"></path>
+<circle cx="12" cy="12" fill="currentColor" r="2"></circle>
+</svg>
+</div>
+<span class="font-extrabold text-[12px] tracking-wider text-slate-900 group-hover:text-blue-600 transition-colors uppercase leading-tight">NEXUS SEMI</span>
+</div>
+<div></div>
+</div>
+<!-- Partner Card 3: Aura AI Lab -->
+<div class="h-[200px] bg-white rounded-xl border border-slate-200 p-4 relative flex flex-col justify-between group hover:border-[#1F4E78] hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+<div class="w-full flex items-center justify-start">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold tracking-wide border border-slate-200/80">
+<svg class="w-2.5 h-2.5 fill-amber-500" viewBox="0 0 24 24">
+<polygon points="12,2 22,8.5 18,22 6,22 2,8.5"></polygon>
+</svg>
+        TOP
+      </span>
+</div>
+<div class="w-full max-w-[70%] mx-auto flex flex-col items-center justify-center my-auto text-center gap-2.5">
+<div class="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 shadow-xs group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<circle cx="12" cy="4" r="2"></circle>
+<circle cx="12" cy="20" r="2"></circle>
+<circle cx="4" cy="12" r="2"></circle>
+<circle cx="20" cy="12" r="2"></circle>
+<path d="M12 6v3M12 15v3M6 12h3M15 12h3"></path>
+</svg>
+</div>
+<span class="font-extrabold text-[12px] tracking-wider text-slate-900 group-hover:text-purple-600 transition-colors uppercase leading-tight">AURA AI LAB</span>
+</div>
+<div></div>
+</div>
+<!-- Partner Card 4: CyberShield -->
+<div class="h-[200px] bg-white rounded-xl border border-slate-200 p-4 relative flex flex-col justify-between group hover:border-[#1F4E78] hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+<div class="w-full flex items-center justify-start">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold tracking-wide border border-slate-200/80">
+<svg class="w-2.5 h-2.5 fill-amber-500" viewBox="0 0 24 24">
+<polygon points="12,2 22,8.5 18,22 6,22 2,8.5"></polygon>
+</svg>
+        TOP
+      </span>
+</div>
+<div class="w-full max-w-[70%] mx-auto flex flex-col items-center justify-center my-auto text-center gap-2.5">
+<div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-xs group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+<path d="M9 12l2 2 4-4"></path>
+</svg>
+</div>
+<span class="font-extrabold text-[12px] tracking-wider text-slate-900 group-hover:text-emerald-600 transition-colors uppercase leading-tight">CYBERSHIELD</span>
+</div>
+<div></div>
+</div>
+<!-- Partner Card 5: BioHealth Dyn -->
+<div class="h-[200px] bg-white rounded-xl border border-slate-200 p-4 relative flex flex-col justify-between group hover:border-[#1F4E78] hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer col-span-2 sm:col-span-1">
+<div class="w-full flex items-center justify-start">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold tracking-wide border border-slate-200/80">
+<svg class="w-2.5 h-2.5 fill-amber-500" viewBox="0 0 24 24">
+<polygon points="12,2 22,8.5 18,22 6,22 2,8.5"></polygon>
+</svg>
+        TOP
+      </span>
+</div>
+<div class="w-full max-w-[70%] mx-auto flex flex-col items-center justify-center my-auto text-center gap-2.5">
+<div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600 shadow-xs group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+</svg>
+</div>
+<span class="font-extrabold text-[12px] tracking-wider text-slate-900 group-hover:text-teal-600 transition-colors uppercase leading-tight">BIOHEALTH DYN</span>
+</div>
+<div></div>
+</div>
+</div>
+<!-- Partner Network Organic Bubble Constellation -->
+</section>
+<div class="border-t border-slate-200 my-8"></div>
+<!-- 8. SECTION: CƠ HỘI MỚI NHẤT (Horizontal List Stack with Rich Interactive Filters) -->
+<section class="w-full" id="latest-opportunities-section">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#1F4E78]"></span>
+<span class="text-xs font-semibold text-[#1F4E78] uppercase tracking-wider">Cơ hội &amp; Học bổng kết nối</span>
+</div>
+<h2 class="text-2xl font-bold text-[#1A1A1A] tracking-tight">Cơ hội mới nhất</h2>
+<p class="text-sm text-slate-700 mt-0.5" id="opportunities-counter">Các đề tài tốt nghiệp, đặt hàng doanh nghiệp và gói học bổng R&amp;D tuyển ứng viên (Hiển thị tất cả 10 cơ hội)</p>
+</div>
+<!-- Filter Tabs Navbar -->
+<div class="flex items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-xs" id="opp-filter-tabs">
+<button class="filter-tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-[#1F4E78] text-white whitespace-nowrap transition-colors" data-filter="all">Tất cả</button>
+<button class="filter-tab-btn px-3.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#1A1A1A] hover:bg-slate-100 rounded-lg whitespace-nowrap transition-colors" data-filter="thesis">Đề tài tốt nghiệp</button>
+<button class="filter-tab-btn px-3.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#1A1A1A] hover:bg-slate-100 rounded-lg whitespace-nowrap transition-colors" data-filter="enterprise">Đặt hàng doanh nghiệp</button>
+<button class="filter-tab-btn px-3.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#1A1A1A] hover:bg-slate-100 rounded-lg whitespace-nowrap transition-colors" data-filter="scholarship">Học bổng</button>
+</div>
+</div>
+<!-- Stack of compact list items -->
+<div class="space-y-4" id="opportunities-container">
+<!-- ================= ĐẶT HÀNG DOANH NGHIỆP (4 items) ================= -->
+<!-- Card 1: Enterprise -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="enterprise">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Autonomous robotics lab" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-26-robot.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-[#E6F0F7] text-[#1F4E78] text-[11px] font-semibold">Robot tự hành &amp; AI Vision</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">business</span> Tài trợ bởi V-Tech Global</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Hệ thống điều hướng AMR trong nhà kho thông minh sử dụng thuật toán SLAM
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Xây dựng bản đồ độ chính xác cao và tối ưu đường đi trong môi trường nhiều vật cản động với cảm biến LiDAR 3D.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Ngân sách: 250.000.000 đ</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 30/04/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 2: Enterprise -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="enterprise">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Semiconductor lab" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-22-chip.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[11px] font-semibold">Thiết kế Vi mạch</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">business</span> Tài trợ bởi Nexus Semi</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Thiết kế IP core tăng tốc mã hóa mật mã hậu lượng tử trên nền tảng RISC-V
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Thực thi phần cứng thuật toán Kyber và Dilithium đạt chuẩn NIST trên quy trình bán dẫn 28nm.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Ngân sách: 180.000.000 đ</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 15/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 3: Enterprise -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="enterprise">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Cyber operations" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-21-shield.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 text-[11px] font-semibold">An toàn Thông tin</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">business</span> Tài trợ bởi CyberShield</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Hệ thống phát hiện sớm mã độc tống tiền (Ransomware) dựa trên hành vi EDR
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Thu thập nhật ký endpoint thời gian thực và phân tích luồng ghi đè bất thường bằng mô hình LightGBM.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Ngân sách: 120.000.000 đ</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 20/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 4: Enterprise -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="enterprise">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Healthcare AI" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-28-health.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-[11px] font-semibold">AI &amp; Tin sinh học</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">business</span> Tài trợ bởi BioHealth Dynamics</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Ứng dụng Graph Neural Network dự đoán tương tác thuốc và phản ứng phụ
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Mô hình hóa cấu trúc phân tử hóa dược nhằm sàng lọc và rút ngắn giai đoạn thử nghiệm lâm sàng.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Ngân sách: 210.000.000 đ</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 05/06/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- ================= ĐỀ TÀI TỐT NGHIỆP (3 items) ================= -->
+<!-- Card 5: Thesis -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="thesis">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Edge AI LLM Research" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-18-network.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[11px] font-semibold">Trí tuệ Nhân tạo</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">school</span> GVHD: PGS.TS. Trần Văn C (Lab AI &amp; Xử lý ngôn ngữ tự nhiên)</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Nghiên cứu tối ưu hóa mô hình LLM tiếng Việt chạy suy luận trên chip biên Edge AI
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Lượng tử hóa 4-bit (AWQ/GPTQ) và tối ưu pipeline suy luận ngữ cảnh dài trên vi xử lý tăng tốc NPU di động.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Kinh phí NCKH: 45.000.000 đ + GPU A100</span>
+<span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">Tuyển 2 sinh viên</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 25/04/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 6: Thesis -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="thesis">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Robotics AGV Laboratory" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-26-robot.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 text-[11px] font-semibold">Tự động hóa &amp; Robotics</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">school</span> GVHD: TS. Lê Thị B (Lab Robotics &amp; IoT)</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Xây dựng hệ thống xe tự hành AGV với định vị LiDAR SLAM 3D và bám quỹ đạo thích nghi
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Ứng dụng hệ điều hành Robot ROS2 Humble, thuật toán điều khiển phi tuyến MPC điều hướng đa điểm chính xác cao.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Kinh phí NCKH: 35.000.000 đ + Kit ROS2</span>
+<span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">Tuyển 3 sinh viên</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 10/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 7: Thesis -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="thesis">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Semiconductor side channel protection" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-22-chip.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[11px] font-semibold">Kỹ thuật Vi mạch</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">school</span> GVHD: TS. Nguyễn Văn A (Lab Vi mạch Số)</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Nghiên cứu kiến trúc vi mạch bảo mật phần cứng chống tấn công kênh kề Side-Channel cho RISC-V
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Triển khai mặt nạ ngẫu nhiên (masking countermeasure) chống phân tích công suất DPA/CPA trên nhân vi xử lý 32-bit.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Kinh phí NCKH: 40.000.000 đ + Kit FPGA Zynq UltraScale+</span>
+<span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">Tuyển 2 sinh viên</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 18/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- ================= HỌC BỔNG (3 items) ================= -->
+<!-- Card 8: Scholarship -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="scholarship">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Scholarship AI and semiconductor" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-27-chip.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 text-[11px] font-semibold">Học bổng &amp; R&amp;D Talent</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">payments</span> Tài trợ: Quỹ ĐHQG-HCM &amp; Nexus Semi</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Học bổng Ươm mầm Tài năng AI &amp; Vi mạch Bán dẫn ĐHQG-HCM 2026
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Tài trợ toàn phần học phí chuyên sâu, thực tập tại Đài Loan/Singapore và cam kết tuyển dụng vị trí Kỹ sư R&amp;D sau tốt nghiệp.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-amber-900 bg-amber-100/70 px-2 py-0.5 rounded border border-amber-300">Trị giá: 50.000.000 đ/suất + Cam kết việc làm</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 15/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 9: Scholarship -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="scholarship">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="CyberShield Security Fellowship" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-21-shield.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 text-[11px] font-semibold">An toàn Thông tin</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">payments</span> Tài trợ: CyberShield Security</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Học bổng Nghiên cứu Trọng điểm An ninh mạng Toàn diện CyberShield Fellowship
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Hỗ trợ sinh viên xuất sắc hướng nghiên cứu Red Team/Blue Team, tiếp cận hệ thống diễn tập SOC và cố vấn trực tiếp từ chuyên gia CISO.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Trị giá: 40.000.000 đ/suất + Mentor 1-1 SOC</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 30/05/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+<!-- Card 10: Scholarship -->
+<div class="opportunity-card bg-white rounded-xl border border-slate-200 p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col md:flex-row gap-4 items-center justify-between" data-category="scholarship">
+<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 min-w-0 w-full">
+<img alt="Healthcare BioHealth TechGrant" class="w-full sm:w-[180px] h-28 rounded-lg object-cover shrink-0" src="../../assets/img/img-28-health.svg">
+<div class="space-y-1.5 min-w-0 flex-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-[11px] font-semibold">Y tế số &amp; Khoa học dữ liệu</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-slate-400">payments</span> Tài trợ: BioHealth Dynamics</span>
+</div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer truncate">
+                      Học bổng Đột phá Sáng tạo Khoa học Dữ liệu Y tế BioHealth TechGrant
+                    </h3>
+<p class="text-xs text-slate-700 line-clamp-1">
+                      Dành cho các đề tài phân tích dữ liệu lâm sàng, giải trình tự gen; cấp quyền truy cập cụm máy chủ y tế tiêu chuẩn HIPAA và tài trợ công bố quốc tế.
+                    </p>
+<div class="flex items-center gap-3 pt-1 flex-wrap">
+<span class="text-xs font-bold text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Trị giá: 35.000.000 đ/suất + Cụm GPU Y tế</span>
+<span class="text-xs text-slate-700 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-slate-500">schedule</span> Hạn nộp: 10/06/2026
+                      </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 w-full md:w-auto flex justify-end">
+<button class="w-full md:w-auto px-5 py-2.5 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold transition-colors shadow-xs">
+                    Ứng tuyển ngay
+                  </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- ===== HẾT NỘI DUNG TRANG ===== -->
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-[#163A59] text-white py-12 px-8 md:px-12 mt-12 border-t border-[#1F4E78]">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Column 1: Brand & Overview -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2 font-bold text-white text-xl">
+<div class="w-8 h-8 rounded-lg bg-white text-[#163A59] flex items-center justify-center font-extrabold text-sm shadow-xs">
+          UIT
+        </div>
+<span class="">UIT Connect</span>
+</div>
+<p class="text-sm text-slate-300 mt-3 leading-relaxed">
+        Nền tảng kết nối năng lực nghiên cứu, chuyển giao công nghệ và hợp tác doanh nghiệp của Trường Đại học Công nghệ Thông tin – ĐHQG-HCM.
+      </p>
+<div class="flex items-center gap-2 text-xs text-emerald-400 mt-4 font-medium">
+<span class="material-symbols-outlined text-[18px] text-emerald-400">verified</span>
+<span class="">Hệ thống quản lý nghiên cứu chính thức</span>
+</div>
+</div>
+<!-- Column 2: Khám phá -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Khám phá</h4>
+<ul class="space-y-2.5 text-sm text-slate-300">
+<li class=""><a class="hover:text-white transition-colors" href="09_kho-tai-lieu.html">Kho tài nguyên số</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="09_kho-tai-lieu.html">Công trình nghiên cứu khoa học</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Sản phẩm chuyển giao công nghệ</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="02_ho-so-khoa-hoc.html">Hồ sơ năng lực giảng viên</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="12_bai-toan-doanh-nghiep-rd.html">Đề tài doanh nghiệp đặt hàng</a></li>
+</ul>
+</div>
+<!-- Column 3: Hỗ trợ -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Hỗ trợ</h4>
+<ul class="space-y-2.5 text-sm text-slate-300">
+<li class=""><a class="hover:text-white transition-colors" href="#">Quy trình công bố tài nguyên</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Thang đo mức sẵn sàng TRL</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Chính sách bảo hộ sở hữu trí tuệ</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Câu hỏi thường gặp (FAQ)</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Hướng dẫn sử dụng API</a></li>
+</ul>
+</div>
+<!-- Column 4: Liên hệ -->
+<div>
+<h4 class="text-white font-semibold mb-4 text-base">Liên hệ</h4>
+<ul class="space-y-3 text-sm text-slate-300">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">location_on</span>
+<span class="">Khu phố 6, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+</li>
+<li class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">mail</span>
+<a class="hover:text-white transition-colors" href="mailto:support@uit.edu.vn">support@uit.edu.vn</a>
+</li>
+<li class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0">call</span>
+<a class="hover:text-white transition-colors" href="tel:02837252002">(028) 372 52002</a>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bottom divider and row -->
+<div class="border-t border-slate-700/60 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+<div class="">
+      © 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM
+    </div>
+<div class="flex items-center gap-4 flex-wrap">
+<a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a>
+<span class="">·</span>
+<a class="hover:text-white transition-colors" href="#">Chính sách bảo mật</a>
+<span class="">·</span>
+<a class="hover:text-white transition-colors" href="#">Quy chế hoạt động</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" id="logout-modal">
+<div class="fixed inset-0" id="logout-modal-backdrop" onclick="closeLogoutModal()"></div>
+<div class="relative w-full max-w-md bg-white rounded-xl shadow-md border border-[#E1E5EA] p-6 z-10 transform transition-all duration-300 scale-95" id="logout-modal-card">
+<!-- Header -->
+<div class="flex items-start justify-between pb-3 border-b border-[#E1E5EA]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#DC2626] shrink-0">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#1A1A1A] leading-tight">Xác nhận đăng xuất</h3>
+<p class="text-xs text-[#5F6368] mt-0.5">Phiên làm việc: TS. Nguyễn Văn A (Khoa MMT &amp; TT · GV01024)</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#5F6368] hover:bg-[#F5F7FA] hover:text-[#1A1A1A] transition-colors" onclick="closeLogoutModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Content body -->
+<div class="py-4 text-xs text-[#5F6368] leading-relaxed">
+<p class="">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc sinh viên? Sau khi đăng xuất, bạn có thể đăng nhập lại qua cổng xác thực SSO hoặc chuyển đổi sang tài khoản mới.</p>
+</div>
+<!-- Quick Action / Navigation Pods -->
+<div class="flex flex-col gap-2 pt-2 border-t border-[#E1E5EA]">
+<button class="w-full h-10 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs" onclick="window.location.href='../auth/02_dang-nhap-sso-microsoft365.html?role=gv'">
+<span class="material-symbols-outlined text-[18px]">login</span>
+<span class="">Đăng nhập lại (SSO UIT)</span>
+</button>
+<button class="w-full h-10 rounded-lg bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center justify-center gap-2 transition-colors" onclick="window.location.href='../auth/03_dang-ky-b1-chon-vai-tro.html?role=gv'">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span class="">Đăng ký tài khoản mới</span>
+</button>
+<button class="w-full h-9 rounded-lg text-slate-700 hover:bg-[#F5F7FA] text-xs font-medium flex items-center justify-center transition-colors mt-1" onclick="closeLogoutModal()">
+<span class="">Hủy / Ở lại phiên làm việc</span>
+</button>
+</div>
+</div>
+</div>
+<script src="../../assets/js/app-shell.js"></script>
+<script src="../../assets/js/ux-effects.js"></script>
+<script>
+(function () {
+  // 2. Interactive Tab Filtering for "Cơ hội mới nhất"
+    const filterButtons = document.querySelectorAll('#opp-filter-tabs .filter-tab-btn');
+    const opportunityCards = document.querySelectorAll('#opportunities-container .opportunity-card');
+    const counterText = document.getElementById('opportunities-counter');
+
+    const counterMessages = {
+      all: 'Các đề tài tốt nghiệp, đặt hàng doanh nghiệp và gói học bổng R&D tuyển ứng viên (Hiển thị tất cả 10 cơ hội)',
+      thesis: 'Đề tài hướng dẫn nghiên cứu khoa học và khóa luận tốt nghiệp UIT (Hiển thị 3/3 đề tài tốt nghiệp)',
+      enterprise: 'Các bài toán đặt hàng R&D có tài trợ trực tiếp từ đối tác công nghệ (Hiển thị 4/4 bài toán doanh nghiệp)',
+      scholarship: 'Các gói tài trợ tài năng, nghiên cứu chuyên sâu và cam kết việc làm (Hiển thị 3/3 học bổng)'
+    };
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+
+        // Update tab button styles
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-[#1F4E78]', 'text-white', 'font-semibold');
+          b.classList.add('text-slate-700', 'font-medium', 'hover:text-[#1A1A1A]', 'hover:bg-slate-100');
+        });
+
+        this.classList.add('bg-[#1F4E78]', 'text-white', 'font-semibold');
+        this.classList.remove('text-slate-700', 'font-medium', 'hover:text-[#1A1A1A]', 'hover:bg-slate-100');
+
+        // Filter cards
+        opportunityCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.classList.remove('hidden-card');
+          } else {
+            card.classList.add('hidden-card');
+          }
+        });
+
+        // Update counter description text
+        if (counterText && counterMessages[filter]) {
+          counterText.textContent = counterMessages[filter];
+        }
+      });
+    });
+})();
+</script>
+</body>
+</html>
