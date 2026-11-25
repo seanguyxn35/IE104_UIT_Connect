@@ -1,4 +1,4 @@
-// Nghiệp vụ "SV ứng tuyển đề tài Lab" – thực thi R1, R2, R3 (thuc-hanh/DESIGN.md, mục 3).
+// Nghiệp vụ "SV ứng tuyển đề tài Lab" – thực thi R1, R2, R3.
 // Thứ tự: đọc đề tài -> kiểm tra trùng (R2) -> kiểm tra hết chỗ (R3) -> mới ghi (R1).
 // Câu INSERT ở bước 8 là lệnh ghi DUY NHẤT; hai nhánh từ chối đều dừng trước nó.
 import { supabase } from '../db.js';

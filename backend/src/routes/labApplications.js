@@ -1,5 +1,5 @@
 // API: POST /api/lab-applications  –  body { "topicId": 9001 }
-// Hợp đồng đầy đủ: thuc-hanh/DESIGN.md, mục 3.3.
+// Hợp đồng: POST /api/lab-applications -> 201 | 400 INVALID_INPUT | 404 TOPIC_NOT_FOUND | 409 ALREADY_APPLIED / TOPIC_FULL.
 import { Router } from 'express';
 import { config } from '../config.js';
 import { AppError } from '../errors.js';

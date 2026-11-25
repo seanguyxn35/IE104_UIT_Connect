@@ -8,6 +8,8 @@ database/
 ├── schema.postgres.sql   # Bản PostgreSQL đang chạy trên Supabase (tên snake_case: lab_application.topic_id)
 ├── seed.sql              # Dữ liệu thử cho chức năng "SV ứng tuyển đề tài Lab" (TC01–TC03)
 ├── reset.sql             # Đặt lại dữ liệu thử trước mỗi ca kiểm thử
+├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
+├── migrations/           # Thay đổi lược đồ sau bản đầu (đã chạy trên Supabase, đã gộp vào schema.postgres.sql)
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 

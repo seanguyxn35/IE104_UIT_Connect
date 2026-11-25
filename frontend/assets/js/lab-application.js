@@ -1,5 +1,5 @@
 // SV-07 Chợ ghép nhóm: nối nút "Ứng tuyển ngay" (có data-topic-id) với POST /api/lab-applications.
-// Luồng và hợp đồng API: thuc-hanh/DESIGN.md, mục 3. Giao diện chỉ hiển thị kết quả máy chủ trả về,
+// Luồng và hợp đồng API: xem DESIGN.md trong gói nộp bài, mục 3. Giao diện chỉ hiển thị kết quả máy chủ trả về,
 // không tự quyết định thành công hay thất bại.
 (function () {
   var API_URL = '/api/lab-applications';

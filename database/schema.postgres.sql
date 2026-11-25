@@ -136,6 +136,9 @@ CREATE TABLE student_profile (
     linkedin_url          VARCHAR(255)  NULL,
     is_open_to_opportunity  BOOLEAN NOT NULL DEFAULT true,   -- (+) "Sẵn sàng nhận Lab / Đề tài DN"
     profile_visibility    VARCHAR(20) NOT NULL DEFAULT 'Public',
+    is_gpa_public            BOOLEAN NOT NULL DEFAULT true,   -- (+) ẩn/công khai riêng từng chỉ số trên SV-04
+    is_training_score_public BOOLEAN NOT NULL DEFAULT true,
+    is_achievements_public   BOOLEAN NOT NULL DEFAULT true,
     generated_cv_url      VARCHAR(255)  NULL,    -- [PDF] link CV hệ thống tạo tự động
     updated_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     CONSTRAINT ck_student_profile_gpa CHECK (gpa BETWEEN 0 AND 10),

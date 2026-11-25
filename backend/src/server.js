@@ -7,6 +7,9 @@ import { fileURLToPath } from 'node:url';
 import { config } from './config.js';
 import { AppError } from './errors.js';
 import { labApplicationsRouter } from './routes/labApplications.js';
+import { studentSkillsRouter } from './routes/studentSkills.js';
+import { studentAvatarRouter } from './routes/studentAvatar.js';
+import { profileVisibilityRouter } from './routes/profileVisibility.js';
 
 const app = express();
 const frontendDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend');
@@ -25,6 +28,9 @@ app.use('/api', (req, res, next) => {
 });
 
 app.use('/api/lab-applications', labApplicationsRouter);
+app.use('/api/student-skills', studentSkillsRouter);
+app.use('/api/student-avatar', studentAvatarRouter);
+app.use('/api/profile-visibility', profileVisibilityRouter);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ code: 'NOT_FOUND', message: 'API không tồn tại.' });
@@ -39,6 +45,9 @@ app.use((err, req, res, next) => {
   }
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ code: 'INVALID_INPUT', message: 'Body không phải JSON hợp lệ.' });
+  }
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ code: 'FILE_TOO_LARGE', message: 'Ảnh tối đa 2 MB.' });
   }
   console.error(err);
   res.status(500).json({ code: 'SERVER_ERROR', message: 'Có lỗi xảy ra, vui lòng thử lại.' });
