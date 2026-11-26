@@ -9,6 +9,7 @@
 <!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
 <link rel="stylesheet" href="../../assets/css/app-shell.css">
 <link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<link rel="stylesheet" href="../../assets/css/dn-bai-toan.css">
 <style>
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -135,26 +136,28 @@
 <div class="flex-1 flex flex-col min-w-0 bg-[#F5F7FA]" id="main-wrapper">
 <main class="w-full bg-[#F5F7FA] p-4 sm:p-6 lg:p-8">
 <!-- ===== NỘI DUNG TRANG: Đăng bài toán R&amp;D mới ===== -->
+<!-- Trình soạn 4 bước trên cùng một trang, điều khiển bởi assets/js/dn-dang-bai-toan.js.
+     ?ma=<mã>  : soạn tiếp bản nháp hoặc sửa bài toán đang mở
+     ?mau=1    : điền sẵn khung mô tả theo Biểu mẫu đề bài (DN-14)
+     #buoc-2.. : mở thẳng một bước (chỉ khi các bước trước đã hợp lệ) -->
 <div class="max-w-[1280px] mx-auto w-full">
-<div class="flex flex-col w-full">
-<!-- Subtle decorative ambient glow element within page canvas -->
 <div class="relative w-full max-w-6xl mx-auto space-y-8 pb-16">
 <!-- TOP TOOLBAR & BREADCRUMB & HEADER -->
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-2">
 <div class="space-y-1.5">
-<nav class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<nav class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm" aria-label="Breadcrumb">
 <a class="hover:text-primary transition-colors" href="01_ban-lam-viec.html">Trang chủ</a>
 <span class="text-text-muted">/</span>
-<a class="hover:text-primary transition-colors" href="04_bai-toan-rd.html">Bài toán R&D</a>
+<a class="hover:text-primary transition-colors" href="04_bai-toan-rd.html">Bài toán R&amp;D</a>
 <span class="text-text-muted">/</span>
-<span class="text-primary font-semibold">Đăng bài toán mới</span>
+<span class="text-primary font-semibold" id="bc-cuoi">Đăng bài toán mới</span>
 </nav>
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
 <span class="material-symbols-outlined text-[24px]">science</span>
 </div>
 <div>
-<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Đăng bài toán R&D mới</h1>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight" id="tieu-de-trang">Đăng bài toán R&amp;D mới</h1>
 <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
               Doanh nghiệp đăng bài toán thực tiễn để kết nối cùng các Lab nghiên cứu, giảng viên cố vấn và đội ngũ sinh viên tài năng UIT.
             </p>
@@ -162,106 +165,75 @@
 </div>
 </div>
 <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-code-sm text-code-sm">
-<span class="w-2 h-2 rounded-full bg-status-warning animate-pulse"></span>
-          BẢN NHÁP TỰ ĐỘNG LƯU: 14:32
-        </span>
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" href="14_bieu-mau-de-bai.html">
+<span class="material-symbols-outlined text-[16px]">description</span>Biểu mẫu đề bài
+</a>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-code-sm text-code-sm uppercase" id="trang-thai-luu">
+<span class="w-2 h-2 rounded-full bg-status-warning" data-cham></span>
+<span data-chu>Chưa lưu</span>
+</span>
 </div>
 </div>
-<!-- 4-STEP STEPPER -->
-<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm">
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
-<!-- Step 1 (Active) -->
-<div class="relative flex items-center gap-3.5 p-2 rounded-lg bg-surface-container-low/70">
-<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-center shrink-0 shadow-sm">
-            1
-          </div>
-<div class="min-w-0 flex-1">
-<span class="font-label-sm text-label-sm text-primary tracking-wider uppercase block">BƯỚC 1</span>
-<span class="font-title-md text-title-md text-on-surface block truncate">Thông tin bài toán</span>
+<!-- Thông báo chế độ (bài mới / soạn tiếp / đang sửa) và nhắc dữ liệu chỉ lưu tạm -->
+<div class="rounded-xl px-4 py-3 bg-status-warning/10 text-on-surface flex items-start gap-3 font-body-md text-body-md" id="thong-bao-che-do" role="note">
+<span class="material-symbols-outlined text-[20px] text-status-warning shrink-0">cloud_off</span>
+<div data-noi-dung>Chưa có API bài toán R&amp;D: bản nháp và bài gửi duyệt chỉ được lưu tạm trên trình duyệt này, <strong>chưa lưu lên máy chủ</strong>.</div>
 </div>
-<span class="absolute bottom-0 left-3 right-3 h-0.5 bg-primary-container rounded-full"></span>
-</div>
-<!-- Step 2 (Upcoming) -->
-<div class="flex items-center gap-3.5 p-2 rounded-lg opacity-60">
-<div class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center shrink-0">
-            2
-          </div>
-<div class="min-w-0 flex-1">
-<span class="font-label-sm text-label-sm text-text-muted tracking-wider uppercase block">BƯỚC 2</span>
-<span class="font-body-md text-body-md text-on-surface-variant block truncate">Yêu cầu & kỹ năng</span>
-</div>
-</div>
-<!-- Step 3 (Upcoming) -->
-<div class="flex items-center gap-3.5 p-2 rounded-lg opacity-60">
-<div class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center shrink-0">
-            3
-          </div>
-<div class="min-w-0 flex-1">
-<span class="font-label-sm text-label-sm text-text-muted tracking-wider uppercase block">BƯỚC 3</span>
-<span class="font-body-md text-body-md text-on-surface-variant block truncate">Ngân sách & thời hạn</span>
-</div>
-</div>
-<!-- Step 4 (Upcoming) -->
-<div class="flex items-center gap-3.5 p-2 rounded-lg opacity-60">
-<div class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center shrink-0">
-            4
-          </div>
-<div class="min-w-0 flex-1">
-<span class="font-label-sm text-label-sm text-text-muted tracking-wider uppercase block">BƯỚC 4</span>
-<span class="font-body-md text-body-md text-on-surface-variant block truncate">Xem lại & gửi duyệt</span>
-</div>
-</div>
-</div>
-</div>
+<!-- 4-STEP STEPPER (dn-dang-bai-toan.js vẽ trạng thái từng bước) -->
+<nav class="bg-surface-container-lowest rounded-xl p-5 shadow-sm" aria-label="Các bước đăng bài toán" id="khung-stepper">
+<ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative" id="stepper">
+<li><button class="w-full text-left" type="button" data-den-buoc="1">Bước 1: Thông tin bài toán</button></li>
+<li><button class="w-full text-left" type="button" data-den-buoc="2">Bước 2: Yêu cầu &amp; kỹ năng</button></li>
+<li><button class="w-full text-left" type="button" data-den-buoc="3">Bước 3: Ngân sách &amp; thời hạn</button></li>
+<li><button class="w-full text-left" type="button" data-den-buoc="4">Bước 4: Xem lại &amp; gửi duyệt</button></li>
+</ol>
+</nav>
 <!-- MAIN FORM CONTAINER -->
-<div class="bg-surface-container-lowest rounded-xl p-6 sm:p-10 shadow-sm space-y-8">
-<!-- Section Title & Meta Header -->
+<form class="bg-surface-container-lowest rounded-xl p-6 sm:p-10 shadow-sm space-y-8" id="form-bai-toan" novalidate>
+
+<!-- ================= BƯỚC 1 ================= -->
+<section class="space-y-8" data-buoc="1" aria-labelledby="tieu-de-buoc-1">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-2">
 <div>
-<h2 class="font-headline-md text-headline-md text-primary">Bước 1: Thông tin cơ bản về bài toán</h2>
+<h2 class="font-headline-md text-headline-md text-primary" id="tieu-de-buoc-1" tabindex="-1">Bước 1: Thông tin cơ bản về bài toán</h2>
 <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
             Cung cấp mô tả tổng quan và định hướng kỹ thuật để thu hút đúng đơn vị nghiên cứu phù hợp.
           </p>
 </div>
-<span class="inline-flex items-center self-start sm:self-auto gap-1 text-status-error font-label-sm text-label-sm bg-error-container text-on-error-container px-2.5 py-1 rounded-full">
+<span class="inline-flex items-center self-start sm:self-auto gap-1 font-label-sm text-label-sm bg-error-container text-on-error-container px-2.5 py-1 rounded-full">
           * Trường bắt buộc
         </span>
 </div>
-<!-- Form field 1: Tiêu đề bài toán -->
+<!-- Tiêu đề -->
 <div class="space-y-2">
 <div class="flex items-center justify-between">
 <label class="font-title-md text-title-md text-on-surface" for="rd-title">
-            Tiêu đề bài toán R&D <span class="text-status-error">*</span>
+            Tiêu đề bài toán R&amp;D <span class="text-status-error">*</span>
 </label>
-<span class="font-code-sm text-code-sm text-text-muted" id="title-char-count">77 / 150 ký tự</span>
+<span class="font-code-sm text-code-sm text-text-muted" id="title-char-count">0 / 150 ký tự</span>
 </div>
-<div class="relative">
-<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs transition-all" id="rd-title" maxlength="150" placeholder="VD: Tối ưu hóa mô hình AI nhận diện biển số xe trong điều kiện ánh sáng yếu..." type="text" value="Hệ thống AI Edge giám sát an toàn giao thông đô thị và phát hiện vi phạm thời gian thực"/>
-</div>
+<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs transition-all" id="rd-title" maxlength="150" placeholder="VD: Tối ưu hóa mô hình AI nhận diện biển số xe trong điều kiện ánh sáng yếu..." type="text" autocomplete="off"/>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="tieuDe"></p>
 <p class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5 pt-0.5">
 <span class="material-symbols-outlined text-[16px] text-primary">info</span>
-          Tối đa 150 ký tự. Tiêu đề cần ngắn gọn, thể hiện rõ công nghệ và mục tiêu bài toán.
+          Từ 10 đến 150 ký tự. Tiêu đề cần ngắn gọn, thể hiện rõ công nghệ và mục tiêu bài toán.
         </p>
 </div>
-<!-- Form field 2: Loại hình bài toán -->
-<div class="space-y-3">
-<label class="font-title-md text-title-md text-on-surface block">
+<!-- Loại hình -->
+<fieldset class="space-y-3">
+<legend class="font-title-md text-title-md text-on-surface block mb-3">
           Loại hình bài toán <span class="text-status-error">*</span>
-</label>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4" role="radiogroup">
-<!-- Option A (SELECTED) -->
-<label class="relative flex flex-col p-4.5 rounded-xl bg-brand-light-blue cursor-pointer shadow-sm hover:shadow-md transition-all select-none group">
+</legend>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<label class="relative flex flex-col p-4 rounded-xl bg-surface-container-low has-[:checked]:bg-brand-light-blue has-[:checked]:ring-2 has-[:checked]:ring-primary-container cursor-pointer hover:shadow-md shadow-xs transition-all select-none group">
 <div class="flex items-start justify-between mb-2.5">
 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
 <span class="material-symbols-outlined text-[14px]">star</span>
                 Phổ biến nhất
               </span>
-<input checked="" class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio"/>
+<input class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio" value="ung-tuyen"/>
 </div>
-<div class="font-title-md text-title-md text-primary group-hover:text-brand-navy-dark transition-colors mb-1.5">
-              Đang mở ứng tuyển (Open Recruitment)
-            </div>
+<div class="font-title-md text-title-md text-primary mb-1.5">Đang mở ứng tuyển (Open Recruitment)</div>
 <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
               Dành cho các nhóm sinh viên NCKH, Khóa luận tốt nghiệp hoặc nhóm tự do nộp proposal giải pháp.
             </p>
@@ -270,17 +242,14 @@
               Quy mô linh hoạt • Nhanh chóng
             </div>
 </label>
-<!-- Option B -->
-<label class="relative flex flex-col p-4.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container shadow-xs transition-all select-none group">
+<label class="relative flex flex-col p-4 rounded-xl bg-surface-container-low has-[:checked]:bg-brand-light-blue has-[:checked]:ring-2 has-[:checked]:ring-primary-container cursor-pointer hover:shadow-md shadow-xs transition-all select-none group">
 <div class="flex items-start justify-between mb-2.5">
 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
                 Lab Chuyên sâu
               </span>
-<input class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio"/>
+<input class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio" value="hop-tac-lab"/>
 </div>
-<div class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors mb-1.5">
-              Hợp tác Lab nghiên cứu (Lab Partnership)
-            </div>
+<div class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors mb-1.5">Hợp tác Lab nghiên cứu (Lab Partnership)</div>
 <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
               Đặt hàng chuyên sâu tới các Phòng thí nghiệm trọng điểm (AI Lab, SecLab, Embedded Lab...) dưới sự bảo trợ của Giảng viên.
             </p>
@@ -289,126 +258,100 @@
               Học viện • Cố vấn PGS/TS
             </div>
 </label>
-<!-- Option C -->
-<label class="relative flex flex-col p-4.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container shadow-xs transition-all select-none group">
+<label class="relative flex flex-col p-4 rounded-xl bg-surface-container-low has-[:checked]:bg-brand-light-blue has-[:checked]:ring-2 has-[:checked]:ring-primary-container cursor-pointer hover:shadow-md shadow-xs transition-all select-none group">
 <div class="flex items-start justify-between mb-2.5">
 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
                 IP Độc quyền
               </span>
-<input class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio"/>
+<input class="w-4 h-4 text-primary focus:ring-primary" name="project_type" type="radio" value="tai-tro"/>
 </div>
-<div class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors mb-1.5">
-              Doanh nghiệp tài trợ & Đặt hàng (Sponsored Grant)
-            </div>
+<div class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors mb-1.5">Doanh nghiệp tài trợ &amp; Đặt hàng (Sponsored Grant)</div>
 <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
               Cung cấp kinh phí nghiên cứu trọn gói, cam kết quyền sở hữu trí tuệ (IP) và chuyển giao công nghệ cho doanh nghiệp.
             </p>
 <div class="mt-4 pt-3 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
 <span class="material-symbols-outlined text-[16px]">verified</span>
-              Bảo hộ IP • Hợp đồng R&D
+              Bảo hộ IP • Hợp đồng R&amp;D
             </div>
 </label>
 </div>
-</div>
-<!-- Form field 3: Lĩnh vực chuyên môn chủ đạo -->
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="loai"></p>
+</fieldset>
+<!-- Lĩnh vực chuyên môn chủ đạo -->
 <div class="space-y-2.5">
 <label class="font-title-md text-title-md text-on-surface block" for="rd-field">
           Lĩnh vực chuyên môn chủ đạo <span class="text-status-error">*</span>
 </label>
 <div class="relative">
-<select class="w-full h-12 px-4 pr-10 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs appearance-none transition-all cursor-pointer" id="rd-field">
-<option selected="">Trí tuệ nhân tạo (AI) & Thị giác máy tính (Computer Vision)</option>
-<option>Hệ thống nhúng & IoT (Embedded Systems & IoT)</option>
-<option>An toàn thông tin & Mật mã học (Cybersecurity)</option>
-<option>Khoa học dữ liệu & Dữ liệu lớn (Data Science & Big Data)</option>
-<option>Mạng máy tính & Điện toán đám mây (Cloud & Networking)</option>
+<select class="w-full h-12 px-4 pr-10 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs appearance-none transition-all cursor-pointer" id="rd-field">
+<option value="">-- Chọn lĩnh vực chủ đạo --</option>
 </select>
-<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-[20px] text-text-muted pointer-events-none">
-            keyboard_arrow_down
-          </span>
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-[20px] text-text-muted pointer-events-none">keyboard_arrow_down</span>
 </div>
-<!-- Secondary tag chips preview -->
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="linhVuc"></p>
+<!-- Thẻ gợi ý: bấm để điền lĩnh vực đó vào ô phía trên -->
 <div class="flex items-center flex-wrap gap-2 pt-1">
 <span class="font-label-sm text-label-sm text-text-muted mr-1">Thẻ liên quan gợi ý:</span>
-<button class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors" type="button">
-<span class="material-symbols-outlined text-[14px]">add</span>
-            Hệ thống nhúng & IoT
-          </button>
-<button class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors" type="button">
-<span class="material-symbols-outlined text-[14px]">add</span>
-            An toàn thông tin
-          </button>
-<button class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors" type="button">
-<span class="material-symbols-outlined text-[14px]">add</span>
-            Mạng máy tính
-          </button>
-<button class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors" type="button">
-<span class="material-symbols-outlined text-[14px]">add</span>
-            Edge Computing
-          </button>
+<div class="flex items-center flex-wrap gap-2" id="goi-y-linh-vuc"></div>
 </div>
 </div>
-<!-- Form field 4: Mô tả chi tiết & Rich Textarea -->
+<!-- Mô tả chi tiết (khung soạn có định dạng) -->
 <div class="space-y-2">
 <div class="flex items-center justify-between">
-<label class="font-title-md text-title-md text-on-surface" for="rd-desc">
-            Mô tả chi tiết bài toán & Bối cảnh thực tế <span class="text-status-error">*</span>
-</label>
-<span class="font-code-sm text-code-sm text-text-muted">620 / 3000 ký tự</span>
+<span class="font-title-md text-title-md text-on-surface" id="nhan-mo-ta">
+            Mô tả chi tiết bài toán &amp; Bối cảnh thực tế <span class="text-status-error">*</span>
+</span>
+<span class="font-code-sm text-code-sm text-text-muted" id="desc-char-count">0 / 3000 ký tự</span>
 </div>
-<div class="rounded-lg bg-surface-container-low focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary shadow-xs transition-all">
-<!-- Textarea Formatting Toolbar -->
-<div class="flex items-center flex-wrap gap-1 px-3 py-2 bg-surface-container-high rounded-t-lg">
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors font-bold" title="Đậm" type="button">
+<div class="rounded-lg bg-surface-container-low focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary shadow-xs transition-all" id="khung-mo-ta">
+<div class="flex items-center flex-wrap gap-1 px-3 py-2 bg-surface-container-high rounded-t-lg" role="toolbar" aria-label="Định dạng mô tả" id="thanh-dinh-dang">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Đậm (Ctrl+B)" aria-label="Đậm" aria-pressed="false" type="button" data-lenh="bold" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_bold</span>
 </button>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors italic" title="Nghiêng" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Nghiêng (Ctrl+I)" aria-label="Nghiêng" aria-pressed="false" type="button" data-lenh="italic" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_italic</span>
 </button>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors underline" title="Gạch chân" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Gạch chân (Ctrl+U)" aria-label="Gạch chân" aria-pressed="false" type="button" data-lenh="underline" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_underlined</span>
 </button>
 <div class="w-px h-4 bg-surface-dim mx-1"></div>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Danh sách số" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Danh sách số" aria-label="Danh sách số" aria-pressed="false" type="button" data-lenh="insertOrderedList" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
 </button>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Danh sách dấu chấm" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Danh sách dấu chấm" aria-label="Danh sách dấu chấm" aria-pressed="false" type="button" data-lenh="insertUnorderedList" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
 </button>
 <div class="w-px h-4 bg-surface-dim mx-1"></div>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Chèn liên kết" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Chèn liên kết" aria-label="Chèn liên kết" type="button" data-lenh="createLink" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">link</span>
 </button>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Khối mã" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Khối mã" aria-label="Khối mã" aria-pressed="false" type="button" data-lenh="code" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">code</span>
 </button>
-<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Trích dẫn" type="button">
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Trích dẫn" aria-label="Trích dẫn" aria-pressed="false" type="button" data-lenh="quote" data-no-ripple>
 <span class="material-symbols-outlined text-[18px]">format_quote</span>
 </button>
+<div class="w-px h-4 bg-surface-dim mx-1"></div>
+<button class="rte-btn w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface transition-colors" title="Xóa định dạng" aria-label="Xóa định dạng" type="button" data-lenh="removeFormat" data-no-ripple>
+<span class="material-symbols-outlined text-[18px]">format_clear</span>
+</button>
 </div>
-<textarea class="w-full p-4 bg-transparent font-body-md text-body-md text-on-surface focus:outline-none resize-y leading-relaxed" id="rd-desc" rows="8">Doanh nghiệp đang mở rộng giải pháp camera AI thông minh triển khai tại các nút giao thông trọng điểm khu vực TP. Thủ Đức. Thách thức kỹ thuật lớn nhất hiện nay là:
-1. Độ trễ suy luận trên thiết bị biên (Edge Device như NVIDIA Jetson Nano / Orin) phải đạt dưới 25 FPS với độ chính xác nhận diện mAP@50 > 92%.
-2. Điều kiện môi trường thay đổi phức tạp (mưa lớn, ban đêm, sương mù, ánh đèn pha ngược chiều gây chói lóa).
-3. Yêu cầu mô hình có khả năng tracking đa mục tiêu và nén mô hình mà không làm suy giảm hiệu năng.
-
-Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặc Lab để xây dựng pipeline hoàn chỉnh từ trích xuất dữ liệu đến triển khai mô hình.</textarea>
+<div class="rte min-h-[200px] max-h-[480px] overflow-y-auto w-full p-4 bg-transparent font-body-md text-body-md text-on-surface focus:outline-none" id="rd-desc" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="nhan-mo-ta" data-placeholder="Nêu hiện trạng, thách thức kỹ thuật, đầu ra mong đợi..."></div>
 </div>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="moTa"></p>
 <p class="font-body-sm text-body-sm text-text-muted">
-          Gợi ý: Nêu rõ hiện trạng kỹ thuật, đầu ra mong đợi (deliverables) và môi trường thử nghiệm thực tế.
+          Gợi ý: Nêu rõ hiện trạng kỹ thuật, đầu ra mong đợi (deliverables) và môi trường thử nghiệm thực tế. Có thể làm theo <a class="text-primary underline" href="14_bieu-mau-de-bai.html">Biểu mẫu đề bài</a>.
         </p>
 </div>
-<!-- Form field 5: Drag & Drop Technical Specs -->
+<!-- Tài liệu đính kèm -->
 <div class="space-y-3">
 <div>
-<label class="font-title-md text-title-md text-on-surface block">
-            Tài liệu đính kèm & Đặc tả kỹ thuật (Technical Specs / RFP)
-          </label>
+<span class="font-title-md text-title-md text-on-surface block">Tài liệu đính kèm &amp; Đặc tả kỹ thuật (Technical Specs / RFP)</span>
 <span class="font-body-sm text-body-sm text-on-surface-variant">
             Cung cấp hồ sơ bài toán, sơ đồ kiến trúc hệ thống mẫu hoặc bộ dữ liệu test mẫu (nếu có).
           </span>
 </div>
-<!-- Drag & Drop Zone -->
-<div class="rounded-xl p-8 bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="rounded-xl p-8 bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col items-center justify-center text-center cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary" id="vung-tai-tep" role="button" tabindex="0" aria-label="Chọn tệp đính kèm">
 <div class="w-14 h-14 rounded-full bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-105 transition-transform mb-3 shadow-xs">
 <span class="material-symbols-outlined text-[28px]">upload_file</span>
 </div>
@@ -416,64 +359,241 @@ Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặ
             Kéo thả tài liệu đặc tả bài toán vào đây hoặc <span class="underline">Chọn tệp từ máy tính</span>
 </div>
 <p class="font-body-sm text-body-sm text-text-muted max-w-md">
-            Hỗ trợ định dạng PDF, DOCX, ZIP, RAR tối đa 25MB mỗi tệp. Doanh nghiệp có thể đính kèm nhiều tài liệu kỹ thuật.
+            Hỗ trợ định dạng PDF, DOCX, ZIP, RAR tối đa 25MB mỗi tệp, tối đa 10 tệp.
           </p>
+<input class="hidden" id="rd-files" type="file" multiple accept=".pdf,.docx,.zip,.rar"/>
 </div>
-<!-- Uploaded File Chip -->
-<div class="flex items-center justify-between p-3.5 rounded-lg bg-surface-container-low shadow-xs">
-<div class="flex items-center gap-3 min-w-0">
-<div class="w-9 h-9 rounded-lg bg-error-container text-on-error-container flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="tep"></p>
+<ul class="space-y-2" id="ds-tep"></ul>
 </div>
-<div class="min-w-0">
-<div class="flex items-center gap-2">
-<span class="font-title-md text-title-md text-on-surface truncate">Specs_Traffic_AI_VTech_2026.pdf</span>
-<span class="inline-flex items-center gap-0.5 text-tertiary-container font-label-sm text-label-sm">
-<span class="material-symbols-outlined text-[14px]">check_circle</span> Tải lên thành công
-                </span>
+</section>
+
+<!-- ================= BƯỚC 2 ================= -->
+<section class="space-y-8" data-buoc="2" aria-labelledby="tieu-de-buoc-2" hidden>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary" id="tieu-de-buoc-2" tabindex="-1">Bước 2: Yêu cầu &amp; kỹ năng</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Xác định ai được nộp proposal, kỹ năng cần có và sản phẩm doanh nghiệp mong nhận.</p>
 </div>
-<span class="font-code-sm text-code-sm text-text-muted">3.4 MB • PDF Document • 14:30 18/05/2026</span>
-</div>
-</div>
-<div class="flex items-center gap-2 shrink-0">
-<button class="h-8 px-3 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
-<span class="material-symbols-outlined text-[16px]">visibility</span>
-              Xem
-            </button>
-<button class="h-8 w-8 rounded-full bg-error-container text-on-error-container hover:opacity-80 transition-opacity flex items-center justify-center" title="Xóa tài liệu" type="button">
-<span class="material-symbols-outlined text-[16px]">delete</span>
+<!-- Kỹ năng -->
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-skill">
+          Kỹ năng / công nghệ yêu cầu <span class="text-status-error">*</span>
+</label>
+<div class="flex gap-2">
+<input class="flex-1 min-w-0 h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs transition-all" id="rd-skill" maxlength="40" placeholder="Nhập kỹ năng rồi bấm Enter, VD: PyTorch" type="text" autocomplete="off"/>
+<button class="h-12 px-5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-1.5 shrink-0" id="nut-them-ky-nang" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>Thêm
 </button>
 </div>
+<ul class="flex flex-wrap gap-2" id="ds-ky-nang" aria-label="Kỹ năng đã chọn"></ul>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="kyNang"></p>
+<div class="flex items-center flex-wrap gap-2 pt-1">
+<span class="font-label-sm text-label-sm text-text-muted mr-1">Gợi ý theo lĩnh vực:</span>
+<div class="flex items-center flex-wrap gap-2" id="goi-y-ky-nang"></div>
 </div>
 </div>
-<!-- INFO ALERT BOX -->
-<div class="rounded-xl p-4.5 bg-brand-light-blue text-brand-active-text flex items-start gap-3.5">
+<!-- Đối tượng -->
+<fieldset class="space-y-3">
+<legend class="font-title-md text-title-md text-on-surface mb-3">Đối tượng được nộp proposal <span class="text-status-error">*</span></legend>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="ds-doi-tuong"></div>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="doiTuong"></p>
+</fieldset>
+<!-- Quy mô + TRL -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<fieldset class="space-y-2.5">
+<legend class="font-title-md text-title-md text-on-surface mb-2.5">Quy mô nhóm (số thành viên) <span class="text-status-error">*</span></legend>
+<div class="flex items-center gap-3">
+<label class="sr-only" for="rd-team-min">Ít nhất</label>
+<input class="w-24 h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs" id="rd-team-min" type="number" min="1" max="20" step="1" inputmode="numeric"/>
+<span class="text-text-muted">đến</span>
+<label class="sr-only" for="rd-team-max">Nhiều nhất</label>
+<input class="w-24 h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs" id="rd-team-max" type="number" min="1" max="20" step="1" inputmode="numeric"/>
+<span class="font-body-md text-body-md text-on-surface-variant">người</span>
+</div>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="quyMoNhom"></p>
+</fieldset>
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-trl">Mức sẵn sàng công nghệ tối thiểu (TRL)</label>
+<div class="relative">
+<select class="w-full h-12 px-4 pr-10 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs appearance-none cursor-pointer" id="rd-trl">
+<option value="0">Không yêu cầu</option>
+<option value="2">TRL 2 – Đã có ý tưởng công nghệ</option>
+<option value="3">TRL 3 – Đã chứng minh khái niệm (PoC)</option>
+<option value="4">TRL 4 – Mẫu thử trong phòng Lab</option>
+<option value="5">TRL 5 – Đã thử trong môi trường gần thực tế</option>
+<option value="6">TRL 6 – Đã trình diễn trong môi trường thực tế</option>
+</select>
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-[20px] text-text-muted pointer-events-none">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+<!-- Sản phẩm bàn giao -->
+<fieldset class="space-y-3">
+<legend class="font-title-md text-title-md text-on-surface mb-3">Sản phẩm bàn giao mong đợi <span class="text-status-error">*</span></legend>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="ds-san-pham"></div>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="sanPham"></p>
+</fieldset>
+<!-- Tiêu chí -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-title-md text-title-md text-on-surface" for="rd-criteria">Tiêu chí đánh giá proposal</label>
+<span class="font-code-sm text-code-sm text-text-muted" id="criteria-char-count">0 / 1000 ký tự</span>
+</div>
+<textarea class="w-full p-4 bg-surface-container-low rounded-lg font-body-md text-body-md text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs resize-y leading-relaxed" id="rd-criteria" maxlength="1000" rows="4" placeholder="VD: Kết quả thử nghiệm sơ bộ, kinh nghiệm của nhóm, kế hoạch bảo mật dữ liệu..."></textarea>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="tieuChi"></p>
+</div>
+<!-- NDA -->
+<label class="flex items-start gap-3 p-4 rounded-xl bg-surface-container-low cursor-pointer">
+<input class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-primary" id="rd-nda" type="checkbox"/>
+<span>
+<span class="font-title-md text-title-md text-on-surface block">Yêu cầu ký thỏa thuận bảo mật (NDA) trước khi chia sẻ dữ liệu</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Theo mẫu NDA chuẩn của UIT. Hệ thống chỉ ghi nhận yêu cầu, việc ký diễn ra ngoài UIT Connect.</span>
+</span>
+</label>
+</section>
+
+<!-- ================= BƯỚC 3 ================= -->
+<section class="space-y-8" data-buoc="3" aria-labelledby="tieu-de-buoc-3" hidden>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary" id="tieu-de-buoc-3" tabindex="-1">Bước 3: Ngân sách &amp; thời hạn</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ngân sách dự kiến, hạn nhận proposal và các mốc nghiệm thu chính.</p>
+</div>
+<!-- Ngân sách -->
+<fieldset class="space-y-2.5">
+<legend class="font-title-md text-title-md text-on-surface mb-2.5">Ngân sách dự kiến (triệu VNĐ) <span class="text-status-error">*</span></legend>
+<div class="flex flex-wrap items-center gap-3">
+<label class="sr-only" for="rd-budget-min">Từ</label>
+<input class="w-36 h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error disabled:opacity-50 shadow-xs" id="rd-budget-min" type="number" min="1" step="1" inputmode="numeric" placeholder="Từ"/>
+<span class="text-text-muted">–</span>
+<label class="sr-only" for="rd-budget-max">Đến</label>
+<input class="w-36 h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error disabled:opacity-50 shadow-xs" id="rd-budget-max" type="number" min="1" step="1" inputmode="numeric" placeholder="Đến"/>
+<span class="font-body-md text-body-md text-on-surface-variant">triệu VNĐ</span>
+<label class="flex items-center gap-2 ml-0 sm:ml-4 font-body-md text-body-md text-on-surface cursor-pointer">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary" id="rd-budget-tbd" type="checkbox"/>Thỏa thuận sau
+</label>
+</div>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="nganSach"></p>
+<p class="font-body-sm text-body-sm text-text-muted">Nhập một giá trị ở cả hai ô nếu ngân sách cố định.</p>
+</fieldset>
+<!-- Thời hạn -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-deadline">Hạn nhận proposal <span class="text-status-error">*</span></label>
+<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs" id="rd-deadline" type="date"/>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="hanNop"></p>
+</div>
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-start">Ngày dự kiến bắt đầu</label>
+<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs" id="rd-start" type="date"/>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="ngayBatDau"></p>
+</div>
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-duration">Thời gian thực hiện (tuần) <span class="text-status-error">*</span></label>
+<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-status-error shadow-xs" id="rd-duration" type="number" min="1" max="104" step="1" inputmode="numeric"/>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="thoiGian"></p>
+</div>
+</div>
+<!-- Hình thức & địa điểm -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-mode">Hình thức làm việc</label>
+<div class="relative">
+<select class="w-full h-12 px-4 pr-10 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs appearance-none cursor-pointer" id="rd-mode"></select>
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-[20px] text-text-muted pointer-events-none">keyboard_arrow_down</span>
+</div>
+</div>
+<div class="space-y-2.5">
+<label class="font-title-md text-title-md text-on-surface block" for="rd-location">Địa điểm</label>
+<input class="w-full h-12 px-4 bg-surface-container-low rounded-lg font-body-lg text-body-lg text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="rd-location" maxlength="120" placeholder="VD: TP. Thủ Đức, TP.HCM" type="text"/>
+</div>
+</div>
+<!-- Mốc nghiệm thu -->
+<div class="space-y-3">
+<div class="flex flex-wrap items-end justify-between gap-2">
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Các mốc nghiệm thu <span class="text-status-error">*</span></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tỷ lệ giải ngân của các mốc cộng lại phải bằng 100%. Đây là thông tin tham khảo, UIT Connect không xử lý thanh toán.</span>
+</div>
+<span class="font-code-sm text-code-sm text-text-muted" id="tong-phan-tram">Tổng: 0%</span>
+</div>
+<div class="hidden md:grid grid-cols-12 gap-3 px-1 font-label-sm text-label-sm text-text-muted uppercase tracking-wider">
+<span class="col-span-6">Tên mốc / sản phẩm nghiệm thu</span><span class="col-span-2">Tuần thứ</span><span class="col-span-3">% giải ngân</span><span class="col-span-1"></span>
+</div>
+<ol class="space-y-2" id="ds-moc"></ol>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="moc"></p>
+<button class="h-10 px-4 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors inline-flex items-center gap-1.5" id="nut-them-moc" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>Thêm mốc
+</button>
+</div>
+</section>
+
+<!-- ================= BƯỚC 4 ================= -->
+<section class="space-y-8" data-buoc="4" aria-labelledby="tieu-de-buoc-4" hidden>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary" id="tieu-de-buoc-4" tabindex="-1">Bước 4: Xem lại &amp; gửi duyệt</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Kiểm tra lại toàn bộ thông tin trước khi gửi Ban Quản lý UIT thẩm định.</p>
+</div>
+<div class="space-y-4" id="xem-lai"></div>
+<div class="rounded-xl p-4 bg-brand-light-blue text-brand-active-text flex items-start gap-3.5">
 <span class="material-symbols-outlined text-[24px] text-primary shrink-0 mt-0.5">verified_user</span>
 <div class="space-y-1">
 <div class="font-title-md text-title-md text-primary">Lưu ý quan trọng từ Ban Quản trị UIT Connect</div>
 <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-            Sau khi hoàn thành đầy đủ 4 bước thiết lập, bài toán sẽ được chuyển tới Ban Quản lý Khoa học & Hợp tác Doanh nghiệp UIT kiểm duyệt tính hợp lệ (thời gian xử lý dự kiến <strong>12 - 24 giờ làm việc</strong>) trước khi hiển thị công khai trên Cổng R&D toàn trường.
+            Sau khi gửi, bài toán được chuyển tới Ban Quản lý Khoa học &amp; Hợp tác Doanh nghiệp UIT kiểm duyệt tính hợp lệ (thời gian xử lý dự kiến <strong>12 - 24 giờ làm việc</strong>) trước khi hiển thị công khai trên Cổng R&amp;D toàn trường. Trong lúc chờ duyệt không sửa được nội dung.
           </p>
 </div>
 </div>
+<div class="space-y-1.5">
+<label class="flex items-start gap-3 cursor-pointer">
+<input class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-primary" id="rd-agree" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">Tôi xác nhận thông tin trên là chính xác và đồng ý với <a class="text-primary underline" href="#">Quy chế sở hữu trí tuệ (IP)</a> của UIT. <span class="text-status-error">*</span></span>
+</label>
+<p class="hidden font-body-sm text-body-sm text-status-error" data-loi="camKet"></p>
+</div>
+</section>
+
 <!-- FORM ACTIONS FOOTER -->
 <div class="pt-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
 <div>
-<button class="w-full sm:w-auto h-11 px-5 rounded-lg text-on-surface-variant hover:text-status-error hover:bg-error-container font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5" type="button" data-href="04_bai-toan-rd.html">
+<button class="w-full sm:w-auto h-11 px-5 rounded-lg text-on-surface-variant hover:text-status-error hover:bg-error-container font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5" id="nut-huy" type="button">
 <span class="material-symbols-outlined text-[18px]">close</span>
             Hủy bỏ
           </button>
 </div>
-<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-<button class="w-full sm:w-auto h-11 px-5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high shadow-xs transition-colors flex items-center justify-center gap-1.5" type="button">
+<div class="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
+<button class="w-full sm:w-auto h-11 px-5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high shadow-xs transition-colors flex items-center justify-center gap-1.5" id="nut-luu-nhap" type="button">
 <span class="material-symbols-outlined text-[18px]">save</span>
             Lưu bản nháp
           </button>
-<button class="w-full sm:w-auto h-11 px-6 rounded-lg bg-primary-container hover:bg-brand-navy-dark text-on-primary font-label-md text-label-md shadow-sm hover:shadow transition-all flex items-center justify-center gap-2" type="button">
-            Tiếp tục: Yêu cầu & kỹ năng
-            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+<button class="hidden w-full sm:w-auto h-11 px-5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high shadow-xs transition-colors items-center justify-center gap-1.5" id="nut-quay-lai" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            Quay lại
+          </button>
+<button class="w-full sm:w-auto h-11 px-6 rounded-lg bg-primary-container hover:bg-brand-navy-dark text-on-primary font-label-md text-label-md shadow-sm hover:shadow transition-all flex items-center justify-center gap-2" id="nut-tiep-tuc" type="button">
+<span data-chu>Tiếp tục: Yêu cầu &amp; kỹ năng</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="hidden w-full sm:w-auto h-11 px-6 rounded-lg bg-primary-container hover:bg-brand-navy-dark text-on-primary font-label-md text-label-md shadow-sm hover:shadow transition-all items-center justify-center gap-2" id="nut-gui" type="submit">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span data-chu>Gửi duyệt</span>
 </button>
 </div>
+</div>
+</form>
+<!-- Kết quả sau khi gửi duyệt / lưu thay đổi -->
+<div class="hidden bg-surface-container-lowest rounded-xl p-6 sm:p-10 shadow-sm text-center flex-col items-center gap-3" id="ket-qua-gui" role="status" tabindex="-1">
+<div class="w-14 h-14 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[30px]">task_alt</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary" data-tieu-de>Đã gửi duyệt</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl" data-noi-dung></p>
+<div class="flex flex-wrap justify-center gap-3 pt-2">
+<a class="h-11 px-5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors inline-flex items-center gap-1.5" href="04_bai-toan-rd.html">
+<span class="material-symbols-outlined text-[18px]">list</span>Về danh sách bài toán
+</a>
+<a class="h-11 px-5 rounded-lg bg-primary-container hover:bg-brand-navy-dark text-on-primary font-label-md text-label-md transition-colors inline-flex items-center gap-1.5" href="15_chi-tiet-bai-toan.html" data-link-chi-tiet>
+<span class="material-symbols-outlined text-[18px]">visibility</span>Xem chi tiết bài toán
+</a>
 </div>
 </div>
 <!-- UIT R&D SUPPORT CALLOUT / STATS ROW -->
@@ -484,7 +604,7 @@ Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặ
 </div>
 <div>
 <span class="font-headline-sm text-headline-sm text-primary block">15+ Phòng Lab</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Sẵn sàng hợp tác từ Khoa KHMT, KTMT, HTTT, MMT & TT.</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sẵn sàng hợp tác từ Khoa KHMT, KTMT, HTTT, MMT &amp; TT.</p>
 </div>
 </div>
 <div class="bg-surface-container-lowest p-5 rounded-xl shadow-xs flex items-center gap-4">
@@ -492,7 +612,7 @@ Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặ
 <span class="material-symbols-outlined text-[24px]">group_work</span>
 </div>
 <div>
-<span class="font-headline-sm text-headline-sm text-secondary block">1,200+ Sinh viên R&D</span>
+<span class="font-headline-sm text-headline-sm text-secondary block">1,200+ Sinh viên R&amp;D</span>
 <p class="font-body-sm text-body-sm text-on-surface-variant">Top tài năng lớp Kỹ sư tài năng, Tiên tiến và Đề tài SV NCKH.</p>
 </div>
 </div>
@@ -501,26 +621,11 @@ Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặ
 <span class="material-symbols-outlined text-[24px]">policy</span>
 </div>
 <div>
-<span class="font-headline-sm text-headline-sm text-tertiary block">Bảo hộ IP & NDA</span>
+<span class="font-headline-sm text-headline-sm text-tertiary block">Bảo hộ IP &amp; NDA</span>
 <p class="font-body-sm text-body-sm text-on-surface-variant">Hỗ trợ thỏa thuận pháp lý chuyển giao tài sản trí tuệ minh bạch.</p>
 </div>
 </div>
 </div>
-</div>
-<script>
-    // Lightweight interactivity for character counter and radio card focus
-    document.addEventListener('DOMContentLoaded', () => {
-      const titleInput = document.getElementById('rd-title');
-      const counterDisplay = document.getElementById('title-char-count');
-      
-      if (titleInput && counterDisplay) {
-        titleInput.addEventListener('input', (e) => {
-          const count = e.target.value.length;
-          counterDisplay.textContent = `${count} / 150 ký tự`;
-        });
-      }
-    });
-  </script>
 </div>
 </div>
 <!-- ===== HẾT NỘI DUNG TRANG ===== -->
@@ -643,6 +748,8 @@ Doanh nghiệp mong muốn hợp tác với nhóm nghiên cứu sinh viên hoặ
 </div>
 </div>
 </div>
+<script src="../../assets/js/dn-bai-toan-data.js"></script>
+<script src="../../assets/js/dn-dang-bai-toan.js"></script>
 <script src="../../assets/js/app-shell.js"></script>
 <script src="../../assets/js/ux-effects.js"></script>
 </body>

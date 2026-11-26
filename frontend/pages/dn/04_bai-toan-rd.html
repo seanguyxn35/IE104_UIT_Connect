@@ -9,6 +9,7 @@
 <!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
 <link rel="stylesheet" href="../../assets/css/app-shell.css">
 <link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<link rel="stylesheet" href="../../assets/css/dn-bai-toan.css">
 <style>
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -177,8 +178,8 @@
 <span class="material-symbols-outlined text-[20px]">add_circle</span>
           Đăng bài toán mới
         </button>
-<button class="h-11 px-space-md rounded-full bg-white/10 hover:bg-white/20 text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-xs backdrop-blur-xs transition-colors" type="button">
-<span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+<button class="h-11 px-space-md rounded-full bg-white/10 hover:bg-white/20 text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-xs backdrop-blur-xs transition-colors" type="button" data-href="14_bieu-mau-de-bai.html">
+<span class="material-symbols-outlined text-[18px]">description</span>
           Biểu mẫu đề bài
         </button>
 </div>
@@ -192,7 +193,7 @@
 </div>
 <div>
 <div class="font-label-sm text-label-sm text-text-muted">Tổng bài toán</div>
-<div class="font-headline-sm text-headline-sm text-on-surface">5 <span class="font-body-sm text-body-sm font-normal text-text-muted">đề tài</span></div>
+<div class="font-headline-sm text-headline-sm text-on-surface"><span id="so-tong-bai-toan">5</span> <span class="font-body-sm text-body-sm font-normal text-text-muted">đề tài</span></div>
 </div>
 </div>
 <div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center gap-space-md">
@@ -210,7 +211,7 @@
 </div>
 <div>
 <div class="font-label-sm text-label-sm text-text-muted">Đang triển khai</div>
-<div class="font-headline-sm text-headline-sm text-on-surface">1 <span class="font-body-sm text-body-sm font-normal text-text-muted">dự án</span></div>
+<div class="font-headline-sm text-headline-sm text-on-surface"><span id="so-dang-trien-khai">1</span> <span class="font-body-sm text-body-sm font-normal text-text-muted">dự án</span></div>
 </div>
 </div>
 <div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center gap-space-md">
@@ -226,29 +227,30 @@
 <!-- Tabs Navigation -->
 <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xs mb-space-md overflow-x-auto">
 <div class="flex items-center gap-1 min-w-max">
-<button class="h-10 px-space-md rounded-lg bg-brand-active-pill text-brand-active-text font-label-md text-label-md flex items-center gap-space-xs shadow-xs transition-colors" type="button">
+<!-- Tab lọc theo trạng thái: dn-bai-toan-list.js đổi kiểu tab đang chọn và cập nhật số đếm -->
+<button class="h-10 px-space-md rounded-lg bg-brand-active-pill text-brand-active-text font-label-md text-label-md flex items-center gap-space-xs shadow-xs transition-colors" type="button" data-tab="tat-ca" aria-pressed="true">
 <span>Tất cả</span>
-<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest text-brand-active-text font-label-sm text-label-sm">5</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest text-brand-active-text font-label-sm text-label-sm" data-dem>5</span>
 </button>
-<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button">
+<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button" data-tab="nhap" aria-pressed="false">
 <span>Bản nháp</span>
-<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-text-muted">1</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-text-muted" data-dem>1</span>
 </button>
-<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button">
+<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button" data-tab="cho-duyet" aria-pressed="false">
 <span>Chờ Admin duyệt</span>
-<span class="px-2 py-0.5 rounded-full bg-status-warning/20 text-status-warning font-label-sm text-label-sm">1</span>
+<span class="px-2 py-0.5 rounded-full bg-status-warning/20 text-status-warning font-label-sm text-label-sm" data-dem>1</span>
 </button>
-<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button">
+<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button" data-tab="dang-mo" aria-pressed="false">
 <span>Đang mở</span>
-<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm">2</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm" data-dem>2</span>
 </button>
-<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button">
+<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button" data-tab="dang-thuc-hien" aria-pressed="false">
 <span>Đang thực hiện</span>
-<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm">1</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm" data-dem>1</span>
 </button>
-<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors opacity-75" type="button">
+<button class="h-10 px-space-md rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md flex items-center gap-space-xs transition-colors" type="button" data-tab="da-dong" aria-pressed="false">
 <span>Đã đóng</span>
-<span class="px-2 py-0.5 rounded-full bg-surface-container-high font-label-sm text-label-sm text-text-muted">0</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high font-label-sm text-label-sm text-text-muted" data-dem>0</span>
 </button>
 </div>
 </div>
@@ -258,35 +260,31 @@
 <!-- Search Input -->
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted text-[20px]">search</span>
-<input class="w-full h-11 pl-11 pr-space-md bg-surface-container-low rounded-lg font-body-md text-body-md text-on-surface placeholder:text-text-muted focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Tìm theo tên bài toán, mã số RD-xxxx, kỹ năng (AI, IoT, ROS)..." type="text"/>
+<input class="w-full h-11 pl-11 pr-space-md bg-surface-container-low rounded-lg font-body-md text-body-md text-on-surface placeholder:text-text-muted focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Tìm theo tên bài toán, mã số RD-xxxx, kỹ năng (AI, IoT, ROS)..." type="search" id="loc-tim-kiem" aria-label="Tìm bài toán"/>
 </div>
 <!-- Filters -->
 <div class="flex flex-wrap sm:flex-nowrap items-center gap-space-sm">
 <!-- Filter 1: Type -->
 <div class="relative min-w-[170px] flex-1 sm:flex-initial">
-<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9">
+<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9" id="loc-loai" aria-label="Lọc theo loại bài toán">
 <option value="">Loại bài toán: Tất cả</option>
 <option value="ung-tuyen">Đang mở ứng tuyển</option>
 <option value="hop-tac-lab">Hợp tác Lab</option>
-<option value="doanh-nghiep-tai-tro">Doanh nghiệp tài trợ</option>
+<option value="tai-tro">Doanh nghiệp tài trợ</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-[18px]">expand_more</span>
 </div>
 <!-- Filter 2: Domain -->
 <div class="relative min-w-[190px] flex-1 sm:flex-initial">
-<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9">
+<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9" id="loc-linh-vuc" aria-label="Lọc theo lĩnh vực">
+<!-- Danh mục lĩnh vực do dn-bai-toan-list.js đổ vào (dùng chung với form DN-05) -->
 <option value="">Lĩnh vực: Tất cả</option>
-<option value="ai">Trí tuệ nhân tạo (AI)</option>
-<option value="cv">Thị giác máy tính (CV)</option>
-<option value="iot">Hệ thống nhúng & IoT</option>
-<option value="sec">An toàn thông tin</option>
-<option value="ic">Vi mạch & Bán dẫn</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-[18px]">expand_more</span>
 </div>
 <!-- Filter 3: Sort -->
 <div class="relative min-w-[170px] flex-1 sm:flex-initial">
-<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9">
+<select class="w-full h-11 px-space-md bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-9" id="loc-sap-xep" aria-label="Sắp xếp">
 <option value="deadline">Hạn gần nhất</option>
 <option value="newest">Ngày tạo mới nhất</option>
 <option value="proposals">Nhiều proposal nhất</option>
@@ -295,457 +293,25 @@
 <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-[18px]">sort</span>
 </div>
 <!-- Reset Button -->
-<button class="w-11 h-11 shrink-0 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant flex items-center justify-center transition-colors" title="Đặt lại bộ lọc" type="button">
+<button class="w-11 h-11 shrink-0 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant flex items-center justify-center transition-colors" title="Đặt lại bộ lọc" type="button" id="loc-dat-lai" aria-label="Đặt lại bộ lọc">
 <span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
 </button>
 </div>
 </div>
 </div>
-<!-- Cards List Container -->
-<div class="flex flex-col gap-space-md mb-space-xl">
-<!-- CARD 1: Đang mở (Edge-AI) -->
-<div class="group bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left Column: Core Details (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-space-xs">
-<!-- Status and Type Chips -->
-<div class="flex flex-wrap items-center gap-space-xs mb-1">
-<span class="px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">code_blocks</span>
-              Đang mở ứng tuyển
-            </span>
-<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-              Đang mở
-            </span>
-<span class="font-code-sm text-code-sm text-text-muted ml-auto sm:ml-0">Mã: RD-2026-084</span>
-</div>
-<!-- Title -->
-<h2 class="font-title-md text-title-md lg:font-headline-sm lg:text-headline-sm text-on-surface group-hover:text-primary transition-colors cursor-pointer">
-            Hệ thống Edge-AI phát hiện bất thường & tấn công DDoS tầng ứng dụng trên thiết bị biên
-          </h2>
-<!-- 1-line requirement -->
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
-            Yêu cầu xây dựng mô hình nén chạy trên Jetson Orin Nano, độ trễ < 15ms, hỗ trợ phân tích gói tin eBPF thời gian thực.
-          </p>
-<!-- Skill Chips -->
-<div class="flex flex-wrap items-center gap-1.5 my-1">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Edge AI</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">eBPF</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">NVIDIA Jetson</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Network Security</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">PyTorch</span>
-</div>
-<!-- Meta info -->
-<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 font-body-sm text-body-sm text-text-muted pt-1">
-<div class="flex items-center gap-1 text-on-surface font-medium">
-<span class="material-symbols-outlined text-[16px] text-status-warning">paid</span>
-              150 - 300 triệu VNĐ
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1 text-error">
-<span class="material-symbols-outlined text-[16px]">hourglass_top</span>
-              Hạn nộp: 30/11/2026
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">location_on</span>
-              TP. Thủ Đức, TP.HCM
-            </div>
-</div>
-</div>
-<!-- Middle Column: Metrics & Avatar Stack (3 cols) -->
-<div class="lg:col-span-3 flex flex-col justify-between h-full bg-surface-container-low rounded-xl p-space-md">
-<div>
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Hồ sơ ứng tuyển</span>
-<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold animate-pulse">3 mới</span>
-</div>
-<div class="font-headline-md text-headline-md text-primary mb-1">
-              8 <span class="font-body-md text-body-md font-normal text-on-surface-variant">proposals</span>
-</div>
-<p class="font-body-sm text-body-sm text-text-muted flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px] text-secondary">send</span>
-              2 lời mời kết nối đã gửi
-            </p>
-</div>
-<!-- Avatar Stack -->
-<div class="pt-space-md mt-space-xs flex items-center justify-between">
-<div class="flex -space-x-2 overflow-hidden">
-<div class="inline-block h-8 w-8 rounded-full bg-primary-container text-on-primary font-code-sm text-code-sm flex items-center justify-center shadow-xs" title="VisionLab UIT">VL</div>
-<div class="inline-block h-8 w-8 rounded-full bg-tertiary-container text-on-tertiary font-code-sm text-code-sm flex items-center justify-center shadow-xs" title="SecLab UIT">SL</div>
-<div class="inline-block h-8 w-8 rounded-full bg-brand-navy-dark text-on-primary font-code-sm text-code-sm flex items-center justify-center shadow-xs" title="AI Researchers Group">AR</div>
-</div>
-<span class="font-label-sm text-label-sm text-text-muted">Nhóm nộp gần nhất</span>
-</div>
-</div>
-<!-- Right Column: Actions (2 cols) -->
-<div class="lg:col-span-2 flex flex-row lg:flex-col justify-end lg:justify-center items-center lg:items-stretch gap-space-sm h-full">
-<button class="w-full h-10 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" data-href="08_hop-thu-ket-noi.html">
-<span class="material-symbols-outlined text-[18px]">folder_open</span>
-            Xem proposal (8)
-          </button>
-<button class="w-full h-9 px-space-md rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-body-md text-body-md flex items-center justify-center gap-1 transition-colors" type="button" data-href="05_dang-bai-toan-moi.html">
-<span class="material-symbols-outlined text-[16px]">edit</span>
-            Chỉnh sửa
-          </button>
-<div class="relative group/menu self-center">
-<button aria-label="Tùy chọn khác" class="w-9 h-9 rounded-lg hover:bg-surface-container text-text-muted hover:text-on-surface flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">more_horiz</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- CARD 2: Đang mở (Healthcare LLM) -->
-<div class="group bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left Column: Core Details (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-space-xs">
-<!-- Status and Type Chips -->
-<div class="flex flex-wrap items-center gap-space-xs mb-1">
-<span class="px-2.5 py-0.5 rounded-full bg-brand-light-blue text-brand-navy-dark font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">hub</span>
-              Hợp tác Lab
-            </span>
-<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-              Đang mở
-            </span>
-<span class="font-code-sm text-code-sm text-text-muted ml-auto sm:ml-0">Mã: RD-2026-079</span>
-</div>
-<!-- Title -->
-<h2 class="font-title-md text-title-md lg:font-headline-sm lg:text-headline-sm text-on-surface group-hover:text-primary transition-colors cursor-pointer">
-            Tối ưu hóa mô hình LLM chuyên biệt tiếng Việt phục vụ y tế dự phòng trên hạ tầng Hybrid-Cloud
-          </h2>
-<!-- 1-line requirement -->
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
-            Fine-tune và nén mô hình ngôn ngữ lớn (7B parameters) với cơ chế RAG đa tầng, kiểm thử đối sánh lâm sàng.
-          </p>
-<!-- Skill Chips -->
-<div class="flex flex-wrap items-center gap-1.5 my-1">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">LLM</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">RAG</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">NLP Tiếng Việt</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">vLLM</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Healthcare AI</span>
-</div>
-<!-- Meta info -->
-<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 font-body-sm text-body-sm text-text-muted pt-1">
-<div class="flex items-center gap-1 text-on-surface font-medium">
-<span class="material-symbols-outlined text-[16px] text-status-warning">paid</span>
-              250 - 450 triệu VNĐ
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1 text-on-surface-variant">
-<span class="material-symbols-outlined text-[16px]">schedule</span>
-              Hạn nộp: 15/12/2026
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">corporate_fare</span>
-              Ban Công nghệ Y tế V-Tech
-            </div>
-</div>
-</div>
-<!-- Middle Column: Metrics & Avatar Stack (3 cols) -->
-<div class="lg:col-span-3 flex flex-col justify-between h-full bg-surface-container-low rounded-xl p-space-md">
-<div>
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Hồ sơ ứng tuyển</span>
-<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">1 mới</span>
-</div>
-<div class="font-headline-md text-headline-md text-primary mb-1">
-              5 <span class="font-body-md text-body-md font-normal text-on-surface-variant">proposals</span>
-</div>
-<p class="font-body-sm text-body-sm text-text-muted flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px] text-secondary">send</span>
-              4 lời mời đã gửi tới các Lab
-            </p>
-</div>
-<div class="pt-space-md mt-space-xs flex items-center justify-between">
-<div class="flex -space-x-2 overflow-hidden">
-<div class="inline-block h-8 w-8 rounded-full bg-primary-fixed text-primary font-code-sm text-code-sm flex items-center justify-center shadow-xs" title="Data Science Lab">DS</div>
-<div class="inline-block h-8 w-8 rounded-full bg-secondary-fixed text-secondary font-code-sm text-code-sm flex items-center justify-center shadow-xs" title="NLP Lab UIT">NL</div>
-</div>
-<span class="font-label-sm text-label-sm text-text-muted">Đang xem xét sơ bộ</span>
-</div>
-</div>
-<!-- Right Column: Actions (2 cols) -->
-<div class="lg:col-span-2 flex flex-row lg:flex-col justify-end lg:justify-center items-center lg:items-stretch gap-space-sm h-full">
-<button class="w-full h-10 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-brand-navy-dark font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" data-href="08_hop-thu-ket-noi.html">
-<span class="material-symbols-outlined text-[18px]">folder_open</span>
-            Xem proposal (5)
-          </button>
-<button class="w-full h-9 px-space-md rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-body-md text-body-md flex items-center justify-center gap-1 transition-colors" type="button" data-href="05_dang-bai-toan-moi.html">
-<span class="material-symbols-outlined text-[16px]">edit</span>
-            Chỉnh sửa
-          </button>
-<div class="relative group/menu self-center">
-<button aria-label="Tùy chọn khác" class="w-9 h-9 rounded-lg hover:bg-surface-container text-text-muted hover:text-on-surface flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">more_horiz</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- CARD 3: Đang thực hiện (AGV SLAM 3D) -->
-<div class="group bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left Column: Core Details (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-space-xs">
-<!-- Status and Type Chips -->
-<div class="flex flex-wrap items-center gap-space-xs mb-1">
-<span class="px-2.5 py-0.5 rounded-full bg-status-warning/20 text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">monetization_on</span>
-              Doanh nghiệp tài trợ
-            </span>
-<span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">sync</span>
-              Đang thực hiện
-            </span>
-<span class="font-code-sm text-code-sm text-text-muted ml-auto sm:ml-0">HĐ: HD-2026-042</span>
-</div>
-<!-- Title -->
-<h2 class="font-title-md text-title-md lg:font-headline-sm lg:text-headline-sm text-on-surface group-hover:text-primary transition-colors cursor-pointer">
-            Phát triển thuật toán SLAM 3D và định vị chính xác cho AGV vận chuyển nhà xưởng thông minh
-          </h2>
-<!-- 1-line requirement -->
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
-            Đang phối hợp cùng Lab Robotics & IoT UIT. Hợp đồng MoA đã ký kết, tiến độ Milestone 2.
-          </p>
-<!-- Skill Chips -->
-<div class="flex flex-wrap items-center gap-1.5 my-1">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">ROS2</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">LiDAR SLAM</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">C++</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Sensor Fusion</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Embedded Linux</span>
-</div>
-<!-- Meta info -->
-<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 font-body-sm text-body-sm text-text-muted pt-1">
-<div class="flex items-center gap-1 text-on-surface font-medium">
-<span class="material-symbols-outlined text-[16px] text-status-warning">paid</span>
-              350 triệu VNĐ
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">calendar_today</span>
-              01/09/2026 - 30/03/2027
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1 text-primary">
-<span class="material-symbols-outlined text-[16px]">group</span>
-              Đối tác: Nhóm Robotics UIT
-            </div>
-</div>
-</div>
-<!-- Middle Column: Project Progress (3 cols) -->
-<div class="lg:col-span-3 flex flex-col justify-between h-full bg-brand-light-blue/60 rounded-xl p-space-md">
-<div>
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-label-sm text-label-sm text-brand-navy-dark uppercase tracking-wider font-semibold">Tiến độ hợp đồng</span>
-<span class="font-code-sm text-code-sm font-bold text-secondary">Milestone 2/4</span>
-</div>
-<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mb-2">
-<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 40%;"></div>
-</div>
-<div class="font-body-sm text-body-sm text-on-surface mb-1 flex items-center justify-between">
-<span>Đã giải ngân:</span>
-<span class="font-label-md text-label-md text-primary">40% (140.000.000 đ)</span>
-</div>
-</div>
-<div class="pt-space-sm mt-space-xs font-label-sm text-label-sm text-brand-navy-dark flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
-            Đã nghiệm thu Milestone 1 (Mô phỏng Gazebo)
-          </div>
-</div>
-<!-- Right Column: Actions (2 cols) -->
-<div class="lg:col-span-2 flex flex-row lg:flex-col justify-end lg:justify-center items-center lg:items-stretch gap-space-sm h-full">
-<button class="w-full h-11 px-space-md rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container font-label-md text-label-md flex items-center justify-center text-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" data-href="09_khong-gian-dam-phan.html">
-<span class="material-symbols-outlined text-[18px]">handshake</span>
-<span>Đàm phán & Báo cáo</span>
-</button>
-<button class="w-full h-9 px-space-md rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-body-md text-body-md flex items-center justify-center gap-1 transition-colors" type="button">
-<span class="material-symbols-outlined text-[16px]">visibility</span>
-            Hồ sơ dự án
-          </button>
-<div class="relative group/menu self-center">
-<button aria-label="Tùy chọn khác" class="w-9 h-9 rounded-lg hover:bg-surface-container text-text-muted hover:text-on-surface flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">more_horiz</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- CARD 4: Chờ Admin duyệt (Bán dẫn Wafer) -->
-<div class="group bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left Column: Core Details (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-space-xs">
-<!-- Status and Type Chips -->
-<div class="flex flex-wrap items-center gap-space-xs mb-1">
-<span class="px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">code_blocks</span>
-              Đang mở ứng tuyển
-            </span>
-<span class="px-2.5 py-0.5 rounded-full bg-status-warning/20 text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px] text-status-warning">hourglass_empty</span>
-              Chờ duyệt
-            </span>
-<span class="font-code-sm text-code-sm text-text-muted ml-auto sm:ml-0">Mã: RD-2026-091</span>
-</div>
-<!-- Title -->
-<h2 class="font-title-md text-title-md lg:font-headline-sm lg:text-headline-sm text-on-surface group-hover:text-primary transition-colors cursor-pointer">
-            Hệ thống kiểm thử vi mạch tự động ứng dụng AI phát hiện lỗi vật lý trên wafer bán dẫn
-          </h2>
-<!-- 1-line requirement -->
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
-            Tự động phân loại khuyết tật hình ảnh SEM wafer với độ chính xác F1-score > 98.5%.
-          </p>
-<!-- Skill Chips -->
-<div class="flex flex-wrap items-center gap-1.5 my-1">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Computer Vision</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Semiconductor</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Deep Learning</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Defect Detection</span>
-</div>
-<!-- Meta info -->
-<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 font-body-sm text-body-sm text-text-muted pt-1">
-<div class="flex items-center gap-1 text-on-surface font-medium">
-<span class="material-symbols-outlined text-[16px] text-status-warning">paid</span>
-              200 - 350 triệu VNĐ
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">event</span>
-              Dự kiến mở: 10/01/2027
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">history</span>
-              Nộp ngày: 22/10/2026
-            </div>
-</div>
-</div>
-<!-- Middle Column: Admin Status Box (3 cols) -->
-<div class="lg:col-span-3 flex flex-col justify-center h-full bg-status-warning/10 rounded-xl p-space-md">
-<div class="flex items-start gap-space-sm text-on-surface">
-<span class="material-symbols-outlined text-[20px] text-status-warning shrink-0 mt-0.5">verified_user</span>
-<div>
-<div class="font-label-md text-label-md mb-1">Ban Quản lý UIT đang thẩm định</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                Đang rà soát nội dung kỹ thuật & tiêu chuẩn bảo mật dữ liệu doanh nghiệp. Dự kiến hoàn tất trong 24 giờ làm việc.
-              </p>
-</div>
-</div>
-</div>
-<!-- Right Column: Actions (2 cols) -->
-<div class="lg:col-span-2 flex flex-row lg:flex-col justify-end lg:justify-center items-center lg:items-stretch gap-space-sm h-full">
-<button class="w-full h-10 px-space-md rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md flex items-center justify-center gap-1 transition-colors cursor-pointer" type="button">
-<span class="material-symbols-outlined text-[18px]">visibility</span>
-            Xem chi tiết
-          </button>
-<button class="w-full h-9 px-space-md rounded-lg bg-surface-container-low text-text-muted font-body-md text-body-md flex items-center justify-center gap-1 cursor-not-allowed" disabled="" title="Bài toán đang trong quá trình Admin xét duyệt" type="button">
-<span class="material-symbols-outlined text-[16px]">lock</span>
-            Sửa nội dung
-          </button>
-<div class="relative group/menu self-center">
-<button aria-label="Tùy chọn khác" class="w-9 h-9 rounded-lg hover:bg-surface-container text-text-muted hover:text-on-surface flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">more_horiz</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- CARD 5: Bản nháp (Blockchain Layer-2) -->
-<div class="group bg-surface-container-lowest/80 rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left Column: Core Details (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-space-xs">
-<!-- Status and Type Chips -->
-<div class="flex flex-wrap items-center gap-space-xs mb-1">
-<span class="px-2.5 py-0.5 rounded-full bg-brand-light-blue text-brand-navy-dark font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">hub</span>
-              Hợp tác Lab
-            </span>
-<span class="px-2.5 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">edit_document</span>
-              Bản nháp
-            </span>
-<span class="font-code-sm text-code-sm text-text-muted ml-auto sm:ml-0">ID: DRAFT-904</span>
-</div>
-<!-- Title -->
-<h2 class="font-title-md text-title-md lg:font-headline-sm lg:text-headline-sm text-on-surface/90 group-hover:text-primary transition-colors cursor-pointer">
-            Nghiên cứu kiến trúc Blockchain Layer-2 tối ưu phí gas cho giao dịch chứng chỉ tín chỉ carbon sinh viên
-          </h2>
-<!-- 1-line requirement -->
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
-            Bản thảo chưa hoàn tất phần ngân sách dự kiến và tiêu chí chuyển giao công nghệ mã nguồn.
-          </p>
-<!-- Skill Chips -->
-<div class="flex flex-wrap items-center gap-1.5 my-1">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Blockchain</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Smart Contracts</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Ethereum L2</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm">Zero-Knowledge Proofs</span>
-</div>
-<!-- Meta info -->
-<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 font-body-sm text-body-sm text-text-muted pt-1">
-<div class="flex items-center gap-1 text-text-muted">
-<span class="material-symbols-outlined text-[16px]">money_off</span>
-              Ngân sách: Chưa thiết lập
-            </div>
-<span class="text-surface-dim">•</span>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">save</span>
-              Lưu gần nhất: 19/10/2026
-            </div>
-</div>
-</div>
-<!-- Middle Column: Draft Status (3 cols) -->
-<div class="lg:col-span-3 flex flex-col justify-between h-full bg-surface-container-low rounded-xl p-space-md">
-<div>
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Trạng thái soạn thảo</span>
-<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">60%</span>
-</div>
-<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mb-2">
-<div class="bg-primary-container h-full rounded-full" style="width: 60%;"></div>
-</div>
-<p class="font-body-sm text-body-sm text-text-muted">
-              Bản nháp cá nhân (Chưa gửi Ban Quản lý duyệt). Hãy bổ sung các mốc nghiệm thu chính.
-            </p>
-</div>
-<div class="pt-space-sm font-label-sm text-label-sm text-secondary flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">info</span>
-            Tự động lưu vào bộ nhớ tạm
-          </div>
-</div>
-<!-- Right Column: Actions (2 cols) -->
-<div class="lg:col-span-2 flex flex-row lg:flex-col justify-end lg:justify-center items-center lg:items-stretch gap-space-sm h-full">
-<button class="w-full h-10 px-space-md rounded-lg bg-brand-navy-dark text-on-primary hover:bg-primary font-label-md text-label-md flex items-center justify-center gap-1 shadow-sm transition-all cursor-pointer" type="button" data-href="05_dang-bai-toan-moi.html">
-<span>Tiếp tục soạn</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</button>
-<button class="w-full h-9 px-space-md rounded-lg bg-surface-container text-status-error hover:bg-error-container hover:text-on-error-container font-body-md text-body-md flex items-center justify-center gap-1 transition-colors" type="button">
-<span class="material-symbols-outlined text-[16px]">delete</span>
-            Xóa bản nháp
-          </button>
-<div class="relative group/menu self-center">
-<button aria-label="Tùy chọn khác" class="w-9 h-9 rounded-lg hover:bg-surface-container text-text-muted hover:text-on-surface flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">more_horiz</span>
-</button>
-</div>
-</div>
-</div>
-</div>
+<!-- Danh sách bài toán: assets/js/dn-bai-toan-list.js dựng thẻ từ dữ liệu trong dn-bai-toan-data.js -->
+<div class="hidden mb-space-md rounded-xl bg-status-warning/10 px-space-md py-space-sm flex items-start gap-space-sm font-body-sm text-body-sm text-on-surface" id="canh-bao-cuc-bo" role="note">
+<span class="material-symbols-outlined text-[18px] text-status-warning shrink-0">cloud_off</span>
+<span>Có <strong data-so>0</strong> bài toán vừa tạo hoặc sửa chỉ được lưu tạm trên trình duyệt này, <strong>chưa lưu lên máy chủ</strong> (chưa có API bài toán R&amp;D).</span>
+</div>
+<div class="flex flex-col gap-space-md mb-space-xl" id="ds-bai-toan" aria-live="polite">
+<noscript><p class="bg-surface-container-lowest rounded-xl p-space-lg font-body-md text-body-md text-on-surface-variant">Cần bật JavaScript để xem danh sách bài toán.</p></noscript>
 </div>
 <!-- Bottom Pagination & Status Bar -->
 <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-md mb-space-xl">
 <div class="font-body-sm text-body-sm text-text-muted flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-secondary"></span>
-      Hiển thị <span class="font-label-md text-label-md text-on-surface">5</span> trên tổng số <span class="font-label-md text-label-md text-on-surface">5</span> bài toán R&D
+      Hiển thị <span class="font-label-md text-label-md text-on-surface" id="dem-hien-thi">5</span> trên tổng số <span class="font-label-md text-label-md text-on-surface" id="dem-tong">5</span> bài toán R&D
     </div>
 <!-- Standard Workspace Pagination -->
 <div class="flex items-center gap-1">
@@ -940,6 +506,8 @@
 </div>
 </div>
 </div>
+<script src="../../assets/js/dn-bai-toan-data.js"></script>
+<script src="../../assets/js/dn-bai-toan-list.js"></script>
 <script src="../../assets/js/app-shell.js"></script>
 <script src="../../assets/js/ux-effects.js"></script>
 </body>

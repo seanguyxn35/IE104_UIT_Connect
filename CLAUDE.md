@@ -17,7 +17,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
   - Chung: đăng nhập email, đăng ký (SV/GV: auth 03–06, DN: auth 09–13), xác thực email, quên mật khẩu (auth 07–08), cài đặt tài khoản.
   - SV: xem/tìm tài nguyên học thuật (sv/02–03), hồ sơ năng lực & CV (sv/04), đề tài của tôi (sv/05), quản trị nhóm & portfolio (sv/06), chợ ghép nhóm + ứng tuyển đề tài Lab (sv/07), xin GV cố vấn (sv/08), cổng DN & bài toán R&D (sv/09), học bổng & tài trợ (sv/10), kho đã lưu (sv/12).
   - GV: hồ sơ khoa học (gv/02), đăng đề tài & hướng dẫn (gv/03), tuyển SV vào đề tài (gv/04), xử lý yêu cầu hướng dẫn (gv/05), thẩm định tài nguyên học thuật (gv/06–08), kho tài liệu (gv/09–10), nhóm nghiên cứu & Lab (gv/11), bài toán DN (gv/12), học bổng (gv/13), kho đã lưu (gv/14).
-  - DN: hồ sơ DN + giấy tờ xác minh (dn/02–03), đăng/quản lý bài toán R&D (dn/04–05), săn nhân tài + gửi lời mời (dn/06–07), hộp thư kết nối + không gian đàm phán (dn/08–09), học bổng & tài trợ (dn/10), kho đã lưu (dn/11).
+  - DN: hồ sơ DN + giấy tờ xác minh (dn/02–03), đăng/quản lý bài toán R&D (dn/04–05, biểu mẫu đề bài dn/14, chi tiết bài toán + hồ sơ dự án dn/15), săn nhân tài + gửi lời mời (dn/06–07), hộp thư kết nối + không gian đàm phán (dn/08–09, trong phòng đàm phán dn/16), học bổng & tài trợ (dn/10), kho đã lưu (dn/11).
   - Admin: duyệt hồ sơ DN, bài toán R&D, tin tuyển dụng, tài nguyên bị báo cáo; ghi `moderation_log` (theo `datab.pdf`). **Chưa có màn hình Admin** – `TBD`.
 - **Out-of-scope – KHÔNG tự thêm:** hợp đồng điện tử, thanh toán online, escrow, chat realtime, recommendation nâng cao,
   thông báo realtime nâng cao, analytics nâng cao, SSO UIT, xác minh GPKD nâng cao.
@@ -26,7 +26,11 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 
 - Email: SV bắt buộc `@gm.uit.edu.vn`, GV bắt buộc `@uit.edu.vn` (CHECK `ck_account_email_domain`). DN/Admin bắt buộc có mật khẩu.
 - Một `account` ↔ đúng một profile theo vai trò (quan hệ 1-1).
-- DN có `verified_status` `Pending|Verified|Rejected`, do Admin duyệt. Việc DN chưa duyệt bị chặn những gì: `TBD`.
+- DN có `verified_status` `Pending|Verified|Rejected`, do Admin duyệt. DN chưa xác minh **không bị chặn** thêm chức năng nào trong luồng DN (chốt 26/11/2026).
+- Bài toán R&D của DN (chốt 26/11/2026):
+  - Sửa bài đã được duyệt → quay về chờ Admin duyệt, gắn nhãn "Đã sửa".
+  - Xóa bài chưa từng được duyệt: chỉ cần xác nhận. Xóa bài đã được duyệt: bắt buộc nêu lý do (≥ 10 ký tự). Bài đang thực hiện (đã ký thỏa thuận): không xóa được.
+  - Proposal của SV cá nhân: thêm cột `student_id` vào `connection_request` (không coi là nhóm 1 người).
 - Ứng tuyển đề tài Lab (đã làm, `labApplicationService.js`):
   - R1: còn chỗ và chưa ứng tuyển → tạo một đơn `Pending` (201).
   - R2: đã có đơn cho đề tài (mọi trạng thái) → 409 `ALREADY_APPLIED`; CSDL chặn thêm bằng `uq_lab_application`.
@@ -141,6 +145,14 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - Chưa có xác thực, phân quyền, policy RLS.
 - Chưa có màn hình và API cho Admin.
 - Chỉ trang SV-04 và SV-07 gọi API (SV-05 mới lọc tab trên giao diện); các trang GV/DN còn dữ liệu tĩnh.
+- Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16) đã có tương tác nhưng **chưa có API**:
+  - Phòng đàm phán (dn/16): 3 bước Trao đổi kỹ thuật → NDA & IP → Hợp đồng, mỗi bước xong khi cả hai bên xác nhận. "Hợp đồng" chỉ ghi nhận đã ký ngoài hệ thống. "Nhắn tin" là trao đổi theo lượt, không phải chat realtime.
+  - Chưa có phía đối tác (SV/GV) để xác nhận, nên phòng mới mở sẽ dừng ở "Chờ đối tác".
+  - Dữ liệu mẫu dùng chung ở `assets/js/dn-bai-toan-data.js` (5 bài toán, 15 proposal).
+  - Bài DN tạo / sửa và thao tác Từ chối / Hẹn / Chấp nhận proposal chỉ lưu tạm trong `localStorage`; trang báo "chưa lưu lên máy chủ".
+  - Chỉ bài toán đã công khai (Đang mở, Đang thực hiện) mới có proposal; tệp đính kèm là PDF minh họa tạo trên trình duyệt.
+  - Sửa / xóa bài đăng theo quy tắc ở mục 3. Proposal và phòng đàm phán của bài đã xóa bị ẩn.
+  - Backend DN (sắp làm): tạm lấy danh tính từ `TEST_BUSINESS_ID` trong `.env`, giống `TEST_STUDENT_ID`.
 - Code gọi `/api/student-skills` đang viết thẳng trong HTML của SV-04, trái quy ước ở mục 6. Cần tách ra `assets/js/`.
 - Mâu thuẫn cần nhóm chốt:
   - Schema có `external_login` (`UIT_SSO`, `Microsoft365`) và màn auth 02 "SSO Microsoft 365", nhưng SSO UIT nằm ngoài phạm vi.
