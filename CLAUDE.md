@@ -78,7 +78,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `GET|POST /api/student-avatar`
   - `GET|PUT /api/profile-visibility`, `GET|PUT /api/profile-visibility/mode`
   - `GET|PUT /api/student-profile/links`
-  - `GET /api/student-cv`
+  - `GET /api/student-cv`, `GET /api/student-cv/pdf` (cần `playwright-core` và Edge/Chrome trên máy chủ)
   - `GET|POST /api/student-showcase`, `GET .../available`, `PUT .../order`, `PATCH|DELETE /api/student-showcase/:resourceId`
   - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
 - Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
