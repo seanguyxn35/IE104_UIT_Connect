@@ -16,6 +16,7 @@ import { studentAchievementsRouter } from './routes/studentAchievements.js';
 import { studentShowcaseRouter } from './routes/studentShowcase.js';
 import { businessInboxRouter } from './routes/businessInbox.js';
 import { businessNegotiationsRouter } from './routes/businessNegotiations.js';
+import { businessDashboardRouter } from './routes/businessDashboard.js';
 
 const app = express();
 const frontendDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend');
@@ -43,6 +44,7 @@ app.use('/api/student-achievements', studentAchievementsRouter);
 app.use('/api/student-showcase', studentShowcaseRouter);
 app.use('/api/business-inbox', businessInboxRouter);
 app.use('/api/business-negotiations', businessNegotiationsRouter);
+app.use('/api/business-dashboard', businessDashboardRouter);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ code: 'NOT_FOUND', message: 'API không tồn tại.' });
@@ -69,5 +71,5 @@ app.listen(config.port, () => {
   console.log(`UIT Connect: http://localhost:${config.port}`);
   console.log(`SV-07:       http://localhost:${config.port}/pages/sv/07_cho-ghep-nhom.html`);
   console.log(`Tài khoản thử: student_id = ${config.testStudentId}, business_id = ${config.testBusinessId}`);
-  console.log(`DN-08:       http://localhost:${config.port}/pages/dn/08_hop-thu-ket-noi.html`);
+  console.log(`DN-01:       http://localhost:${config.port}/pages/dn/01_ban-lam-viec.html`);
 });

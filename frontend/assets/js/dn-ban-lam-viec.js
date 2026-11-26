@@ -11,9 +11,52 @@
   var esc = D.escapeHtml;
   var $ = function (id) { return document.getElementById(id); };
 
-  var baiToan = D.layTatCa();
-  var proposal = D.layDanhSachProposal();
-  var phong = D.layDanhSachPhong();
+  var A = window.DnApi;
+
+  // ---------- Mô hình số liệu: từ API (có máy chủ) hoặc từ dữ liệu mẫu ----------
+  //   baiToan[] (kèm soProposal), moiNhat[] (≤ 3 proposal chờ phản hồi), soChoPhanHoi, soMoi,
+  //   loiMoiIds[], choXacNhanIds[], phong[]
+  function moHinhCucBo() {
+    var proposal = D.layDanhSachProposal();
+    var phong = D.layDanhSachPhong();
+    var choPhanHoi = proposal.filter(function (p) { return p.trangThai === 'cho-phan-hoi'; });
+    return {
+      baiToan: D.layTatCa().map(function (b) {
+        b.soProposal = proposal.filter(function (p) { return p.baiToan === b.ma; }).length;
+        return b;
+      }),
+      moiNhat: choPhanHoi.slice().sort(function (a, b) { return a.phutTruoc - b.phutTruoc; }).slice(0, 3),
+      soChoPhanHoi: choPhanHoi.length,
+      soMoi: choPhanHoi.filter(function (p) { return p.moi; }).length,
+      loiMoiIds: proposal.filter(function (p) { return p.laPhanHoiLoiMoi && p.trangThai !== 'tu-choi'; }).map(function (p) { return p.id; }),
+      choXacNhanIds: phong.filter(function (ph) { return ph.trangThai === 'cho-xac-nhan'; }).map(function (ph) { return ph.id; }),
+      phong: phong
+    };
+  }
+
+  function moHinhApi(d) {
+    var ngay = function (iso) { return iso ? String(iso).slice(0, 10) : ''; };
+    return {
+      baiToan: d.problems.map(function (b) {
+        var bt = A.baiToanTuApi(b);
+        bt.hanNop = b.deadline;
+        bt.ngayNop = ngay(b.createdAt);
+        bt.ngayLuu = ngay(b.createdAt);
+        bt.soProposal = b.proposalCount;
+        bt.duAn = b.partnerName ? { doiTac: b.partnerName } : null;
+        return bt;
+      }),
+      moiNhat: d.latestProposals.map(A.proposalTuApi),
+      soChoPhanHoi: d.counts.newProposals,
+      soMoi: d.counts.newUnread,
+      loiMoiIds: d.invitationReplyIds.map(String),
+      choXacNhanIds: d.awaitingRoomIds.map(String),
+      phong: d.rooms.map(A.phongTuApi)
+    };
+  }
+
+  function ve(m) {
+  var baiToan = m.baiToan, phong = m.phong;
 
   // ---------- 4 thẻ việc cần xử lý ----------
   function datThe(so, giaTri, href, tieuDeLink) {
@@ -22,17 +65,14 @@
     a.href = href;
     a.title = tieuDeLink;
   }
-  var choPhanHoi = proposal.filter(function (p) { return p.trangThai === 'cho-phan-hoi'; });
-  var loiMoi = proposal.filter(function (p) { return p.laPhanHoiLoiMoi && p.trangThai !== 'tu-choi'; });
-  var choXacNhan = phong.filter(function (ph) { return ph.trangThai === 'cho-xac-nhan'; });
-  var choDuyet = baiToan.filter(function (b) { return b.trangThai === 'cho-duyet'; });
+  var soChoDuyet = baiToan.filter(function (b) { return b.trangThai === 'cho-duyet'; }).length;
 
-  datThe(1, choPhanHoi.length, '08_hop-thu-ket-noi.html?tab=cho-phan-hoi', 'Mở tab Chờ phản hồi ở Hộp thư kết nối');
-  datThe(2, loiMoi.length, loiMoi.length === 1 ? '08_hop-thu-ket-noi.html?proposal=' + encodeURIComponent(loiMoi[0].id) : '08_hop-thu-ket-noi.html?tab=da-hen',
+  datThe(1, m.soChoPhanHoi, '08_hop-thu-ket-noi.html?tab=cho-phan-hoi', 'Mở tab Chờ phản hồi ở Hộp thư kết nối');
+  datThe(2, m.loiMoiIds.length, m.loiMoiIds.length === 1 ? '08_hop-thu-ket-noi.html?proposal=' + encodeURIComponent(m.loiMoiIds[0]) : '08_hop-thu-ket-noi.html?tab=da-hen',
     'Mở phản hồi lời mời ở Hộp thư kết nối');
-  datThe(3, choXacNhan.length, choXacNhan.length === 1 ? '16_phong-dam-phan.html?phong=' + encodeURIComponent(choXacNhan[0].id) + '#tien-trinh' : '09_khong-gian-dam-phan.html?trang-thai=cho-xac-nhan',
+  datThe(3, m.choXacNhanIds.length, m.choXacNhanIds.length === 1 ? '16_phong-dam-phan.html?phong=' + encodeURIComponent(m.choXacNhanIds[0]) + '#tien-trinh' : '09_khong-gian-dam-phan.html?trang-thai=cho-xac-nhan',
     'Mở phòng đàm phán đang chờ bạn xác nhận');
-  datThe(4, choDuyet.length, '04_bai-toan-rd.html?tab=cho-duyet', 'Mở tab Chờ Admin duyệt ở Bài toán R&D');
+  datThe(4, soChoDuyet, '04_bai-toan-rd.html?tab=cho-duyet', 'Mở tab Chờ Admin duyệt ở Bài toán R&D');
 
   // ---------- Bài toán R&D của tôi ----------
   var CHIP = {
@@ -51,10 +91,9 @@
   var dsBt = baiToan.slice().sort(function (a, b) { return THU_TU[a.trangThai] - THU_TU[b.trangThai]; }).slice(0, 4);
   $('bl-bai-toan').innerHTML = dsBt.map(function (b) {
     var ma = encodeURIComponent(b.ma);
-    var dsP = proposal.filter(function (p) { return p.baiToan === b.ma; });
     var meta = '', nutHtml = '';
     if (b.trangThai === 'dang-mo') {
-      meta = '<span class="flex items-center gap-1 text-primary font-medium"><span class="material-symbols-outlined text-[16px]">description</span>' + dsP.length + ' proposal đã nộp</span>' +
+      meta = '<span class="flex items-center gap-1 text-primary font-medium"><span class="material-symbols-outlined text-[16px]">description</span>' + b.soProposal + ' proposal đã nộp</span>' +
         '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">event</span>Hạn: ' + esc(D.dinhDangNgay(b.hanNop)) + '</span>';
       nutHtml = nut('05_dang-bai-toan-moi.html?ma=' + ma, LOP_NUT, 'Chỉnh sửa') + nut('08_hop-thu-ket-noi.html?bai-toan=' + ma, LOP_NUT_CHINH, 'Xem hồ sơ');
     } else if (b.trangThai === 'nhap') {
@@ -80,8 +119,8 @@
   }).join('');
 
   // ---------- Proposal mới nhất ----------
-  var moiNhat = choPhanHoi.slice().sort(function (a, b) { return a.phutTruoc - b.phutTruoc; }).slice(0, 3);
-  $('bl-so-moi').textContent = choPhanHoi.filter(function (p) { return p.moi; }).length + ' mới';
+  var moiNhat = m.moiNhat;
+  $('bl-so-moi').textContent = m.soMoi + ' mới';
   $('bl-proposal').innerHTML = moiNhat.length ? moiNhat.map(function (p) {
     var bt = baiToan.filter(function (b) { return b.ma === p.baiToan; })[0];
     var them = p.thanhVien.length - 2;
@@ -125,4 +164,16 @@
       '<a class="font-label-md text-label-md text-primary hover:text-secondary flex items-center gap-0.5 font-semibold" href="16_phong-dam-phan.html?phong=' + encodeURIComponent(ph.id) + '">' +
       '<span>Mở</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></a></div></div>';
   }).join('') || '<p class="font-body-sm text-body-sm text-text-muted">Chưa có phòng đàm phán.</p>';
+  }
+
+  // ---------- Bắt đầu: nạp dữ liệu rồi vẽ ----------
+  var thu = A.coMayChu() ? A.goi('/api/business-dashboard') : Promise.reject(null);
+  thu.then(function (d) {
+    A.veNguon(document.querySelector('section[aria-label="Các đầu việc cần xử lý"]'), true, '',
+      'số liệu và danh sách lấy từ CSDL. Trang Bài toán R&D (DN-04/05/15) vẫn dùng dữ liệu mẫu cho tới khi có API bài toán.');
+    ve(moHinhApi(d));
+  }, function (err) {
+    A.veNguon(document.querySelector('section[aria-label="Các đầu việc cần xử lý"]'), false, A.lyDoDuLieuMau(err), '');
+    ve(moHinhCucBo());
+  });
 })();
