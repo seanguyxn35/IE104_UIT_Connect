@@ -37,6 +37,18 @@ END $$;
 -- 1. Xóa dữ liệu thử DN cũ (kể cả dữ liệu ca kiểm thử tạo thêm trên các proposal thử)
 DELETE FROM rd_attachment WHERE attachment_id BETWEEN 9961 AND 9999
     OR (owner_type IN ('Request','Negotiation') AND owner_id BETWEEN 9901 AND 9950);
+-- Dữ liệu phía SV gắn với bài toán V-Tech (seed_sv_rd.sql + proposal SV nộp khi thử); chạy lại seed_sv_rd.sql sau file này
+DELETE FROM rd_attachment WHERE (owner_type = 'Request' AND owner_id IN (SELECT request_id FROM connection_request WHERE business_id = 9501))
+    OR (owner_type = 'Problem' AND owner_id IN (9084, 9079, 9071, 9091, 9904));
+DO $$
+BEGIN
+    -- saved_opportunity / problem_milestone tham chiếu business_problem (problem_milestone có từ migration 006)
+    DELETE FROM saved_opportunity WHERE problem_id IN (SELECT problem_id FROM business_problem WHERE business_id = 9501);
+    IF to_regclass('public.problem_milestone') IS NOT NULL THEN
+        DELETE FROM problem_milestone WHERE problem_id IN (SELECT problem_id FROM business_problem WHERE business_id = 9501);
+    END IF;
+END $$;
+DELETE FROM problem_skill WHERE problem_id IN (SELECT problem_id FROM business_problem WHERE business_id = 9501);
 DELETE FROM connection_meeting WHERE request_id BETWEEN 9901 AND 9950;
 DELETE FROM connection_request WHERE request_id BETWEEN 9901 AND 9950 OR business_id = 9501;
 DELETE FROM team_member WHERE team_id BETWEEN 9801 AND 9850;

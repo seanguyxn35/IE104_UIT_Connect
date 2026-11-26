@@ -111,6 +111,8 @@ export async function getInbox(businessId) {
     .select(COT_YEU_CAU)
     .eq('business_id', businessId)
     .not('problem_id', 'is', null)
+    // Proposal SV đã rút (SV-13) không hiện trong hộp thư
+    .neq('status', 'Cancelled')
     .order('created_at', { ascending: false });
   if (rError) throw rError;
 
