@@ -875,13 +875,66 @@
     } catch (e) { return {}; }
   }
 
+  // ---------- Proposal sinh viên nộp từ SV-13 (Chi tiết & ứng tuyển bài toán R&D) ----------
+  // Lưu tạm trên trình duyệt; proposal nộp cho bài toán của DN này hiện luôn trong Hộp thư kết nối (DN-08).
+  var KHOA_SV_PROPOSAL = 'uitc.sv.proposal.v1';
+
+  function docSvProposal() {
+    try {
+      var ds = JSON.parse(window.localStorage.getItem(KHOA_SV_PROPOSAL) || '[]');
+      return Array.isArray(ds) ? ds : [];
+    } catch (e) { return []; }
+  }
+
+  function ghiSvProposal(ds) {
+    try { window.localStorage.setItem(KHOA_SV_PROPOSAL, JSON.stringify(ds)); return true; }
+    catch (e) { return false; }
+  }
+
+  // "Vừa xong", "5 phút trước"... tính từ thời điểm gửi (ISO)
+  function thoiGianTruoc(phut) {
+    if (phut < 1) return 'Vừa xong';
+    if (phut < 60) return phut + ' phút trước';
+    if (phut < 1440) return Math.floor(phut / 60) + ' giờ trước';
+    if (phut < 10080) return Math.floor(phut / 1440) + ' ngày trước';
+    return Math.floor(phut / 10080) + ' tuần trước';
+  }
+
+  function svProposalDayDu(p) {
+    var ban = nhanBan(p);
+    var phut = Math.max(0, Math.round((Date.now() - new Date(p.guiLuc).getTime()) / 60000)) || 0;
+    ban.phutTruoc = phut;
+    ban.thoiGian = thoiGianTruoc(phut);
+    ban.tuSinhVien = true;
+    return ban;
+  }
+
+  // Thêm proposal mới (đã kiểm tra hợp lệ ở trang SV). Trả về false nếu trình duyệt chặn lưu.
+  function nopProposalSv(p) {
+    var ds = docSvProposal();
+    ds.push(p);
+    return ghiSvProposal(ds);
+  }
+
+  // Rút proposal: chỉ khi DN chưa phản hồi. Xóa cả thay đổi DN đã lưu cho proposal đó.
+  function rutProposalSv(id) {
+    var ds = docSvProposal();
+    var conLai = ds.filter(function (p) { return p.id !== id; });
+    if (conLai.length === ds.length) return false;
+    var kho = docHopThu();
+    delete kho[id];
+    try { window.localStorage.setItem(KHOA_HOP_THU, JSON.stringify(kho)); } catch (e) { /* bỏ qua */ }
+    return ghiSvProposal(conLai);
+  }
+
   // Danh sách proposal đã áp các thay đổi DN thực hiện trên trình duyệt này
   function layDanhSachProposal() {
     var kho = docHopThu();
     // Ẩn proposal của bài toán đã bị xóa
     var conBaiToan = {};
     layTatCa().forEach(function (b) { conBaiToan[b.ma] = true; });
-    return PROPOSAL_MAU.filter(function (p) { return conBaiToan[p.baiToan]; }).map(function (p) {
+    var tuSv = docSvProposal().map(svProposalDayDu);
+    return tuSv.concat(PROPOSAL_MAU).filter(function (p) { return conBaiToan[p.baiToan]; }).map(function (p) {
       var ban = nhanBan(p);
       var sua = kho[p.id];
       if (sua) { Object.assign(ban, sua); ban.luuCucBo = true; }
@@ -1129,6 +1182,9 @@
     daTungDuyet: daTungDuyet,
     xoaBaiToanCoXacNhan: xoaBaiToanCoXacNhan,
     taoMaTam: taoMaTam,
-    proposalCuaBaiToan: proposalCuaBaiToan
+    proposalCuaBaiToan: proposalCuaBaiToan,
+    docSvProposal: docSvProposal,
+    nopProposalSv: nopProposalSv,
+    rutProposalSv: rutProposalSv
   };
 })();

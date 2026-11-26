@@ -1,5 +1,6 @@
-// Tải tệp PDF minh họa cho các tệp đính kèm dữ liệu thử DN (rd_attachment 9961–9999) lên bucket riêng tư "rd-files".
-// Chạy SAU database/seed_dn.sql:   cd backend && npm run seed:dn-files
+// Tải tệp PDF minh họa cho các tệp đính kèm dữ liệu thử lên bucket riêng tư "rd-files":
+//   rd_attachment 9961–9999 (seed_dn.sql: proposal + phòng đàm phán), 9931–9949 (seed_sv_rd.sql: tệp đề bài).
+// Chạy SAU database/seed_dn.sql (và seed_sv_rd.sql nếu có):   cd backend && npm run seed:dn-files
 // Chạy lại nhiều lần vẫn được (ghi đè tệp cũ). Chỉ đụng tới tệp của dữ liệu thử.
 import { supabase } from '../src/db.js';
 
@@ -42,7 +43,7 @@ await ensureBucket();
 const { data: tep, error } = await supabase
   .from('rd_attachment')
   .select('attachment_id, owner_type, owner_id, file_name, storage_path, doc_type')
-  .gte('attachment_id', 9961)
+  .gte('attachment_id', 9931)
   .lte('attachment_id', 9999)
   .order('attachment_id');
 if (error) throw error;
