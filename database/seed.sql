@@ -33,8 +33,8 @@ BEGIN;
 -- ---------------------------------------------------------------------
 INSERT INTO account (account_id, email, password_hash, role, is_active, email_verified_at, terms_accepted_at)
 VALUES
-    (9101, 'test.sv.a@gm.uit.edu.vn', NULL, 'Student',  true, now(), now()),
-    (9102, 'test.sv.b@gm.uit.edu.vn', NULL, 'Student',  true, now(), now()),
+    (9101, '23529101@gm.uit.edu.vn', NULL, 'Student',  true, now(), now()),
+    (9102, '23529102@gm.uit.edu.vn', NULL, 'Student',  true, now(), now()),
     (9201, 'test.gv@uit.edu.vn',      NULL, 'Lecturer', true, now(), now())
 ON CONFLICT (account_id) DO UPDATE SET
     email     = EXCLUDED.email,
@@ -47,8 +47,8 @@ ON CONFLICT (account_id) DO UPDATE SET
 INSERT INTO student_profile (student_id, full_name, student_code, major_id, class_name, cohort, enrollment_year, gpa)
 SELECT s.student_id, s.full_name, s.student_code, m.major_id, 'KHMT2023', 'K18', 2023, s.gpa
 FROM (VALUES
-    (9101, 'Sinh viên Thử A', 'TEST0001', 8.20),
-    (9102, 'Sinh viên Thử B', 'TEST0002', 8.50)
+    (9101, 'Sinh viên Thử A', '23529101', 8.20),
+    (9102, 'Sinh viên Thử B', '23529102', 8.50)
 ) AS s(student_id, full_name, student_code, gpa)
 JOIN major AS m ON m.name = 'Trí tuệ Nhân tạo & Thị giác máy tính'
 ON CONFLICT (student_id) DO UPDATE SET

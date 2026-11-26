@@ -1,4 +1,4 @@
-// API "Bài toán DN & R&D" phía Sinh viên (SV-09, SV-13). Danh tính SV lấy ở máy chủ (TEST_STUDENT_ID), không nhận từ client.
+// API "Bài toán DN & R&D" phía Sinh viên (SV-09, SV-13). Danh tính SV lấy từ phiên đăng nhập ở máy chủ (authMiddleware), không nhận từ client.
 //   GET    /api/student-rd-problems                         -> 200 { problems, saved }
 //   POST   /api/student-rd-problems/proposal-files          (thân = tệp PDF ≤ 10 MB, header X-File-Name)
 //                                                           -> 201 { uploadId, fileName, sizeBytes } | 400 | 413 FILE_TOO_LARGE | 415 UNSUPPORTED_TYPE
@@ -13,7 +13,6 @@
 //   GET    /api/student-rd-problems/:code/attachments/:attachmentId[?download=1]                 -> 200 { url, fileName, expiresIn }
 //   GET    /api/student-rd-problems/:code/proposals/:id/attachments/:attachmentId[?download=1]  -> 200 { url, fileName, expiresIn }
 import express, { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import { soNguyenDuong, chuoiTuyChon } from '../validation.js';
 import {
@@ -68,7 +67,7 @@ function docProposal(body) {
 }
 
 studentRdProblemsRouter.get('/', async (req, res) => {
-  res.json(await listProblems(config.testStudentId));
+  res.json(await listProblems(req.user.accountId));
 });
 
 studentRdProblemsRouter.post(
@@ -80,33 +79,33 @@ studentRdProblemsRouter.post(
     }
     let ten = req.get('x-file-name') || 'proposal.pdf';
     try { ten = decodeURIComponent(ten); } catch { /* giữ nguyên */ }
-    res.status(201).json(await uploadProposalFile(config.testStudentId, req.body, ten));
+    res.status(201).json(await uploadProposalFile(req.user.accountId, req.body, ten));
   },
 );
 
 studentRdProblemsRouter.get('/:code', async (req, res) => {
-  res.json(await getProblem(config.testStudentId, maBaiToan(req.params.code)));
+  res.json(await getProblem(req.user.accountId, maBaiToan(req.params.code)));
 });
 
 studentRdProblemsRouter.put('/:code/saved', async (req, res) => {
-  res.json(await saveProblem(config.testStudentId, maBaiToan(req.params.code)));
+  res.json(await saveProblem(req.user.accountId, maBaiToan(req.params.code)));
 });
 
 studentRdProblemsRouter.delete('/:code/saved', async (req, res) => {
-  await unsaveProblem(config.testStudentId, maBaiToan(req.params.code));
+  await unsaveProblem(req.user.accountId, maBaiToan(req.params.code));
   res.status(204).end();
 });
 
 studentRdProblemsRouter.post('/:code/proposals', async (req, res) => {
   const code = maBaiToan(req.params.code);
   const input = docProposal(req.body);
-  res.status(201).json(await submitProposal(config.testStudentId, code, input));
+  res.status(201).json(await submitProposal(req.user.accountId, code, input));
 });
 
 studentRdProblemsRouter.post('/:code/proposals/:id/withdraw', async (req, res) => {
   const code = maBaiToan(req.params.code);
   const id = soNguyenDuong(req.params.id, 'Mã proposal');
-  res.json(await withdrawProposal(config.testStudentId, code, id));
+  res.json(await withdrawProposal(req.user.accountId, code, id));
 });
 
 studentRdProblemsRouter.get('/:code/attachments/:attachmentId', async (req, res) => {
@@ -119,7 +118,7 @@ studentRdProblemsRouter.get('/:code/proposals/:id/attachments/:attachmentId', as
   const code = maBaiToan(req.params.code);
   const id = soNguyenDuong(req.params.id, 'Mã proposal');
   const attachmentId = soNguyenDuong(req.params.attachmentId, 'Mã tệp');
-  res.json(await getProposalAttachmentUrl(config.testStudentId, code, id, attachmentId, req.query.download === '1'));
+  res.json(await getProposalAttachmentUrl(req.user.accountId, code, id, attachmentId, req.query.download === '1'));
 });
 
 // Tệp quá lớn: báo đúng giới hạn của proposal (bộ xử lý chung trong server.js dành cho ảnh đại diện)

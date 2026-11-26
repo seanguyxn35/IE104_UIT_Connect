@@ -5,7 +5,6 @@
 //   GET /api/profile-visibility/mode                 -> 200 { visibility }
 //   PUT /api/profile-visibility/mode { visibility }  -> 200 { visibility } | 400 INVALID_INPUT
 import { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import {
   PROFILE_MODES,
@@ -19,7 +18,7 @@ import {
 export const profileVisibilityRouter = Router();
 
 profileVisibilityRouter.get('/mode', async (req, res) => {
-  res.json(await getProfileMode(config.testStudentId));
+  res.json(await getProfileMode(req.user.accountId));
 });
 
 profileVisibilityRouter.put('/mode', async (req, res) => {
@@ -27,11 +26,11 @@ profileVisibilityRouter.put('/mode', async (req, res) => {
   if (!PROFILE_MODES.includes(visibility)) {
     throw new AppError(400, 'INVALID_INPUT', `visibility phải là một trong: ${PROFILE_MODES.join(', ')}.`);
   }
-  res.json(await setProfileMode(config.testStudentId, visibility));
+  res.json(await setProfileMode(req.user.accountId, visibility));
 });
 
 profileVisibilityRouter.get('/', async (req, res) => {
-  res.json(await getVisibility(config.testStudentId));
+  res.json(await getVisibility(req.user.accountId));
 });
 
 profileVisibilityRouter.put('/', async (req, res) => {
@@ -42,5 +41,5 @@ profileVisibilityRouter.put('/', async (req, res) => {
   if (typeof isPublic !== 'boolean') {
     throw new AppError(400, 'INVALID_INPUT', 'isPublic phải là true hoặc false.');
   }
-  res.json(await setVisibility(config.testStudentId, field, isPublic));
+  res.json(await setVisibility(req.user.accountId, field, isPublic));
 });

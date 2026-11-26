@@ -3,14 +3,13 @@
 //   POST   /api/student-skills            -> 201 kỹ năng | 400 INVALID_INPUT | 409 ALREADY_EXISTS
 //   DELETE /api/student-skills/:skillId   -> 204 | 400 INVALID_INPUT | 404 SKILL_NOT_FOUND
 import { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import { CATEGORY_KEYS, addSkill, listSkills, removeSkill } from '../services/studentSkillService.js';
 
 export const studentSkillsRouter = Router();
 
 studentSkillsRouter.get('/', async (req, res) => {
-  res.json({ skills: await listSkills(config.testStudentId) });
+  res.json({ skills: await listSkills(req.user.accountId) });
 });
 
 studentSkillsRouter.post('/', async (req, res) => {
@@ -28,7 +27,7 @@ studentSkillsRouter.post('/', async (req, res) => {
     throw new AppError(400, 'INVALID_INPUT', 'Lĩnh vực không hợp lệ.');
   }
 
-  res.status(201).json(await addSkill(config.testStudentId, { name, level, category }));
+  res.status(201).json(await addSkill(req.user.accountId, { name, level, category }));
 });
 
 studentSkillsRouter.delete('/:skillId', async (req, res) => {
@@ -36,6 +35,6 @@ studentSkillsRouter.delete('/:skillId', async (req, res) => {
   if (!Number.isInteger(skillId) || skillId <= 0) {
     throw new AppError(400, 'INVALID_INPUT', 'skillId không hợp lệ.');
   }
-  await removeSkill(config.testStudentId, skillId);
+  await removeSkill(req.user.accountId, skillId);
   res.status(204).end();
 });

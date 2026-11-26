@@ -11,11 +11,13 @@ database/
 ├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
 ├── seed_showcase.sql        # tài nguyên đã / chưa thẩm định (ID 9301–9306) cho mục "Công trình trưng bày trên CV"
 ├── seed_dn.sql              # Dữ liệu thử luồng Doanh nghiệp (DN 9501, 5 bài toán, 15 proposal); chạy lại để đặt lại
+├── seed_auth.sql            # Đăng nhập: Admin 9001, mật khẩu thử MatKhau@123, email SV dạng MSSV; chạy SAU seed_sv_rd.sql
 ├── seed_sv_rd.sql           # Bài toán R&D phía SV (SV-09/13): 15 bài của DN/Lab khác, chi tiết đề bài V-Tech, nhóm thử 9821–9823; chạy SAU seed_dn.sql
 ├── migrations/           # Thay đổi lược đồ sau bản đầu (chạy trên Supabase rồi gộp vào schema.postgres.sql)
 │   ├── 004_dn_hop_thu_ket_noi.sql      # Hộp thư kết nối DN: proposal SV cá nhân, lịch hẹn, tệp đính kèm
 │   ├── 005_dn_khong_gian_dam_phan.sql  # Phòng đàm phán: 3 bước xác nhận hai bên, trao đổi theo lượt
-│   └── 006_sv_bai_toan_rd.sql          # Bài toán R&D phía SV: chi tiết đề bài, mốc, chặn nộp trùng, lưu bài
+│   ├── 006_sv_bai_toan_rd.sql          # Bài toán R&D phía SV: chi tiết đề bài, mốc, chặn nộp trùng, lưu bài
+│   └── 007_dang_nhap.sql               # Đăng nhập: mã đặt lại mật khẩu (Reset_Token), chỉ mục phiên
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 
@@ -26,8 +28,8 @@ Toàn bộ là dữ liệu giả, ID cố định trong dải 9xxx:
 
 | Dữ liệu | ID | Ca |
 |---|---|---|
-| SV A – tài khoản thử (`test.sv.a@gm.uit.edu.vn`) | `account_id = 9101` | Mọi ca |
-| SV B (`test.sv.b@gm.uit.edu.vn`) | `account_id = 9102` | TC03 |
+| SV A – tài khoản thử (`23529101@gm.uit.edu.vn`) | `account_id = 9101` | Mọi ca |
+| SV B (`23529102@gm.uit.edu.vn`) | `account_id = 9102` | TC03 |
 | GV (`test.gv@uit.edu.vn`) | `account_id = 9201` | Mọi ca |
 | Đề tài 1: slots = 3, Open, chưa có đơn | `topic_id = 9001` | TC01 → R1 |
 | Đề tài 2: SV A đã có đơn Pending | `topic_id = 9002` | TC02 → R2 |

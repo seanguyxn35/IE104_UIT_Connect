@@ -75,16 +75,20 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
-- **Chưa có đăng nhập ở backend**: danh tính lấy từ `TEST_STUDENT_ID` trong `.env`.
-  - Đã chốt hướng: phiên đăng nhập phía máy chủ, cookie HttpOnly `uitc_session`, bảng `login_session`.
-  - Giao diện đã làm (nhánh `feature/nhan-dang-nhap`). Hợp đồng `/api/auth/*` (đăng nhập, phiên, đăng xuất, quên mật khẩu) ghi ở đầu `assets/js/auth.js`; backend chưa làm.
+- **Đăng nhập theo vai trò** (nhánh `feature/nhan-dang-nhap` giao diện, `feature/nhan-backend-dang-nhap` backend):
+  - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
+  - `services/authService.js`, `routes/auth.js` (`/api/auth/*`), `authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
+  - Route lấy danh tính từ `req.user.accountId`. `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho `Student`; `/api/business-*` chỉ cho `Business`.
+  - `AUTH_MODE=test` (mặc định): gọi API không kèm phiên thì dùng `TEST_STUDENT_ID` / `TEST_BUSINESS_ID` (script test cũ vẫn chạy). `AUTH_MODE=session`: bắt buộc đăng nhập (401).
+  - Quên mật khẩu: mã 6 số trong `verification_code` (`Password_Reset`), sau đó `Reset_Token`. Chưa có dịch vụ email nên mã **in ra log máy chủ** – `TBD`.
+  - Đếm "sai 5 lần / 15 phút" và "gửi lại sau 60 giây" nằm trong bộ nhớ máy chủ (khởi động lại thì xóa).
   - Hai cổng đăng nhập:
     - auth/02 "UIT SSO": chỉ email UIT.
       - SV: đúng 8 chữ số MSSV + `@gm.uit.edu.vn` (vd `24521228@gm.uit.edu.vn`).
       - GV: `@uit.edu.vn`, phần trước `@` bắt đầu bằng chữ cái, không toàn số.
       - Admin: dùng cổng này.
       - Sai định dạng: 400 `INVALID_EMAIL`.
-    - **Dữ liệu thử chưa khớp:** 41 email SV trong `seed*.sql` (`test.sv.a@…`, `test.dn.21520001@…`) sai định dạng. Backend phải đổi sang `<MSSV 8 số>@gm.uit.edu.vn` (SV 9101/9102 đang có `student_code` `TEST0001/0002`).
+    - Email SV thử đã đổi sang dạng MSSV: 9101 → `23529101@gm.uit.edu.vn`, 9102 → `23529102@…`, 9601–9639 → `<student_code>@gm.uit.edu.vn`. `seed_auth.sql` tự sửa CSDL đã nạp bản cũ.
     - auth/01 "Email và mật khẩu": Doanh nghiệp, email không thuộc UIT.
     - Email sai cổng thì báo chuyển cổng; máy chủ trả 403 `WRONG_PORTAL`.
   - Admin là tài khoản riêng `admin.uitconnect@uit.edu.vn` (role `Admin`, đăng nhập qua UIT SSO). CSDL chưa có tài khoản này, backend phải seed.
@@ -149,7 +153,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Commit `type(scope): mô tả` (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`). PR cần ít nhất 1 người review.
 - Không commit `.env`, khóa Supabase, `node_modules/`.
 - Mỗi chức năng phải có test case dương và âm (400 / 401 / 403 / 409).
-  - Hiện chưa có đăng nhập nên chưa kiểm thử được 401/403 – `TBD`.
+  - 401/403: kiểm thử bằng phiên đăng nhập thật (`npm run test:auth`); ca 401 của API cần `AUTH_MODE=session`.
 - Dữ liệu thử dùng ID dải 9xxx; không đụng dữ liệu ngoài dải khi test. Test xong phải dọn dữ liệu đã tạo.
 - Đặt lại dữ liệu thử của chức năng ứng tuyển bằng `database/reset.sql` trước khi test hoặc demo.
 
@@ -170,12 +174,14 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
   - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` → `005_dn_khong_gian_dam_phan.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
   - Bài toán R&D phía SV: `migrations/006_sv_bai_toan_rd.sql` (một lần) → `seed_sv_rd.sql` (sau `seed_dn.sql`; chạy lại `seed_dn.sql` thì chạy lại file này) → `npm run seed:dn-files`.
+  - Đăng nhập: `migrations/007_dang_nhap.sql` (một lần) → `seed_auth.sql` (sau `seed_sv_rd.sql`; chạy lại seed khác thì chạy lại file này).
+    Mật khẩu chung các tài khoản thử: `MatKhau@123`. Admin 9001 `admin.uitconnect@uit.edu.vn`; SV 9103 chưa xác thực email, 9104 bị khóa.
     ID: DN/Lab khác 9511–9525; bài toán 9301–9315 (RD-2026-101..115); nhóm thử 9821 (SV 9101 trưởng nhóm), 9822 (9101 là thành viên), 9823 (5 người); tệp đề bài 9931–9950.
     `seed_dn.sql` được sinh từ dữ liệu mẫu của giao diện (`dn-bai-toan-data.js`). ID dùng:
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915
     - Lịch 9951–9957; tin 9001–9014; tệp 9961–9989
-- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd` (máy chủ đang chạy, tự dọn dữ liệu).
+- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
 
 ## 9. Việc đang mở / lưu ý
 
@@ -185,7 +191,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - `README.md` gốc đã cũ: vẫn ghi "backend chưa có mã nguồn", "CSDL SQL Server", chạy bằng Live Server. Cần cập nhật.
 - `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
 - CSDL chung đã có các cột của migration 001.
-- Chưa có xác thực ở backend, phân quyền, policy RLS (giao diện đăng nhập đã sẵn, xem mục 5).
+- Đã có đăng nhập + phân quyền theo vai trò ở backend (mục 5); chưa có policy RLS, chưa có API đăng ký tài khoản, chưa có dịch vụ gửi email.
 - Màn đăng ký (03–06, 09–13) vẫn là giả lập, chưa gọi API. "UIT SSO" thực chất là đăng nhập email + mật khẩu giới hạn email UIT (SSO thật nằm ngoài phạm vi).
 - Chưa có màn hình và API cho Admin.
 - Trang SV gọi API: SV-04, SV-07, SV-09, SV-13 (SV-05 mới lọc tab trên giao diện); trang GV còn dữ liệu tĩnh.

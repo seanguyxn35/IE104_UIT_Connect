@@ -7,7 +7,6 @@
 //   DELETE /api/student-showcase/:resourceId -> 204 | 404 SHOWCASE_NOT_FOUND
 //   PUT    /api/student-showcase/order  { resourceIds: [...] } -> 200 { items } | 400 INVALID_INPUT
 import { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import {
   addToShowcase,
@@ -50,11 +49,11 @@ const PARSERS = {
 };
 
 studentShowcaseRouter.get('/', async (req, res) => {
-  res.json({ items: await listShowcase(config.testStudentId) });
+  res.json({ items: await listShowcase(req.user.accountId) });
 });
 
 studentShowcaseRouter.get('/available', async (req, res) => {
-  res.json({ resources: await listAvailable(config.testStudentId) });
+  res.json({ resources: await listAvailable(req.user.accountId) });
 });
 
 studentShowcaseRouter.post('/', async (req, res) => {
@@ -65,7 +64,7 @@ studentShowcaseRouter.post('/', async (req, res) => {
     highlights: PARSERS.highlights(body.highlights),
     isShownOnCv: body.isShownOnCv === undefined ? true : parseShown(body.isShownOnCv),
   };
-  res.status(201).json(await addToShowcase(config.testStudentId, input));
+  res.status(201).json(await addToShowcase(req.user.accountId, input));
 });
 
 studentShowcaseRouter.put('/order', async (req, res) => {
@@ -73,7 +72,7 @@ studentShowcaseRouter.put('/order', async (req, res) => {
   if (!Array.isArray(ids)) throw invalid('resourceIds phải là mảng.');
   ids.forEach(parseId);
   if (new Set(ids).size !== ids.length) throw invalid('resourceIds không được lặp.');
-  res.json({ items: await reorderShowcase(config.testStudentId, ids) });
+  res.json({ items: await reorderShowcase(req.user.accountId, ids) });
 });
 
 studentShowcaseRouter.patch('/:resourceId', async (req, res) => {
@@ -81,10 +80,10 @@ studentShowcaseRouter.patch('/:resourceId', async (req, res) => {
   const fields = Object.keys(PARSERS).filter((f) => req.body?.[f] !== undefined);
   if (fields.length === 0) throw invalid(`Cần gửi ít nhất một trong: ${Object.keys(PARSERS).join(', ')}.`);
   const changes = Object.fromEntries(fields.map((f) => [f, PARSERS[f](req.body[f])]));
-  res.json(await updateShowcaseItem(config.testStudentId, resourceId, changes));
+  res.json(await updateShowcaseItem(req.user.accountId, resourceId, changes));
 });
 
 studentShowcaseRouter.delete('/:resourceId', async (req, res) => {
-  await removeFromShowcase(config.testStudentId, parseId(Number(req.params.resourceId)));
+  await removeFromShowcase(req.user.accountId, parseId(Number(req.params.resourceId)));
   res.status(204).end();
 });
