@@ -71,7 +71,16 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `DELETE` | `/api/student-showcase/:resourceId` | Gỡ khỏi danh sách (giữ nguyên tài nguyên gốc) → 204; 404 `SHOWCASE_NOT_FOUND` |
 | `PUT` | `/api/student-showcase/order` | Sắp xếp `{ "resourceIds": [...] }` (đúng đủ các mục đang chọn) → 200 `{ items }`; sai → 400 |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
+| `GET` | `/api/student-rd-problems` | Bài toán R&D đã được duyệt công khai (Open / In_Progress) cho SV-09: `{ problems: [{ id, code, title, summary, type, fieldName, status, isOpen, funding, fundingMin, deadline, acceptedPartners, skills, business, saved, myProposal, fitScore }], saved: [problemId] }` |
+| `GET` | `/api/student-rd-problems/:code` | Chi tiết cho SV-13 (thêm mô tả, quy mô nhóm, TRL, sản phẩm, NDA, mốc, tệp đề bài, proposal của tôi, nhóm & GV để chọn) → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND` |
+| `PUT` / `DELETE` | `/api/student-rd-problems/:code/saved` | Lưu → 200 `{ saved: true }` (lưu lại vẫn 200) / bỏ lưu → 204; 404 |
+| `POST` | `/api/student-rd-problems/proposal-files` | Bước 1: tải tệp proposal, thân là tệp PDF ≤ 10 MB, header `X-File-Name` → 201 `{ uploadId, fileName, sizeBytes }`; không phải PDF (kiểm tra nội dung) → 415; quá lớn → 413 |
+| `POST` | `/api/student-rd-problems/:code/proposals` | Bước 2: nộp `{ partnerType: "Student"\|"Team"\|"Lab", teamId?, lecturerId?, title, content, trlLabel, durationWeeks?, coverLetter?, ndaAccepted, confirmed: true, uploadId }` → 201. Thứ tự kiểm tra: 404 `PROBLEM_NOT_FOUND` → 409 `PROBLEM_CLOSED` → 409 `PARTNER_TYPE_NOT_ACCEPTED` → 404 `TEAM_NOT_FOUND` / 403 `NOT_TEAM_LEADER` / 409 `TEAM_SIZE_MISMATCH` / 400 `LECTURER_NOT_FOUND` → 409 `ALREADY_APPLIED` → 400 `NDA_REQUIRED` → 400 `UPLOAD_NOT_FOUND`. Proposal hiện ngay trong `/api/business-inbox` của DN |
+| `POST` | `/api/student-rd-problems/:code/proposals/:id/withdraw` | Rút proposal (chỉ người gửi, chỉ khi `Submitted`) → 200 `Cancelled`; không phải của mình → 404; DN đã phản hồi → 409 `INVALID_STATE`. Proposal đã rút không hiện trong hộp thư DN và SV nộp lại được |
+| `GET` | `/api/student-rd-problems/:code/attachments/:attachmentId`, `.../proposals/:id/attachments/:attachmentId` | Liên kết ký tạm 60 giây (`?download=1` để tải về) cho tệp đề bài / tệp proposal của mình |
 
 **Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
+
+Kiểm thử API bài toán R&D phía SV (cần máy chủ đang chạy, đã chạy migration 006 + `database/seed_sv_rd.sql`): `npm run test:sv-rd` (tự dọn dữ liệu đã tạo).
 
 Hợp đồng chi tiết (mã phản hồi, body mẫu): xem DESIGN.md trong gói nộp bài, mục 3.3.
