@@ -13,7 +13,7 @@
   var ZOOM_STEPS = [0.5, 0.6, 0.75, 0.9, 1, 1.25];
 
   var TYPE_LABELS = { Project: 'Dự án', Product: 'Sản phẩm', Paper: 'Bài báo', Thesis: 'Khóa luận', Textbook: 'Giáo trình', Slide: 'Bài giảng' };
-  var CATEGORY_LABELS = { Award: 'Giải thưởng', Publication: 'Công bố', Language_Cert: 'Ngoại ngữ', Tech_Cert: 'Công nghệ' };
+  var CATEGORY_LABELS = { Award: 'Giải thưởng', Publication: 'Công bố bên ngoài hệ thống', Language_Cert: 'Ngoại ngữ', Tech_Cert: 'Công nghệ' };
   var STATUS_TAGS = {
     Self_Declared: { text: 'Tự khai', className: 'cvp-tag cvp-tag-self' },
     Pending: { text: 'Chờ xác minh', className: 'cvp-tag' },
@@ -90,6 +90,12 @@
     return items.length ? h('ul', null, items.map(function (s) { return h('li', null, [s]); })) : null;
   }
 
+  // Công bố bên ngoài hệ thống: luôn ghi "SV tự cung cấp" và không dùng màu của bài đã thẩm định
+  function publicationTag(status) {
+    var extra = status === 'Pending' ? ' · Chờ xác minh' : status === 'Verified' ? ' · Đã xác minh' : '';
+    return { text: 'SV tự cung cấp' + extra, className: 'cvp-tag cvp-tag-self' };
+  }
+
   // ---------- Dựng tờ CV ----------
   function buildSheet(cv) {
     var uni = cv.university || {};
@@ -154,12 +160,12 @@
     var parts = 0;
     if ((cv.projects || []).length) {
       parts++;
-      main.appendChild(section('Dự án tiêu biểu', cv.projects.map(function (p) {
+      main.appendChild(section('Công trình & Project trưng bày', cv.projects.map(function (p) {
         var meta = [TYPE_LABELS[p.type] || p.type, p.venue, p.trlLevel ? 'TRL ' + p.trlLevel : null].filter(Boolean).join(' · ');
         return h('div', 'cvp-item', [
           h('div', 'cvp-item-head', [h('span', null, [p.title]), h('time', null, [monthYear(p.date)])]),
           (p.role || meta) && h('p', 'cvp-item-sub', [[p.role, meta].filter(Boolean).join(' — ')]),
-          p.reviewerName && h('p', 'cvp-muted-dark', ['Đã được thẩm định bởi ' + p.reviewerName]),
+          p.reviewerName && h('p', 'cvp-muted-dark', ['Đã thẩm định bởi ' + p.reviewerName]),
           bullets(p.highlights)
         ]);
       })));
@@ -174,11 +180,11 @@
         ]);
       })));
     }
-    [['Danh hiệu & giải thưởng', cv.awards], ['Chứng chỉ', cv.certificates]].forEach(function (pair) {
+    [['Thành tích', cv.awards], ['Chứng chỉ', cv.certificates]].forEach(function (pair) {
       if (!(pair[1] || []).length) return;
       parts++;
       main.appendChild(section(pair[0], pair[1].map(function (a) {
-        var tag = STATUS_TAGS[a.status];
+        var tag = a.category === 'Publication' ? publicationTag(a.status) : STATUS_TAGS[a.status];
         var text = [a.title, a.issuedBy].filter(Boolean).join(' – ');
         return h('div', 'cvp-row', [
           h('time', null, [year(a.issuedDate)]),
@@ -186,6 +192,7 @@
             h('span', null, [text]),
             tag && h('span', tag.className, [tag.text]),
             a.detail && h('p', 'cvp-muted-dark', [a.detail]),
+            a.externalUrl && /^https:\/\//.test(a.externalUrl) && h('p', 'cvp-ext-link', [link(a.externalUrl)]),
             h('p', null, [h('small', null, [CATEGORY_LABELS[a.category] || ''])])
           ])
         ]);

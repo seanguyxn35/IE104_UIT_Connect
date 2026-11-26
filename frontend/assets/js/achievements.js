@@ -10,7 +10,7 @@
 
   var CATEGORIES = {
     Award: { label: 'Giải thưởng', chip: 'bg-amber-50 text-amber-800 border-amber-200' },
-    Publication: { label: 'Công bố', chip: 'bg-[#E6F0F7] text-[#1F4E78] border-[#cfe2f0]' },
+    Publication: { label: 'Công bố bên ngoài hệ thống', chip: 'bg-[#E6F0F7] text-[#1F4E78] border-[#cfe2f0]' },
     Language_Cert: { label: 'Chứng chỉ ngoại ngữ', chip: 'bg-violet-50 text-violet-800 border-violet-200' },
     Tech_Cert: { label: 'Chứng chỉ công nghệ', chip: 'bg-sky-50 text-sky-800 border-sky-200' }
   };
@@ -135,6 +135,14 @@
   function card(item) {
     var category = CATEGORIES[item.category] || CATEGORIES.Award;
     var status = STATUSES[item.status] || STATUSES.Self_Declared;
+    // Công bố bên ngoài luôn ghi rõ là SV tự cung cấp, để không nhầm với bài đã thẩm định trong hệ thống
+    if (item.category === 'Publication') {
+      status = {
+        label: item.status === 'Self_Declared' ? 'SV tự cung cấp' : 'SV tự cung cấp · ' + status.label,
+        icon: status.icon,
+        color: item.status === 'Rejected' ? status.color : 'text-slate-600'
+      };
+    }
     var editable = item.status === 'Self_Declared' || item.status === 'Rejected';
     var local = item.achievementId < 0; // mục mẫu hoặc chưa lưu: không gọi được máy chủ
 
@@ -149,6 +157,13 @@
     select.addEventListener('change', function () { changeVisibility(item, select); });
 
     var actions = [];
+    if (item.externalUrl && /^https:\/\//.test(item.externalUrl)) {
+      var open = h('a', 'inline-flex items-center gap-1 h-7 px-2 rounded text-xs font-semibold text-[#1F4E78] hover:bg-[#E6F0F7]', [icon('open_in_new'), 'Mở liên kết']);
+      open.href = item.externalUrl;
+      open.target = '_blank';
+      open.rel = 'noopener noreferrer';
+      actions.push(open);
+    }
     if (item.hasEvidence && !local) {
       var view = h('a', 'inline-flex items-center gap-1 h-7 px-2 rounded text-xs font-semibold text-[#1F4E78] hover:bg-[#E6F0F7]', [icon('attach_file'), 'Xem minh chứng']);
       view.href = API_URL + '/' + item.achievementId + '/evidence';
@@ -177,7 +192,8 @@
         ]),
         h('h3', 'text-base font-semibold text-[#1F4E78] break-words', [item.title]),
         h('p', 'text-xs text-[#5F6368] mt-1 break-words', [item.issuedBy || '']),
-        item.detail && h('p', 'text-xs text-[#5F6368] mt-0.5 break-words', [item.detail])
+        item.detail && h('p', 'text-xs text-[#5F6368] mt-0.5 break-words', [item.detail]),
+        item.missingProof && h('p', 'mt-1 text-xs text-amber-700', ['Chưa lên CV: hãy tải tệp minh chứng (công bố này chưa có liên kết DOI/URL).'])
       ]),
       h('div', 'mt-auto pt-3 border-t border-[#E1E5EA] flex flex-wrap items-center justify-between gap-2', [
         h('span', 'inline-flex items-center gap-1 text-xs font-medium ' + status.color, [
@@ -267,9 +283,19 @@
     submitBtn.textContent = value ? 'Đang lưu…' : 'Lưu thành tích';
   }
 
+  // Ô liên kết và nhãn tệp minh chứng đổi theo phân loại
+  function syncCategory() {
+    var isPublication = form.elements.category.value === 'Publication';
+    document.getElementById('achievement-link-group').classList.toggle('hidden', !isPublication);
+    document.getElementById('achievement-file-label').textContent = isPublication
+      ? 'Tệp minh chứng (bắt buộc nếu không có liên kết)'
+      : 'Tệp minh chứng (không bắt buộc)';
+  }
+
   function openModal(trigger) {
     lastFocus = trigger;
     form.reset();
+    syncCategory();
     form.elements.issuedDate.max = today();
     showError('');
     setSaving(false);
@@ -292,6 +318,8 @@
       detail: form.elements.detail.value.trim(),
       visibility: form.elements.visibility.value
     };
+    var isPublication = values.category === 'Publication';
+    var link = isPublication ? form.elements.externalUrl.value.trim() : '';
     if (!values.title) return { error: 'Hãy nhập tên thành tích.', field: 'title' };
     if (!values.issuedBy) return { error: 'Hãy nhập tổ chức cấp.', field: 'issuedBy' };
     if (!values.issuedDate) return { error: 'Hãy chọn ngày cấp hợp lệ.', field: 'issuedDate' };
@@ -299,6 +327,14 @@
     if (values.issuedDate < '1950-01-01') return { error: 'Ngày cấp không được trước năm 1950.', field: 'issuedDate' };
     var file = form.elements.evidence.files[0] || null;
     if (file && checkFile(file)) return { error: checkFile(file), field: 'evidence' };
+    if (isPublication) {
+      if (link && !/^(https:\/\/|(doi:\s*)?10\.\d{4,9}\/)/i.test(link)) {
+        return { error: 'Liên kết phải bắt đầu bằng https:// hoặc là mã DOI dạng 10.xxxx/...', field: 'externalUrl' };
+      }
+      if (!link && !file) return { error: 'Công bố bên ngoài hệ thống cần liên kết DOI/URL hoặc tệp minh chứng.', field: 'externalUrl' };
+      if (link) values.externalUrl = link;
+      if (file) values.hasEvidenceFile = true;
+    }
     return { values: values, file: file };
   }
 
@@ -350,6 +386,9 @@
     if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
   });
   form.addEventListener('submit', submit);
+  form.addEventListener('change', function (event) {
+    if (event.target.name === 'category') syncCategory();
+  });
 
   function load() {
     message('Đang tải thành tích…');

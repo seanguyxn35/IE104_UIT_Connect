@@ -2,7 +2,8 @@
 // Tôn trọng lựa chọn ẩn/công khai: chỉ số và mục đang ẩn KHÔNG được gửi về (chỉ báo tên trong hiddenFields).
 import { supabase } from '../db.js';
 import { AppError } from '../errors.js';
-import { listShowcase } from './studentShowcaseService.js';
+import { isMissingProof } from './studentAchievementService.js';
+import { listCvProjects } from './studentShowcaseService.js';
 
 // Phạm vi hệ thống là một Khoa của UIT (CLAUDE.md mục 1)
 const UNIVERSITY = 'Trường Đại học Công nghệ Thông tin – ĐHQG-HCM';
@@ -43,13 +44,13 @@ export async function getCv(studentId) {
       .then(check),
     supabase
       .from('student_achievement')
-      .select('category, title, issued_by, issued_date, detail, verification_status')
+      .select('category, title, issued_by, issued_date, detail, verification_status, external_url, evidence_url')
       .eq('student_id', studentId)
       .neq('visibility', 'Private') // mục SV để Riêng tư không đưa lên CV
       .neq('verification_status', 'Rejected')
       .order('issued_date', { ascending: false, nullsFirst: false })
       .then(check),
-    listShowcase(studentId),
+    listCvProjects(studentId),
   ]);
 
   if (!profile) throw new AppError(404, 'PROFILE_NOT_FOUND', 'Không tìm thấy hồ sơ sinh viên.');
@@ -70,13 +71,15 @@ export async function getCv(studentId) {
     endDate: t.end_date,
     description: t.description,
   }));
-  const achievementDto = achievements.map((a) => ({
+  // Công bố tự khai thiếu cả liên kết lẫn minh chứng thì không đưa lên CV
+  const achievementDto = achievements.filter((a) => !isMissingProof(a)).map((a) => ({
     category: a.category,
     title: a.title,
     issuedBy: a.issued_by,
     issuedDate: a.issued_date,
     detail: a.detail,
     status: a.verification_status, // Self_Declared | Pending | Verified
+    externalUrl: a.external_url, // chỉ công bố bên ngoài hệ thống mới có; tệp minh chứng không gửi ra
   }));
 
   return {
@@ -106,20 +109,18 @@ export async function getCv(studentId) {
       : [],
     education: showEducation ? timelineDto.filter((t) => t.type !== 'Work') : [],
     experience: timelineDto.filter((t) => t.type === 'Work'),
-    // Chỉ công trình SV chọn hiện trên CV VÀ còn đủ điều kiện (đã được GV thẩm định đạt)
+    // Công trình SV ghim, đã công khai và còn đủ điều kiện (lọc trong listCvProjects)
     projects: profile.is_achievements_public
-      ? showcase
-          .filter((p) => p.isShownOnCv && p.eligible)
-          .map((p) => ({
-            title: p.title,
-            type: p.type,
-            venue: p.venue,
-            trlLevel: p.trlLevel,
-            date: p.date,
-            role: p.role,
-            highlights: p.highlights,
-            reviewerName: p.reviewerName,
-          }))
+      ? showcase.map((p) => ({
+          title: p.title,
+          type: p.type,
+          venue: p.venue,
+          trlLevel: p.trlLevel,
+          date: p.date,
+          role: p.role,
+          highlights: p.highlights,
+          reviewerName: p.reviewerName,
+        }))
       : [],
     awards: achievementDto.filter((a) => AWARD_CATEGORIES.includes(a.category)),
     certificates: achievementDto.filter((a) => !AWARD_CATEGORIES.includes(a.category)),
