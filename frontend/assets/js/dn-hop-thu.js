@@ -29,15 +29,136 @@
   var LOP_CHON = 'bg-blue-50/70 border-l-4 border-l-primary-container border-y border-r border-border-subtle rounded-r-lg p-4 shadow-sm';
   var LOP_THUONG = 'bg-surface-container-lowest border border-border-subtle rounded-lg p-4 shadow-xs hover:border-primary-fixed-dim hover:bg-surface-container-low';
 
-  var tatCaBaiToan = D.layTatCa();
+  // ---------- Nguồn dữ liệu: API (khi mở qua máy chủ) hoặc dữ liệu mẫu (file://, máy chủ không chạy) ----------
+  var API = '/api/business-inbox';
+  var nguon = { api: false, ds: [], baiToan: [], loi: '' };
+  var tatCaBaiToan = [];
   function baiToan(ma) { return tatCaBaiToan.filter(function (b) { return b.ma === ma; })[0] || null; }
+  function dsProposal() { return nguon.api ? nguon.ds : D.layDanhSachProposal(); }
+  function layP(id) { return dsProposal().filter(function (p) { return p.id === id; })[0] || null; }
+
+  var TT_API = { Submitted: 'cho-phan-hoi', Scheduled: 'da-hen', In_Discussion: 'dam-phan', Contracted: 'dam-phan', Completed: 'dam-phan', Declined: 'tu-choi', Cancelled: 'tu-choi' };
+  var TT_BT_API = { Draft: 'nhap', Pending_Approval: 'cho-duyet', Open: 'dang-mo', In_Progress: 'dang-thuc-hien', Closed: 'da-dong', Rejected: 'da-dong' };
+  var MAU = ['bg-blue-100 text-blue-700', 'bg-purple-100 text-purple-700', 'bg-amber-100 text-amber-700', 'bg-teal-100 text-teal-700',
+    'bg-rose-100 text-rose-700', 'bg-indigo-100 text-indigo-700', 'bg-emerald-100 text-emerald-700', 'bg-cyan-100 text-cyan-700'];
+
+  function kyHieu(ten) {
+    return String(ten || '?').replace(/^(GS\.TS|PGS\.TS|TS|ThS)\.\s*/, '').split(/\s+/).slice(-2).map(function (x) { return x[0]; }).join('').toUpperCase();
+  }
+  function tuongDoi(phut) {
+    if (phut < 60) return phut + ' phút trước';
+    if (phut < 1440) return Math.round(phut / 60) + ' giờ trước';
+    if (phut < 10080) return Math.round(phut / 1440) + ' ngày trước';
+    if (phut < 43200) return Math.round(phut / 10080) + ' tuần trước';
+    return Math.round(phut / 43200) + ' tháng trước';
+  }
+  function dungLuong(b) { return b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
+  function gioVN(iso, kieu) {
+    var d = new Date(iso);
+    return kieu === 'ngay'
+      ? d.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' })
+      : d.toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+
+  // Đổi một proposal từ API sang cùng dạng dữ liệu mẫu để phần vẽ giao diện dùng chung
+  function tuApi(r) {
+    var tv = [];
+    if (r.lecturer) tv.push({ ten: r.lecturer.name, truongNhom: true, vaiTro: r.lecturer.position || 'Giảng viên' });
+    r.members.forEach(function (m) {
+      tv.push({ ten: m.name, truongNhom: !r.lecturer && m.isLeader, mssv: m.studentCode, vaiTro: m.role || 'Thành viên',
+        gpa: m.gpa != null ? Number(m.gpa).toFixed(2) : '' });
+    });
+    var ld = r.lecturer ? null : r.leader;
+    var nguoiGui = r.lecturer ? r.lecturer.name : (ld ? ld.name : '');
+    var phut = Math.max(1, Math.round((Date.now() - Date.parse(r.createdAt)) / 60000));
+    var soNguoi = r.members.length + (r.lecturer ? 1 : 0);
+    var nguonP = r.partner.type === 'student' ? 'ca-nhan' : (r.partner.type === 'lab' ? 'lab' : 'nhom-sv');
+    return {
+      id: String(r.id), baiToan: r.problemCode, trangThai: TT_API[r.status] || 'cho-phan-hoi', trangThaiApi: r.status,
+      nguon: nguonP, tieuDe: r.title || 'Proposal', nguoiGui: nguoiGui, kyHieu: kyHieu(nguoiGui), mau: MAU[r.id % MAU.length],
+      quyMo: nguonP === 'ca-nhan' ? 'Cá nhân' : (r.lecturer ? 'Lab · ' + soNguoi + ' thành viên' : 'Nhóm ' + soNguoi + ' SV'),
+      moi: r.isNew, thoiGian: tuongDoi(phut), phutTruoc: phut, phuHop: r.fitScore == null ? 0 : r.fitScore,
+      nhom: r.partner.name || 'Cá nhân', laPhanHoiLoiMoi: r.initiatedBy === 'Business',
+      dongPhu: r.initiatedBy === 'Business' ? 'Phản hồi lời mời · ' + ((ld && ld.faculty) || '') : null,
+      mssv: ld ? ld.studentCode : null, khoa: ld ? ld.faculty : '',
+      lop: ld && ld.className ? 'Lớp ' + ld.className + (ld.cohort ? ' (' + ld.cohort + ')' : '') : '',
+      gpa: ld && ld.gpa != null ? Number(ld.gpa).toFixed(2) : '—', drl: ld && ld.trainingScore != null ? ld.trainingScore : '—',
+      gioiThieu: r.lecturer ? [r.lecturer.position, r.lecturer.faculty].filter(Boolean).join(' · ') : '',
+      noiDung: r.content || '', the: r.tags || [], trl: r.trlLabel || '',
+      thu: String(r.coverLetter || '').split(/\n\s*\n/).filter(Boolean),
+      tep: r.attachments.map(function (a) { return { id: a.id, ten: a.fileName, kichThuoc: dungLuong(a.sizeBytes), loai: a.docType || 'Tài liệu' }; }),
+      thanhVien: tv,
+      lichHen: r.meeting ? { ngay: gioVN(r.meeting.startAt, 'ngay'), gio: gioVN(r.meeting.startAt, 'gio'), hinhThuc: r.meeting.mode, ghiChu: r.meeting.agenda || '' } : null,
+      lyDoTuChoi: r.declineReason, dpId: 'dp-' + r.id
+    };
+  }
+
+  function linhVucTuTen(ten) {
+    var lv = D.LINH_VUC.filter(function (x) { return x.tenCsdl === ten; })[0];
+    return lv ? lv.id : '';
+  }
+
+  // Gọi API; lỗi nghiệp vụ trả về { code, message } thì ném Error mang message đó
+  function goiApi(duongDan, tuyChon) {
+    tuyChon = tuyChon || {};
+    if (tuyChon.body) tuyChon.headers = { 'Content-Type': 'application/json' };
+    return fetch(duongDan, tuyChon).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        if (!res.ok) { var e = new Error(data.message || 'Máy chủ trả lỗi ' + res.status); e.status = res.status; throw e; }
+        return data;
+      });
+    });
+  }
+
+  function napApi() {
+    return goiApi(API).then(function (data) {
+      nguon.api = true;
+      nguon.ds = data.requests.map(tuApi);
+      tatCaBaiToan = data.problems.map(function (b) {
+        return { ma: b.code, tieuDe: b.title, trangThai: TT_BT_API[b.status] || 'dang-mo', linhVuc: linhVucTuTen(b.fieldName) };
+      });
+    });
+  }
+
+  function napNguon() {
+    if (!/^https?:$/.test(window.location.protocol)) {
+      nguon.loi = 'Trang đang mở trực tiếp từ tệp (file://)';
+      tatCaBaiToan = D.layTatCa();
+      return Promise.resolve();
+    }
+    return napApi().catch(function (err) {
+      nguon.api = false;
+      nguon.loi = err.status ? err.message : 'Không kết nối được máy chủ';
+      tatCaBaiToan = D.layTatCa();
+    });
+  }
+
+  // Báo rõ nguồn dữ liệu đang dùng (yêu cầu: không có máy chủ thì vẫn hiển thị và báo "chưa lưu")
+  function veNguon() {
+    var el = document.getElementById('nguon-du-lieu');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'nguon-du-lieu';
+      var tabs = document.querySelector('[role="tablist"]');
+      tabs.parentNode.insertBefore(el, tabs);
+    }
+    el.className = 'rounded-lg px-4 py-2.5 text-xs flex items-start gap-2 border ' +
+      (nguon.api ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900');
+    el.innerHTML = nguon.api
+      ? '<span class="material-symbols-outlined text-[16px]">cloud_done</span><span>Dữ liệu từ máy chủ: thao tác Từ chối / Hẹn / Chấp nhận được lưu vào CSDL.</span>'
+      : '<span class="material-symbols-outlined text-[16px]">cloud_off</span><span>' + esc(nguon.loi) +
+        ': đang hiển thị <strong>dữ liệu mẫu</strong>, thao tác chỉ lưu tạm trên trình duyệt, <strong>chưa lưu lên máy chủ</strong>. ' +
+        'Chạy <code>npm start</code> trong thư mục backend rồi mở trang qua http://localhost:3000.</span>';
+  }
 
   // ---------- Đổ danh mục vào bộ lọc ----------
-  chonBaiToan.insertAdjacentHTML('beforeend', tatCaBaiToan.map(function (b) {
-    var ghiChu = b.trangThai === 'nhap' ? ' (bản nháp)' : (b.trangThai === 'cho-duyet' ? ' (chờ duyệt)' : '');
-    var ten = b.tieuDe.length > 48 ? b.tieuDe.slice(0, 46) + '…' : b.tieuDe;
-    return '<option value="' + esc(b.ma) + '">' + esc(b.ma + ' · ' + ten + ghiChu) + '</option>';
-  }).join(''));
+  function doDanhMuc() {
+    chonBaiToan.innerHTML = '<option value="">Bài toán: Tất cả</option>' + tatCaBaiToan.map(function (b) {
+      var ghiChu = b.trangThai === 'nhap' ? ' (bản nháp)' : (b.trangThai === 'cho-duyet' ? ' (chờ duyệt)' : '');
+      var ten = b.tieuDe.length > 48 ? b.tieuDe.slice(0, 46) + '…' : b.tieuDe;
+      return '<option value="' + esc(b.ma) + '">' + esc(b.ma + ' · ' + ten + ghiChu) + '</option>';
+    }).join('');
+  }
   chonLinhVuc.insertAdjacentHTML('beforeend', D.LINH_VUC.map(function (lv) {
     return '<option value="' + lv.id + '">' + esc(lv.ngan) + '</option>';
   }).join(''));
@@ -47,12 +168,15 @@
   var boLoc = { q: '', baiToan: thamSo.get('bai-toan') || '', nguon: '', linhVuc: '', sapXep: 'moi-nhat' };
   var tab = 'cho-phan-hoi';
   var idChon = thamSo.get('proposal') || '';
-  if (boLoc.baiToan && !baiToan(boLoc.baiToan)) boLoc.baiToan = '';
-
   // ?tab=<trạng thái> mở sẵn một tab (nút "Mở từ Hộp thư kết nối" ở DN-09 dùng ?tab=dam-phan)
   if (D.TRANG_THAI_PROPOSAL[thamSo.get('tab')]) tab = thamSo.get('tab');
-  var pChon = idChon ? D.layProposal(idChon) : null;
-  if (pChon) tab = pChon.trangThai;
+
+  // Chạy sau khi đã có dữ liệu: kiểm tra tham số URL theo dữ liệu thật
+  function apThamSoUrl() {
+    if (boLoc.baiToan && !baiToan(boLoc.baiToan)) boLoc.baiToan = '';
+    var pChon = idChon ? layP(idChon) : null;
+    if (pChon) tab = pChon.trangThai;
+  }
 
   function dongBoOLoc() {
     oTim.value = boLoc.q;
@@ -89,12 +213,12 @@
     });
   }
 
-  function dsDaLoc() { return D.layDanhSachProposal().filter(khopBoLoc); }
+  function dsDaLoc() { return dsProposal().filter(khopBoLoc); }
   function dsTrongTab() { return sapXep(dsDaLoc().filter(function (p) { return p.trangThai === tab; })); }
 
   // ---------- Vẽ ----------
   function veThongKe() {
-    var tatCa = D.layDanhSachProposal();
+    var tatCa = dsProposal();
     var cho = tatCa.filter(function (p) { return p.trangThai === 'cho-phan-hoi'; }).length;
     var daPhanHoi = tatCa.length - cho;
     var pt = Math.round(daPhanHoi / tatCa.length * 100);
@@ -182,7 +306,7 @@
   }
 
   function veChiTiet() {
-    var p = D.layProposal(idChon);
+    var p = layP(idChon);
     if (!p || p.trangThai !== tab || !khopBoLoc(p)) p = null;
     if (!p) {
       chiTietEl.innerHTML = '<div class="py-16 text-center text-xs text-text-muted flex flex-col items-center gap-2">' +
@@ -245,7 +369,8 @@
 
       '<div class="py-5 border-b border-border-subtle space-y-3"><div class="flex items-center justify-between gap-2">' +
       '<span class="text-[11px] font-bold uppercase tracking-wider text-text-muted">Tài liệu đính kèm (' + p.tep.length + ')</span>' +
-      '<span class="text-[10px] text-text-muted" title="Chưa có kho tệp: hệ thống tạo tệp PDF minh họa">Tệp minh họa (bản demo)</span></div>' +
+      (nguon.api ? '<span class="text-[10px] text-text-muted">Liên kết xem / tải có hiệu lực 60 giây</span>' :
+        '<span class="text-[10px] text-text-muted" title="Chưa có kho tệp: hệ thống tạo tệp PDF minh họa">Tệp minh họa (bản demo)</span>') + '</div>' +
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">' + tep + '</div></div>' +
 
       '<div class="pt-5 space-y-3"><span class="text-[11px] font-bold uppercase tracking-wider text-text-muted">' +
@@ -268,6 +393,10 @@
       trai = nutHtml(LOP_TU_CHOI, 'close', 'Từ chối', 'tu-choi');
       phai = nutHtml(LOP_HEN, 'calendar_month', p.trangThai === 'da-hen' ? 'Đổi lịch hẹn' : 'Hẹn trao đổi', 'hen') +
         nutHtml(LOP_CHAP_NHAN, 'check', 'Chấp nhận & mở đàm phán', 'chap-nhan');
+    } else if (p.trangThai === 'dam-phan' && nguon.api) {
+      // Không gian đàm phán chưa nối API (màn kế tiếp) nên chưa có phòng tương ứng với proposal trong CSDL
+      phai = '<span class="text-[11px] text-text-muted mr-2">Phòng đàm phán sẽ nối với CSDL ở bước sau.</span>' +
+        '<a class="' + LOP_HEN + '" href="09_khong-gian-dam-phan.html"><span class="material-symbols-outlined text-[18px]">handshake</span><span>Không gian đàm phán</span></a>';
     } else if (p.trangThai === 'dam-phan') {
       phai = '<a class="' + LOP_HEN + '" href="09_khong-gian-dam-phan.html#' + esc(p.dpId) + '"><span class="material-symbols-outlined text-[18px]">view_agenda</span><span>Xem trong danh sách</span></a>' +
         '<a class="' + LOP_CHAP_NHAN + '" href="16_phong-dam-phan.html?phong=' + encodeURIComponent(p.dpId) + '"><span class="material-symbols-outlined text-[18px]">meeting_room</span><span>Vào phòng đàm phán</span></a>';
@@ -300,28 +429,66 @@
   // ---------- Thao tác ----------
   function canhBaoKhongLuu() { D.thongBao('Không lưu được: trình duyệt đang chặn lưu dữ liệu cục bộ.', 'loi'); }
 
+  // Chế độ API: gọi máy chủ rồi nạp lại hộp thư từ CSDL. Lỗi (409 trạng thái đã đổi...) thì báo và vẽ lại.
+  var dangGui = false;
+  function goiHanhDong(duongDan, body) {
+    if (dangGui) return Promise.reject(new Error('Đang xử lý thao tác trước, vui lòng chờ.'));
+    dangGui = true;
+    thanhNut.classList.add('opacity-60', 'pointer-events-none');
+    return goiApi(API + duongDan, { method: 'POST', body: JSON.stringify(body || {}) })
+      .then(function (kq) { return napApi().then(function () { return kq; }); })
+      .finally(function () { dangGui = false; thanhNut.classList.remove('opacity-60', 'pointer-events-none'); });
+  }
+  function baoLoiApi(err) {
+    D.thongBao(err.message || 'Không thực hiện được thao tác.', 'loi');
+    if (nguon.api) napApi().then(veLai).catch(function () {});
+  }
+
   function tuChoi(p) {
+    var thongBaoXong = function (hoanTacFn) {
+      veLai();
+      ghiUrl();
+      D.thongBao('Đã từ chối proposal của ' + p.nhom + ' (' + p.nguoiGui + ') cho bài toán ' + p.baiToan + '.', null, { chu: 'Hoàn tác', lam: hoanTacFn });
+    };
+    if (nguon.api) {
+      goiHanhDong('/' + p.id + '/decline').then(function () {
+        thongBaoXong(function () {
+          goiHanhDong('/' + p.id + '/reopen').then(function () { idChon = p.id; tab = layP(p.id).trangThai; veLai(); ghiUrl(); }).catch(baoLoiApi);
+        });
+      }).catch(baoLoiApi);
+      return;
+    }
     var truoc = p.trangThai;
     if (!D.capNhatProposal(p.id, { trangThai: 'tu-choi', trangThaiTruoc: truoc })) { canhBaoKhongLuu(); return; }
-    veLai();
-    ghiUrl();
-    D.thongBao('Đã từ chối proposal của ' + p.nhom + ' (' + p.nguoiGui + ') cho bài toán ' + p.baiToan + '.', null, {
-      chu: 'Hoàn tác',
-      lam: function () { D.capNhatProposal(p.id, { trangThai: truoc }); idChon = p.id; veLai(); ghiUrl(); }
-    });
+    thongBaoXong(function () { D.capNhatProposal(p.id, { trangThai: truoc }); idChon = p.id; veLai(); ghiUrl(); });
   }
 
   function hoanTac(p) {
-    var ve = p.trangThaiTruoc || 'cho-phan-hoi';
-    if (!D.capNhatProposal(p.id, { trangThai: ve })) { canhBaoKhongLuu(); return; }
-    tab = ve;
-    idChon = p.id;
-    veLai();
-    ghiUrl();
-    D.thongBao('Đã đưa proposal của ' + p.nhom + ' về tab "' + D.TRANG_THAI_PROPOSAL[ve] + '".');
+    var xong = function () {
+      var moi = layP(p.id);
+      tab = moi ? moi.trangThai : 'cho-phan-hoi';
+      idChon = p.id;
+      veLai();
+      ghiUrl();
+      D.thongBao('Đã đưa proposal của ' + p.nhom + ' về tab "' + D.TRANG_THAI_PROPOSAL[tab] + '".');
+    };
+    if (nguon.api) { goiHanhDong('/' + p.id + '/reopen').then(xong).catch(baoLoiApi); return; }
+    if (!D.capNhatProposal(p.id, { trangThai: p.trangThaiTruoc || 'cho-phan-hoi' })) { canhBaoKhongLuu(); return; }
+    xong();
   }
 
   function chapNhan(p) {
+    if (nguon.api) {
+      // Không gian đàm phán chưa nối API (bước sau): ở lại hộp thư, chuyển sang tab "Chuyển đàm phán"
+      goiHanhDong('/' + p.id + '/accept').then(function () {
+        tab = 'dam-phan';
+        idChon = p.id;
+        veLai();
+        ghiUrl();
+        D.thongBao('Đã chấp nhận proposal của ' + p.nhom + ', chuyển sang tab "Chuyển đàm phán" (đã lưu vào CSDL).');
+      }).catch(baoLoiApi);
+      return;
+    }
     if (!D.capNhatProposal(p.id, { trangThai: 'dam-phan', trangThaiTruoc: p.trangThai })) { canhBaoKhongLuu(); return; }
     window.location.href = '09_khong-gian-dam-phan.html?tu-hop-thu=' + encodeURIComponent(p.id) + '#' + encodeURIComponent(p.dpId);
   }
@@ -357,7 +524,7 @@
     hop.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
       var f = e.target;
-      var p = D.layProposal(hop.getAttribute('data-proposal'));
+      var p = layP(hop.getAttribute('data-proposal'));
       var ngay = f.ngay.value, gio = f.gio.value;
       var loi = '';
       if (!ngay || !gio) loi = 'Chọn ngày và giờ hẹn.';
@@ -372,11 +539,23 @@
       oLoi.classList.toggle('hidden', !loi);
       if (loi || !p) return;
       var lichHen = { ngay: ngay, gio: gio, hinhThuc: f.hinhThuc.value, ghiChu: f.ghiChu.value.trim() };
+      var xong = function () {
+        dongHop();
+        veLai();
+        ghiUrl();
+        D.thongBao('Đã hẹn trao đổi với ' + p.nhom + ' lúc ' + gio + ' ngày ' + D.dinhDangNgay(ngay) + '. Proposal chuyển sang tab "Đã hẹn trao đổi".');
+      };
+      if (nguon.api) {
+        goiHanhDong('/' + p.id + '/meetings', { date: ngay, time: gio, mode: lichHen.hinhThuc, agenda: lichHen.ghiChu })
+          .then(xong)
+          .catch(function (err) {
+            // Lỗi kiểm tra dữ liệu (400) hiện ngay trong hộp thoại; lỗi khác báo chung
+            if (err.status === 400) { oLoi.textContent = err.message; oLoi.classList.remove('hidden'); } else { dongHop(); baoLoiApi(err); }
+          });
+        return;
+      }
       if (!D.capNhatProposal(p.id, { trangThai: 'da-hen', trangThaiTruoc: p.trangThai, lichHen: lichHen })) { canhBaoKhongLuu(); return; }
-      dongHop();
-      veLai();
-      ghiUrl();
-      D.thongBao('Đã hẹn trao đổi với ' + p.nhom + ' lúc ' + gio + ' ngày ' + D.dinhDangNgay(ngay) + '. Proposal chuyển sang tab "Đã hẹn trao đổi".');
+      xong();
     });
   }
   function moHop(p) {
@@ -406,7 +585,7 @@
   thanhNut.addEventListener('click', function (e) {
     var nut = e.target.closest('[data-hanh-dong-ht]');
     if (!nut) return;
-    var p = D.layProposal(idChon);
+    var p = layP(idChon);
     if (!p) return;
     var hd = nut.getAttribute('data-hanh-dong-ht');
     if (hd === 'tu-choi') tuChoi(p);
@@ -419,9 +598,25 @@
     var nutXem = e.target.closest('[data-xem-tep]');
     var nutTai = e.target.closest('[data-tai-tep]');
     if (!nutXem && !nutTai) return;
-    var p = D.layProposal(idChon);
+    var p = layP(idChon);
     var t = p && p.tep[Number((nutXem || nutTai).getAttribute(nutXem ? 'data-xem-tep' : 'data-tai-tep'))];
     if (!t) return;
+    if (nguon.api) {
+      // Liên kết ký tạm 60 giây từ máy chủ. Mở tab trước (trong lúc người dùng vừa bấm) để không bị chặn cửa sổ bật lên.
+      var tabMoi = nutXem ? window.open('', '_blank') : null;
+      goiApi(API + '/' + p.id + '/attachments/' + t.id + (nutTai ? '?download=1' : ''))
+        .then(function (kq) {
+          if (tabMoi) { tabMoi.location.href = kq.url; return; }
+          var a = document.createElement('a');
+          a.href = kq.url;
+          a.download = kq.fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        })
+        .catch(function (err) { if (tabMoi) tabMoi.close(); D.thongBao(err.message, 'loi'); });
+      return;
+    }
     var blob = D.taoPdfMau([
       'UIT Connect - Tai lieu minh hoa (ban demo)', '',
       'Ten tep: ' + t.ten,
@@ -496,6 +691,13 @@
     ghiUrl();
   });
 
-  dongBoOLoc();
-  veLai();
+  // ---------- Bắt đầu: nạp dữ liệu (API hoặc mẫu) rồi mới vẽ ----------
+  dsEl.innerHTML = '<div class="p-6 text-center text-xs text-text-muted">Đang tải hộp thư…</div>';
+  napNguon().then(function () {
+    veNguon();
+    doDanhMuc();
+    apThamSoUrl();
+    dongBoOLoc();
+    veLai();
+  });
 })();

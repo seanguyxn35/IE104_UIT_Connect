@@ -12,16 +12,17 @@
   var KHOA_LUU = 'uitc.dn.baiToan.v1';
 
   // ---------- Danh mục ----------
+  // tenCsdl: tên tương ứng trong bảng field của CSDL (API trả tên này). "Điện toán biên" chưa có trong danh mục CSDL.
   var LINH_VUC = [
-    { id: 'ai', ten: 'Trí tuệ nhân tạo (AI) & Thị giác máy tính (Computer Vision)', ngan: 'Trí tuệ nhân tạo (AI)' },
-    { id: 'iot', ten: 'Hệ thống nhúng & IoT (Embedded Systems & IoT)', ngan: 'Hệ thống nhúng & IoT' },
-    { id: 'sec', ten: 'An toàn thông tin & Mật mã học (Cybersecurity)', ngan: 'An toàn thông tin' },
-    { id: 'data', ten: 'Khoa học dữ liệu & Dữ liệu lớn (Data Science & Big Data)', ngan: 'Khoa học dữ liệu' },
-    { id: 'cloud', ten: 'Mạng máy tính & Điện toán đám mây (Cloud & Networking)', ngan: 'Mạng máy tính & Cloud' },
-    { id: 'edge', ten: 'Điện toán biên (Edge Computing)', ngan: 'Điện toán biên' },
-    { id: 'ic', ten: 'Vi mạch & Bán dẫn (IC Design & Semiconductor)', ngan: 'Vi mạch & Bán dẫn' },
-    { id: 'robot', ten: 'Robot & Hệ thống tự hành (Robotics)', ngan: 'Robot & Tự hành' },
-    { id: 'blockchain', ten: 'Blockchain & Công nghệ tài chính (Fintech)', ngan: 'Blockchain & Fintech' }
+    { id: 'ai', ten: 'Trí tuệ nhân tạo (AI) & Thị giác máy tính (Computer Vision)', ngan: 'Trí tuệ nhân tạo (AI)', tenCsdl: 'Trí tuệ nhân tạo & Học máy' },
+    { id: 'iot', ten: 'Hệ thống nhúng & IoT (Embedded Systems & IoT)', ngan: 'Hệ thống nhúng & IoT', tenCsdl: 'Hệ thống nhúng & IoT' },
+    { id: 'sec', ten: 'An toàn thông tin & Mật mã học (Cybersecurity)', ngan: 'An toàn thông tin', tenCsdl: 'An toàn thông tin' },
+    { id: 'data', ten: 'Khoa học dữ liệu & Dữ liệu lớn (Data Science & Big Data)', ngan: 'Khoa học dữ liệu', tenCsdl: 'Khoa học dữ liệu & Big Data' },
+    { id: 'cloud', ten: 'Mạng máy tính & Điện toán đám mây (Cloud & Networking)', ngan: 'Mạng máy tính & Cloud', tenCsdl: 'Mạng & Điện toán đám mây' },
+    { id: 'edge', ten: 'Điện toán biên (Edge Computing)', ngan: 'Điện toán biên', tenCsdl: null },
+    { id: 'ic', ten: 'Vi mạch & Bán dẫn (IC Design & Semiconductor)', ngan: 'Vi mạch & Bán dẫn', tenCsdl: 'Thiết kế vi mạch & Bán dẫn' },
+    { id: 'robot', ten: 'Robot & Hệ thống tự hành (Robotics)', ngan: 'Robot & Tự hành', tenCsdl: 'Robot & Xe tự hành' },
+    { id: 'blockchain', ten: 'Blockchain & Công nghệ tài chính (Fintech)', ngan: 'Blockchain & Fintech', tenCsdl: 'Blockchain & Fintech' }
   ];
 
   var LOAI = {

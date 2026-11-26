@@ -85,6 +85,10 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `GET /api/student-cv`, `GET /api/student-cv/pdf` (cần `playwright-core` và Edge/Chrome trên máy chủ)
   - `GET|POST /api/student-showcase`, `GET .../available`, `PUT .../order`, `PATCH|DELETE /api/student-showcase/:resourceId`
   - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
+  - DN-08 Hộp thư kết nối (danh tính DN từ `TEST_BUSINESS_ID`):
+    - `GET /api/business-inbox`
+    - `POST /api/business-inbox/:id/decline|reopen|accept`, `POST .../:id/meetings`
+    - `GET .../:id/attachments/:attachmentId[?download=1]` (liên kết ký tạm 60 s, bucket riêng tư `rd-files`)
 - Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
 
 ## 6. Giao diện
@@ -132,6 +136,8 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `reset.sql` (trước mỗi ca test)
   - `seed_student_skills.sql` (kỹ năng mẫu SV 9101)
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
+  - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
+    `seed_dn.sql` được sinh từ dữ liệu mẫu của giao diện (`dn-bai-toan-data.js`), ID 9501, 9601–9639, 9701–9703, 9801–9813, 9084/9079/9071/9091/9904, 9901–9915, 9951–9952, 9961–9981.
 - Test tự động: chưa có script `npm test` – `TBD`.
 
 ## 9. Việc đang mở / lưu ý

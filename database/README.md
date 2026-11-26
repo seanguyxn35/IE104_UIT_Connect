@@ -10,7 +10,9 @@ database/
 ├── reset.sql             # Đặt lại dữ liệu thử trước mỗi ca kiểm thử
 ├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
 ├── seed_showcase.sql        # tài nguyên đã / chưa thẩm định (ID 9301–9306) cho mục "Công trình trưng bày trên CV"
-├── migrations/           # Thay đổi lược đồ sau bản đầu (đã chạy trên Supabase, đã gộp vào schema.postgres.sql)
+├── seed_dn.sql              # Dữ liệu thử luồng Doanh nghiệp (DN 9501, 5 bài toán, 15 proposal); chạy lại để đặt lại
+├── migrations/           # Thay đổi lược đồ sau bản đầu (chạy trên Supabase rồi gộp vào schema.postgres.sql)
+│   └── 004_dn_hop_thu_ket_noi.sql  # Hộp thư kết nối DN: proposal SV cá nhân, lịch hẹn, tệp đính kèm
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 

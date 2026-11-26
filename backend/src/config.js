@@ -14,6 +14,12 @@ if (!Number.isInteger(testStudentId) || testStudentId <= 0) {
   throw new Error('TEST_STUDENT_ID trong backend/.env phải là số nguyên dương (vd 9101)');
 }
 
+// Tài khoản DN thử (database/seed_dn.sql). Tùy chọn để máy chỉ làm phần SV vẫn chạy được; mặc định 9501.
+const testBusinessId = Number(process.env.TEST_BUSINESS_ID || 9501);
+if (!Number.isInteger(testBusinessId) || testBusinessId <= 0) {
+  throw new Error('TEST_BUSINESS_ID trong backend/.env phải là số nguyên dương (vd 9501)');
+}
+
 export const config = {
   port: Number(process.env.PORT) || 3000,
   supabaseUrl: required('SUPABASE_URL'),
@@ -21,4 +27,6 @@ export const config = {
   // Bài thực hành không xây chức năng đăng nhập: danh tính SV lấy từ tài khoản thử cấu hình ở máy chủ,
   // KHÔNG lấy từ dữ liệu client gửi lên.
   testStudentId,
+  // Tương tự cho Doanh nghiệp: business_id lấy ở máy chủ, không nhận từ client.
+  testBusinessId,
 };
