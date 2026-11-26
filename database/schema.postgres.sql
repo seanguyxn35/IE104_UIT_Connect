@@ -230,12 +230,16 @@ CREATE TABLE student_achievement (
     issued_date           DATE NULL,
     detail               VARCHAR(500) NULL,    -- DOI, điểm từng kỹ năng IELTS...
     evidence_url          VARCHAR(255)  NULL,    -- tệp minh chứng (PDF/JPG/PNG)
-    verification_status   VARCHAR(20) NOT NULL DEFAULT 'Pending',
+    visibility           VARCHAR(20) NOT NULL DEFAULT 'Public',   -- (+) migration 002: chế độ hiển thị từng mục
+    verification_status   VARCHAR(20) NOT NULL DEFAULT 'Self_Declared',  -- (+) migration 002: SV tự khai, xác minh tùy chọn
     verified_by_account_id  INT NULL CONSTRAINT fk_student_achievement_verifier REFERENCES account(account_id),
     created_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     CONSTRAINT ck_student_achievement_category CHECK (category IN ('Award','Publication','Language_Cert','Tech_Cert')),
-    CONSTRAINT ck_student_achievement_status   CHECK (verification_status IN ('Pending','Verified','Rejected'))
+    CONSTRAINT ck_student_achievement_visibility CHECK (visibility IN ('Public','Partners_Only','Private')),
+    CONSTRAINT ck_student_achievement_status   CHECK (verification_status IN ('Self_Declared','Pending','Verified','Rejected'))
 );
+CREATE UNIQUE INDEX ux_student_achievement_entry
+    ON student_achievement (student_id, lower(title), lower(coalesce(issued_by, '')), issued_date) NULLS NOT DISTINCT;
 
 -- [MỚI] Lĩnh vực & kỹ năng chuyên môn của GV (bộ lọc danh bạ GV, "Lĩnh vực Chuyên môn & Kỹ năng Cốt lõi")
 CREATE TABLE lecturer_field (

@@ -36,6 +36,8 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Đánh giá đối tác chỉ khi kết nối `Completed`, điểm 1.0–5.0.
 - Tài nguyên học thuật: GV thẩm định `Approved|Rejected|Revision_Needed`; mọi quyết định của Admin ghi vào `moderation_log`.
 - Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài (`is_*_public`).
+- Thành tích / chứng chỉ: SV tự khai, lưu ở `Self_Declared` và hiện ngay, không cần duyệt. Xác minh là tùy chọn (cần tệp minh chứng): `Self_Declared`/`Rejected` → `Pending` → `Verified`/`Rejected`. Mỗi mục có chế độ hiển thị riêng; mục `Private` và mục bị từ chối không đưa lên CV. Minh chứng PDF/JPG/PNG ≤ 5 MB, lưu riêng tư.
+- Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của mình hoặc nhóm mình. Điều kiện "đã được GV thẩm định": trạng thái `Approved`/`Published` **và** có phiếu `Approved` trong `academic_review_log`. Kiểm tra lại mỗi lần đọc; mất điều kiện thì không lên CV.
 - Ảnh đại diện: JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp, không tin `Content-Type`.
 - **Danh tính lấy ở server**, không bao giờ nhận `studentId`/`accountId` từ client.
 
@@ -74,7 +76,11 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `POST /api/lab-applications`
   - `GET|POST /api/student-skills`, `DELETE /api/student-skills/:skillId`
   - `GET|POST /api/student-avatar`
-  - `GET|PUT /api/profile-visibility`
+  - `GET|PUT /api/profile-visibility`, `GET|PUT /api/profile-visibility/mode`
+  - `GET|PUT /api/student-profile/links`
+  - `GET /api/student-cv`
+  - `GET|POST /api/student-showcase`, `GET .../available`, `PUT .../order`, `PATCH|DELETE /api/student-showcase/:resourceId`
+  - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
 - Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
 
 ## 6. Giao diện
@@ -139,5 +145,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - Mâu thuẫn cần nhóm chốt:
   - Schema có `external_login` (`UIT_SSO`, `Microsoft365`) và màn auth 02 "SSO Microsoft 365", nhưng SSO UIT nằm ngoài phạm vi.
   - `account.password_hash` cho phép NULL với SV/GV vì giả định có SSO.
-- Ô "Xem trước CV A4" ở SV-04 chưa lấy dữ liệu thật (kỹ năng, ảnh).
+- Popup "Xem trước CV" ở SV-04 đã lấy dữ liệu thật (`/api/student-cv`); chưa có API thêm học vấn, kinh nghiệm nên các mục đó còn trống.
+- Công trình trưng bày: chưa có chức năng SV nộp tài nguyên và GV thẩm định, nên dữ liệu thử lấy từ `database/seed_showcase.sql`.
+- Thành tích: SV gửi xác minh được nhưng **chưa có ai duyệt** (chưa có API/màn hình duyệt; người duyệt: `TBD`).
 - Chủ sở hữu thư mục, mã UC chính thức, tiêu chí chặn DN chưa xác minh: `TBD`.

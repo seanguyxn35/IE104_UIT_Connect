@@ -12,10 +12,20 @@ backend/
 │   ├── routes/labApplications.js       # POST /api/lab-applications
 │   ├── routes/studentSkills.js         # GET/POST/DELETE /api/student-skills
 │   ├── routes/studentAvatar.js         # GET/POST /api/student-avatar
+│   ├── routes/profileVisibility.js     # GET/PUT /api/profile-visibility, /mode
+│   ├── routes/studentProfile.js        # GET/PUT /api/student-profile/links
+│   ├── routes/studentCv.js             # GET /api/student-cv
+│   ├── routes/studentShowcase.js       # /api/student-showcase (công trình trưng bày trên CV)
+│   ├── routes/studentAchievements.js   # /api/student-achievements (thành tích tự khai, minh chứng)
 │   └── services/
 │       ├── labApplicationService.js    # nghiệp vụ ứng tuyển đề tài: R1, R2, R3
 │       ├── studentSkillService.js      # kỹ năng trên hồ sơ SV (skill, student_skill)
-│       └── avatarService.js            # ảnh đại diện SV (Supabase Storage + account.avatar_url)
+│       ├── avatarService.js            # ảnh đại diện SV (Supabase Storage + account.avatar_url)
+│       ├── profileVisibilityService.js # ẩn/công khai chỉ số và chế độ hiển thị hồ sơ (student_profile)
+│       ├── studentProfileService.js    # liên kết GitHub, LinkedIn trên hồ sơ (student_profile)
+│       ├── studentCvService.js         # gom dữ liệu CV từ các bảng hồ sơ
+│       ├── studentShowcaseService.js   # chọn công trình đã thẩm định để trưng bày (cv_showcase_item)
+│       └── studentAchievementService.js # thành tích, chứng chỉ SV tự khai (student_achievement, Storage "evidence")
 ├── .env.example                        # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
@@ -39,5 +49,25 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `DELETE` | `/api/student-skills/:skillId` | Xóa kỹ năng khỏi hồ sơ → 204; không có → 404 `SKILL_NOT_FOUND` |
 | `GET` | `/api/student-avatar` | Ảnh đại diện hiện tại: `{ avatarUrl }` (`null` nếu chưa đặt) |
 | `POST` | `/api/student-avatar` | Đổi ảnh: body là nội dung ảnh, `Content-Type: image/jpeg\|png\|webp`, ≤ 2 MB → 200 `{ avatarUrl }`; sai loại → 415, quá lớn → 413 |
+| `GET` | `/api/profile-visibility` | Ẩn/công khai từng chỉ số: `{ gpa, drl, projects }` (`true` = công khai) |
+| `PUT` | `/api/profile-visibility` | Đổi một chỉ số `{ "field": "gpa"\|"drl"\|"projects", "isPublic": true\|false }` → 200; sai dữ liệu → 400 `INVALID_INPUT` |
+| `GET` | `/api/profile-visibility/mode` | Chế độ hiển thị cả hồ sơ: `{ visibility }` |
+| `PUT` | `/api/profile-visibility/mode` | Đổi chế độ `{ "visibility": "Public"\|"Partners_Only"\|"Private" }` → 200; giá trị khác → 400 `INVALID_INPUT` |
+| `GET` | `/api/student-profile/links` | Liên kết trên hồ sơ: `{ githubUrl, linkedinUrl }` (`null` = chưa có) |
+| `PUT` | `/api/student-profile/links` | Đổi `{ "githubUrl"?, "linkedinUrl"? }` → 200; `null` hoặc `""` để xóa. Chỉ nhận `https` đúng tên miền GitHub / LinkedIn, tối đa 255 ký tự; sai → 400 `INVALID_INPUT` |
+| `GET` | `/api/student-cv` | Dữ liệu xem trước CV (hồ sơ, học vấn, kỹ năng, dự án trên CV, kinh nghiệm, giải thưởng, chứng chỉ). Chỉ số đang ẩn không được trả về, tên của chúng nằm ở `hiddenFields`; thành tích bị từ chối không được trả về |
+| `GET` | `/api/student-achievements` | Thành tích của SV: `{ achievements: [{ achievementId, category, title, issuedBy, issuedDate, detail, visibility, status, hasEvidence }] }` |
+| `POST` | `/api/student-achievements` | Thêm `{ "category": "Award"\|"Publication"\|"Language_Cert"\|"Tech_Cert", "title", "issuedBy", "issuedDate": "YYYY-MM-DD", "detail"?, "visibility"? }` → 201, luôn ở trạng thái `Self_Declared`; sai dữ liệu → 400; trùng tên + tổ chức + ngày → 409 `ALREADY_EXISTS` |
+| `PATCH` | `/api/student-achievements/:id` | Đổi chế độ hiển thị `{ "visibility" }` → 200; không phải mục của mình → 404 `ACHIEVEMENT_NOT_FOUND` |
+| `DELETE` | `/api/student-achievements/:id` | Xóa mục và tệp minh chứng → 204; 404 |
+| `PUT` | `/api/student-achievements/:id/evidence` | Tải / thay minh chứng: thân là tệp PDF/JPG/PNG ≤ 5 MB → 200; sai loại → 415, quá lớn → 413; mục `Pending`/`Verified` → 409 `ACHIEVEMENT_LOCKED` |
+| `GET` | `/api/student-achievements/:id/evidence` | Chuyển hướng 302 tới liên kết ký tạm (60 giây) trong bucket riêng tư `evidence`; chưa có tệp → 404 `EVIDENCE_NOT_FOUND` |
+| `POST` | `/api/student-achievements/:id/verification-request` | Gửi xác minh (tùy chọn): `Self_Declared`/`Rejected` → `Pending`; chưa có tệp → 409 `EVIDENCE_REQUIRED`; trạng thái khác → 409 `INVALID_STATUS` |
+| `GET` | `/api/student-showcase` | Công trình SV trưng bày trên CV, theo thứ tự: `{ items: [{ resourceId, type, title, venue, trlLevel, reviewerName, reviewedAt, reviewScore, role, highlights, isShownOnCv, displayOrder, eligible }] }` |
+| `GET` | `/api/student-showcase/available` | Tài nguyên chọn được (của SV hoặc nhóm SV, đã được GV thẩm định đạt) mà chưa chọn: `{ resources }` |
+| `POST` | `/api/student-showcase` | Thêm `{ "resourceId", "role"?, "highlights"?, "isShownOnCv"? }` → 201; không phải của mình → 404 `RESOURCE_NOT_FOUND`; chưa thẩm định đạt → 409 `NOT_REVIEWED`; đã chọn → 409 `ALREADY_EXISTS` |
+| `PATCH` | `/api/student-showcase/:resourceId` | Đổi `role`, `highlights`, `isShownOnCv` → 200; 404 `SHOWCASE_NOT_FOUND` |
+| `DELETE` | `/api/student-showcase/:resourceId` | Gỡ khỏi danh sách (giữ nguyên tài nguyên gốc) → 204; 404 `SHOWCASE_NOT_FOUND` |
+| `PUT` | `/api/student-showcase/order` | Sắp xếp `{ "resourceIds": [...] }` (đúng đủ các mục đang chọn) → 200 `{ items }`; sai → 400 |
 
 Hợp đồng chi tiết (mã phản hồi, body mẫu): xem DESIGN.md trong gói nộp bài, mục 3.3.

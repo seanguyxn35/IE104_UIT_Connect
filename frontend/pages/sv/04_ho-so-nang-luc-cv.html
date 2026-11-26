@@ -103,6 +103,7 @@
     <!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
     <link rel="stylesheet" href="../../assets/css/app-shell.css" />
     <link rel="stylesheet" href="../../assets/css/ux-effects.css" />
+    <link rel="stylesheet" href="../../assets/css/cv-preview.css" />
   </head>
   <body
     class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased selection:bg-[#E6F0F7] selection:text-[#1F4E78]"
@@ -399,6 +400,7 @@
                 </div>
                 <div
                   class="w-full flex flex-wrap items-center justify-between gap-4 pb-6 pt-1"
+                  data-profile-toolbar
                 >
                   <div
                     class="flex items-center gap-2 text-[13px] text-[#5F6368]"
@@ -408,26 +410,31 @@
                       >Đồng bộ SSO ĐHQG-HCM · Lưu tự động lúc 14:32</span
                     >
                   </div>
-                  <div class="flex items-center gap-3">
+                  <div class="flex flex-wrap items-center gap-3">
                     <div
                       class="relative inline-block text-left"
                       id="visibility-dropdown-wrapper"
+                      data-no-ripple
                     >
                       <button
-                        class="h-10 px-3.5 rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors text-xs font-semibold flex items-center gap-2 shadow-xs"
-                        onclick="
-                          document
-                            .getElementById('visibility-menu')
-                            .classList.toggle('hidden')
-                        "
+                        class="h-10 min-w-[168px] px-3.5 rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors text-xs font-semibold flex items-center justify-center gap-2 shadow-xs whitespace-nowrap disabled:opacity-70"
+                        id="visibility-toggle"
+                        aria-haspopup="menu"
+                        aria-expanded="false"
                         type="button"
                       >
                         <span
                           class="material-symbols-outlined text-[16px] text-[#1F4E78]"
+                          id="current-visibility-icon"
                           >public</span
                         >
                         <span class="" id="current-visibility-label"
                           >Công khai</span
+                        >
+                        <span
+                          class="hidden px-1.5 py-0.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-medium leading-none"
+                          id="current-visibility-unsaved"
+                          >Chưa lưu</span
                         >
                         <span
                           class="material-symbols-outlined text-[16px] text-slate-400"
@@ -435,22 +442,21 @@
                         >
                       </button>
                       <div
-                        class="hidden absolute right-0 mt-1.5 w-52 rounded-lg bg-white border border-[#E1E5EA] shadow-lg z-50 py-1.5"
+                        class="hidden absolute right-0 top-full mt-1.5 w-64 rounded-lg bg-white border border-[#E1E5EA] shadow-lg z-50 py-1.5 whitespace-nowrap"
                         id="visibility-menu"
+                        role="menu"
+                        aria-label="Chế độ hiển thị hồ sơ"
                       >
+                        <p
+                          class="px-3.5 pt-1 pb-2 text-[11px] font-semibold uppercase tracking-wide text-[#5F6368]"
+                          aria-hidden="true"
+                        >
+                          Chế độ hiển thị hồ sơ
+                        </p>
                         <button
                           class="w-full text-left px-3.5 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium flex items-center gap-2"
-                          onclick="
-                            document.getElementById(
-                              'current-visibility-label',
-                            ).textContent = 'Công khai';
-                            document
-                              .getElementById('visibility-menu')
-                              .classList.add('hidden');
-                            triggerToast(
-                              'Đã đổi chế độ hiển thị sang: Công khai',
-                            );
-                          "
+                          data-profile-mode="Public"
+                          role="menuitemradio"
                           type="button"
                         >
                           <span
@@ -458,20 +464,17 @@
                             >public</span
                           >
                           <span class="">Công khai</span>
+                          <span
+                            class="material-symbols-outlined text-[16px] text-[#1F4E78] ml-auto invisible"
+                            data-mode-check
+                            aria-hidden="true"
+                            >check</span
+                          >
                         </button>
                         <button
                           class="w-full text-left px-3.5 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium flex items-center gap-2"
-                          onclick="
-                            document.getElementById(
-                              'current-visibility-label',
-                            ).textContent = 'Chỉ DN đối tác';
-                            document
-                              .getElementById('visibility-menu')
-                              .classList.add('hidden');
-                            triggerToast(
-                              'Đã đổi chế độ: Chỉ doanh nghiệp đối tác',
-                            );
-                          "
+                          data-profile-mode="Partners_Only"
+                          role="menuitemradio"
                           type="button"
                         >
                           <span
@@ -479,20 +482,17 @@
                             >corporate_fare</span
                           >
                           <span class="">Chỉ doanh nghiệp đối tác</span>
+                          <span
+                            class="material-symbols-outlined text-[16px] text-[#1F4E78] ml-auto invisible"
+                            data-mode-check
+                            aria-hidden="true"
+                            >check</span
+                          >
                         </button>
                         <button
                           class="w-full text-left px-3.5 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium flex items-center gap-2"
-                          onclick="
-                            document.getElementById(
-                              'current-visibility-label',
-                            ).textContent = 'Riêng tư';
-                            document
-                              .getElementById('visibility-menu')
-                              .classList.add('hidden');
-                            triggerToast(
-                              'Đã chuyển hồ sơ sang chế độ: Riêng tư',
-                            );
-                          "
+                          data-profile-mode="Private"
+                          role="menuitemradio"
                           type="button"
                         >
                           <span
@@ -500,6 +500,12 @@
                             >lock</span
                           >
                           <span class="">Riêng tư</span>
+                          <span
+                            class="material-symbols-outlined text-[16px] text-[#1F4E78] ml-auto invisible"
+                            data-mode-check
+                            aria-hidden="true"
+                            >check</span
+                          >
                         </button>
                       </div>
                     </div>
@@ -538,7 +544,7 @@
                         >
                       </button>
                       <div
-                        class="hidden absolute right-0 mt-1.5 w-56 rounded-lg bg-white border border-[#E1E5EA] shadow-lg z-50 py-1.5"
+                        class="hidden absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-56 rounded-lg bg-white border border-[#E1E5EA] shadow-lg z-50 py-1.5"
                         id="export-menu"
                       >
                         <a
@@ -669,25 +675,62 @@
                               </div>
                             </div>
                             <div
-                              class="flex flex-col items-start gap-2 text-[13px] tracking-[0.05em] text-slate-600 mt-1"
+                              class="flex flex-col items-start gap-1 text-[13px] tracking-[0.05em] text-slate-600 mt-1"
+                              data-no-ripple
                             >
-                              <a
-                                class="inline-flex items-center gap-1 hover:text-[#1F4E78] transition-colors"
-                                href="https://github.com/nguyenvanan"
-                                target="_blank"
-                                ><span
-                                  class="material-symbols-outlined text-[15px] text-[#1F4E78]"
-                                  >code</span
-                                >github.com/nguyenvanan</a
-                              ><a
-                                class="inline-flex items-center gap-1 hover:text-[#1F4E78] transition-colors"
-                                href="https://linkedin.com/in/nguyenvanan"
-                                target="_blank"
-                                ><span
-                                  class="material-symbols-outlined text-[15px] text-[#2E86AB]"
-                                  >badge</span
-                                >linkedin.com/in/nguyenvanan</a
-                              >
+                              <!-- Liên kết GitHub / LinkedIn: sửa bằng nút bút chì (assets/js/profile-links.js) -->
+                              <div class="w-full min-w-0" data-link-field="githubUrl">
+                                <div class="flex items-center gap-1.5 min-w-0" data-link-view>
+                                  <a
+                                    class="inline-flex items-center gap-1 min-w-0 hover:text-[#1F4E78] transition-colors"
+                                    href="https://github.com/nguyenvanan"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-link-anchor
+                                    ><span
+                                      class="material-symbols-outlined text-[15px] text-[#1F4E78]"
+                                      >code</span
+                                    ><span class="truncate" data-link-text
+                                      >github.com/nguyenvanan</span
+                                    ></a
+                                  >
+                                  <button
+                                    class="shrink-0 w-7 h-7 inline-flex items-center justify-center rounded text-slate-400 hover:text-[#1F4E78] hover:bg-[#E6F0F7] transition-colors disabled:opacity-40"
+                                    type="button"
+                                    title="Sửa liên kết GitHub"
+                                    aria-label="Sửa liên kết GitHub"
+                                    data-link-edit
+                                  >
+                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="w-full min-w-0" data-link-field="linkedinUrl">
+                                <div class="flex items-center gap-1.5 min-w-0" data-link-view>
+                                  <a
+                                    class="inline-flex items-center gap-1 min-w-0 hover:text-[#1F4E78] transition-colors"
+                                    href="https://linkedin.com/in/nguyenvanan"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-link-anchor
+                                    ><span
+                                      class="material-symbols-outlined text-[15px] text-[#2E86AB]"
+                                      >badge</span
+                                    ><span class="truncate" data-link-text
+                                      >linkedin.com/in/nguyenvanan</span
+                                    ></a
+                                  >
+                                  <button
+                                    class="shrink-0 w-7 h-7 inline-flex items-center justify-center rounded text-slate-400 hover:text-[#1F4E78] hover:bg-[#E6F0F7] transition-colors disabled:opacity-40"
+                                    type="button"
+                                    title="Sửa liên kết LinkedIn"
+                                    aria-label="Sửa liên kết LinkedIn"
+                                    data-link-edit
+                                  >
+                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                             <div
                               class="flex flex-row flex-wrap items-center gap-2 mt-1"
@@ -1264,873 +1307,93 @@
                         </div>
                       </div>
                     </section>
-                    <!-- 4. SECTION: CHỨNG CHỈ & THÀNH TÍCH -->
+                    <!-- 4. SECTION: CHỨNG CHỈ & THÀNH TÍCH (assets/js/achievements.js) -->
                     <section
                       class="rounded-lg bg-white p-6 border border-[#E1E5EA] shadow-sm"
                     >
                       <div
-                        class="flex items-center justify-between pb-4 border-b border-[#E1E5EA] mb-4"
+                        class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E1E5EA] mb-4"
                       >
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5 min-w-0">
                           <div
-                            class="w-9 h-9 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
+                            class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
                           >
-                            <span class="material-symbols-outlined text-[20px]"
-                              >workspace_premium</span
-                            >
+                            <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
                           </div>
-                          <div>
-                            <div class="flex items-center gap-2">
-                              <h2 class="text-2xl font-semibold text-[#1A1A1A]">
-                                Chứng chỉ, Giải thưởng &amp; Công bố khoa học
-                              </h2>
-                              <button
-                                class="text-slate-400 hover:text-slate-600 p-1 rounded-sm transition-colors"
-                                title="Chế độ hiển thị: Công khai"
-                                type="button"
-                              >
-                                <span
-                                  class="material-symbols-outlined text-[18px]"
-                                  >visibility</span
-                                >
-                              </button>
-                            </div>
+                          <div class="min-w-0">
+                            <h2 class="text-2xl font-semibold text-[#1A1A1A]">
+                              Chứng chỉ, Giải thưởng &amp; Công bố khoa học
+                            </h2>
                             <p class="text-xs text-[#5F6368]">
-                              Hồ sơ xác thực bởi Hội đồng ĐHQG-HCM và cơ quan
-                              kiểm định
+                              Thành tích bạn tự khai được hiển thị ngay. Gửi xác minh là tùy chọn.
                             </p>
                           </div>
                         </div>
-                        <button
-                          class="border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors"
-                          onclick="toggleModal('modal-add-achievement')"
-                          type="button"
-                        >
-                          <span class="material-symbols-outlined text-[16px]"
-                            >add</span
-                          ><span class="">Thêm thành tích</span>
-                        </button>
+                        <div class="flex flex-wrap items-center gap-2">
+                          <button
+                            class="border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors"
+                            data-cv-preview-open
+                            type="button"
+                          >
+                            <span class="material-symbols-outlined text-[16px]">description</span><span>Xem trên CV</span>
+                          </button>
+                          <button
+                            class="bg-[#1F4E78] text-white hover:bg-[#163A59] text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors"
+                            data-achievement-open
+                            type="button"
+                          >
+                            <span class="material-symbols-outlined text-[16px]">add</span><span>Thêm thành tích</span>
+                          </button>
+                        </div>
                       </div>
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Award 1 -->
-                        <div
-                          class="p-4 rounded-lg bg-white border border-[#E1E5EA] shadow-xs flex flex-col justify-between hover:border-[#1F4E78] transition-colors"
-                        >
-                          <div>
-                            <div class="flex items-center justify-between mb-2">
-                              <span
-                                class="px-2.5 py-0.5 rounded-xl bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-200"
-                              >
-                                Giải thưởng NCKH
-                              </span>
-                              <span class="text-xs text-[#5F6368]"
-                                >11/2024</span
-                              >
-                            </div>
-                            <h3 class="text-base font-semibold text-[#1F4E78]">
-                              Giải Nhì – Sinh viên NCKH Euréka 2024
-                            </h3>
-                            <p class="text-xs text-[#5F6368] mt-1">
-                              Lĩnh vực Công nghệ Thông tin • Đề tài:
-                              <em>Hệ thống EdgeVision-Traffic</em>
-                            </p>
-                          </div>
-                          <div
-                            class="pt-3 mt-3 border-t border-[#E1E5EA] flex items-center justify-between"
-                          >
-                            <span
-                              class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >verified</span
-                              >
-                              Xác thực bởi ĐHQG-HCM
-                            </span>
-                            <a
-                              class="text-xs font-semibold text-[#1F4E78] hover:underline inline-flex items-center gap-0.5"
-                              href="javascript:void(0)"
-                              onclick="
-                                triggerToast(
-                                  'Mở tài liệu minh chứng Euréka PDF',
-                                )
-                              "
-                            >
-                              <span class="">Xem bằng khen</span>
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >open_in_new</span
-                              >
-                            </a>
-                          </div>
-                        </div>
-                        <!-- Paper Scopus -->
-                        <div
-                          class="p-4 rounded-lg bg-white border border-[#E1E5EA] shadow-xs flex flex-col justify-between hover:border-[#1F4E78] transition-colors"
-                        >
-                          <div>
-                            <div class="flex items-center justify-between mb-2">
-                              <span
-                                class="px-2.5 py-0.5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold border border-[#cfe2f0]"
-                              >
-                                Công bố Quốc tế
-                              </span>
-                              <span class="text-xs text-[#5F6368]"
-                                >08/2024</span
-                              >
-                            </div>
-                            <h3 class="text-base font-semibold text-[#1F4E78]">
-                              Bài báo Hội nghị Quốc tế RIVF 2024
-                            </h3>
-                            <p class="text-xs text-[#5F6368] mt-1">
-                              "Lightweight YOLOv8 Compression for Edge Hardware"
-                              (Đồng tác giả / Lead)
-                            </p>
-                          </div>
-                          <div
-                            class="pt-3 mt-3 border-t border-[#E1E5EA] flex items-center justify-between"
-                          >
-                            <span
-                              class="inline-flex items-center gap-1 text-xs font-medium text-[#1F4E78]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >menu_book</span
-                              >
-                              Scopus / IEEE Indexed
-                            </span>
-                            <span class="text-xs text-[#5F6368]"
-                              >DOI: 10.1109/RIVF.2024.9</span
-                            >
-                          </div>
-                        </div>
-                        <!-- IELTS -->
-                        <div
-                          class="p-4 rounded-lg bg-white border border-[#E1E5EA] shadow-xs flex flex-col justify-between hover:border-[#1F4E78] transition-colors"
-                        >
-                          <div>
-                            <div class="flex items-center justify-between mb-2">
-                              <span
-                                class="px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200"
-                              >
-                                Ngoại ngữ
-                              </span>
-                              <span class="text-xs text-[#5F6368]"
-                                >03/2023 - 03/2025</span
-                              >
-                            </div>
-                            <h3 class="text-base font-semibold text-[#1F4E78]">
-                              IELTS Academic 7.5 (Overall)
-                            </h3>
-                            <p class="text-xs text-[#5F6368] mt-1">
-                              IDP Education • L: 8.5 | R: 8.0 | W: 7.0 | S: 6.5
-                            </p>
-                          </div>
-                          <div
-                            class="pt-3 mt-3 border-t border-[#E1E5EA] flex items-center justify-between"
-                          >
-                            <span
-                              class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >verified</span
-                              >
-                              TRF ID Verified
-                            </span>
-                            <span class="text-xs text-[#5F6368]"
-                              >Chuẩn đầu ra K18</span
-                            >
-                          </div>
-                        </div>
-                        <!-- NVIDIA -->
-                        <div
-                          class="p-4 rounded-lg bg-white border border-[#E1E5EA] shadow-xs flex flex-col justify-between hover:border-[#1F4E78] transition-colors"
-                        >
-                          <div>
-                            <div class="flex items-center justify-between mb-2">
-                              <span
-                                class="px-2.5 py-0.5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold border border-[#cfe2f0]"
-                              >
-                                Chứng chỉ Công nghệ
-                              </span>
-                              <span class="text-xs text-[#5F6368]"
-                                >11/2023</span
-                              >
-                            </div>
-                            <h3 class="text-base font-semibold text-[#1F4E78]">
-                              NVIDIA Certified Associate
-                            </h3>
-                            <p class="text-xs text-[#5F6368] mt-1">
-                              Generative AI and Deep Learning on Jetson
-                              Ecosystem
-                            </p>
-                          </div>
-                          <div
-                            class="pt-3 mt-3 border-t border-[#E1E5EA] flex items-center justify-between"
-                          >
-                            <span
-                              class="inline-flex items-center gap-1 text-xs font-medium text-[#2E86AB]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >badge</span
-                              >
-                              NVIDIA DLI Verified
-                            </span>
-                            <a
-                              class="text-xs font-semibold text-[#1F4E78] hover:underline inline-flex items-center gap-0.5"
-                              href="javascript:void(0)"
-                              onclick="
-                                triggerToast(
-                                  'Mở chứng chỉ số NVIDIA Credential',
-                                )
-                              "
-                            >
-                              <span class="">Xem Huy hiệu</span>
-                              <span
-                                class="material-symbols-outlined text-[14px]"
-                                >open_in_new</span
-                              >
-                            </a>
-                          </div>
-                        </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="achievement-list" aria-live="polite">
+                        <p class="md:col-span-2 text-sm text-[#5F6368]">Đang tải thành tích…</p>
                       </div>
                     </section>
-                    <!-- 5. SECTION: "PROJECT TRƯNG BÀY TRÊN CV" (UC-E1) -->
+                    <!-- 5. SECTION: "PROJECT TRƯNG BÀY TRÊN CV" (UC-E1) – assets/js/showcase.js -->
                     <section
                       class="rounded-lg bg-white p-6 border border-[#E1E5EA] shadow-sm"
                     >
                       <div
                         class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E1E5EA] mb-4"
                       >
-                        <div>
+                        <div class="min-w-0">
                           <div class="flex items-center gap-2">
-                            <div
-                              class="w-9 h-9 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[20px]"
-                                >view_kanban</span
-                              >
+                            <div class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]">
+                              <span class="material-symbols-outlined text-[20px]">view_kanban</span>
                             </div>
                             <h2 class="text-2xl font-semibold text-[#1A1A1A]">
-                              Công trình &amp; Project Trưng bày trên CV&nbsp;
+                              Công trình &amp; Project Trưng bày trên CV
                             </h2>
-                            <button
-                              class="text-slate-400 hover:text-slate-600 p-1 rounded-sm transition-colors"
-                              title="Chế độ hiển thị: Công khai"
-                              type="button"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[18px]"
-                                >visibility</span
-                              >
-                            </button>
                           </div>
                           <p class="text-xs text-[#5F6368] mt-1">
-                            Chọn lọc các đề tài NCKH đã thẩm định hoặc dự án
-                            tiêu biểu để đưa vào bản in CV. Kéo thả hoặc dùng
-                            nút để sắp xếp thứ tự ưu tiên.
+                            Chọn từ các công trình của bạn hoặc nhóm bạn đã được giảng viên thẩm định.
+                            Dùng nút mũi tên để sắp xếp thứ tự trên CV.
                           </p>
                         </div>
-                        <div
-                          class="flex items-center gap-2.5 self-start sm:self-auto"
-                        >
+                        <div class="flex flex-wrap items-center gap-2.5 self-start sm:self-auto shrink-0">
                           <span
                             class="rounded-xl bg-[#E6F0F7] text-[#1F4E78] px-3 py-1 text-xs font-semibold whitespace-nowrap"
                             id="cv-showcase-counter"
-                            >Đang hiển thị: 3 / 4 đề tài</span
-                          ><button
-                            class="border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors"
-                            onclick="
-                              triggerToast(
-                                'Mở biểu mẫu Thêm công trình / dự án mới',
-                              )
-                            "
+                            >Đang tải…</span
+                          >
+                          <button
+                            class="bg-[#1F4E78] text-white hover:bg-[#163A59] text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap"
+                            data-showcase-open
                             type="button"
                           >
-                            <span class="material-symbols-outlined text-[16px]"
-                              >add</span
-                            ><span class="">Thêm dự án</span>
+                            <span class="material-symbols-outlined text-[16px]">add</span><span>Thêm dự án</span>
                           </button>
                         </div>
                       </div>
                       <!-- Filter bar -->
-                      <div
-                        class="flex flex-wrap items-center justify-between gap-2 mb-4 p-2 bg-[#F5F7FA] rounded border border-[#E1E5EA]"
-                      >
-                        <div class="flex items-center gap-1.5">
-                          <button
-                            class="px-3 py-1 rounded-md bg-white border border-[#E1E5EA] text-[#1F4E78] text-xs font-semibold shadow-xs"
-                            type="button"
-                          >
-                            Tất cả đề tài (4)
-                          </button>
-                          <button
-                            class="px-3 py-1 rounded-md text-[#5F6368] hover:text-[#1F4E78] text-xs font-medium"
-                            type="button"
-                          >
-                            Đã thẩm định TRL (3)
-                          </button>
-                          <button
-                            class="px-3 py-1 rounded-md text-[#5F6368] hover:text-[#1F4E78] text-xs font-medium"
-                            type="button"
-                          >
-                            Chỉ hiển thị trên CV (3)
-                          </button>
-                        </div>
+                      <div class="flex flex-wrap items-center gap-1.5 mb-4 p-2 bg-[#F5F7FA] rounded border border-[#E1E5EA]" id="showcase-filters">
+                        <button class="px-3 py-1 rounded-md text-xs font-medium" data-showcase-filter="all" type="button">Tất cả</button>
+                        <button class="px-3 py-1 rounded-md text-xs font-medium" data-showcase-filter="shown" type="button">Hiển thị trên CV</button>
+                        <button class="px-3 py-1 rounded-md text-xs font-medium" data-showcase-filter="hidden" type="button">Đang ẩn</button>
                       </div>
-                      <!-- Project Cards List matching TRANG CHỦ badge style -->
-                      <div class="space-y-4" id="projects-container">
-                        <!-- Card 1 -->
-                        <div
-                          class="rounded-lg bg-white p-5 border border-[#E1E5EA] shadow-xs hover:shadow-sm transition-all"
-                          data-id="p1"
-                        >
-                          <div class="flex items-start gap-3">
-                            <div
-                              class="flex flex-col items-center gap-1 cursor-grab pt-1 text-[#5F6368] hover:text-[#1F4E78]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[20px]"
-                                >drag_indicator</span
-                              >
-                              <span
-                                class="w-5 h-5 rounded-sm bg-[#1F4E78] text-white text-xs font-bold flex items-center justify-center"
-                                >1</span
-                              >
-                            </div>
-                            <div class="flex-1 min-w-0">
-                              <!-- Badges Row matching TRANG CHỦ -->
-                              <div
-                                class="flex flex-wrap items-center justify-between gap-2 mb-2"
-                              >
-                                <div class="flex flex-wrap items-center gap-2">
-                                  <!-- Type Badge: Sản phẩm (green) -->
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold flex items-center gap-1.5 border border-emerald-200"
-                                  >
-                                    <span
-                                      class="w-1.5 h-1.5 rounded-xl bg-emerald-600"
-                                    ></span>
-                                    Sản phẩm
-                                  </span>
-                                  <!-- Verified Badge: green -->
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200"
-                                  >
-                                    ✓ Đã thẩm định
-                                  </span>
-                                  <!-- TRL Badge with progress bar -->
-                                  <div
-                                    class="flex items-center gap-2 bg-[#F5F7FA] border border-[#E1E5EA] px-2.5 py-0.5 rounded-md"
-                                  >
-                                    <span
-                                      class="px-1.5 py-0.2 rounded-sm bg-[#1F4E78] text-white font-mono text-xs font-medium"
-                                      >TRL 6</span
-                                    >
-                                    <div
-                                      class="w-12 h-1.5 bg-[#E1E5EA] rounded-xl overflow-hidden hidden sm:block"
-                                    >
-                                      <div
-                                        class="h-full bg-emerald-600 rounded-xl"
-                                        suyle="width: 66.6%;"
-                                      ></div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Toggle Switch -->
-                                <label
-                                  class="inline-flex items-center gap-2 cursor-pointer select-none"
-                                >
-                                  <span
-                                    class="text-xs font-semibold text-[#1F4E78]"
-                                    >Hiển thị trên CV</span
-                                  >
-                                  <input
-                                    checked=""
-                                    class="sr-only peer"
-                                    onchange="toggleProjectCV('p1', this)"
-                                    type="checkbox"
-                                  />
-                                  <div
-                                    class="w-9 h-5 bg-[#E1E5EA] peer-focus:outline-none rounded-xl peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:bg-[#1F4E78]"
-                                  ></div>
-                                </label>
-                              </div>
-                              <h3
-                                class="text-base font-semibold text-[#1F4E78] hover:underline cursor-pointer"
-                              >
-                                Hệ thống AI Edge giám sát an toàn giao thông đô
-                                thị thông minh thời gian thực
-                                (EdgeVision-Traffic)
-                              </h3>
-                              <p class="text-xs text-[#5F6368] mt-0.5">
-                                Trưởng nhóm (Lead AI Engineer) • Nhóm 4 thành
-                                viên • GVHD: PGS.TS. Trần Quốc Dũng (CV&amp;PR
-                                Lab)
-                              </p>
-                              <!-- Accomplishments -->
-                              <div
-                                class="mt-2.5 p-3 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#5F6368] space-y-1"
-                              >
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Kết quả định lượng:</strong
-                                  >
-                                  Tối ưu hóa suy luận mô hình YOLOv8x bằng
-                                  TensorRT INT8, giảm độ trễ 38% và đạt
-                                  <strong class="text-[#1A1A1A]"
-                                    >38.5 FPS</strong
-                                  >
-                                  ổn định trên kit NVIDIA Jetson AGX Orin.
-                                </p>
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Dữ liệu &amp; Thực nghiệm:</strong
-                                  >
-                                  Xây dựng bộ dataset 45.000 ảnh giao thông tại
-                                  khu đô thị ĐHQG-HCM; Độ chính xác mAP@50 đạt
-                                  91.4% trong điều kiện thời tiết phức tạp.
-                                </p>
-                              </div>
-                              <!-- Tech Chips & Links (Max 3 chips + N, no wrap) -->
-                              <div
-                                class="mt-3 flex flex-wrap items-center justify-between gap-2"
-                              >
-                                <div
-                                  class="flex items-center gap-1.5 overflow-hidden whitespace-nowrap"
-                                >
-                                  <span
-                                    class="text-xs font-medium text-[#2E86AB] bg-[#E6F0F7] px-2 py-0.5 rounded-sm"
-                                    >Thị giác máy tính</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >PyTorch</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >YOLOv8</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >TensorRT</span
-                                  >
-                                  <span
-                                    class="px-1.5 py-0.5 rounded-sm bg-[#F5F7FA] text-xs text-[#5F6368] font-medium"
-                                    >+2</span
-                                  >
-                                </div>
-                                <div class="flex items-center gap-3">
-                                  <a
-                                    class="text-xs font-semibold text-[#1F4E78] hover:underline flex items-center gap-1"
-                                    href="javascript:void(0)"
-                                    onclick="
-                                      triggerToast(
-                                        'Mở GitHub: UIT-CVPR/EdgeVision-Traffic',
-                                      )
-                                    "
-                                  >
-                                    <span
-                                      class="material-symbols-outlined text-[15px]"
-                                      >code</span
-                                    >
-                                    GitHub Repo
-                                  </a>
-                                  <a
-                                    class="text-xs font-semibold text-[#1F4E78] hover:underline flex items-center gap-1"
-                                    href="javascript:void(0)"
-                                    onclick="
-                                      triggerToast('Mở Demo video YouTube')
-                                    "
-                                  >
-                                    <span
-                                      class="material-symbols-outlined text-[15px]"
-                                      >play_circle</span
-                                    >
-                                    Demo Video
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Card 2 -->
-                        <div
-                          class="rounded-lg bg-white p-5 border border-[#E1E5EA] shadow-xs hover:shadow-sm transition-all"
-                          data-id="p2"
-                        >
-                          <div class="flex items-start gap-3">
-                            <div
-                              class="flex flex-col items-center gap-1 cursor-grab pt-1 text-[#5F6368] hover:text-[#1F4E78]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[20px]"
-                                >drag_indicator</span
-                              >
-                              <span
-                                class="w-5 h-5 rounded-sm bg-[#1F4E78] text-white text-xs font-bold flex items-center justify-center"
-                                >2</span
-                              >
-                            </div>
-                            <div class="flex-1 min-w-0">
-                              <div
-                                class="flex flex-wrap items-center justify-between gap-2 mb-2"
-                              >
-                                <div class="flex flex-wrap items-center gap-2">
-                                  <!-- Type Badge: Dự án (blue) -->
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center gap-1.5 border border-[#cfe2f0]"
-                                  >
-                                    <span
-                                      class="w-1.5 h-1.5 rounded-xl bg-[#1F4E78]"
-                                    ></span>
-                                    Dự án
-                                  </span>
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200"
-                                  >
-                                    ✓ Đã thẩm định
-                                  </span>
-                                  <div
-                                    class="flex items-center gap-2 bg-[#F5F7FA] border border-[#E1E5EA] px-2.5 py-0.5 rounded-md"
-                                  >
-                                    <span
-                                      class="px-1.5 py-0.2 rounded-sm bg-[#1F4E78] text-white font-mono text-xs font-medium"
-                                      >TRL 5</span
-                                    >
-                                    <div
-                                      class="w-12 h-1.5 bg-[#E1E5EA] rounded-xl overflow-hidden hidden sm:block"
-                                    >
-                                      <div
-                                        class="h-full bg-[#1F4E78] rounded-xl"
-                                        style="width: 55.5%"
-                                      ></div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <label
-                                  class="inline-flex items-center gap-2 cursor-pointer select-none"
-                                >
-                                  <span
-                                    class="text-xs font-semibold text-[#1F4E78]"
-                                    >Hiển thị trên CV</span
-                                  >
-                                  <input
-                                    checked=""
-                                    class="sr-only peer"
-                                    onchange="toggleProjectCV('p2', this)"
-                                    type="checkbox"
-                                  />
-                                  <div
-                                    class="w-9 h-5 bg-[#E1E5EA] peer-focus:outline-none rounded-xl peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:bg-[#1F4E78]"
-                                  ></div>
-                                </label>
-                              </div>
-                              <h3
-                                class="text-base font-semibold text-[#1F4E78] hover:underline cursor-pointer"
-                              >
-                                Thiết bị định vị &amp; cảm biến đeo tay đo nhịp
-                                tim – SpO2 thông minh cho người cao tuổi
-                              </h3>
-                              <p class="text-xs text-[#5F6368] mt-0.5">
-                                Kỹ sư nhúng &amp; Mobile App (BLE + Flutter) •
-                                GVHD: TS. Nguyễn Văn A
-                              </p>
-                              <div
-                                class="mt-2.5 p-3 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#5F6368] space-y-1"
-                              >
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Thiết kế Firmware:</strong
-                                  >
-                                  Lập trình vi điều khiển ESP32 với FreeRTOS,
-                                  tối ưu hóa năng lượng kéo dài thời lượng pin
-                                  48 giờ liên tục; Tích hợp cảnh báo ngã té qua
-                                  gia tốc kế MPU6050.
-                                </p>
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Hệ thống đồng bộ:</strong
-                                  >
-                                  Truyền tải dữ liệu qua Bluetooth Low Energy
-                                  (BLE) lên ứng dụng di động Flutter và lưu trữ
-                                  trên Firebase Realtime DB với độ trễ dưới
-                                  200ms.
-                                </p>
-                              </div>
-                              <div
-                                class="mt-3 flex flex-wrap items-center justify-between gap-2"
-                              >
-                                <div
-                                  class="flex items-center gap-1.5 overflow-hidden whitespace-nowrap"
-                                >
-                                  <span
-                                    class="text-xs font-medium text-[#2E86AB] bg-[#E6F0F7] px-2 py-0.5 rounded-sm"
-                                    >IoT &amp; Y tế</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >ESP32</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >FreeRTOS</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >Flutter</span
-                                  >
-                                  <span
-                                    class="px-1.5 py-0.5 rounded-sm bg-[#F5F7FA] text-xs text-[#5F6368] font-medium"
-                                    >+2</span
-                                  >
-                                </div>
-                                <a
-                                  class="text-xs font-semibold text-[#1F4E78] hover:underline flex items-center gap-1"
-                                  href="javascript:void(0)"
-                                  onclick="
-                                    triggerToast(
-                                      'Mở tài liệu thiết kế phần cứng',
-                                    )
-                                  "
-                                >
-                                  <span
-                                    class="material-symbols-outlined text-[15px]"
-                                    >description</span
-                                  >
-                                  Báo cáo kỹ thuật
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Card 3 -->
-                        <div
-                          class="rounded-lg bg-white p-5 border border-[#E1E5EA] shadow-xs hover:shadow-sm transition-all"
-                          data-id="p3"
-                        >
-                          <div class="flex items-start gap-3">
-                            <div
-                              class="flex flex-col items-center gap-1 cursor-grab pt-1 text-[#5F6368] hover:text-[#1F4E78]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[20px]"
-                                >drag_indicator</span
-                              >
-                              <span
-                                class="w-5 h-5 rounded-sm bg-[#1F4E78] text-white text-xs font-bold flex items-center justify-center"
-                                >3</span
-                              >
-                            </div>
-                            <div class="flex-1 min-w-0">
-                              <div
-                                class="flex flex-wrap items-center justify-between gap-2 mb-2"
-                              >
-                                <div class="flex flex-wrap items-center gap-2">
-                                  <!-- Type Badge: Bài báo (amber) -->
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-amber-50 text-amber-800 text-xs font-semibold flex items-center gap-1.5 border border-amber-200"
-                                  >
-                                    <span
-                                      class="w-1.5 h-1.5 rounded-xl bg-amber-500"
-                                    ></span>
-                                    Bài báo
-                                  </span>
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200"
-                                  >
-                                    ✓ Đã thẩm định
-                                  </span>
-                                  <div
-                                    class="flex items-center gap-2 bg-[#F5F7FA] border border-[#E1E5EA] px-2.5 py-0.5 rounded-md"
-                                  >
-                                    <span
-                                      class="px-1.5 py-0.2 rounded-sm bg-[#1F4E78] text-white font-mono text-xs font-medium"
-                                      >TRL 4</span
-                                    >
-                                    <div
-                                      class="w-12 h-1.5 bg-[#E1E5EA] rounded-xl overflow-hidden hidden sm:block"
-                                    >
-                                      <div
-                                        class="h-full bg-amber-500 rounded-xl"
-                                        style="width: 44.4%"
-                                      ></div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <label
-                                  class="inline-flex items-center gap-2 cursor-pointer select-none"
-                                >
-                                  <span
-                                    class="text-xs font-semibold text-[#1F4E78]"
-                                    >Hiển thị trên CV</span
-                                  >
-                                  <input
-                                    checked=""
-                                    class="sr-only peer"
-                                    onchange="toggleProjectCV('p3', this)"
-                                    type="checkbox"
-                                  />
-                                  <div
-                                    class="w-9 h-5 bg-[#E1E5EA] peer-focus:outline-none rounded-xl peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:bg-[#1F4E78]"
-                                  ></div>
-                                </label>
-                              </div>
-                              <h3
-                                class="text-base font-semibold text-[#1F4E78] hover:underline cursor-pointer"
-                              >
-                                Nén mô hình Deep Learning sử dụng Pruning &amp;
-                                Lượng tử hóa INT8 cho Drone giám sát
-                              </h3>
-                              <p class="text-xs text-[#5F6368] mt-0.5">
-                                Nghiên cứu viên AI (First Author) • Hợp tác cùng
-                                Phòng thí nghiệm CV&amp;PR
-                              </p>
-                              <div
-                                class="mt-2.5 p-3 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#5F6368] space-y-1"
-                              >
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Thuật toán tối ưu:</strong
-                                  >
-                                  Áp dụng kỹ thuật Structured Pruning kết hợp
-                                  Post-Training Quantization (PTQ) giúp giảm
-                                  kích thước mô hình từ 68MB xuống 14.2MB (giảm
-                                  79%).
-                                </p>
-                                <p class="">
-                                  •
-                                  <strong class="text-[#1A1A1A]"
-                                    >Đánh giá thực nghiệm:</strong
-                                  >
-                                  Giảm 45% điện năng tiêu thụ trên phần cứng
-                                  Raspberry Pi 4 &amp; Coral TPU mà chỉ sụt giảm
-                                  1.8% độ chính xác mAP.
-                                </p>
-                              </div>
-                              <div
-                                class="mt-3 flex flex-wrap items-center justify-between gap-2"
-                              >
-                                <div
-                                  class="flex items-center gap-1.5 overflow-hidden whitespace-nowrap"
-                                >
-                                  <span
-                                    class="text-xs font-medium text-[#2E86AB] bg-[#E6F0F7] px-2 py-0.5 rounded-sm"
-                                    >Nén mô hình AI</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >PyTorch</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >ONNX</span
-                                  >
-                                  <span
-                                    class="px-2 py-0.5 rounded-sm bg-[#F5F7FA] border border-[#E1E5EA] text-xs text-[#1A1A1A]"
-                                    >Edge TPU</span
-                                  >
-                                  <span
-                                    class="px-1.5 py-0.5 rounded-sm bg-[#F5F7FA] text-xs text-[#5F6368] font-medium"
-                                    >+1</span
-                                  >
-                                </div>
-                                <a
-                                  class="text-xs font-semibold text-[#1F4E78] hover:underline flex items-center gap-1"
-                                  href="javascript:void(0)"
-                                  onclick="triggerToast('Mở tài liệu Scopus')"
-                                >
-                                  <span
-                                    class="material-symbols-outlined text-[15px]"
-                                    >menu_book</span
-                                  >
-                                  IEEE Scopus Record
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Card 4 (Hidden) -->
-                        <div
-                          class="rounded-lg bg-[#F5F7FA] p-5 border border-[#E1E5EA] opacity-80 hover:opacity-100 transition-all"
-                          data-id="p4"
-                        >
-                          <div class="flex items-start gap-3">
-                            <div
-                              class="flex flex-col items-center gap-1 pt-1 text-[#5F6368]"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[20px]"
-                                >drag_indicator</span
-                              >
-                              <span
-                                class="w-5 h-5 rounded-sm bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-bold flex items-center justify-center"
-                                >4</span
-                              >
-                            </div>
-                            <div class="flex-1 min-w-0">
-                              <div
-                                class="flex flex-wrap items-center justify-between gap-2 mb-2"
-                              >
-                                <div class="flex flex-wrap items-center gap-2">
-                                  <span
-                                    class="px-2.5 py-0.5 rounded-xl bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-medium"
-                                  >
-                                    Đồ án môn học Web
-                                  </span>
-                                  <div
-                                    class="flex items-center gap-1.5 bg-white border border-[#E1E5EA] px-2.5 py-0.5 rounded-md"
-                                  >
-                                    <span
-                                      class="px-1.5 py-0.2 rounded-sm bg-slate-300 text-slate-700 font-mono text-xs font-medium"
-                                      >TRL 3</span
-                                    >
-                                  </div>
-                                  <span class="text-xs text-[#5F6368] italic"
-                                    >Đang ẩn khỏi CV</span
-                                  >
-                                </div>
-                                <label
-                                  class="inline-flex items-center gap-2 cursor-pointer select-none"
-                                >
-                                  <span class="text-xs text-[#5F6368]"
-                                    >Ẩn khỏi CV</span
-                                  >
-                                  <input
-                                    class="sr-only peer"
-                                    onchange="toggleProjectCV('p4', this)"
-                                    type="checkbox"
-                                  />
-                                  <div
-                                    class="w-9 h-5 bg-[#E1E5EA] peer-focus:outline-none rounded-xl peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:bg-[#1F4E78]"
-                                  ></div>
-                                </label>
-                              </div>
-                              <h3
-                                class="text-base font-semibold text-[#1A1A1A]"
-                              >
-                                Website Quản lý Thư viện Khoa KHMT tích hợp
-                                Chatbot AI hỗ trợ mượn trả
-                              </h3>
-                              <p class="text-xs text-[#5F6368] mt-0.5">
-                                Fullstack Developer • Môn học: Phát triển Phần
-                                mềm Hướng dịch vụ
-                              </p>
-                              <p class="mt-2 text-xs text-[#5F6368]">
-                                Ghi chú: Đã ẩn để ưu tiên các đề tài NCKH chuyên
-                                sâu trên bản in CV 1 trang chuẩn học thuật.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="space-y-4" id="projects-container" aria-live="polite">
+                        <p class="text-sm text-[#5F6368]">Đang tải công trình…</p>
                       </div>
                     </section>
                   </div>
@@ -2181,11 +1444,15 @@
                           class="w-[145px] h-[190px] bg-white rounded-sm shadow-sm border border-[#E1E5EA] p-2 text-[6px] text-slate-400 select-none overflow-hidden relative leading-tight"
                         >
                           <div class="border-b border-slate-200 pb-1 mb-1">
-                            <div class="font-bold text-[8px] text-[#1F4E78]">
+                            <div
+                              class="font-bold text-[8px] text-[#1F4E78] uppercase truncate"
+                              data-cv-mini-name
+                            >
                               NGUYỄN VĂN AN
                             </div>
                             <div
-                              class="text-[6px] text-[#2E86AB] font-semibold"
+                              class="text-[6px] text-[#2E86AB] font-semibold uppercase truncate"
+                              data-cv-mini-headline
                             >
                               KỸ SƯ KHMT • AI &amp; EDGE
                             </div>
@@ -2230,9 +1497,7 @@
                         >
                           <button
                             class="px-3 py-1.5 rounded-md bg-white text-[#1F4E78] font-semibold text-xs shadow-md hover:bg-[#E6F0F7] transition-colors flex items-center gap-1"
-                            onclick="
-                              triggerToast('Mở cửa sổ xem trước CV chi tiết')
-                            "
+                            data-cv-preview-open
                             type="button"
                           >
                             <span class="material-symbols-outlined text-[15px]"
@@ -2244,9 +1509,7 @@
                       <div class="grid grid-cols-2 gap-2 pt-1">
                         <button
                           class="h-9 flex items-center justify-center gap-1.5 rounded border border-[#1F4E78] text-[#1F4E78] bg-white hover:bg-[#E6F0F7] transition-colors text-xs font-semibold shadow-xs"
-                          onclick="
-                            triggerToast('Mở bản xem trước CV A4 hoàn chỉnh')
-                          "
+                          data-cv-preview-open
                           type="button"
                         >
                           <span class="material-symbols-outlined text-[16px]"
@@ -2275,163 +1538,156 @@
                 </div>
                 <!-- FOOTER -->
               </div>
-              <!-- MODAL: THÊM THÀNH TÍCH MỚI -->
+              <!-- MODAL: CHỌN CÔNG TRÌNH TRƯNG BÀY (assets/js/showcase.js) -->
+              <div
+                class="fixed inset-0 z-50 flex items-center justify-center bg-[#163A59]/40 backdrop-blur-xs p-4 hidden"
+                id="modal-showcase"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="showcase-modal-title"
+              >
+                <div class="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg bg-white border border-[#E1E5EA] shadow-2xl p-5 sm:p-6 flex flex-col gap-4">
+                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-[#E1E5EA]">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]">
+                        <span class="material-symbols-outlined text-[20px]">view_kanban</span>
+                      </div>
+                      <h2 class="text-lg font-bold text-[#1A1A1A]" id="showcase-modal-title">Thêm công trình vào CV</h2>
+                    </div>
+                    <button class="w-8 h-8 shrink-0 rounded hover:bg-[#F5F7FA] text-[#5F6368] flex items-center justify-center" data-showcase-close aria-label="Đóng" type="button">
+                      <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                  </div>
+                  <form class="space-y-4" id="form-showcase" novalidate>
+                    <fieldset>
+                      <legend class="block text-xs font-semibold text-[#1A1A1A] mb-1" id="showcase-picker-label">Công trình đã được GV thẩm định *</legend>
+                      <div class="space-y-2 max-h-64 overflow-y-auto" id="showcase-picker"></div>
+                    </fieldset>
+                    <div>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="showcase-role">Vai trò của bạn</label>
+                      <input class="h-11 w-full px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="showcase-role" name="role" type="text" maxlength="150" placeholder="VD: Trưởng nhóm (Lead AI Engineer)" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="showcase-highlights">Kết quả nổi bật (mỗi dòng một ý)</label>
+                      <textarea class="py-2 w-full px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="showcase-highlights" name="highlights" rows="4" maxlength="1000" placeholder="VD: Đạt 94% mAP trên tập thử nghiệm"></textarea>
+                    </div>
+                    <label class="flex items-center gap-2 text-xs font-medium text-[#1A1A1A] cursor-pointer">
+                      <input class="rounded text-[#1F4E78] focus:ring-[#1F4E78]" name="isShownOnCv" type="checkbox" checked />
+                      Hiển thị trên CV
+                    </label>
+                    <p class="hidden px-3 py-2 rounded bg-red-50 border border-red-200 text-xs text-red-700" id="showcase-error" role="alert"></p>
+                    <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-4 border-t border-[#E1E5EA]">
+                      <button class="h-10 px-4 rounded border border-[#E1E5EA] bg-[#F5F7FA] text-[#1A1A1A] hover:bg-slate-200 transition-colors text-xs font-semibold" data-showcase-close type="button">Hủy bỏ</button>
+                      <button class="h-10 px-5 rounded bg-[#1F4E78] text-white hover:bg-[#163A59] transition-colors text-xs font-semibold shadow-sm disabled:opacity-60" id="showcase-submit" type="submit">Thêm vào CV</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- MODAL: THÊM THÀNH TÍCH MỚI (assets/js/achievements.js) -->
               <div
                 class="fixed inset-0 z-50 flex items-center justify-center bg-[#163A59]/40 backdrop-blur-xs p-4 hidden"
                 id="modal-add-achievement"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="achievement-modal-title"
               >
                 <div
                   class="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg bg-white border border-[#E1E5EA] shadow-2xl p-5 sm:p-6 flex flex-col gap-4"
                 >
-                  <div
-                    class="flex items-center justify-between gap-3 pb-3 border-b border-[#E1E5EA]"
-                  >
+                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-[#E1E5EA]">
                     <div class="flex items-center gap-2.5">
-                      <div
-                        class="w-9 h-9 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
-                      >
-                        <span class="material-symbols-outlined text-[20px]"
-                          >emoji_events</span
-                        >
+                      <div class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]">
+                        <span class="material-symbols-outlined text-[20px]">emoji_events</span>
                       </div>
-                      <h2 class="text-lg font-bold text-[#1A1A1A]">
+                      <h2 class="text-lg font-bold text-[#1A1A1A]" id="achievement-modal-title">
                         Thêm thành tích hoặc chứng chỉ mới
                       </h2>
                     </div>
                     <button
-                      class="w-8 h-8 rounded hover:bg-[#F5F7FA] text-[#5F6368] flex items-center justify-center"
-                      onclick="toggleModal('modal-add-achievement')"
+                      class="w-8 h-8 shrink-0 rounded hover:bg-[#F5F7FA] text-[#5F6368] flex items-center justify-center"
+                      data-achievement-close
+                      aria-label="Đóng"
                       type="button"
                     >
-                      <span class="material-symbols-outlined text-[20px]"
-                        >close</span
-                      >
+                      <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
                   </div>
-                  <form
-                    class="space-y-4"
-                    id="form-achievement"
-                    onsubmit="handleSaveAchievement(event)"
-                  >
-                    <div>
-                      <label
-                        class="block text-xs font-semibold text-[#1A1A1A] mb-1.5"
-                        >Phân loại thành tích *</label
-                      >
-                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <form class="space-y-4" id="form-achievement" novalidate>
+                    <fieldset>
+                      <legend class="block text-xs font-semibold text-[#1A1A1A] mb-1.5">Phân loại *</legend>
+                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         <label
                           class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
                         >
-                          <input
-                            checked=""
-                            class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]"
-                            name="achieve_type"
-                            type="radio"
-                            value="award"
-                          />
-                          Giải thưởng NCKH
+                          <input class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]" name="category" type="radio" value="Award" checked />
+                          Giải thưởng
                         </label>
                         <label
                           class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
                         >
-                          <input
-                            class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]"
-                            name="achieve_type"
-                            type="radio"
-                            value="paper"
-                          />
+                          <input class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]" name="category" type="radio" value="Publication" />
                           Bài báo / Công bố
                         </label>
                         <label
                           class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
                         >
-                          <input
-                            class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]"
-                            name="achieve_type"
-                            type="radio"
-                            value="cert"
-                          />
-                          Chứng chỉ
+                          <input class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]" name="category" type="radio" value="Language_Cert" />
+                          Chứng chỉ ngoại ngữ
+                        </label>
+                        <label
+                          class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
+                        >
+                          <input class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]" name="category" type="radio" value="Tech_Cert" />
+                          Chứng chỉ công nghệ
                         </label>
                       </div>
-                    </div>
+                    </fieldset>
                     <div>
-                      <label
-                        class="block text-xs font-semibold text-[#1A1A1A] mb-1"
-                        >Tên thành tích / Bằng khen / Chứng chỉ *</label
-                      >
-                      <input
-                        class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
-                        placeholder="VD: Giải Nhất Cuộc thi Học thuật Hackathon AI UIT"
-                        required=""
-                        type="text"
-                      />
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-title">Tên thành tích / Bằng khen / Chứng chỉ *</label>
+                      <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-title" name="title" type="text" maxlength="255" placeholder="VD: Giải Nhất Cuộc thi Học thuật Hackathon AI UIT" />
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label
-                          class="block text-xs font-semibold text-[#1A1A1A] mb-1"
-                          >Tổ chức trao tặng / Cấp chứng nhận</label
-                        >
-                        <input
-                          class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
-                          placeholder="VD: Trường ĐH CNTT"
-                          type="text"
-                        />
+                        <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-issuer">Tổ chức cấp *</label>
+                        <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-issuer" name="issuedBy" type="text" maxlength="150" placeholder="VD: Trường ĐH CNTT" />
                       </div>
                       <div>
-                        <label
-                          class="block text-xs font-semibold text-[#1A1A1A] mb-1"
-                          >Năm / Thời điểm cấp</label
-                        >
-                        <input
-                          class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
-                          placeholder="VD: 11/2024"
-                          type="text"
-                        />
+                        <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-date">Ngày cấp *</label>
+                        <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-date" name="issuedDate" type="date" min="1950-01-01" />
                       </div>
                     </div>
                     <div>
-                      <label
-                        class="block text-xs font-semibold text-[#1A1A1A] mb-1"
-                        >Tải lên tệp minh chứng đối soát (PDF, JPG, PNG)</label
-                      >
-                      <div
-                        class="border border-dashed border-[#E1E5EA] rounded-lg p-5 text-center hover:bg-[#F5F7FA] transition-colors cursor-pointer"
-                        onclick="
-                          triggerToast('Mở trình chọn tệp minh chứng...')
-                        "
-                      >
-                        <span
-                          class="material-symbols-outlined text-[28px] text-[#1F4E78]"
-                          >upload_file</span
-                        >
-                        <p class="text-xs font-semibold text-[#1A1A1A] mt-1">
-                          Kéo thả tệp minh chứng hoặc nhấn để duyệt
-                        </p>
-                        <p class="text-xs text-[#5F6368] mt-0.5">
-                          PDF, DOCX, JPG, PNG – tối đa 25MB
-                        </p>
-                        <p class="text-[11px] text-[#5F6368] mt-0.5">
-                          Dùng để Giảng viên/Khoa phê duyệt xác thực
-                        </p>
-                      </div>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-detail">Mô tả thêm</label>
+                      <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-detail" name="detail" type="text" maxlength="500" placeholder="VD: điểm từng kỹ năng, mã DOI" />
                     </div>
-                    <div
-                      class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-4 border-t border-[#E1E5EA]"
-                    >
-                      <button
-                        class="h-10 px-4 rounded border border-[#E1E5EA] bg-[#F5F7FA] text-[#1A1A1A] hover:bg-slate-200 transition-colors text-xs font-semibold"
-                        onclick="toggleModal('modal-add-achievement')"
-                        type="button"
-                      >
+                    <div>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-file">Tệp minh chứng (không bắt buộc)</label>
+                      <input
+                        class="block w-full text-xs text-[#5F6368] border border-dashed border-slate-300 rounded-lg p-3 cursor-pointer file:mr-3 file:h-8 file:px-3 file:rounded file:border-0 file:bg-[#E6F0F7] file:text-[#1F4E78] file:text-xs file:font-semibold file:cursor-pointer"
+                        id="achievement-file"
+                        name="evidence"
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                      />
+                      <p class="text-[11px] text-[#5F6368] mt-1">
+                        PDF, JPG, PNG – tối đa 5 MB. Tệp được lưu riêng tư; cần có tệp nếu muốn gửi xác minh.
+                      </p>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-visibility">Hiển thị *</label>
+                      <select class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-visibility" name="visibility">
+                        <option value="Public">Công khai</option>
+                        <option value="Partners_Only">Chỉ doanh nghiệp đối tác</option>
+                        <option value="Private">Riêng tư (không đưa lên CV)</option>
+                      </select>
+                    </div>
+                    <p class="hidden px-3 py-2 rounded bg-red-50 border border-red-200 text-xs text-red-700" id="achievement-error" role="alert"></p>
+                    <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-4 border-t border-[#E1E5EA]">
+                      <button class="h-10 px-4 rounded border border-[#E1E5EA] bg-[#F5F7FA] text-[#1A1A1A] hover:bg-slate-200 transition-colors text-xs font-semibold" data-achievement-close type="button">
                         Hủy bỏ
                       </button>
-                      <button
-                        class="h-10 px-5 rounded bg-[#1F4E78] text-white hover:bg-[#163A59] transition-colors text-xs font-semibold shadow-sm"
-                        type="submit"
-                      >
-                        Lưu và gửi xác thực
+                      <button class="h-10 px-5 rounded bg-[#1F4E78] text-white hover:bg-[#163A59] transition-colors text-xs font-semibold shadow-sm disabled:opacity-60" id="achievement-submit" type="submit">
+                        Lưu thành tích
                       </button>
                     </div>
                   </form>
@@ -2726,35 +1982,6 @@
         const modal = document.getElementById(modalId);
         if (!modal) return;
         modal.classList.toggle("hidden");
-      }
-
-      function handleSaveAchievement(event) {
-        event.preventDefault();
-        toggleModal("modal-add-achievement");
-        triggerToast(
-          "Thành tích mới đã được thêm và gửi tới Hội đồng thẩm định!",
-        );
-      }
-
-      function toggleProjectCV(projectId, checkbox) {
-        const miniItem = document.getElementById("cv-mini-" + projectId);
-        const counterBadge = document.getElementById("cv-showcase-counter");
-
-        if (checkbox.checked) {
-          if (miniItem) miniItem.classList.remove("hidden");
-          triggerToast("Đã thêm đề tài vào bản in CV thời gian thực");
-        } else {
-          if (miniItem) miniItem.classList.add("hidden");
-          triggerToast("Đã ẩn đề tài khỏi bản in CV");
-        }
-
-        const activeCheckboxes = document.querySelectorAll(
-          '#projects-container input[type="checkbox"]:checked',
-        );
-        if (counterBadge) {
-          counterBadge.textContent =
-            "Đang hiển thị: " + activeCheckboxes.length + " / 4 đề tài";
-        }
       }
 
       var SKILL_LEVELS = {
@@ -3068,5 +2295,10 @@
         }
       });
     </script>
+    <script src="../../assets/js/profile-mode.js"></script>
+    <script src="../../assets/js/profile-links.js"></script>
+    <script src="../../assets/js/cv-preview.js"></script>
+    <script src="../../assets/js/achievements.js"></script>
+    <script src="../../assets/js/showcase.js"></script>
   </body>
 </html>

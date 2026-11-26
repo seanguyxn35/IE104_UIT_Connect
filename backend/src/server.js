@@ -10,6 +10,10 @@ import { labApplicationsRouter } from './routes/labApplications.js';
 import { studentSkillsRouter } from './routes/studentSkills.js';
 import { studentAvatarRouter } from './routes/studentAvatar.js';
 import { profileVisibilityRouter } from './routes/profileVisibility.js';
+import { studentProfileRouter } from './routes/studentProfile.js';
+import { studentCvRouter } from './routes/studentCv.js';
+import { studentAchievementsRouter } from './routes/studentAchievements.js';
+import { studentShowcaseRouter } from './routes/studentShowcase.js';
 
 const app = express();
 const frontendDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend');
@@ -31,6 +35,10 @@ app.use('/api/lab-applications', labApplicationsRouter);
 app.use('/api/student-skills', studentSkillsRouter);
 app.use('/api/student-avatar', studentAvatarRouter);
 app.use('/api/profile-visibility', profileVisibilityRouter);
+app.use('/api/student-profile', studentProfileRouter);
+app.use('/api/student-cv', studentCvRouter);
+app.use('/api/student-achievements', studentAchievementsRouter);
+app.use('/api/student-showcase', studentShowcaseRouter);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ code: 'NOT_FOUND', message: 'API không tồn tại.' });

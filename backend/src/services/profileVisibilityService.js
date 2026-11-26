@@ -27,6 +27,32 @@ export async function getVisibility(studentId) {
   return toDto(data);
 }
 
+// Chế độ hiển thị của CẢ hồ sơ (cột profile_visibility, khớp ràng buộc ck_student_profile_visibility)
+export const PROFILE_MODES = ['Public', 'Partners_Only', 'Private'];
+
+export async function getProfileMode(studentId) {
+  const { data, error } = await supabase
+    .from('student_profile')
+    .select('profile_visibility')
+    .eq('student_id', studentId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) throw new AppError(404, 'PROFILE_NOT_FOUND', 'Không tìm thấy hồ sơ sinh viên.');
+  return { visibility: data.profile_visibility };
+}
+
+export async function setProfileMode(studentId, visibility) {
+  const { data, error } = await supabase
+    .from('student_profile')
+    .update({ profile_visibility: visibility, updated_at: new Date().toISOString() })
+    .eq('student_id', studentId)
+    .select('profile_visibility')
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) throw new AppError(404, 'PROFILE_NOT_FOUND', 'Không tìm thấy hồ sơ sinh viên.');
+  return { visibility: data.profile_visibility };
+}
+
 export async function setVisibility(studentId, field, isPublic) {
   const { data, error } = await supabase
     .from('student_profile')
