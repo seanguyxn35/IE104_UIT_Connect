@@ -16,6 +16,7 @@ backend/
 │   ├── routes/studentProfile.js        # GET/PUT /api/student-profile/links
 │   ├── routes/studentCv.js             # GET /api/student-cv
 │   ├── routes/studentShowcase.js       # /api/student-showcase (công trình trưng bày trên CV)
+│   ├── routes/studentProjects.js       # /api/student-projects (Đề tài của tôi – SV-05)
 │   ├── routes/studentAchievements.js   # /api/student-achievements (thành tích tự khai, minh chứng)
 │   └── services/
 │       ├── labApplicationService.js    # nghiệp vụ ứng tuyển đề tài: R1, R2, R3
@@ -71,6 +72,13 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `PATCH` | `/api/student-showcase/:resourceId` | Đổi `role`, `highlights`, `isShownOnCv` → 200; đã rời nhóm sở hữu → 403 `NOT_TEAM_MEMBER`; 404 `SHOWCASE_NOT_FOUND` |
 | `DELETE` | `/api/student-showcase/:resourceId` | Gỡ khỏi danh sách (giữ nguyên tài nguyên gốc) → 204; 404 `SHOWCASE_NOT_FOUND` |
 | `PUT` | `/api/student-showcase/order` | Sắp xếp `{ "resourceIds": [...] }` (đúng đủ các mục đang chọn) → 200 `{ items }`; sai → 400 |
+| `GET` | `/api/student-projects` | Đề tài cá nhân của SV và đề tài của nhóm SV đang tham gia (`Project`/`Product`/`Paper`/`Thesis`), mới cập nhật trước: `{ projects: [{ resourceId, type, status, title, abstract, authors, keywords, venue, doi, fieldId, field, team, lecturer, role, hasFile, fileSizeKb, latestReview, canEdit, canDelete, ... }] }`. `role` là vai trò trong nhóm (`Leader`/`Member`); đề tài cá nhân là `Leader` |
+| `GET` | `/api/student-projects/options` | Lựa chọn cho biểu mẫu: `{ fields, teams: [{ teamId, name, role }] }` (chỉ nhóm đang hoạt động) |
+| `POST` | `/api/student-projects` | Tạo bản nháp `{ "type", "title" (5–255), "teamId"? (bắt buộc với `Paper`), "abstract"?, "authors"?, "keywords"?, "venue"?, "doi"?, "fieldId"?, "sourceCodeUrl"?, "demoUrl"? (https) }` → 201, luôn ở `Draft`; sai dữ liệu → 400 `INVALID_INPUT`; không thuộc nhóm → 403 `NOT_TEAM_MEMBER`; nhóm ngừng hoạt động → 409 `TEAM_INACTIVE` |
+| `PATCH` | `/api/student-projects/:id` | Sửa các trường ở trên (trừ `type`, `teamId`; `status` bị bỏ qua) → 200; chỉ khi `Draft`/`Revision_Needed`, ngoài ra → 409 `PROJECT_LOCKED`; không được xem → 404 `PROJECT_NOT_FOUND` |
+| `PUT` | `/api/student-projects/:id/file` | Thân yêu cầu là tệp PDF (`Content-Type: application/pdf`) ≤ 10 MB → 200; 404; 409 `PROJECT_LOCKED`; 413 `FILE_TOO_LARGE`; 415 `UNSUPPORTED_TYPE`; mạng quá chậm → 504 `UPLOAD_TIMEOUT` (máy chủ chờ kho tối đa 180 giây) |
+| `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
+| `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
 
 **Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
