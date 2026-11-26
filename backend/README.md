@@ -24,6 +24,7 @@ backend/
 │       ├── profileVisibilityService.js # ẩn/công khai chỉ số và chế độ hiển thị hồ sơ (student_profile)
 │       ├── studentProfileService.js    # liên kết GitHub, LinkedIn trên hồ sơ (student_profile)
 │       ├── studentCvService.js         # gom dữ liệu CV từ các bảng hồ sơ
+│       ├── studentCvPdfService.js      # dựng tệp PDF của CV bằng trình duyệt chạy ẩn
 │       ├── studentShowcaseService.js   # chọn công trình đã thẩm định để trưng bày (cv_showcase_item)
 │       └── studentAchievementService.js # thành tích, chứng chỉ SV tự khai (student_achievement, Storage "evidence")
 ├── .env.example                        # mẫu biến môi trường (file .env thật không commit)
@@ -69,5 +70,8 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `PATCH` | `/api/student-showcase/:resourceId` | Đổi `role`, `highlights`, `isShownOnCv` → 200; 404 `SHOWCASE_NOT_FOUND` |
 | `DELETE` | `/api/student-showcase/:resourceId` | Gỡ khỏi danh sách (giữ nguyên tài nguyên gốc) → 204; 404 `SHOWCASE_NOT_FOUND` |
 | `PUT` | `/api/student-showcase/order` | Sắp xếp `{ "resourceIds": [...] }` (đúng đủ các mục đang chọn) → 200 `{ items }`; sai → 400 |
+| `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
+
+**Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
 
 Hợp đồng chi tiết (mã phản hồi, body mẫu): xem DESIGN.md trong gói nộp bài, mục 3.3.

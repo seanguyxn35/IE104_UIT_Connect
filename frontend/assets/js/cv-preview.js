@@ -1,9 +1,14 @@
 // SV-04: popup xem trước CV khổ A4 (bố cục 2 cột), dữ liệu lấy từ GET /api/student-cv.
-// Mở bằng phần tử có thuộc tính data-cv-preview-open. Có phóng to / thu nhỏ và In / Lưu PDF (hộp thoại in của trình duyệt).
+// Mở bằng phần tử có thuộc tính data-cv-preview-open. Có phóng to / thu nhỏ, Tải PDF (GET /api/student-cv/pdf)
+// và In (hộp thoại in của trình duyệt, dùng được cả khi máy chủ không tạo được PDF).
+// Nút tải ngoài popup: thuộc tính data-cv-pdf-download.
+// Máy chủ cũng nạp tệp này để dựng PDF (backend/src/services/studentCvPdfService.js) qua window.uitCvPreview.buildSheet.
 // Mọi nội dung được gán bằng textContent, không ghép chuỗi HTML từ dữ liệu.
 // Cần: assets/css/cv-preview.css. Nạp SAU đoạn script khai báo triggerToast trong trang.
 (function () {
   var API_URL = '/api/student-cv';
+  var PDF_URL = API_URL + '/pdf';
+  var PRINT_HINT = 'Hãy dùng nút In rồi chọn "Lưu dưới dạng PDF".';
   var SHEET_WIDTH = 794;
   var ZOOM_STEPS = [0.5, 0.6, 0.75, 0.9, 1, 1.25];
 
@@ -42,7 +47,9 @@
     updatedAt: null
   };
 
-  var overlay, stage, noteEl, zoomLabel, printBtn, closeBtn, sheet;
+  var overlay, stage, noteEl, zoomLabel, downloadBtn, printBtn, closeBtn, sheet;
+  var sampleShown = false; // true: popup đang hiện dữ liệu mẫu, không cho tải như CV thật
+  var downloading = false;
   var zoom = null; // null = vừa khung
   var lastFocus = null;
   var loadId = 0;
@@ -223,7 +230,8 @@
       b.addEventListener('click', onClick);
       return b;
     }
-    printBtn = button('print', 'In / Lưu PDF', 'In hoặc lưu CV thành PDF', printCv, 'cvp-primary');
+    downloadBtn = button('download', 'Tải PDF', 'Tải CV dưới dạng tệp PDF', function () { downloadPdf(downloadBtn); }, 'cvp-primary');
+    printBtn = button('print', null, 'In CV', printCv);
     closeBtn = button('close', null, 'Đóng xem trước', close);
 
     overlay.append(
@@ -235,7 +243,7 @@
           button('zoom_in', null, 'Phóng to', function () { stepZoom(1); }),
           button('fit_screen', null, 'Vừa khung', function () { zoom = null; applyZoom(); })
         ]),
-        h('div', 'cvp-actions', [printBtn, closeBtn])
+        h('div', 'cvp-actions', [downloadBtn, printBtn, closeBtn])
       ]),
       stage = h('div', 'cvp-stage')
     );
@@ -280,7 +288,7 @@
 
   function showState(iconName, text, retry) {
     sheet = null;
-    printBtn.disabled = true;
+    printBtn.disabled = downloadBtn.disabled = true;
     var box = h('div', 'cvp-state', [icon(iconName, iconName === 'progress_activity' ? 'cvp-spin' : ''), h('p', null, [text])]);
     if (retry) {
       var again = h('button', 'cvp-btn cvp-primary', ['Thử lại']);
@@ -295,7 +303,9 @@
   function showCv(cv, note, warn) {
     sheet = buildSheet(cv);
     stage.replaceChildren(sheet);
+    sampleShown = cv === SAMPLE;
     printBtn.disabled = false;
+    downloadBtn.disabled = sampleShown || downloading;
     setNote(note, warn);
     applyZoom();
   }
@@ -345,6 +355,75 @@
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
+  // ---------- Tải tệp PDF ----------
+  function setDownloading(button, busy) {
+    downloading = busy;
+    var iconEl = button.querySelector('.material-symbols-outlined');
+    // Chỉ lấy span con trực tiếp: ux-effects.js chèn thêm các span gợn sóng vào trong nút
+    var textEl = button.querySelector(':scope > span:not(.material-symbols-outlined):not(.ux-ripple-host)');
+    if (busy) {
+      button.dataset.idleText = textEl ? textEl.textContent : '';
+      button.dataset.idleIcon = iconEl ? iconEl.textContent : '';
+    }
+    if (iconEl) {
+      iconEl.textContent = busy ? 'progress_activity' : button.dataset.idleIcon;
+      iconEl.classList.toggle('cvp-spin', busy);
+    }
+    if (textEl) textEl.textContent = busy ? 'Đang tạo PDF…' : button.dataset.idleText;
+    button.disabled = busy;
+    button.setAttribute('aria-busy', String(busy));
+  }
+
+  // "attachment; filename=\"CV_x.pdf\"" -> "CV_x.pdf"
+  function fileNameFrom(header) {
+    var m = /filename="?([^";]+)"?/i.exec(header || '');
+    return m ? m[1] : 'CV.pdf';
+  }
+
+  function fetchPdf() {
+    var offline = { message: 'Không kết nối được máy chủ nên chưa tạo được tệp PDF. ' + PRINT_HINT };
+    if (location.protocol === 'file:') return Promise.reject(offline);
+    return fetch(PDF_URL, { signal: AbortSignal.timeout(60000) }).then(function (res) {
+      var type = res.headers.get('Content-Type') || '';
+      if (res.ok && type.indexOf('application/pdf') === 0) {
+        return res.blob().then(function (blob) {
+          return { blob: blob, name: fileNameFrom(res.headers.get('Content-Disposition')) };
+        });
+      }
+      return res.json().catch(function () { return null; }).then(function (data) {
+        if (!data || !data.code) throw offline;
+        throw { message: data.message };
+      });
+    }, function (err) {
+      if (err && err.name === 'TimeoutError') throw { message: 'Tạo PDF quá lâu. ' + PRINT_HINT };
+      throw offline;
+    });
+  }
+
+  function downloadPdf(button) {
+    if (downloading) return;
+    setDownloading(button, true);
+    var finish = function (message) {
+      setDownloading(button, false);
+      if (button === downloadBtn) downloadBtn.disabled = sampleShown || !sheet;
+      toast(message);
+    };
+    fetchPdf().then(function (file) {
+      var url = URL.createObjectURL(file.blob);
+      var a = h('a');
+      a.href = url;
+      a.download = file.name;
+      a.setAttribute('data-no-ripple', '');
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      finish('Đã tải ' + file.name);
+    }, function (err) {
+      finish(err.message);
+    });
+  }
+
   function printCv() {
     if (!sheet) return;
     document.body.classList.add('cvp-printing');
@@ -354,8 +433,20 @@
     };
     window.addEventListener('afterprint', done);
     window.print();
-    toast('Chọn "Lưu dưới dạng PDF" trong hộp thoại in để tải CV');
   }
+
+  // Máy chủ nạp tệp này vào trang trống để dựng PDF: chỉ cần hàm dựng tờ CV
+  window.uitCvPreview = { buildSheet: buildSheet };
+  if (location.protocol === 'about:') return;
+
+  document.addEventListener('click', function (e) {
+    var download = e.target.closest && e.target.closest('[data-cv-pdf-download]');
+    if (!download) return;
+    e.preventDefault();
+    if (downloading) return;
+    toast('Đang tạo tệp PDF…');
+    downloadPdf(download);
+  });
 
   document.addEventListener('click', function (e) {
     var trigger = e.target.closest && e.target.closest('[data-cv-preview-open]');

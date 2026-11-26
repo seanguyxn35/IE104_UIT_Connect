@@ -522,74 +522,17 @@
                       >
                       <span class="">Sao chép link</span>
                     </button>
-                    <div
-                      class="relative inline-block text-left"
-                      id="export-dropdown-wrapper"
+                    <button
+                      class="h-10 px-4 rounded bg-[#1F4E78] text-white hover:bg-[#163A59] transition-colors text-xs font-semibold flex items-center gap-1.5 shadow-sm whitespace-nowrap disabled:opacity-70"
+                      data-cv-pdf-download
+                      title="Tải CV dạng tệp PDF (A4)"
+                      type="button"
                     >
-                      <button
-                        class="h-10 px-4 rounded bg-[#1F4E78] text-white hover:bg-[#163A59] transition-colors text-xs font-semibold flex items-center gap-1.5 shadow-sm"
-                        onclick="
-                          document
-                            .getElementById('export-menu')
-                            .classList.toggle('hidden')
-                        "
-                        type="button"
+                      <span class="material-symbols-outlined text-[16px]"
+                        >file_download</span
                       >
-                        <span class="material-symbols-outlined text-[16px]"
-                          >file_download</span
-                        >
-                        <span class="">Xuất CV PDF</span>
-                        <span class="material-symbols-outlined text-[16px]"
-                          >expand_more</span
-                        >
-                      </button>
-                      <div
-                        class="hidden absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-56 rounded-lg bg-white border border-[#E1E5EA] shadow-lg z-50 py-1.5"
-                        id="export-menu"
-                      >
-                        <a
-                          class="flex items-center gap-2.5 px-3 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium"
-                          href="javascript:void(0)"
-                          onclick="
-                            triggerToast(
-                              'Đang tạo bản in: Chuẩn UIT Academic...',
-                            )
-                          "
-                        >
-                          <span
-                            class="material-symbols-outlined text-[16px] text-[#1F4E78]"
-                            >school</span
-                          >
-                          <span class="">Chuẩn UIT Academic (A4)</span>
-                        </a>
-                        <a
-                          class="flex items-center gap-2.5 px-3 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium"
-                          href="javascript:void(0)"
-                          onclick="
-                            triggerToast('Đang tạo bản in: Tech Industry CV...')
-                          "
-                        >
-                          <span
-                            class="material-symbols-outlined text-[16px] text-[#2E86AB]"
-                            >terminal</span
-                          >
-                          <span class="">Tech Industry CV (1 Trang)</span>
-                        </a>
-                        <a
-                          class="flex items-center gap-2.5 px-3 py-2 text-xs text-[#1A1A1A] hover:bg-[#E6F0F7] hover:text-[#1F4E78] transition-colors font-medium"
-                          href="javascript:void(0)"
-                          onclick="
-                            triggerToast('Đang xuất tệp JSON cấu trúc...')
-                          "
-                        >
-                          <span
-                            class="material-symbols-outlined text-[16px] text-[#5F6368]"
-                            >code</span
-                          >
-                          <span class="">Dữ liệu JSON Resume</span>
-                        </a>
-                      </div>
-                    </div>
+                      <span class="">Xuất CV PDF</span>
+                    </button>
                   </div>
                 </div>
                 <!-- Toast Notification Container -->
@@ -1506,7 +1449,7 @@
                           </button>
                         </div>
                       </div>
-                      <div class="grid grid-cols-2 gap-2 pt-1">
+                      <div class="grid grid-cols-1 gap-2 pt-1">
                         <button
                           class="h-9 flex items-center justify-center gap-1.5 rounded border border-[#1F4E78] text-[#1F4E78] bg-white hover:bg-[#E6F0F7] transition-colors text-xs font-semibold shadow-xs"
                           data-cv-preview-open
@@ -1514,17 +1457,7 @@
                         >
                           <span class="material-symbols-outlined text-[16px]"
                             >visibility</span
-                          ><span class="">Xem trước CV</span></button
-                        ><button
-                          class="h-9 flex items-center justify-center gap-1.5 rounded border border-[#1F4E78] text-[#1F4E78] bg-white hover:bg-[#E6F0F7] transition-colors text-xs font-semibold shadow-xs"
-                          onclick="
-                            triggerToast('Đã tạo mã QR liên kết hồ sơ số!')
-                          "
-                          type="button"
-                        >
-                          <span class="material-symbols-outlined text-[16px]"
-                            >qr_code</span
-                          ><span class="">Tạo QR hồ sơ</span>
+                          ><span class="">Xem trước CV</span>
                         </button>
                       </div>
                       <p
@@ -2286,14 +2219,6 @@
           triggerToast("Đã áp dụng mẫu: UIT Academic Standard");
         }
       }
-
-      document.addEventListener("click", function (e) {
-        const wrapper = document.getElementById("export-dropdown-wrapper");
-        const menu = document.getElementById("export-menu");
-        if (wrapper && menu && !wrapper.contains(e.target)) {
-          menu.classList.add("hidden");
-        }
-      });
     </script>
     <script src="../../assets/js/profile-mode.js"></script>
     <script src="../../assets/js/profile-links.js"></script>
