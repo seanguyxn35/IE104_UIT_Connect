@@ -75,7 +75,19 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
-- **Chưa có đăng nhập**: danh tính lấy từ `TEST_STUDENT_ID` trong `.env`. Cơ chế xác thực thật: `TBD`.
+- **Chưa có đăng nhập ở backend**: danh tính lấy từ `TEST_STUDENT_ID` trong `.env`.
+  - Đã chốt hướng: phiên đăng nhập phía máy chủ, cookie HttpOnly `uitc_session`, bảng `login_session`.
+  - Giao diện đã làm (nhánh `feature/nhan-dang-nhap`). Hợp đồng `/api/auth/*` (đăng nhập, phiên, đăng xuất, quên mật khẩu) ghi ở đầu `assets/js/auth.js`; backend chưa làm.
+  - Hai cổng đăng nhập:
+    - auth/02 "UIT SSO": chỉ email UIT.
+      - SV: đúng 8 chữ số MSSV + `@gm.uit.edu.vn` (vd `24521228@gm.uit.edu.vn`).
+      - GV: `@uit.edu.vn`, phần trước `@` bắt đầu bằng chữ cái, không toàn số.
+      - Admin: dùng cổng này.
+      - Sai định dạng: 400 `INVALID_EMAIL`.
+    - **Dữ liệu thử chưa khớp:** 41 email SV trong `seed*.sql` (`test.sv.a@…`, `test.dn.21520001@…`) sai định dạng. Backend phải đổi sang `<MSSV 8 số>@gm.uit.edu.vn` (SV 9101/9102 đang có `student_code` `TEST0001/0002`).
+    - auth/01 "Email và mật khẩu": Doanh nghiệp, email không thuộc UIT.
+    - Email sai cổng thì báo chuyển cổng; máy chủ trả 403 `WRONG_PORTAL`.
+  - Admin là tài khoản riêng `admin.uitconnect@uit.edu.vn` (role `Admin`, đăng nhập qua UIT SSO). CSDL chưa có tài khoản này, backend phải seed.
 - API hiện có:
   - `POST /api/lab-applications`
   - `GET|POST /api/student-skills`, `DELETE /api/student-skills/:skillId`
@@ -116,6 +128,12 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `app-shell.js/.css`: sidebar, modal đăng xuất, `data-href`.
   - `ux-effects.js/.css`: hiệu ứng ripple; tắt bằng `data-no-ripple`.
   - `router.js`: chỉ dùng cho `pages/auth/`.
+  - `auth.js` + `auth-guard.js`: nạp trong `<head>` của **mọi** trang SV/GV/DN (trang mới phải thêm).
+    - Chặn người chưa đăng nhập hoặc sai vai trò; nút trong hộp thoại đăng xuất gọi `dangXuat()`.
+    - Không có máy chủ đăng nhập: chế độ xem thử, vai trò suy ra từ đuôi email, hiện dải báo "Chế độ xem thử".
+  - `dang-nhap.js`: màn auth/01 và auth/02 (`<form data-cong="business|uit">`). Đăng nhập xong vào trang theo vai trò máy chủ trả về, không theo `?role=`.
+  - `quen-mat-khau.js`: quên mật khẩu UIT (auth/07 → 08) và DN (auth/14 → 15).
+    - Mã 6 chữ số; nút "Gửi lại email (60s)" đếm ngược, hết giờ mới gửi lại được.
 - JS gọi API đặt ở file riêng `assets/js/<chức-năng>.js` (ví dụ `lab-application.js`, `student-avatar.js`), không nhét vào HTML.
 - Khi không có máy chủ (`file://`, GitHub Pages), trang phải hiển thị được và báo rõ "chưa lưu".
 - Luôn dùng **đường dẫn tương đối**. Tên file chữ thường, không dấu, nối bằng `-`, đánh số theo màn (`05_dang-bai-toan-moi.html`).
@@ -167,7 +185,8 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - `README.md` gốc đã cũ: vẫn ghi "backend chưa có mã nguồn", "CSDL SQL Server", chạy bằng Live Server. Cần cập nhật.
 - `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
 - CSDL chung đã có các cột của migration 001.
-- Chưa có xác thực, phân quyền, policy RLS.
+- Chưa có xác thực ở backend, phân quyền, policy RLS (giao diện đăng nhập đã sẵn, xem mục 5).
+- Màn đăng ký (03–06, 09–13) vẫn là giả lập, chưa gọi API. "UIT SSO" thực chất là đăng nhập email + mật khẩu giới hạn email UIT (SSO thật nằm ngoài phạm vi).
 - Chưa có màn hình và API cho Admin.
 - Trang SV gọi API: SV-04, SV-07, SV-09, SV-13 (SV-05 mới lọc tab trên giao diện); trang GV còn dữ liệu tĩnh.
 - Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16) đã có tương tác nhưng **chưa có API**:

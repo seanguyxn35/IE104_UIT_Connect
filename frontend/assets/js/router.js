@@ -26,6 +26,9 @@
     'kich-hoat-thanh-cong': withRole('06_dang-ky-b4-kich-hoat-thanh-cong.html'),
     'quen-mk-1': withRole('07_quen-mat-khau-b1-kiem-tra-email.html'),
     'quen-mk-2': withRole('08_quen-mat-khau-b2-dat-lai-mat-khau.html'),
+    // Quên mật khẩu riêng cho Doanh nghiệp (màn 14–15); màn 07–08 dành cho email UIT
+    'quen-mk-dn-1': withRole('14_quen-mat-khau-dn-b1-kiem-tra-email.html', 'dn'),
+    'quen-mk-dn-2': withRole('15_quen-mat-khau-dn-b2-dat-lai-mat-khau.html', 'dn'),
     // Đăng ký doanh nghiệp (màn 09–13); các tab vai trò trên đó chuyển sang form SV / GV
     'dang-ky-dn-1': withRole('09_dang-ky-dn-b1-tai-khoan.html', 'dn'),
     'dang-ky-dn-2': withRole('10_dang-ky-dn-b2-thong-tin.html', 'dn'),
