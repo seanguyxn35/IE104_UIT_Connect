@@ -152,7 +152,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
   - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` → `005_dn_khong_gian_dam_phan.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
   - Bài toán R&D phía SV: `migrations/006_sv_bai_toan_rd.sql` (một lần) → `seed_sv_rd.sql` (sau `seed_dn.sql`; chạy lại `seed_dn.sql` thì chạy lại file này) → `npm run seed:dn-files`.
-    ID: DN/Lab khác 9511–9525; bài toán 9301–9315 (RD-2026-101..115); nhóm thử 9821 (SV 9101 trưởng nhóm), 9822 (9101 là thành viên), 9823 (5 người); tệp đề bài 9931–9949.
+    ID: DN/Lab khác 9511–9525; bài toán 9301–9315 (RD-2026-101..115); nhóm thử 9821 (SV 9101 trưởng nhóm), 9822 (9101 là thành viên), 9823 (5 người); tệp đề bài 9931–9950.
     `seed_dn.sql` được sinh từ dữ liệu mẫu của giao diện (`dn-bai-toan-data.js`). ID dùng:
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915

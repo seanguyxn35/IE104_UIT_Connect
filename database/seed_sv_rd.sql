@@ -7,7 +7,7 @@
    Cách chạy: Supabase → SQL Editor → dán toàn bộ file → Run.
    Chạy lại bất cứ lúc nào để ĐẶT LẠI dữ liệu thử (xóa rồi nạp lại trong dải ID cố định).
    Chạy lại seed_dn.sql thì phải chạy lại file này (seed_dn.sql nạp lại 4 bài V-Tech nhưng không có phần chi tiết đề bài).
-   Sau khi chạy: cd backend && npm run seed:dn-files  (tải PDF minh họa cho tệp đề bài 9931–9949).
+   Sau khi chạy: cd backend && npm run seed:dn-files  (tải PDF minh họa cho tệp đề bài 9931–9950).
 
    Toàn bộ là dữ liệu GIẢ. ID cố định trong dải 9xxx:
    | Dữ liệu                                         | ID          |
@@ -18,7 +18,7 @@
    | Nhóm thử của SV A (9101 trưởng nhóm, 3 người)   | 9821        |
    | Nhóm thử SV A là thành viên (không nộp được)    | 9822        |
    | Nhóm thử 5 người của SV A (sai quy mô nhóm)     | 9823        |
-   | Tệp đề bài (rd_attachment, owner Problem)       | 9931–9949   |
+   | Tệp đề bài (rd_attachment, owner Problem)       | 9931–9950   |
    Proposal SV tạo khi thử (connection_request của SV 9101 / nhóm 9821, 9822) bị xóa khi chạy lại file này.
    ===================================================================== */
 
@@ -43,7 +43,7 @@ DELETE FROM rd_attachment WHERE owner_type = 'Request' AND owner_id IN (
     WHERE problem_id IN (9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313, 9314, 9315) OR (problem_id IS NOT NULL AND (student_id IN (9101, 9102) OR team_id IN (9821, 9822, 9823))));
 DELETE FROM connection_request
     WHERE problem_id IN (9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313, 9314, 9315) OR (problem_id IS NOT NULL AND (student_id IN (9101, 9102) OR team_id IN (9821, 9822, 9823)));
-DELETE FROM rd_attachment WHERE attachment_id BETWEEN 9931 AND 9949
+DELETE FROM rd_attachment WHERE attachment_id BETWEEN 9931 AND 9950
     OR (owner_type = 'Problem' AND owner_id IN (9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313, 9314, 9315, 9084, 9079, 9071, 9091));
 DELETE FROM saved_opportunity WHERE problem_id IN (9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313, 9314, 9315, 9084, 9079, 9071, 9091) OR (account_id IN (9101, 9102) AND problem_id IS NOT NULL);
 DELETE FROM problem_milestone WHERE problem_id IN (9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313, 9314, 9315, 9084, 9079, 9071, 9091);
