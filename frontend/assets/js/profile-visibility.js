@@ -1,10 +1,11 @@
-// SV-04: nút con mắt trên 3 thẻ chỉ số (GPA, Điểm rèn luyện, Đề tài & Công bố) – ẩn / công khai từng thẻ.
-// Trạng thái lưu ở CSDL qua /api/profile-visibility. Khi ẩn, người xem hồ sơ không thấy chỉ số này;
-// riêng chủ hồ sơ vẫn thấy thẻ ở dạng che kèm nhãn "Đang ẩn".
+// SV-04: công tắc ẩn / công khai trên 3 thẻ chỉ số (GPA, Điểm rèn luyện, Đề tài & Công bố)
+// và trên tiêu đề 2 mục (Học vấn, Kỹ năng).
+// Trạng thái lưu ở CSDL qua /api/profile-visibility. Khi ẩn, người xem hồ sơ không thấy phần này;
+// riêng chủ hồ sơ vẫn thấy: thẻ chỉ số ở dạng che kèm nhãn "Đang ẩn", mục được viền nét đứt.
 (function () {
   var API_URL = '/api/profile-visibility';
-  var LABELS = { gpa: 'GPA', drl: 'Điểm rèn luyện', projects: 'Đề tài & Công bố' };
-  var state = { gpa: true, drl: true, projects: true };
+  var LABELS = { gpa: 'GPA', drl: 'Điểm rèn luyện', projects: 'Đề tài & Công bố', education: 'mục Học vấn', skills: 'mục Kỹ năng' };
+  var state = { gpa: true, drl: true, projects: true, education: true, skills: true };
   var online = true;
 
   var cards = {};
@@ -21,7 +22,29 @@
       '<span class="ml-auto px-2 py-0.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 whitespace-nowrap">Đang ẩn</span>';
     row.parentNode.insertBefore(mask, row.nextSibling);
 
-    cards[key] = { card: card, row: row, btn: btn, mask: mask, icon: btn.querySelector('.material-symbols-outlined') };
+    cards[key] = {
+      btn: btn,
+      show: function (isPublic) {
+        row.classList.toggle('hidden', !isPublic);
+        mask.classList.toggle('hidden', isPublic);
+        card.classList.toggle('border-dashed', !isPublic);
+      }
+    };
+  });
+
+  // Công tắc ở tiêu đề mục: cùng cách lưu với thẻ chỉ số, chỉ khác phần hiển thị
+  document.querySelectorAll('[data-vis-section]').forEach(function (input) {
+    var text = input.parentElement.querySelector('[data-vis-text]');
+    var section = input.closest('section');
+    cards[input.dataset.visSection] = {
+      btn: input,
+      show: function (isPublic) {
+        text.textContent = isPublic ? 'Công khai' : 'Đang ẩn';
+        text.classList.toggle('text-[#1F4E78]', isPublic);
+        text.classList.toggle('text-[#5F6368]', !isPublic);
+        section.classList.toggle('border-dashed', !isPublic);
+      }
+    };
   });
 
   function toast(msg) { if (typeof triggerToast === 'function') triggerToast(msg); }
@@ -29,17 +52,10 @@
   function render(key) {
     var c = cards[key];
     if (!c) return;
-    var isPublic = state[key];
-    c.row.classList.toggle('hidden', !isPublic);
-    c.mask.classList.toggle('hidden', isPublic);
-    c.card.classList.toggle('border-dashed', !isPublic);
-    c.icon.textContent = isPublic ? 'visibility' : 'visibility_off';
-    c.btn.classList.toggle('text-slate-400', isPublic);
-    c.btn.classList.toggle('text-[#1F4E78]', !isPublic);
-    var title = isPublic ? 'Chế độ hiển thị: Công khai (bấm để ẩn)' : 'Chế độ hiển thị: Đang ẩn (bấm để công khai)';
-    c.btn.title = title;
-    c.btn.setAttribute('aria-label', LABELS[key] + ' – ' + title);
-    c.btn.setAttribute('aria-pressed', String(!isPublic));
+    var isPublic = state[key] !== false; // máy chủ không trả trường này thì giữ mặc định công khai
+    c.show(isPublic);
+    c.btn.checked = isPublic;
+    c.btn.parentElement.title = isPublic ? 'Chế độ hiển thị: Công khai (bấm để ẩn)' : 'Chế độ hiển thị: Đang ẩn (bấm để công khai)';
   }
 
   function renderAll() { Object.keys(cards).forEach(render); }
@@ -64,27 +80,28 @@
   }
 
   function toggle(key) {
-    var next = !state[key];
-    var apply = function () {
+    var next = cards[key].btn.checked;
+    if (!online) {
       state[key] = next;
       render(key);
-      toast(next ? 'Đã công khai ' + LABELS[key] : 'Đã ẩn ' + LABELS[key] + ' khỏi hồ sơ công khai');
-    };
-
-    if (!online) { apply(); return; }
+      toast((next ? 'Công khai ' : 'Ẩn ') + LABELS[key] + ': chưa lưu, không kết nối được máy chủ');
+      return;
+    }
     var btn = cards[key].btn;
     btn.disabled = true;
     request('PUT', { field: key, isPublic: next }).then(function (data) {
-      state = data;
-      renderAll();
+      // Chỉ cập nhật công tắc vừa lưu, để hai lần bấm liên tiếp không ghi đè hiển thị của nhau
+      state[key] = data[key];
+      render(key);
       toast(next ? 'Đã công khai ' + LABELS[key] : 'Đã ẩn ' + LABELS[key] + ' khỏi hồ sơ công khai');
     }, function (err) {
+      render(key); // trả công tắc về trạng thái đã lưu
       toast(err.offline ? 'Không kết nối được máy chủ, chưa lưu được' : 'Không lưu được: ' + err.message);
     }).then(function () { btn.disabled = false; });
   }
 
   Object.keys(cards).forEach(function (key) {
-    cards[key].btn.addEventListener('click', function () { toggle(key); });
+    cards[key].btn.addEventListener('change', function () { toggle(key); });
   });
 
   renderAll();

@@ -19,7 +19,7 @@
     Pending: { text: 'Chờ xác minh', className: 'cvp-tag' },
     Verified: { text: 'Đã xác minh', className: 'cvp-tag cvp-tag-ok' }
   };
-  var HIDDEN_LABELS = { gpa: 'GPA', drl: 'Điểm rèn luyện', projects: 'Đề tài & Công bố' };
+  var HIDDEN_LABELS = { gpa: 'GPA', drl: 'Điểm rèn luyện', projects: 'Đề tài & Công bố', education: 'Học vấn', skills: 'Kỹ năng' };
 
   // Dữ liệu mẫu khi không có máy chủ (file://, GitHub Pages) – toàn bộ là dữ liệu giả
   var SAMPLE = {
@@ -139,8 +139,8 @@
       h('div', 'cvp-hero', [avatar, h('div', 'cvp-name', [cv.fullName]), cv.headline && h('div', 'cvp-headline', [cv.headline])]),
       h('div', 'cvp-side-body', [
         contact,
-        section('Học vấn', eduItems),
-        skillBody.length && section('Kỹ năng', skillBody)
+        (cv.hiddenFields || []).indexOf('education') === -1 && section('Học vấn', eduItems),
+        skillBody.length > 0 && section('Kỹ năng', skillBody)
       ])
     ]);
 

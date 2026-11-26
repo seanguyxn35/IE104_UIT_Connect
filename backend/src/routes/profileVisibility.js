@@ -1,6 +1,6 @@
-// API ẩn/công khai chỉ số hồ sơ SV (danh tính lấy ở máy chủ, không lấy từ client):
-//   GET /api/profile-visibility                      -> 200 { gpa, drl, projects }  (true = công khai)
-//   PUT /api/profile-visibility { field, isPublic }  -> 200 { gpa, drl, projects } | 400 INVALID_INPUT
+// API ẩn/công khai chỉ số và mục trên hồ sơ SV (danh tính lấy ở máy chủ, không lấy từ client):
+//   GET /api/profile-visibility                      -> 200 { gpa, drl, projects, education, skills }  (true = công khai)
+//   PUT /api/profile-visibility { field, isPublic }  -> 200 { gpa, drl, projects, education, skills } | 400 INVALID_INPUT
 // Chế độ hiển thị của cả hồ sơ (Public | Partners_Only | Private):
 //   GET /api/profile-visibility/mode                 -> 200 { visibility }
 //   PUT /api/profile-visibility/mode { visibility }  -> 200 { visibility } | 400 INVALID_INPUT

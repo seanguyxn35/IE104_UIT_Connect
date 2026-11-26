@@ -139,6 +139,8 @@ CREATE TABLE student_profile (
     is_gpa_public            BOOLEAN NOT NULL DEFAULT true,   -- (+) ẩn/công khai riêng từng chỉ số trên SV-04
     is_training_score_public BOOLEAN NOT NULL DEFAULT true,
     is_achievements_public   BOOLEAN NOT NULL DEFAULT true,
+    is_education_public      BOOLEAN NOT NULL DEFAULT true,   -- (+) ẩn/công khai mục Học vấn, Kỹ năng trên SV-04
+    is_skills_public         BOOLEAN NOT NULL DEFAULT true,
     generated_cv_url      VARCHAR(255)  NULL,    -- [PDF] link CV hệ thống tạo tự động
     updated_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     CONSTRAINT ck_student_profile_gpa CHECK (gpa BETWEEN 0 AND 10),

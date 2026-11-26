@@ -1,4 +1,5 @@
-// Ẩn / công khai từng chỉ số trên hồ sơ SV: GPA, Điểm rèn luyện, Đề tài & Công bố (bảng student_profile).
+// Ẩn / công khai trên hồ sơ SV (bảng student_profile):
+// từng chỉ số (GPA, Điểm rèn luyện, Đề tài & Công bố) và từng mục (Học vấn, Kỹ năng).
 import { supabase } from '../db.js';
 import { AppError } from '../errors.js';
 
@@ -7,6 +8,8 @@ const COLUMN_BY_FIELD = {
   gpa: 'is_gpa_public',
   drl: 'is_training_score_public',
   projects: 'is_achievements_public',
+  education: 'is_education_public',
+  skills: 'is_skills_public',
 };
 export const VISIBILITY_FIELDS = Object.keys(COLUMN_BY_FIELD);
 

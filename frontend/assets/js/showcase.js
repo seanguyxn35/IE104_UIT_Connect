@@ -156,11 +156,13 @@
     checkbox.checked = item.isShownOnCv;
     checkbox.setAttribute('aria-label', 'Hiển thị trên CV: ' + item.title);
     checkbox.addEventListener('change', function () { toggleShown(item, checkbox); });
-    var toggle = h('label', 'inline-flex items-center gap-2 cursor-pointer select-none', [
+    var toggle = h('label', 'relative inline-flex items-center gap-2 cursor-pointer select-none', [
       h('span', 'text-xs font-semibold ' + (item.isShownOnCv ? 'text-[#1F4E78]' : 'text-[#5F6368]'), [item.isShownOnCv ? 'Hiển thị trên CV' : 'Ẩn khỏi CV']),
       checkbox,
       h('span', "relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]")
     ]);
+
+    toggle.dataset.noRipple = ''; // cùng cách hoạt động với các công tắc ẩn/hiện khác trên trang
 
     var bullets = lines(item.highlights);
     var el = h('article', 'rounded-lg bg-white p-4 sm:p-5 border shadow-xs flex items-start gap-3 ' + (item.isShownOnCv && item.eligible ? 'border-[#E1E5EA]' : 'border-dashed border-slate-300'), [
