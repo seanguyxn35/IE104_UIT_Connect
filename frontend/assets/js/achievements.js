@@ -107,7 +107,7 @@
   }
 
   function message(text, retry) {
-    var box = h('div', 'md:col-span-2 p-5 rounded-lg border border-dashed border-slate-300 text-center text-sm text-[#5F6368]', [h('p', null, [text])]);
+    var box = h('div', 'col-span-full p-5 rounded-lg border border-dashed border-slate-300 text-center text-sm text-[#5F6368]', [h('p', null, [text])]);
     if (retry) {
       var again = h('button', 'mt-3 h-8 px-3 rounded bg-[#1F4E78] text-white text-xs font-semibold', ['Thử lại']);
       again.type = 'button';
@@ -171,7 +171,7 @@
 
     var el = h('article', 'p-4 rounded-lg bg-white border border-[#E1E5EA] shadow-xs flex flex-col gap-3 hover:border-[#1F4E78] transition-colors min-w-0', [
       h('div', null, [
-        h('div', 'flex items-center justify-between gap-2 mb-2', [
+        h('div', 'flex flex-wrap items-center justify-between gap-2 mb-2', [
           h('span', 'px-2.5 py-0.5 rounded-xl text-xs font-semibold border ' + category.chip, [category.label]),
           h('span', 'text-xs text-[#5F6368] whitespace-nowrap', [viDate(item.issuedDate)])
         ]),
@@ -362,7 +362,7 @@
         online = false;
         items = SAMPLE.map(function (i) { return Object.assign({}, i); });
         render();
-        listEl.prepend(h('p', 'md:col-span-2 text-xs text-amber-700', ['Chưa kết nối máy chủ: đang hiển thị dữ liệu mẫu, thay đổi sẽ không được lưu.']));
+        listEl.prepend(h('p', 'col-span-full text-xs text-amber-700',['Chưa kết nối máy chủ: đang hiển thị dữ liệu mẫu, thay đổi sẽ không được lưu.']));
         return;
       }
       message('Không tải được thành tích: ' + err.message, true);

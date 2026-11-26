@@ -548,10 +548,10 @@
                 </div>
                 <!-- Main 2-Column Split: 8 Cols Management, 4 Cols Preview -->
                 <div
-                  class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-start"
+                  class="grid grid-cols-1 xl:grid-cols-12 gap-6 w-full items-start"
                 >
                   <!-- LEFT COLUMN (8 Cols) -->
-                  <div class="lg:col-span-8 flex flex-col gap-6 min-w-0">
+                  <div class="xl:col-span-8 flex flex-col gap-6 min-w-0">
                     <!-- 1. TOP PROFILE HEADER CARD -->
                     <section
                       class="rounded-lg bg-white border border-[#E1E5EA] shadow-sm relative overflow-hidden"
@@ -701,30 +701,23 @@
                       <!-- Divider -->
                       <div class="border-t border-[#E1E5EA]"></div>
                       <!-- Row 2: Academic Key Metrics (3 Equal Cards with proper padding) -->
-                      <div class="p-6 pt-5 bg-white">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div class="p-4 sm:p-6 sm:pt-5 bg-white @container">
+                        <div class="grid grid-cols-1 @xl:grid-cols-3 gap-4">
                           <!-- Card 1: GPA -->
                           <div
                             data-vis-card="gpa"
                             class="p-3.5 bg-[#F5F7FA] rounded-lg border border-[#E1E5EA]"
                           >
                             <div
-                              class="flex items-center justify-between text-xs font-medium text-[#5F6368]"
+                              class="flex items-center justify-between gap-2 text-xs font-medium text-[#5F6368]"
                             >
-                              <span class="">GPA Tích lũy</span>
-                              <button
-                                class="text-slate-400 hover:text-slate-600 p-0.5 rounded-sm transition-colors"
-                                data-vis-toggle
-                                title="Chế độ hiển thị: Công khai"
-                                type="button"
-                              >
-                                <span
-                                  class="material-symbols-outlined text-[16px]"
-                                  >visibility</span
-                                >
-                              </button>
+                              <span class="min-w-0">GPA Tích lũy</span>
+                              <label class="relative inline-flex shrink-0 cursor-pointer" data-no-ripple title="Chế độ hiển thị: Công khai">
+                                <input class="sr-only peer" type="checkbox" checked autocomplete="off" aria-label="Hiển thị công khai GPA" data-vis-toggle />
+                                <span class="relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] peer-disabled:opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]" aria-hidden="true"></span>
+                              </label>
                               </div>
-                            <div data-vis-row class="flex items-baseline gap-1 mt-1.5">
+                            <div data-vis-row class="flex flex-wrap items-baseline gap-1 mt-1.5">
                               <span class="text-2xl font-bold text-[#1F4E78]"
                                 >8.65</span
                               >
@@ -744,22 +737,15 @@
                             class="p-3.5 bg-[#F5F7FA] rounded-lg border border-[#E1E5EA]"
                           >
                             <div
-                              class="flex items-center justify-between text-xs font-medium text-[#5F6368]"
+                              class="flex items-center justify-between gap-2 text-xs font-medium text-[#5F6368]"
                             >
-                              <span class="">Điểm Rèn luyện (DRL)</span>
-                              <button
-                                class="text-slate-400 hover:text-slate-600 p-0.5 rounded-sm transition-colors"
-                                data-vis-toggle
-                                title="Chế độ hiển thị: Công khai"
-                                type="button"
-                              >
-                                <span
-                                  class="material-symbols-outlined text-[16px]"
-                                  >visibility</span
-                                >
-                              </button>
+                              <span class="min-w-0">Điểm Rèn luyện (DRL)</span>
+                              <label class="relative inline-flex shrink-0 cursor-pointer" data-no-ripple title="Chế độ hiển thị: Công khai">
+                                <input class="sr-only peer" type="checkbox" checked autocomplete="off" aria-label="Hiển thị công khai Điểm rèn luyện" data-vis-toggle />
+                                <span class="relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] peer-disabled:opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]" aria-hidden="true"></span>
+                              </label>
                               </div>
-                            <div data-vis-row class="flex items-baseline gap-1 mt-1.5">
+                            <div data-vis-row class="flex flex-wrap items-baseline gap-1 mt-1.5">
                               <span class="text-2xl font-bold text-[#1F4E78]"
                                 >92</span
                               >
@@ -779,22 +765,15 @@
                             class="p-3.5 bg-[#F5F7FA] rounded-lg border border-[#E1E5EA]"
                           >
                             <div
-                              class="flex items-center justify-between text-xs font-medium text-[#5F6368]"
+                              class="flex items-center justify-between gap-2 text-xs font-medium text-[#5F6368]"
                             >
-                              <span class="">Đề tài &amp; Công bố</span>
-                              <button
-                                class="text-slate-400 hover:text-slate-600 p-0.5 rounded-sm transition-colors"
-                                data-vis-toggle
-                                title="Chế độ hiển thị: Công khai"
-                                type="button"
-                              >
-                                <span
-                                  class="material-symbols-outlined text-[16px]"
-                                  >visibility</span
-                                >
-                              </button>
+                              <span class="min-w-0">Đề tài &amp; Công bố</span>
+                              <label class="relative inline-flex shrink-0 cursor-pointer" data-no-ripple title="Chế độ hiển thị: Công khai">
+                                <input class="sr-only peer" type="checkbox" checked autocomplete="off" aria-label="Hiển thị công khai Đề tài và Công bố" data-vis-toggle />
+                                <span class="relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] peer-disabled:opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]" aria-hidden="true"></span>
+                              </label>
                               </div>
-                            <div data-vis-row class="flex items-baseline gap-1.5 mt-1.5">
+                            <div data-vis-row class="flex flex-wrap items-baseline gap-1.5 mt-1.5">
                               <span class="text-2xl font-bold text-[#1F4E78]"
                                 >04</span
                               >
@@ -809,36 +788,31 @@
                     </section>
                     <!-- 2. SECTION: HỌC VẤN (EDUCATION) -->
                     <section
-                      class="rounded-lg bg-white p-6 border border-[#E1E5EA] shadow-sm"
+                      class="@container rounded-lg bg-white p-4 sm:p-6 border border-[#E1E5EA] shadow-sm"
                     >
                       <div
-                        class="flex items-center justify-between pb-4 border-b border-[#E1E5EA] mb-4"
+                        class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E1E5EA] mb-4"
                       >
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5 min-w-0 grow basis-64">
                           <div
-                            class="w-9 h-9 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
+                            class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
                           >
                             <span class="material-symbols-outlined text-[20px]"
                               >school</span
                             >
                           </div>
-                          <div class="flex items-center gap-2">
-                            <h2 class="text-2xl font-semibold text-[#1A1A1A]">
+                          <div class="min-w-0">
+                            <h2 class="text-lg @xl:text-2xl font-semibold text-[#1A1A1A] break-words">
                               Học vấn &amp; Quá trình đào tạo
                             </h2>
-                            <button
-                              class="text-slate-400 hover:text-slate-600 p-1 rounded-sm transition-colors"
-                              title="Chế độ hiển thị: Công khai"
-                              type="button"
-                            >
-                              <span
-                                class="material-symbols-outlined text-[18px]"
-                                >visibility</span
-                              >
-                            </button>
                           </div>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-3">
+                          <label class="relative inline-flex items-center gap-2 cursor-pointer select-none" data-no-ripple>
+                            <span class="min-w-[64px] text-right text-xs font-semibold text-[#1F4E78]" data-vis-text>Công khai</span>
+                            <input class="sr-only peer" type="checkbox" checked autocomplete="off" aria-label="Hiển thị công khai mục Học vấn" data-vis-section="education" />
+                            <span class="relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] peer-disabled:opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]" aria-hidden="true"></span>
+                          </label>
                           <button
                             class="border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs px-2.5 py-1.5 rounded flex items-center gap-1.5 font-medium transition-colors"
                             onclick="
@@ -858,9 +832,9 @@
                           class="p-4 rounded-lg bg-[#F5F7FA] border border-[#E1E5EA] space-y-2"
                         >
                           <div
-                            class="flex flex-col sm:flex-row sm:items-start justify-between gap-1"
+                            class="flex flex-col @xl:flex-row @xl:items-start justify-between gap-2"
                           >
-                            <div>
+                            <div class="min-w-0">
                               <h3
                                 class="text-base font-semibold text-[#1F4E78]"
                               >
@@ -873,7 +847,7 @@
                               </p>
                             </div>
                             <span
-                              class="px-2.5 py-0.5 rounded-xl bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-medium whitespace-nowrap self-start"
+                              class="px-2.5 py-0.5 rounded-xl bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-medium @xl:max-w-[45%] @xl:text-right self-start"
                             >
                               2021 – 2025 (Dự kiến tốt nghiệp 06/2025)
                             </span>
@@ -921,9 +895,9 @@
                           class="p-4 rounded-lg bg-[#F5F7FA] border border-[#E1E5EA] space-y-1.5"
                         >
                           <div
-                            class="flex flex-col sm:flex-row sm:items-start justify-between gap-1"
+                            class="flex flex-col @xl:flex-row @xl:items-start justify-between gap-2"
                           >
-                            <div>
+                            <div class="min-w-0">
                               <h3
                                 class="text-base font-semibold text-[#1F4E78]"
                               >
@@ -936,7 +910,7 @@
                               </p>
                             </div>
                             <span
-                              class="px-2.5 py-0.5 rounded-xl bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-medium whitespace-nowrap self-start"
+                              class="px-2.5 py-0.5 rounded-xl bg-white border border-[#E1E5EA] text-[#5F6368] text-xs font-medium @xl:max-w-[45%] @xl:text-right self-start"
                             >
                               Hè 2023 (07/2023 – 08/2023)
                             </span>
@@ -954,58 +928,51 @@
                     </section>
                     <!-- 3. SECTION: KỸ NĂNG & TECH-STACK -->
                     <section
-                      class="rounded-lg bg-white p-6 border border-[#E1E5EA] shadow-sm"
+                      class="@container rounded-lg bg-white p-4 sm:p-6 border border-[#E1E5EA] shadow-sm"
                     >
                       <div
                         class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E1E5EA] mb-4"
                       >
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5 min-w-0 grow basis-64">
                           <div
-                            class="w-9 h-9 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
+                            class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
                           >
                             <span class="material-symbols-outlined text-[20px]"
                               >terminal</span
                             >
                           </div>
-                          <div>
-                            <div class="flex items-center gap-2">
-                              <h2 class="text-2xl font-semibold text-[#1A1A1A]">
-                                Kỹ năng &amp; Ngăn xếp Công nghệ (Tech-Stack)
-                              </h2>
-                              <button
-                                class="text-slate-400 hover:text-slate-600 p-1 rounded-sm transition-colors"
-                                title="Chế độ hiển thị: Công khai"
-                                type="button"
-                              >
-                                <span
-                                  class="material-symbols-outlined text-[18px]"
-                                  >visibility</span
-                                >
-                              </button>
-                            </div>
+                          <div class="min-w-0">
+                            <h2 class="text-lg @xl:text-2xl font-semibold text-[#1A1A1A] break-words">
+                              Kỹ năng &amp; Ngăn xếp Công nghệ (Tech-Stack)
+                            </h2>
                             <p class="text-xs text-[#5F6368]">
                               Phân loại theo mức độ thành thạo kỹ thuật để định
                               hình hồ sơ năng lực
                             </p>
                           </div>
                         </div>
+                        <label class="relative inline-flex items-center gap-2 cursor-pointer select-none" data-no-ripple>
+                          <span class="min-w-[64px] text-right text-xs font-semibold text-[#1F4E78]" data-vis-text>Công khai</span>
+                          <input class="sr-only peer" type="checkbox" checked autocomplete="off" aria-label="Hiển thị công khai mục Kỹ năng" data-vis-section="skills" />
+                          <span class="relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] peer-disabled:opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]" aria-hidden="true"></span>
+                        </label>
                       </div>
                       <div
-                        class="sticky top-[72px] z-30 mb-4 p-4 rounded-lg bg-[#F5F7FA] border border-[#E1E5EA] shadow-md"
+                        class="[@media(min-height:700px)]:sticky top-[72px] z-30 mb-4 p-4 rounded-lg bg-[#F5F7FA] border border-[#E1E5EA] shadow-md"
                         id="quick-add-skill-box"
                       >
                         <label
                           class="block text-xs font-semibold text-[#1A1A1A] mb-2"
                           >Thêm kỹ năng mới vào hồ sơ:</label
                         >
-                        <div class="flex flex-wrap items-center gap-2">
+                        <div class="grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-2">
                           <input
-                            class="flex-1 min-w-[180px] h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
+                            class="@md:col-span-2 @2xl:col-span-3 w-full min-w-0 h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-[#5F6368] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
                             id="new-skill-name"
                             placeholder="Tên kỹ năng (VD: FastAPI)"
                             type="text"
                           /><select
-                            class="h-11 pl-3 pr-10 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
+                            class="w-full min-w-0 h-11 pl-3 pr-10 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
                             id="new-skill-level"
                             aria-label="Mức độ"
                           >
@@ -1016,7 +983,7 @@
                             <option value="3">Khá (3/5)</option>
                             <option value="2">Cơ bản (2/5)</option></select
                           ><select
-                            class="h-11 pl-3 pr-10 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
+                            class="w-full min-w-0 h-11 pl-3 pr-10 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F4E78]"
                             id="new-skill-cat"
                             aria-label="Lĩnh vực"
                           >
@@ -1030,7 +997,7 @@
                               Hạ tầng &amp; Công cụ phát triển
                             </option></select
                           ><button
-                            class="h-11 px-5 rounded bg-[#1F4E78] text-white text-xs font-semibold hover:bg-[#163A59] transition-colors"
+                            class="@md:col-span-2 @2xl:col-span-1 h-11 px-5 rounded bg-[#1F4E78] text-white text-xs font-semibold whitespace-nowrap hover:bg-[#163A59] transition-colors"
                             id="add-skill-btn"
                             onclick="addCustomSkill()"
                             type="button"
@@ -1043,7 +1010,7 @@
                         <div
                           class="bg-[#F5F7FA] p-4 rounded-lg border border-[#E1E5EA]"
                         >
-                          <div class="flex items-center justify-between mb-3">
+                          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                             <div class="flex items-center gap-1.5">
                               <span
                                 class="w-2.5 h-2.5 rounded-sm bg-[#1F4E78]"
@@ -1112,7 +1079,7 @@
                         <div
                           class="bg-[#F5F7FA] p-4 rounded-lg border border-[#E1E5EA]"
                         >
-                          <div class="flex items-center justify-between mb-3">
+                          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                             <div class="flex items-center gap-1.5">
                               <span
                                 class="w-2.5 h-2.5 rounded-sm bg-[#2E86AB]"
@@ -1181,7 +1148,7 @@
                         <div
                           class="bg-[#F5F7FA] p-4 rounded-lg border border-[#E1E5EA]"
                         >
-                          <div class="flex items-center justify-between mb-3">
+                          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                             <div class="flex items-center gap-1.5">
                               <span
                                 class="w-2.5 h-2.5 rounded-sm bg-[#1F4E78]"
@@ -1252,19 +1219,19 @@
                     </section>
                     <!-- 4. SECTION: CHỨNG CHỈ & THÀNH TÍCH (assets/js/achievements.js) -->
                     <section
-                      class="rounded-lg bg-white p-6 border border-[#E1E5EA] shadow-sm"
+                      class="@container rounded-lg bg-white p-4 sm:p-6 border border-[#E1E5EA] shadow-sm"
                     >
                       <div
                         class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E1E5EA] mb-4"
                       >
-                        <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="flex items-center gap-2.5 min-w-0 grow basis-64">
                           <div
                             class="w-9 h-9 shrink-0 rounded bg-[#E6F0F7] flex items-center justify-center text-[#1F4E78]"
                           >
                             <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
                           </div>
                           <div class="min-w-0">
-                            <h2 class="text-2xl font-semibold text-[#1A1A1A]">
+                            <h2 class="text-lg @xl:text-2xl font-semibold text-[#1A1A1A] break-words">
                               Chứng chỉ, Giải thưởng &amp; Công bố khoa học
                             </h2>
                             <p class="text-xs text-[#5F6368]">
@@ -1289,8 +1256,8 @@
                           </button>
                         </div>
                       </div>
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="achievement-list" aria-live="polite">
-                        <p class="md:col-span-2 text-sm text-[#5F6368]">Đang tải thành tích…</p>
+                      <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4" id="achievement-list" aria-live="polite">
+                        <p class="col-span-full text-sm text-[#5F6368]">Đang tải thành tích…</p>
                       </div>
                     </section>
                     <!-- 5. SECTION: "PROJECT TRƯNG BÀY TRÊN CV" (UC-E1) – assets/js/showcase.js -->
@@ -1342,7 +1309,7 @@
                   </div>
                   <!-- RIGHT COLUMN (4 Cols) - STICKY LIVE CV PREVIEW -->
                   <div
-                    class="lg:col-span-4 flex flex-col gap-5 lg:sticky lg:top-20"
+                    class="xl:col-span-4 flex flex-col gap-5 min-w-0 xl:sticky xl:top-20"
                   >
                     <div
                       class="rounded-lg bg-white p-5 border border-[#E1E5EA] shadow-sm flex flex-col gap-4"
@@ -2005,15 +1972,16 @@
       function buildSkillChip(skill) {
         var chip = document.createElement("span");
         chip.className =
-          "inline-flex items-center gap-2.5 px-3 py-1.5 rounded bg-white border border-[#E1E5EA] text-sm text-[#1A1A1A] shadow-xs";
+          "inline-flex max-w-full items-center gap-2.5 px-3 py-1.5 rounded bg-white border border-[#E1E5EA] text-sm text-[#1A1A1A] shadow-xs";
         chip.dataset.skillId = skill.skillId;
         var nameEl = document.createElement("span");
         nameEl.className =
-          skill.level >= 5 ? "font-semibold text-[#1F4E78]" : "";
+          "min-w-0 break-words" +
+          (skill.level >= 5 ? " font-semibold text-[#1F4E78]" : "");
         nameEl.textContent = skill.name;
         var dots = document.createElement("span");
         dots.className =
-          "inline-flex items-center gap-0.5 text-xs text-[#1F4E78] tracking-widest";
+          "inline-flex shrink-0 items-center gap-0.5 text-xs text-[#1F4E78] tracking-widest";
         dots.title = SKILL_LEVELS[skill.level] || skill.level + "/5";
         dots.appendChild(document.createTextNode("●".repeat(skill.level)));
         if (skill.level < 5) {
@@ -2025,7 +1993,7 @@
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className =
-          "skill-remove -mr-1.5 w-5 h-5 inline-flex items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors";
+          "skill-remove shrink-0 -mr-1.5 w-5 h-5 inline-flex items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors";
         btn.title = "Xóa kỹ năng";
         btn.setAttribute("aria-label", "Xóa kỹ năng " + skill.name);
         btn.innerHTML =

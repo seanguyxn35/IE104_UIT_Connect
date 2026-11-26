@@ -50,13 +50,13 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `DELETE` | `/api/student-skills/:skillId` | Xóa kỹ năng khỏi hồ sơ → 204; không có → 404 `SKILL_NOT_FOUND` |
 | `GET` | `/api/student-avatar` | Ảnh đại diện hiện tại: `{ avatarUrl }` (`null` nếu chưa đặt) |
 | `POST` | `/api/student-avatar` | Đổi ảnh: body là nội dung ảnh, `Content-Type: image/jpeg\|png\|webp`, ≤ 2 MB → 200 `{ avatarUrl }`; sai loại → 415, quá lớn → 413 |
-| `GET` | `/api/profile-visibility` | Ẩn/công khai từng chỉ số: `{ gpa, drl, projects }` (`true` = công khai) |
-| `PUT` | `/api/profile-visibility` | Đổi một chỉ số `{ "field": "gpa"\|"drl"\|"projects", "isPublic": true\|false }` → 200; sai dữ liệu → 400 `INVALID_INPUT` |
+| `GET` | `/api/profile-visibility` | Ẩn/công khai từng chỉ số và mục: `{ gpa, drl, projects, education, skills }` (`true` = công khai) |
+| `PUT` | `/api/profile-visibility` | Đổi một mục `{ "field": "gpa"\|"drl"\|"projects"\|"education"\|"skills", "isPublic": true\|false }` → 200; sai dữ liệu → 400 `INVALID_INPUT` |
 | `GET` | `/api/profile-visibility/mode` | Chế độ hiển thị cả hồ sơ: `{ visibility }` |
 | `PUT` | `/api/profile-visibility/mode` | Đổi chế độ `{ "visibility": "Public"\|"Partners_Only"\|"Private" }` → 200; giá trị khác → 400 `INVALID_INPUT` |
 | `GET` | `/api/student-profile/links` | Liên kết trên hồ sơ: `{ githubUrl, linkedinUrl }` (`null` = chưa có) |
 | `PUT` | `/api/student-profile/links` | Đổi `{ "githubUrl"?, "linkedinUrl"? }` → 200; `null` hoặc `""` để xóa. Chỉ nhận `https` đúng tên miền GitHub / LinkedIn, tối đa 255 ký tự; sai → 400 `INVALID_INPUT` |
-| `GET` | `/api/student-cv` | Dữ liệu xem trước CV (hồ sơ, học vấn, kỹ năng, dự án trên CV, kinh nghiệm, giải thưởng, chứng chỉ). Chỉ số đang ẩn không được trả về, tên của chúng nằm ở `hiddenFields`; thành tích bị từ chối không được trả về |
+| `GET` | `/api/student-cv` | Dữ liệu xem trước CV (hồ sơ, học vấn, kỹ năng, dự án trên CV, kinh nghiệm, giải thưởng, chứng chỉ). Chỉ số và mục đang ẩn không được trả về, tên của chúng nằm ở `hiddenFields`; thành tích bị từ chối không được trả về |
 | `GET` | `/api/student-achievements` | Thành tích của SV: `{ achievements: [{ achievementId, category, title, issuedBy, issuedDate, detail, visibility, status, hasEvidence }] }` |
 | `POST` | `/api/student-achievements` | Thêm `{ "category": "Award"\|"Publication"\|"Language_Cert"\|"Tech_Cert", "title", "issuedBy", "issuedDate": "YYYY-MM-DD", "detail"?, "visibility"? }` → 201, luôn ở trạng thái `Self_Declared`; sai dữ liệu → 400; trùng tên + tổ chức + ngày → 409 `ALREADY_EXISTS` |
 | `PATCH` | `/api/student-achievements/:id` | Đổi chế độ hiển thị `{ "visibility" }` → 200; không phải mục của mình → 404 `ACHIEVEMENT_NOT_FOUND` |

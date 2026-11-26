@@ -1,5 +1,5 @@
 // Dữ liệu CV của SV: gom từ các bảng hồ sơ để hiển thị bản xem trước CV (SV-04).
-// Tôn trọng lựa chọn ẩn/công khai: chỉ số đang ẩn KHÔNG được gửi về (chỉ báo tên trong hiddenFields).
+// Tôn trọng lựa chọn ẩn/công khai: chỉ số và mục đang ẩn KHÔNG được gửi về (chỉ báo tên trong hiddenFields).
 import { supabase } from '../db.js';
 import { AppError } from '../errors.js';
 import { listShowcase } from './studentShowcaseService.js';
@@ -21,7 +21,8 @@ export async function getCv(studentId) {
       .from('student_profile')
       .select(`full_name, student_code, class_name, cohort, enrollment_year, graduation_year,
                gpa, training_score, headline, github_url, linkedin_url,
-               is_gpa_public, is_training_score_public, is_achievements_public, updated_at,
+               is_gpa_public, is_training_score_public, is_achievements_public,
+               is_education_public, is_skills_public, updated_at,
                account(email, avatar_url),
                major(name, faculty(name))`)
       .eq('student_id', studentId)
@@ -57,6 +58,9 @@ export async function getCv(studentId) {
   if (!profile.is_gpa_public) hiddenFields.push('gpa');
   if (!profile.is_training_score_public) hiddenFields.push('drl');
   if (!profile.is_achievements_public) hiddenFields.push('projects');
+  if (!profile.is_education_public) hiddenFields.push('education');
+  if (!profile.is_skills_public) hiddenFields.push('skills');
+  const showEducation = profile.is_education_public;
 
   const timelineDto = timeline.map((t) => ({
     type: t.entry_type,
@@ -86,18 +90,21 @@ export async function getCv(studentId) {
     githubUrl: profile.github_url,
     linkedinUrl: profile.linkedin_url,
     // Học vấn chính tại UIT lấy từ hồ sơ; các mục học vấn khác lấy từ profile_timeline
+    // GPA và điểm rèn luyện có công tắc riêng, không phụ thuộc mục Học vấn
     university: {
-      name: UNIVERSITY,
-      faculty: profile.major?.faculty?.name ?? null,
-      major: profile.major?.name ?? null,
-      enrollmentYear: profile.enrollment_year,
-      graduationYear: profile.graduation_year,
+      name: showEducation ? UNIVERSITY : null,
+      faculty: showEducation ? (profile.major?.faculty?.name ?? null) : null,
+      major: showEducation ? (profile.major?.name ?? null) : null,
+      enrollmentYear: showEducation ? profile.enrollment_year : null,
+      graduationYear: showEducation ? profile.graduation_year : null,
       gpa: profile.is_gpa_public ? profile.gpa : null,
       trainingScore: profile.is_training_score_public ? profile.training_score : null,
     },
     hiddenFields,
-    skills: skills.map((s) => ({ name: s.skill.name, level: s.skill_level, category: s.skill.category })),
-    education: timelineDto.filter((t) => t.type !== 'Work'),
+    skills: profile.is_skills_public
+      ? skills.map((s) => ({ name: s.skill.name, level: s.skill_level, category: s.skill.category }))
+      : [],
+    education: showEducation ? timelineDto.filter((t) => t.type !== 'Work') : [],
     experience: timelineDto.filter((t) => t.type === 'Work'),
     // Chỉ công trình SV chọn hiện trên CV VÀ còn đủ điều kiện (đã được GV thẩm định đạt)
     projects: profile.is_achievements_public
