@@ -87,13 +87,13 @@
   }
 
   // ---------- Đăng xuất (nút trong hộp thoại đăng xuất) ----------
-  // dich: 'dang-ky' → sang màn chọn vai trò để đăng ký tài khoản mới; mặc định → màn đăng nhập
+  // dich: 'dang-ky' → sang màn chọn vai trò để đăng ký tài khoản mới; mặc định → trang tổng quan công khai
   window.dangXuat = function (dich) {
     var nut = document.activeElement;
     if (nut && nut.tagName === 'BUTTON') nut.disabled = true;
     A.dangXuat().then(function () {
       var vaiTro = MA === 'sv' ? '' : '?role=' + MA;
-      window.location.replace(dich === 'dang-ky' ? '../auth/03_dang-ky-b1-chon-vai-tro.html' + vaiTro : A.trangDangNhap(MA, null, 'da-dang-xuat'));
+      window.location.replace(dich === 'dang-ky' ? '../auth/03_dang-ky-b1-chon-vai-tro.html' + vaiTro : '../../index.html?ly-do=da-dang-xuat');
     });
   };
 

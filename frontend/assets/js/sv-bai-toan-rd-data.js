@@ -545,6 +545,7 @@
     coMayChu: coMayChu,
     laApi: function () { return nguon.api; },
     napDanhSach: napDanhSach,
+    baiToanTuApi: baiToanTuApi,
     napChiTiet: napChiTiet,
     veNguon: veNguon
   };

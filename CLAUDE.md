@@ -57,7 +57,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 
 ```
 prototyp@/                 (chủ sở hữu từng thư mục: TBD)
-├── frontend/   pages/{auth,sv,gv,dn}/, assets/{css,js,img}/
+├── frontend/   index.html (trang tổng quan công khai), pages/{auth,sv,gv,dn,khach}/, assets/{css,js,img}/
 ├── backend/    src/{server,config,db,errors}.js, routes/, services/
 ├── database/   schema.postgres.sql, migrations/, seed*.sql, reset.sql, test_supabase.sql
 ├── docs/       DESIGN.md (design system), datab.pdf (yêu cầu dữ liệu)
@@ -133,10 +133,15 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `ux-effects.js/.css`: hiệu ứng ripple; tắt bằng `data-no-ripple`.
   - `router.js`: chỉ dùng cho `pages/auth/`.
   - `auth.js` + `auth-guard.js`: nạp trong `<head>` của **mọi** trang SV/GV/DN (trang mới phải thêm).
-    - Chặn người chưa đăng nhập hoặc sai vai trò; nút trong hộp thoại đăng xuất gọi `dangXuat()`.
+    - Chặn người chưa đăng nhập hoặc sai vai trò; nút trong hộp thoại đăng xuất gọi `dangXuat()`, đăng xuất xong về `index.html`.
     - Không có máy chủ đăng nhập: chế độ xem thử, vai trò suy ra từ đuôi email, hiện dải báo "Chế độ xem thử".
   - `dang-nhap.js`: màn auth/01 và auth/02 (`<form data-cong="business|uit">`). Đăng nhập xong vào trang theo vai trò máy chủ trả về, không theo `?role=`.
   - `quen-mat-khau.js`: quên mật khẩu UIT (auth/07 → 08) và DN (auth/14 → 15).
+  - Trang công khai cho khách (không gắn `auth-guard.js`), dùng `cong-khai.js`:
+    - `index.html` (`tong-quan.js`): giới thiệu, số liệu, tiêu điểm, bài toán R&D công khai (lọc khi bấm "Lọc"), cách hoạt động, đối tác, tin tức.
+    - `pages/khach/01_chi-tiet-bai-toan-rd.html` (`khach-chi-tiet-bai-toan-rd.js`): xem đề bài; ẩn tệp đính kèm và nút nộp; "Đăng nhập để ứng tuyển" → UIT SSO rồi vào thẳng SV-13.
+    - Đã đăng nhập: thanh trên cùng có "Vào trang của tôi". Không hiện thông tin cá nhân (tên, MSSV, điểm SV, proposal, email liên hệ).
+    - Hợp đồng `/api/public/overview`, `/api/public/problems/:code` ghi ở đầu `cong-khai.js`; backend chưa làm, chưa có thì dùng dữ liệu mẫu và báo "dữ liệu minh họa".
     - Mã 6 chữ số; nút "Gửi lại email (60s)" đếm ngược, hết giờ mới gửi lại được.
 - JS gọi API đặt ở file riêng `assets/js/<chức-năng>.js` (ví dụ `lab-application.js`, `student-avatar.js`), không nhét vào HTML.
 - Khi không có máy chủ (`file://`, GitHub Pages), trang phải hiển thị được và báo rõ "chưa lưu".

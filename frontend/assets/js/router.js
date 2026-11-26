@@ -38,8 +38,9 @@
     'ban-lam-viec-dn': APPS.dn.home,
     'dang-ky-sv': withRole('04_dang-ky-b2-thong-tin-sinh-vien.html', 'sv'),
     'dang-ky-gv': withRole('04_dang-ky-b2-thong-tin-sinh-vien.html', 'gv'),
+    // Logo và "Về trang chủ" trên các màn đăng nhập / đăng ký -> trang tổng quan công khai (index.html)
+    'trang-chu': '../../index.html',
     // Sau khi đăng nhập / kích hoạt tài khoản -> không gian làm việc theo vai trò
-    'trang-chu': APPS[ROLE].home,
     'ban-lam-viec-sinh-vien': APPS[ROLE].home,
     'thiet-lap-ho-so': APPS[ROLE].profile
   };
