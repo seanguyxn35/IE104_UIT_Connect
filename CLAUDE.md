@@ -3,6 +3,7 @@
 Đọc file này trước mọi việc. Viết code, chú thích, tài liệu, giao diện bằng **tiếng Việt**.
 Chỗ ghi `TBD` là chưa chốt: hỏi nhóm, không tự quyết.
 Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dùng chung: [CONTRIBUTING.md](CONTRIBUTING.md).
+Bản hướng dẫn từng bước trên VS Code cho thành viên mới dùng Git: [HUONGDANGIT.md](HUONGDANGIT.md). Sửa quy trình thì sửa cả hai file.
 
 ## 1. Tổng quan
 
@@ -35,7 +36,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Kết nối DN: chỉ sang `Contracted`/`Completed` khi **cả hai bên** xác nhận. Chỉ là trạng thái, không làm hợp đồng điện tử.
 - Đánh giá đối tác chỉ khi kết nối `Completed`, điểm 1.0–5.0.
 - Tài nguyên học thuật: GV thẩm định `Approved|Rejected|Revision_Needed`; mọi quyết định của Admin ghi vào `moderation_log`.
-- Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài (`is_*_public`).
+- Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài / Học vấn / Kỹ năng (`is_*_public`).
 - Thành tích / chứng chỉ: SV tự khai, lưu ở `Self_Declared` và hiện ngay, không cần duyệt. Xác minh là tùy chọn (cần tệp minh chứng): `Self_Declared`/`Rejected` → `Pending` → `Verified`/`Rejected`. Mỗi mục có chế độ hiển thị riêng; mục `Private` và mục bị từ chối không đưa lên CV. Minh chứng PDF/JPG/PNG ≤ 5 MB, lưu riêng tư.
 - Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của mình hoặc nhóm mình. Điều kiện "đã được GV thẩm định": trạng thái `Approved`/`Published` **và** có phiếu `Approved` trong `academic_review_log`. Kiểm tra lại mỗi lần đọc; mất điều kiện thì không lên CV.
 - Ảnh đại diện: JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp, không tin `Content-Type`.
@@ -61,6 +62,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 ├── archive/    prototype cũ (không sửa)
 ├── .github/workflows/deploy-pages.yml
 ├── CONTRIBUTING.md
+├── HUONGDANGIT.md   hướng dẫn Git từng bước trên VS Code
 └── README.md
 ```
 
@@ -71,6 +73,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
+- Storage: bucket công khai `avatars` (ảnh đại diện), bucket riêng tư `evidence` (minh chứng, đọc qua liên kết ký tạm 60 s). Backend tự tạo bucket lần đầu.
 - **Chưa có đăng nhập**: danh tính lấy từ `TEST_STUDENT_ID` trong `.env`. Cơ chế xác thực thật: `TBD`.
 - API hiện có:
   - `POST /api/lab-applications`
@@ -127,17 +130,22 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `seed.sql` (lần đầu)
   - `reset.sql` (trước mỗi ca test)
   - `seed_student_skills.sql` (kỹ năng mẫu SV 9101)
+  - `seed_showcase.sql` (tài nguyên 9301–9306 cho công trình trưng bày; mặc định gắn SV **9111**, sửa `v_student` thành `TEST_STUDENT_ID` của mình)
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
+- Migration đã có: `001_student_profile_visibility.sql`, `002_student_achievement_self_declared.sql`, `003_student_section_visibility.sql`.
 - Test tự động: chưa có script `npm test` – `TBD`.
 
 ## 9. Việc đang mở / lưu ý
 
-- Trạng thái nhánh (26/11/2026): code backend nằm ở `feature/hai-ho-so-sv`, **chưa gộp vào `develop`**
-  (`develop` và `main` chưa có backend). Cập nhật dòng này sau khi PR được gộp.
+- Trạng thái nhánh (26/11/2026):
+  - Backend + trang SV-04 đã gộp vào `develop` (PR #1, #2, #4, #5 từ `feature/hai-ho-so-sv`).
+  - PR #3 (`feature/hai-ho-so-sv` → `main`) còn mở, trái quy trình (feature phải vào `develop`): nên đóng.
+  - `main` vẫn ở commit `0b37969`, **chưa có backend**: cần PR `develop` → `main` khi `develop` chạy ổn.
+  - Các nhánh `feature/hai-cho-ghep-nhom`, `-de-tai-cua-toi`, `-de-xuat-co-van`, `-nhom-nghien-cuu-lab` đã tạo trên remote nhưng chưa có commit (dừng ở `0b37969`, cũ hơn `develop`): tạo lại từ `develop` trước khi làm.
 - Nhánh `thuc-hanh/ung-tuyen-de-tai` (commit `bea23cb`) là bản nộp bài cá nhân: không sửa, không gộp.
-- `README.md` gốc đã cũ: vẫn ghi "backend chưa có mã nguồn", "CSDL SQL Server", chạy bằng Live Server. Cần cập nhật.
-- `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
-- CSDL chung đã có các cột của migration 001.
+- `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (thiếu các cột của migration 001, 002).
+- CSDL chung đã có các cột của migration 001 và 002; migration 003 (mới, PR #5): kiểm tra đã chạy trên Supabase chưa.
+- `seed_showcase.sql` mặc định dùng SV 9111 (không có trong `seed.sql`), trong khi `TEST_STUDENT_ID` mặc định là 9101: nhớ sửa trước khi chạy.
 - Chưa có xác thực, phân quyền, policy RLS.
 - Chưa có màn hình và API cho Admin.
 - Chỉ trang SV-04 và SV-07 gọi API (SV-05 mới lọc tab trên giao diện); các trang GV/DN còn dữ liệu tĩnh.

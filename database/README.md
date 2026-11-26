@@ -4,13 +4,17 @@ Lược đồ CSDL của UIT Connect.
 
 ```
 database/
-├── schema.sql            # Bản gốc cho Microsoft SQL Server 2017+ (tên PascalCase: LabApplication.TopicID)
-├── schema.postgres.sql   # Bản PostgreSQL đang chạy trên Supabase (tên snake_case: lab_application.topic_id)
+├── schema.postgres.sql   # BẢN CHÍNH THỨC: PostgreSQL đang chạy trên Supabase (tên snake_case: lab_application.topic_id)
+├── schema.sql            # Bản SQL Server cũ (PascalCase), chỉ tham khảo, KHÔNG cập nhật – đã lệch bản PostgreSQL
 ├── seed.sql              # Dữ liệu thử cho chức năng "SV ứng tuyển đề tài Lab" (TC01–TC03)
 ├── reset.sql             # Đặt lại dữ liệu thử trước mỗi ca kiểm thử
 ├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
 ├── seed_showcase.sql        # tài nguyên đã / chưa thẩm định (ID 9301–9306) cho mục "Công trình trưng bày trên CV"
+│                            #   mặc định gắn cho SV 9111: sửa "v_student := 9111" thành TEST_STUDENT_ID của bạn
 ├── migrations/           # Thay đổi lược đồ sau bản đầu (đã chạy trên Supabase, đã gộp vào schema.postgres.sql)
+│   ├── 001_student_profile_visibility.sql      # ẩn/công khai GPA, DRL, đề tài; chế độ hiển thị hồ sơ
+│   ├── 002_student_achievement_self_declared.sql  # thành tích tự khai: Self_Declared, visibility từng mục
+│   └── 003_student_section_visibility.sql      # ẩn/công khai mục Học vấn, Kỹ năng
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 
@@ -36,7 +40,9 @@ rồi nạp lại 2 đơn có sẵn; không đụng dữ liệu khác. Câu `SEL
 - Project: `uit-connect` (region Singapore, ref `rhqoitsmiuijefglhdoy`), tổ chức IE104.
 - Đã chạy `schema.postgres.sql`: 65 bảng, 3 view, dữ liệu danh mục (khoa, chuyên ngành, lĩnh vực, Lab, tiêu chí thẩm định).
 - **RLS bật cho mọi bảng, chưa có policy** → frontend (khóa `anon`) không đọc/ghi được.
-  Backend truy cập bằng `service_role key` đặt trong `backend/.env` (không commit).
+  Backend truy cập bằng secret key (`SUPABASE_SECRET_KEY`) đặt trong `backend/.env` (không commit).
+- Storage: bucket công khai `avatars` (ảnh đại diện) và bucket riêng tư `evidence` (minh chứng thành tích,
+  chỉ đọc qua liên kết ký tạm). Backend tự tạo bucket ở lần dùng đầu tiên.
 - Sửa lược đồ: viết thay đổi thành file SQL mới và chạy trong SQL Editor (hoặc Supabase CLI),
   đồng thời cập nhật `schema.postgres.sql` để file này luôn khớp với CSDL.
 

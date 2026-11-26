@@ -1,6 +1,7 @@
 # Hướng dẫn đóng góp – UIT Connect
 
 Tài liệu dành cho thành viên nhóm. Đọc hết một lần trước khi sửa code.
+Chưa quen Git: đọc [HUONGDANGIT.md](HUONGDANGIT.md) trước (các bước bấm trên VS Code).
 Chỗ ghi `TBD` là nhóm chưa chốt: hỏi cả nhóm, không tự quyết.
 
 ## 1. Cài đặt lần đầu
@@ -151,7 +152,8 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 **Dữ liệu thử:**
 
 - Dùng ID dải 9xxx, toàn bộ là dữ liệu giả. Không đụng dữ liệu ngoài dải này khi thử.
-- Đã dùng: tài khoản `9101`, `9102`, `9201`; đề tài `9001`–`9003`.
+- Đã dùng: tài khoản `9101`, `9102`, `9111`, `9201`; đề tài `9001`–`9003`;
+  tài nguyên học thuật `9301`–`9306` và nhóm `9301` (`seed_showcase.sql`).
 - Dải ID riêng cho từng thành viên: `TBD`.
 - `reset.sql` đặt lại dữ liệu thử của chức năng ứng tuyển, **kể cả khi người khác đang thử** trên cùng CSDL: báo nhóm trước khi chạy.
 
