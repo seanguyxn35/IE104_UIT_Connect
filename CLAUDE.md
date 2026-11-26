@@ -15,7 +15,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Actor: **SV** (Student), **GV** (Lecturer), **DN** (Business), **Admin**. Giá trị `account.role`: `Student|Lecturer|Business|Admin`.
 - Danh sách UC (suy ra từ `datab.pdf` + màn hình trong `frontend/pages/`; mã UC chính thức: `TBD`):
   - Chung: đăng nhập email, đăng ký (SV/GV: auth 03–06, DN: auth 09–13), xác thực email, quên mật khẩu (auth 07–08), cài đặt tài khoản.
-  - SV: xem/tìm tài nguyên học thuật (sv/02–03), hồ sơ năng lực & CV (sv/04), đề tài của tôi (sv/05), quản trị nhóm & portfolio (sv/06), chợ ghép nhóm + ứng tuyển đề tài Lab (sv/07), xin GV cố vấn (sv/08), cổng DN & bài toán R&D (sv/09), học bổng & tài trợ (sv/10), kho đã lưu (sv/12).
+  - SV: xem/tìm tài nguyên học thuật (sv/02–03), hồ sơ năng lực & CV (sv/04), đề tài của tôi (sv/05), quản trị nhóm & portfolio (sv/06), chợ ghép nhóm + ứng tuyển đề tài Lab (sv/07), xin GV cố vấn (sv/08), cổng DN & bài toán R&D (sv/09, chi tiết + nộp proposal sv/13), học bổng & tài trợ (sv/10), kho đã lưu (sv/12).
   - GV: hồ sơ khoa học (gv/02), đăng đề tài & hướng dẫn (gv/03), tuyển SV vào đề tài (gv/04), xử lý yêu cầu hướng dẫn (gv/05), thẩm định tài nguyên học thuật (gv/06–08), kho tài liệu (gv/09–10), nhóm nghiên cứu & Lab (gv/11), bài toán DN (gv/12), học bổng (gv/13), kho đã lưu (gv/14).
   - DN: hồ sơ DN + giấy tờ xác minh (dn/02–03), đăng/quản lý bài toán R&D (dn/04–05, biểu mẫu đề bài dn/14, chi tiết bài toán + hồ sơ dự án dn/15), săn nhân tài + gửi lời mời (dn/06–07), hộp thư kết nối + không gian đàm phán (dn/08–09, trong phòng đàm phán dn/16), học bổng & tài trợ (dn/10), kho đã lưu (dn/11).
   - Admin: duyệt hồ sơ DN, bài toán R&D, tin tuyển dụng, tài nguyên bị báo cáo; ghi `moderation_log` (theo `datab.pdf`). **Chưa có màn hình Admin** – `TBD`.
@@ -95,6 +95,12 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     - `POST|DELETE .../:id/steps/:step/confirm` (`step` = `Technical|NDA_IP|Contract`)
     - `POST .../:id/messages`, `POST .../:id/meetings`, `GET .../:id/documents/:attachmentId[?download=1]`
   - DN-01 Bàn làm việc: `GET /api/business-dashboard`.
+  - SV-09 / SV-13 Bài toán R&D phía SV (`studentRdProblemService.js`):
+    - `GET /api/student-rd-problems`, `GET .../:code`, `PUT|DELETE .../:code/saved`
+    - `POST .../proposal-files` (tải PDF, bước 1) → `POST .../:code/proposals` (nộp, bước 2), `POST .../:code/proposals/:id/withdraw`
+    - `GET .../:code/attachments/:id`, `GET .../:code/proposals/:id/attachments/:aid`
+    - SV chỉ thấy bài `Open`/`In_Progress`. Proposal ghi vào `connection_request` nên hiện ngay ở `/api/business-inbox`; proposal đã rút (`Cancelled`) bị ẩn khỏi hộp thư DN.
+    - Frontend gọi qua `sv-bai-toan-rd-data.js`; không có máy chủ thì dùng dữ liệu mẫu và báo "chưa lưu".
   - Frontend gọi các API DN qua `assets/js/dn-api.js`. Mở bằng `file://` hoặc máy chủ lỗi thì dùng dữ liệu mẫu và báo "chưa lưu".
     DN-04/05/14/15 (bài toán R&D) chưa có API.
 - Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
@@ -145,11 +151,13 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `seed_student_skills.sql` (kỹ năng mẫu SV 9101)
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
   - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` → `005_dn_khong_gian_dam_phan.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
+  - Bài toán R&D phía SV: `migrations/006_sv_bai_toan_rd.sql` (một lần) → `seed_sv_rd.sql` (sau `seed_dn.sql`; chạy lại `seed_dn.sql` thì chạy lại file này) → `npm run seed:dn-files`.
+    ID: DN/Lab khác 9511–9525; bài toán 9301–9315 (RD-2026-101..115); nhóm thử 9821 (SV 9101 trưởng nhóm), 9822 (9101 là thành viên), 9823 (5 người); tệp đề bài 9931–9950.
     `seed_dn.sql` được sinh từ dữ liệu mẫu của giao diện (`dn-bai-toan-data.js`). ID dùng:
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915
     - Lịch 9951–9957; tin 9001–9014; tệp 9961–9989
-- Test tự động: chưa có script `npm test` – `TBD`.
+- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd` (máy chủ đang chạy, tự dọn dữ liệu).
 
 ## 9. Việc đang mở / lưu ý
 
@@ -161,7 +169,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - CSDL chung đã có các cột của migration 001.
 - Chưa có xác thực, phân quyền, policy RLS.
 - Chưa có màn hình và API cho Admin.
-- Chỉ trang SV-04 và SV-07 gọi API (SV-05 mới lọc tab trên giao diện); các trang GV/DN còn dữ liệu tĩnh.
+- Trang SV gọi API: SV-04, SV-07, SV-09, SV-13 (SV-05 mới lọc tab trên giao diện); trang GV còn dữ liệu tĩnh.
 - Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16) đã có tương tác nhưng **chưa có API**:
   - Phòng đàm phán (dn/16): 3 bước Trao đổi kỹ thuật → NDA & IP → Hợp đồng, mỗi bước xong khi cả hai bên xác nhận. "Hợp đồng" chỉ ghi nhận đã ký ngoài hệ thống. "Nhắn tin" là trao đổi theo lượt, không phải chat realtime.
   - Chưa có phía đối tác (SV/GV) để xác nhận, nên phòng mới mở sẽ dừng ở "Chờ đối tác".
@@ -170,6 +178,12 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - Chỉ bài toán đã công khai (Đang mở, Đang thực hiện) mới có proposal; tệp đính kèm là PDF minh họa tạo trên trình duyệt.
   - Sửa / xóa bài đăng theo quy tắc ở mục 3. Proposal và phòng đàm phán của bài đã xóa bị ẩn.
   - Backend DN (sắp làm): tạm lấy danh tính từ `TEST_BUSINESS_ID` trong `.env`, giống `TEST_STUDENT_ID`.
+- Bài toán R&D phía SV (sv/09, sv/13) đã có API (mục 5). Khi không có máy chủ:
+  - Dữ liệu mẫu: bài DN (`dn-bai-toan-data.js`) ở trạng thái Đang mở / Đang thực hiện cộng 15 bài của DN/Lab khác (`sv-bai-toan-rd-data.js`).
+  - Lưu bài và proposal lưu tạm trong `localStorage` (`uitc.sv.baiToanDaLuu.v1`, `uitc.sv.proposal.v1`), hiện trong Hộp thư DN-08 cùng trình duyệt.
+  - Bài DN mới đăng ở DN-05 chưa lên CSDL (DN-05 chưa có API) và cần Admin duyệt (chưa có màn Admin) mới hiện cho SV.
+  - Chỉ trưởng nhóm nộp proposal thay nhóm (403 `NOT_TEAM_LEADER`).
+- `schema.postgres.sql` chưa gộp migration 004–006 (chỉ có tới 003).
 - Code gọi `/api/student-skills` đang viết thẳng trong HTML của SV-04, trái quy ước ở mục 6. Cần tách ra `assets/js/`.
 - Mâu thuẫn cần nhóm chốt:
   - Schema có `external_login` (`UIT_SSO`, `Microsoft365`) và màn auth 02 "SSO Microsoft 365", nhưng SSO UIT nằm ngoài phạm vi.
