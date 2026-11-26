@@ -379,13 +379,13 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <!-- Action Create Button with Quick Dropdown Menu -->
 <div class="relative inline-block text-left group">
-<button class="h-10 px-space-lg bg-primary hover:bg-brand-navy-dark text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button">
+<button class="h-10 px-space-lg bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button">
 <span class="material-symbols-outlined text-[18px]">add_circle</span>
 <span class="">Tạo đề tài mới</span>
 <span class="material-symbols-outlined text-[18px] ml-1">arrow_drop_down</span>
 </button>
 <!-- Dropdown on Hover/Focus -->
-<div class="absolute right-0 top-full mt-1.5 w-60 bg-surface-container-lowest rounded-lg shadow-xl py-1.5 z-30 hidden group-hover:block hover:block">
+<div class="absolute right-0 top-full mt-1.5 w-60 bg-surface-container-lowest rounded-lg shadow-xl py-1.5 z-30 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
 <div class="px-space-md py-1 font-label-sm text-label-sm text-outline uppercase tracking-wider">Chọn thể loại khởi tạo</div>
 <a class="flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" href="#">
 <span class="material-symbols-outlined text-[18px] text-secondary">science</span>
@@ -405,26 +405,28 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <!-- Status Tabs -->
 <div class="w-full bg-surface-container-lowest rounded-lg shadow-xs px-space-md pt-2">
-<div class="flex items-center gap-space-sm overflow-x-auto scrollbar-none"><button class="status-tab-btn pb-3 px-space-lg font-title-md text-title-md text-primary font-bold border-b-2 border-primary flex items-center gap-1.5 whitespace-nowrap transition-colors" data-status-filter="all" onclick="switchProjectTab(this, 'all')" type="button">
-  <span class="">Tất cả</span>
-  <span class="tab-count px-2 py-0.5 rounded-xl bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">4</span>
+<div class="flex items-end gap-1 overflow-x-auto scrollbar-none" data-no-ripple role="tablist">
+<button class="status-tab-btn shrink-0 flex items-center gap-2 pt-2 pb-3 px-space-lg rounded-t-lg border-b-2 font-body-md text-body-md font-medium whitespace-nowrap transition-colors text-primary border-primary bg-primary-fixed/30 font-semibold" role="tab" data-status-filter="all" onclick="switchProjectTab(this, 'all')" type="button">
+  <span>Tất cả</span>
+  <span class="tab-count min-w-[22px] text-center px-1.5 py-0.5 rounded-xl bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">4</span>
 </button>
-<button class="status-tab-btn pb-3 px-space-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors flex items-center gap-1.5 whitespace-nowrap" data-status-filter="draft" onclick="switchProjectTab(this, 'draft')" type="button">
-  <span class="">Bản nháp</span>
-  <span class="tab-count px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
+<button class="status-tab-btn shrink-0 flex items-center gap-2 pt-2 pb-3 px-space-lg rounded-t-lg border-b-2 font-body-md text-body-md font-medium whitespace-nowrap transition-colors text-on-surface-variant border-transparent hover:bg-surface-container-low hover:text-on-surface" role="tab" data-status-filter="draft" onclick="switchProjectTab(this, 'draft')" type="button">
+  <span>Bản nháp</span>
+  <span class="tab-count min-w-[22px] text-center px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
 </button>
-<button class="status-tab-btn pb-3 px-space-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors flex items-center gap-1.5 whitespace-nowrap" data-status-filter="pending" onclick="switchProjectTab(this, 'pending')" type="button">
-  <span class="">Chờ thẩm định</span>
-  <span class="tab-count px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
+<button class="status-tab-btn shrink-0 flex items-center gap-2 pt-2 pb-3 px-space-lg rounded-t-lg border-b-2 font-body-md text-body-md font-medium whitespace-nowrap transition-colors text-on-surface-variant border-transparent hover:bg-surface-container-low hover:text-on-surface" role="tab" data-status-filter="pending" onclick="switchProjectTab(this, 'pending')" type="button">
+  <span>Chờ thẩm định</span>
+  <span class="tab-count min-w-[22px] text-center px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
 </button>
-<button class="status-tab-btn pb-3 px-space-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors flex items-center gap-1.5 whitespace-nowrap" data-status-filter="changes_requested" onclick="switchProjectTab(this, 'changes_requested')" type="button">
-  <span class="">Cần bổ sung</span>
-  <span class="tab-count px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
+<button class="status-tab-btn shrink-0 flex items-center gap-2 pt-2 pb-3 px-space-lg rounded-t-lg border-b-2 font-body-md text-body-md font-medium whitespace-nowrap transition-colors text-on-surface-variant border-transparent hover:bg-surface-container-low hover:text-on-surface" role="tab" data-status-filter="changes_requested" onclick="switchProjectTab(this, 'changes_requested')" type="button">
+  <span>Cần bổ sung</span>
+  <span class="tab-count min-w-[22px] text-center px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
 </button>
-<button class="status-tab-btn pb-3 px-space-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors flex items-center gap-1.5 whitespace-nowrap" data-status-filter="approved" onclick="switchProjectTab(this, 'approved')" type="button">
-  <span class="">Đã thẩm định</span>
-  <span class="tab-count px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
-</button></div>
+<button class="status-tab-btn shrink-0 flex items-center gap-2 pt-2 pb-3 px-space-lg rounded-t-lg border-b-2 font-body-md text-body-md font-medium whitespace-nowrap transition-colors text-on-surface-variant border-transparent hover:bg-surface-container-low hover:text-on-surface" role="tab" data-status-filter="approved" onclick="switchProjectTab(this, 'approved')" type="button">
+  <span>Đã thẩm định</span>
+  <span class="tab-count min-w-[22px] text-center px-1.5 py-0.5 rounded-xl bg-surface-container-high text-on-surface font-label-sm text-label-sm">1</span>
+</button>
+</div>
 </div>
 <!-- Filter & Controls Toolbar -->
 <div class="mt-space-md mb-space-md flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
@@ -510,7 +512,7 @@ main > :last-child { margin-bottom: 0 !important; }
     </div>
   </div>
   <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-primary hover:bg-brand-navy-dark text-on-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button" data-href="03_chi-tiet-tai-nguyen.html">
+    <button class="h-9 px-space-md bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button" data-href="03_chi-tiet-tai-nguyen.html">
       <span class="material-symbols-outlined text-[16px]">visibility</span>
       <span class="">Xem trên Kho tài liệu</span>
     </button>
@@ -518,7 +520,7 @@ main > :last-child { margin-bottom: 0 !important; }
       <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
         <span class="material-symbols-outlined text-[20px]">more_vert</span>
       </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block hover:block">
+      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
         <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
           <span class="material-symbols-outlined text-[16px]">info</span>
           <span class="">Chi tiết</span>
@@ -578,7 +580,7 @@ main > :last-child { margin-bottom: 0 !important; }
       <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
         <span class="material-symbols-outlined text-[20px]">more_vert</span>
       </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block hover:block">
+      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
         <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
           <span class="material-symbols-outlined text-[16px]">info</span>
           <span class="">Chi tiết</span>
@@ -620,7 +622,7 @@ main > :last-child { margin-bottom: 0 !important; }
     
   </div>
   <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-surface-container-lowest text-primary hover:bg-brand-light-blue rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button">
+    <button class="h-9 px-space-md bg-surface-container-lowest text-primary border border-primary/30 hover:bg-brand-light-blue hover:border-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button">
       <span class="material-symbols-outlined text-[16px]">timeline</span>
       <span class="">Xem tiến trình</span>
     </button>
@@ -628,7 +630,7 @@ main > :last-child { margin-bottom: 0 !important; }
       <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
         <span class="material-symbols-outlined text-[20px]">more_vert</span>
       </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block hover:block">
+      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
         <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
           <span class="material-symbols-outlined text-[16px]">info</span>
           <span class="">Chi tiết</span>
@@ -677,7 +679,7 @@ main > :last-child { margin-bottom: 0 !important; }
       <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
         <span class="material-symbols-outlined text-[20px]">more_vert</span>
       </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block hover:block">
+      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
         <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
           <span class="material-symbols-outlined text-[16px]">content_copy</span>
           <span class="">Nhân bản bản nháp</span>
@@ -853,5 +855,6 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <script src="../../assets/js/app-shell.js"></script>
 <script src="../../assets/js/ux-effects.js"></script>
+<script src="../../assets/js/de-tai-cua-toi.js"></script>
 </body>
 </html>
