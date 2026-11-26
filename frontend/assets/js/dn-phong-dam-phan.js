@@ -24,9 +24,31 @@
       '<span class="material-symbols-outlined text-[18px]">arrow_back</span>Về Không gian đàm phán</a></div>';
   }
 
-  var ph = D.layPhong(idPhong);
-  if (!ph) { khongThay(); return; }
-  if (ph.chuaDoc) D.capNhatPhong(ph.id, { daDoc: true });
+  // ---------- Nguồn dữ liệu ----------
+  // Có máy chủ và mã phòng là số (id proposal trong CSDL) → API; còn lại (file://, phòng mẫu "dp-...") → dữ liệu mẫu
+  var A = window.DnApi;
+  var nguon = { api: false, loi: '' };
+  var ph = null;
+  var API_PHONG = '/api/business-negotiations/' + encodeURIComponent(idPhong);
+
+  function layCucBo(err) {
+    nguon.api = false;
+    nguon.loi = err && err.message === 'mau' ? 'Đây là phòng của dữ liệu mẫu' : A.lyDoDuLieuMau(err);
+    ph = D.layPhong(idPhong);
+    if (ph && ph.chuaDoc) D.capNhatPhong(ph.id, { daDoc: true });
+  }
+  // Nạp (lại) phòng; API GET cũng đánh dấu doanh nghiệp đã đọc mục Trao đổi
+  function layLai() {
+    if (!A.coMayChu()) { layCucBo(null); return Promise.resolve(); }
+    if (!/^\d+$/.test(idPhong)) { layCucBo(new Error('mau')); return Promise.resolve(); }
+    return A.goi(API_PHONG).then(function (r) {
+      nguon.api = true;
+      ph = A.phongTuApi(r);
+    }, function (err) {
+      if (err.status === 404) { nguon.api = true; ph = null; return; }
+      layCucBo(err);
+    });
+  }
 
   function gioPhut(d) { return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
   function thoiDiem(iso) {
@@ -153,7 +175,6 @@
 
   // ---------- Vẽ trang ----------
   function ve() {
-    ph = D.layPhong(idPhong);
     var p = ph.p, bt = ph.baiToan;
     var tt = D.TRANG_THAI_PHONG[ph.trangThai];
     var loai = bt && D.LOAI[bt.loai];
@@ -169,14 +190,13 @@
       '<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">' + esc(bt ? bt.tieuDe : p.tieuDe) + '</h1>' +
       '<p class="font-body-md text-body-md text-on-surface-variant">Đối tác: <strong class="text-on-surface">' + esc(p.nguoiGui) + '</strong> · ' + esc(p.nhom) + ' · Mở phòng ' + esc(D.dinhDangNgay(ph.moPhong)) + '</p></div>' +
       '<div class="flex flex-wrap gap-space-xs shrink-0">' +
-      '<a class="h-10 px-4 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md inline-flex items-center gap-1.5" href="09_khong-gian-dam-phan.html#' + esc(ph.id) + '"><span class="material-symbols-outlined text-[18px]">arrow_back</span>Danh sách phòng</a>' +
+      '<a class="h-10 px-4 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md inline-flex items-center gap-1.5" href="09_khong-gian-dam-phan.html#' + esc(ph.cardId || ph.id) + '"><span class="material-symbols-outlined text-[18px]">arrow_back</span>Danh sách phòng</a>' +
       (ph.trangThai === 'da-ky' ? '<a class="h-10 px-4 rounded-lg bg-primary-container hover:bg-brand-navy-dark text-on-primary font-label-md text-label-md inline-flex items-center gap-1.5" href="15_chi-tiet-bai-toan.html?ma=' + encodeURIComponent(p.baiToan) + '#ho-so-du-an"><span class="material-symbols-outlined text-[18px]">folder_shared</span>Hồ sơ dự án</a>' : '') +
       '</div></div>';
 
     var canhBao = (ph.trangThai === 'cho-xac-nhan' && ph.canhBao ? '<div class="p-space-sm rounded bg-status-warning/10 text-on-surface flex items-center gap-2.5 font-label-md text-label-md">' +
       '<span class="material-symbols-outlined text-status-warning text-[20px]">warning</span><span><strong class="text-status-error">Chờ bạn xác nhận:</strong> ' + esc(ph.canhBao) + '</span></div>' : '') +
-      (ph.moi || ph.luuCucBo ? '<div class="p-space-sm rounded bg-surface-container-low text-on-surface-variant flex items-center gap-2 font-body-sm text-body-sm">' +
-        '<span class="material-symbols-outlined text-status-warning text-[18px]">cloud_off</span>Thay đổi trong phòng này chỉ lưu tạm trên trình duyệt, chưa lưu lên máy chủ.</div>' : '');
+      '';
 
     goc.innerHTML = dau + canhBao +
       '<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg items-start">' +
@@ -197,6 +217,29 @@
   function khongLuuDuoc() { D.thongBao('Không lưu được: trình duyệt đang chặn lưu dữ liệu cục bộ.', 'loi'); }
   function tenBuoc(id) { return D.BUOC_PHONG.filter(function (b) { return b.id === id; })[0].ten; }
 
+  // Chạy một thao tác: API (rồi nạp lại phòng từ CSDL) hoặc dữ liệu mẫu (localStorage)
+  var dangGui = false;
+  function thucHien(goiApiFn, cucBoFn, xongFn, loiFn) {
+    if (dangGui) return;
+    if (nguon.api) {
+      dangGui = true;
+      goiApiFn()
+        .then(layLai)
+        .then(function () { ve(); if (xongFn) xongFn(); })
+        .catch(function (err) {
+          if (loiFn && loiFn(err)) return;
+          D.thongBao(err.message || 'Không thực hiện được thao tác.', 'loi');
+          layLai().then(ve);
+        })
+        .finally(function () { dangGui = false; });
+      return;
+    }
+    if (!cucBoFn()) { khongLuuDuoc(); return; }
+    ph = D.layPhong(idPhong);
+    ve();
+    if (xongFn) xongFn();
+  }
+
   goc.addEventListener('click', function (e) {
     var xn = e.target.closest('[data-xac-nhan]');
     var huy = e.target.closest('[data-huy-xac-nhan]');
@@ -208,27 +251,39 @@
         ? 'Xác nhận hai bên đã ký hợp đồng R&D (ký ngoài hệ thống)? UIT Connect chỉ ghi nhận trạng thái.'
         : 'Xác nhận hoàn tất bước "' + tenBuoc(id) + '" về phía doanh nghiệp?';
       if (!window.confirm(cauHoi)) return;
-      var patch = { buoc: {} };
-      patch.buoc[id] = { dn: true };
-      patch.tinNhanMoi = { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đã xác nhận bước "' + tenBuoc(id) + '".' };
-      if (!D.capNhatPhong(ph.id, patch)) { khongLuuDuoc(); return; }
-      ve();
-      var x = ph.buoc[id];
-      D.thongBao(D.buocXong(x)
-        ? (id === 'hopDong' ? 'Hai bên đã xác nhận ký hợp đồng. Phòng chuyển sang "Đã ký kết".' : 'Bước "' + tenBuoc(id) + '" hoàn tất: cả hai bên đã xác nhận.')
-        : 'Đã xác nhận phía doanh nghiệp. Bước "' + tenBuoc(id) + '" chờ đối tác xác nhận.');
+      thucHien(
+        function () { return A.goi(API_PHONG + '/steps/' + A.BUOC[id] + '/confirm', { method: 'POST' }); },
+        function () {
+          var patch = { buoc: {} };
+          patch.buoc[id] = { dn: true };
+          patch.tinNhanMoi = { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đã xác nhận bước "' + tenBuoc(id) + '".' };
+          return D.capNhatPhong(ph.id, patch);
+        },
+        function () {
+          var x = ph.buoc[id];
+          D.thongBao(D.buocXong(x)
+            ? (id === 'hopDong' ? 'Hai bên đã xác nhận ký hợp đồng. Phòng chuyển sang "Đã ký kết".' : 'Bước "' + tenBuoc(id) + '" hoàn tất: cả hai bên đã xác nhận.')
+            : 'Đã xác nhận phía doanh nghiệp. Bước "' + tenBuoc(id) + '" chờ đối tác xác nhận.');
+        });
     } else if (huy) {
       var idH = huy.getAttribute('data-huy-xac-nhan');
       if (!window.confirm('Hủy xác nhận bước "' + tenBuoc(idH) + '"?')) return;
-      var patchH = { buoc: {} };
-      patchH.buoc[idH] = { dn: false };
-      patchH.tinNhanMoi = { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đã hủy xác nhận bước "' + tenBuoc(idH) + '".' };
-      if (!D.capNhatPhong(ph.id, patchH)) { khongLuuDuoc(); return; }
-      ve();
-      D.thongBao('Đã hủy xác nhận bước "' + tenBuoc(idH) + '".');
+      thucHien(
+        function () { return A.goi(API_PHONG + '/steps/' + A.BUOC[idH] + '/confirm', { method: 'DELETE' }); },
+        function () {
+          var patchH = { buoc: {} };
+          patchH.buoc[idH] = { dn: false };
+          patchH.tinNhanMoi = { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đã hủy xác nhận bước "' + tenBuoc(idH) + '".' };
+          return D.capNhatPhong(ph.id, patchH);
+        },
+        function () { D.thongBao('Đã hủy xác nhận bước "' + tenBuoc(idH) + '".'); });
     } else if (xem || tai) {
       var t = dsTep[Number((xem || tai).getAttribute(xem ? 'data-xem-tep' : 'data-tai-tep'))];
       if (!t) return;
+      if (nguon.api) {
+        A.moTep(API_PHONG + '/documents/' + t.id, !!tai).catch(function (err) { D.thongBao(err.message, 'loi'); });
+        return;
+      }
       var url = URL.createObjectURL(D.taoPdfMau([
         'UIT Connect - Tai lieu minh hoa (ban demo)', '',
         'Ten tep: ' + t.ten, 'Loai: ' + t.loai + ' - ' + t.kichThuoc,
@@ -259,10 +314,13 @@
       loi.textContent = !noiDung ? 'Nhập nội dung trước khi gửi.' : (noiDung.length > 1000 ? 'Tối đa 1000 ký tự.' : '');
       loi.classList.toggle('hidden', !loi.textContent);
       if (loi.textContent) { o.focus(); return; }
-      if (!D.capNhatPhong(ph.id, { tinNhanMoi: { tu: 'dn', luc: bayGioIso(), noiDung: noiDung } })) { khongLuuDuoc(); return; }
-      ve();
-      document.getElementById('o-tin-nhan').focus();
-      D.thongBao('Đã gửi tin nhắn (lưu tạm trên trình duyệt, chưa gửi lên máy chủ).');
+      thucHien(
+        function () { return A.goi(API_PHONG + '/messages', { method: 'POST', body: JSON.stringify({ content: noiDung }) }); },
+        function () { return D.capNhatPhong(ph.id, { tinNhanMoi: { tu: 'dn', luc: bayGioIso(), noiDung: noiDung } }); },
+        function () {
+          document.getElementById('o-tin-nhan').focus();
+          D.thongBao(nguon.api ? 'Đã gửi tin nhắn (đã lưu vào CSDL).' : 'Đã gửi tin nhắn (lưu tạm trên trình duyệt, chưa gửi lên máy chủ).');
+        });
     } else if (e.target.id === 'form-lich') {
       var f = e.target;
       var ngay = f.ngay.value, gio = f.gio.value;
@@ -274,13 +332,19 @@
       oLoi.classList.toggle('hidden', !loiL);
       if (loiL) return;
       var lich = { ngay: ngay, gio: gio, hinhThuc: f.hinhThuc.value, noiDung: f.noiDung.value.trim() };
-      if (!D.capNhatPhong(ph.id, { lich: lich, tinNhanMoi: { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đề xuất lịch trao đổi ' + gio + ' ngày ' + D.dinhDangNgay(ngay) + ' (' + lich.hinhThuc + ').' } })) { khongLuuDuoc(); return; }
-      ve();
-      D.thongBao('Đã cập nhật lịch trao đổi và báo cho đối tác trong mục Trao đổi.');
+      thucHien(
+        function () {
+          return A.goi(API_PHONG + '/meetings', { method: 'POST', body: JSON.stringify({ date: ngay, time: gio, mode: lich.hinhThuc, agenda: lich.noiDung }) });
+        },
+        function () {
+          return D.capNhatPhong(ph.id, { lich: lich, tinNhanMoi: { tu: 'he-thong', luc: bayGioIso(), noiDung: TEN_DN + ' đề xuất lịch trao đổi ' + gio + ' ngày ' + D.dinhDangNgay(ngay) + ' (' + lich.hinhThuc + ').' } });
+        },
+        function () { D.thongBao('Đã cập nhật lịch trao đổi và báo cho đối tác trong mục Trao đổi.'); },
+        // Lỗi kiểm tra dữ liệu (400) hiện ngay dưới biểu mẫu
+        function (err) { if (err.status !== 400) return false; oLoi.textContent = err.message; oLoi.classList.remove('hidden'); return true; });
     }
   });
 
-  ve();
   // Cuộn / focus sau khi trang tải xong: trình duyệt tự cuộn tới #... lúc tải sẽ làm mất focus đặt sớm hơn
   function denMuc() {
     var muc = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
@@ -288,6 +352,16 @@
     muc.scrollIntoView({ block: 'start' });
     if (window.location.hash === '#trao-doi') { var o = document.getElementById('o-tin-nhan'); if (o) o.focus({ preventScroll: true }); }
   }
-  if (document.readyState === 'complete') denMuc();
-  else window.addEventListener('load', function () { setTimeout(denMuc, 0); });
+
+  // ---------- Bắt đầu ----------
+  goc.innerHTML = '<div class="p-6 text-center font-body-sm text-body-sm text-text-muted">Đang tải phòng đàm phán…</div>';
+  var daTai = new Promise(function (xong) {
+    if (document.readyState === 'complete') xong(); else window.addEventListener('load', function () { setTimeout(xong, 0); });
+  });
+  layLai().then(function () {
+    if (!ph) { khongThay(); return; }
+    A.veNguon(goc, nguon.api, nguon.loi, 'xác nhận bước, trao đổi và lịch hẹn được lưu vào CSDL.');
+    ve();
+    return daTai.then(denMuc);
+  });
 })();
