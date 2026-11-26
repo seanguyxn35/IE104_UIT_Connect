@@ -89,8 +89,8 @@ function doanhNghiep(b) {
   };
 }
 
-function tomTatBaiToan(p, phuTro) {
-  const skills = (p.skills ?? []).map((s) => s.skill?.name).filter(Boolean);
+// Phần tóm tắt AN TOÀN ĐỂ CÔNG KHAI của một bài toán (dùng cả cho /api/public, không có dữ liệu riêng của người xem)
+export function tomTatCongKhai(p) {
   return {
     id: p.problem_id,
     code: p.problem_code ?? `RD-${p.problem_id}`,
@@ -105,13 +105,63 @@ function tomTatBaiToan(p, phuTro) {
     deadline: p.deadline,
     location: p.location,
     acceptedPartners: p.accepted_partners ?? [],
-    skills,
+    skills: kyNangBai(p),
     publishedAt: p.approved_at ?? p.created_at,
     business: doanhNghiep(p.business),
+  };
+}
+
+function kyNangBai(p) {
+  return (p.skills ?? []).map((s) => s.skill?.name).filter(Boolean);
+}
+
+// Tóm tắt cho SV đang đăng nhập: phần công khai + đã lưu, proposal của tôi, mức phù hợp
+function tomTatBaiToan(p, phuTro) {
+  return {
+    ...tomTatCongKhai(p),
     saved: phuTro.daLuu.has(p.problem_id),
     myProposal: phuTro.proposal.get(p.problem_id) ?? null,
-    fitScore: mucPhuHop(skills, phuTro.kyNang),
+    fitScore: mucPhuHop(kyNangBai(p), phuTro.kyNang),
   };
+}
+
+async function mocCua(problemId) {
+  const { data, error } = await supabase.from('problem_milestone')
+    .select('seq, name, due_week, budget_percent').eq('problem_id', problemId).order('seq');
+  if (error) throw error;
+  return data.map((m) => ({ seq: m.seq, name: m.name, dueWeek: m.due_week, budgetPercent: m.budget_percent }));
+}
+
+// Phần chi tiết đề bài AN TOÀN ĐỂ CÔNG KHAI (không có tệp đính kèm, không có dữ liệu riêng của người xem)
+export function chiTietCongKhai(p, milestones) {
+  return {
+    ...tomTatCongKhai(p),
+    requirement: p.requirement,
+    teamSizeMin: p.team_size_min,
+    teamSizeMax: p.team_size_max,
+    trlLevel: p.trl_level,
+    deliverables: p.deliverables ?? [],
+    selectionCriteria: p.selection_criteria,
+    ndaRequired: p.nda_required,
+    startDate: p.start_date,
+    durationWeeks: p.duration_weeks,
+    workMode: p.work_mode,
+    milestones,
+  };
+}
+
+// Chi tiết một bài công khai cho khách (/api/public/problems/:code)
+export async function getPublicProblem(code) {
+  const p = await timBaiCongKhai(code);
+  return chiTietCongKhai(p, await mocCua(p.problem_id));
+}
+
+// Tất cả bài công khai (Open / In_Progress), mới duyệt trước
+export async function listPublicProblemRows() {
+  const { data, error } = await supabase.from('business_problem').select(COT_BAI_TOAN).in('status', CONG_KHAI)
+    .order('approved_at', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
 }
 
 // ---------- Dữ liệu của SV đang đăng nhập ----------
@@ -217,13 +267,11 @@ async function timBaiCongKhai(code) {
 // ---------- Danh sách ----------
 export async function listProblems(studentId) {
   const [baiToan, nhom, kyNang, daLuu] = await Promise.all([
-    supabase.from('business_problem').select(COT_BAI_TOAN).in('status', CONG_KHAI)
-      .order('approved_at', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false }),
+    listPublicProblemRows(),
     nhomCuaToi(studentId),
     kyNangCuaToi(studentId),
     daLuuCuaToi(studentId),
   ]);
-  if (baiToan.error) throw baiToan.error;
   const dsProposal = await proposalCuaToi(studentId, nhom.map((m) => m.team_id));
   const phuTro = {
     kyNang,
@@ -231,7 +279,7 @@ export async function listProblems(studentId) {
     proposal: new Map(dsProposal.map((r) => [r.problem_id, proposalNgan(r)])),
   };
   return {
-    problems: baiToan.data.map((p) => tomTatBaiToan(p, phuTro)),
+    problems: baiToan.map((p) => tomTatBaiToan(p, phuTro)),
     // Thứ tự lưu (mới nhất trước) cho tab "Đã lưu"
     saved: daLuu.sort((a, b) => b.saved_at.localeCompare(a.saved_at)).map((s) => s.problem_id),
   };
@@ -244,10 +292,9 @@ export async function getProblem(studentId, code) {
     nhomCuaToi(studentId),
     kyNangCuaToi(studentId),
     daLuuCuaToi(studentId),
-    supabase.from('problem_milestone').select('seq, name, due_week, budget_percent').eq('problem_id', p.problem_id).order('seq'),
+    mocCua(p.problem_id),
     tepCua('Problem', [p.problem_id]),
   ]);
-  if (moc.error) throw moc.error;
   const teamIds = nhom.map((m) => m.team_id);
   const [cuaToi] = await proposalCuaToi(studentId, teamIds, p.problem_id);
   const tepProposal = cuaToi ? await tepCua('Request', [cuaToi.request_id]) : [];
@@ -283,18 +330,8 @@ export async function getProblem(studentId, code) {
     proposal: new Map(cuaToi ? [[p.problem_id, proposalNgan(cuaToi)]] : []),
   };
   return {
+    ...chiTietCongKhai(p, moc),
     ...tomTatBaiToan(p, phuTro),
-    requirement: p.requirement,
-    teamSizeMin: p.team_size_min,
-    teamSizeMax: p.team_size_max,
-    trlLevel: p.trl_level,
-    deliverables: p.deliverables ?? [],
-    selectionCriteria: p.selection_criteria,
-    ndaRequired: p.nda_required,
-    startDate: p.start_date,
-    durationWeeks: p.duration_weeks,
-    workMode: p.work_mode,
-    milestones: moc.data.map((m) => ({ seq: m.seq, name: m.name, dueWeek: m.due_week, budgetPercent: m.budget_percent })),
     attachments: tepBai.map((t) => ({ id: t.attachment_id, fileName: t.file_name, sizeBytes: t.size_bytes, docType: t.doc_type })),
     myProposal: cuaToi ? proposalDayDu(cuaToi, studentId, tepProposal) : null,
     mySkills: kyNang,

@@ -111,6 +111,8 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     - `POST|DELETE .../:id/steps/:step/confirm` (`step` = `Technical|NDA_IP|Contract`)
     - `POST .../:id/messages`, `POST .../:id/meetings`, `GET .../:id/documents/:attachmentId[?download=1]`
   - DN-01 Bàn làm việc: `GET /api/business-dashboard`.
+  - Công khai, không cần đăng nhập (`routes/public.js`, `services/publicService.js`): `GET /api/public/overview`, `GET /api/public/problems/:code`.
+    Chỉ bài Open/In_Progress; không trả tệp đính kèm, dữ liệu sinh viên, dữ liệu riêng của người xem. Dùng chung `tomTatCongKhai` / `chiTietCongKhai` với API SV.
   - SV-09 / SV-13 Bài toán R&D phía SV (`studentRdProblemService.js`):
     - `GET /api/student-rd-problems`, `GET .../:code`, `PUT|DELETE .../:code/saved`
     - `POST .../proposal-files` (tải PDF, bước 1) → `POST .../:code/proposals` (nộp, bước 2), `POST .../:code/proposals/:id/withdraw`
@@ -141,7 +143,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     - `index.html` (`tong-quan.js`): giới thiệu, số liệu, tiêu điểm, bài toán R&D công khai (lọc khi bấm "Lọc"), cách hoạt động, đối tác, tin tức.
     - `pages/khach/01_chi-tiet-bai-toan-rd.html` (`khach-chi-tiet-bai-toan-rd.js`): xem đề bài; ẩn tệp đính kèm và nút nộp; "Đăng nhập để ứng tuyển" → UIT SSO rồi vào thẳng SV-13.
     - Đã đăng nhập: thanh trên cùng có "Vào trang của tôi". Không hiện thông tin cá nhân (tên, MSSV, điểm SV, proposal, email liên hệ).
-    - Hợp đồng `/api/public/overview`, `/api/public/problems/:code` ghi ở đầu `cong-khai.js`; backend chưa làm, chưa có thì dùng dữ liệu mẫu và báo "dữ liệu minh họa".
+    - Gọi `/api/public/overview`, `/api/public/problems/:code` (hợp đồng ở đầu `cong-khai.js`); không có máy chủ thì dùng dữ liệu mẫu và báo "dữ liệu minh họa".
     - Mã 6 chữ số; nút "Gửi lại email (60s)" đếm ngược, hết giờ mới gửi lại được.
 - JS gọi API đặt ở file riêng `assets/js/<chức-năng>.js` (ví dụ `lab-application.js`, `student-avatar.js`), không nhét vào HTML.
 - Khi không có máy chủ (`file://`, GitHub Pages), trang phải hiển thị được và báo rõ "chưa lưu".
@@ -186,7 +188,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915
     - Lịch 9951–9957; tin 9001–9014; tệp 9961–9989
-- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
+- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth`; API công khai: `npm run test:public` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
 
 ## 9. Việc đang mở / lưu ý
 

@@ -44,6 +44,8 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
+| `GET` | `/api/public/overview` | **Không cần đăng nhập.** Trang tổng quan: `{ stats: { openProblems, inProgressProblems, partners, totalFunding }, problems, partners }`. Chỉ bài Open / In_Progress; không có dữ liệu sinh viên, tệp đính kèm, dữ liệu riêng của người xem. Lưu đệm 60 giây |
+| `GET` | `/api/public/problems/:code` | **Không cần đăng nhập.** Chi tiết đề bài (mô tả, mốc, quy mô nhóm...) không có tệp đính kèm → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND`; mã sai → 400 |
 | `POST` | `/api/auth/login` | Đăng nhập `{ email, password, remember?, portal: "uit"|"business" }` → 200 `{ user }` + cookie HttpOnly `uitc_session`. 400 `INVALID_INPUT` / `INVALID_EMAIL` (SV phải là MSSV 8 số @gm.uit.edu.vn), 401 `INVALID_CREDENTIALS`, 403 `WRONG_PORTAL` / `ACCOUNT_DISABLED` / `EMAIL_NOT_VERIFIED`, 429 `TOO_MANY_ATTEMPTS` (sai 5 lần / 15 phút) |
 | `GET` / `POST` | `/api/auth/me`, `/api/auth/logout` | Người dùng của phiên → 200 `{ user }` / 401 `UNAUTHENTICATED`; đăng xuất → 204 (thu hồi phiên) |
 | `POST` | `/api/auth/password-reset/request|verify|confirm` | Quên mật khẩu: gửi mã 6 số (202, gửi lại sau 60 giây, mã in ra log máy chủ vì chưa có dịch vụ email) → xác thực mã (200 `{ resetToken }`, 400 `INVALID_CODE`, 410 `CODE_EXPIRED`) → đặt mật khẩu mới (204, 400 `WEAK_PASSWORD`, 410 `TOKEN_EXPIRED`; thu hồi mọi phiên cũ) |
@@ -84,7 +86,7 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 
 **Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
 
-Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
+Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
 
 Kiểm thử API bài toán R&D phía SV (cần máy chủ đang chạy, đã chạy migration 006 + `database/seed_sv_rd.sql`): `npm run test:sv-rd` (tự dọn dữ liệu đã tạo).
 

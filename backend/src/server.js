@@ -19,6 +19,7 @@ import { businessNegotiationsRouter } from './routes/businessNegotiations.js';
 import { businessDashboardRouter } from './routes/businessDashboard.js';
 import { studentRdProblemsRouter } from './routes/studentRdProblems.js';
 import { authRouter } from './routes/auth.js';
+import { publicRouter } from './routes/public.js';
 import { napPhien, chiChoVaiTro } from './authMiddleware.js';
 
 const app = express();
@@ -42,7 +43,8 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Đăng nhập (không cần phiên); mọi API khác đọc phiên rồi kiểm tra vai trò
+// Không cần phiên: dữ liệu công khai cho khách, đăng nhập. Mọi API khác đọc phiên rồi kiểm tra vai trò.
+app.use('/api/public', publicRouter);
 app.use('/api/auth', authRouter);
 app.use('/api', napPhien);
 const chiSv = chiChoVaiTro('Student');
