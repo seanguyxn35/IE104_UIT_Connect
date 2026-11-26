@@ -3,7 +3,7 @@
    Sinh từ dữ liệu mẫu của giao diện (frontend/assets/js/dn-bai-toan-data.js) để
    giao diện có máy chủ và không có máy chủ hiển thị cùng nội dung.
 
-   Chạy SAU schema.postgres.sql + migrations/004_dn_hop_thu_ket_noi.sql.
+   Chạy SAU schema.postgres.sql + migrations/004_dn_hop_thu_ket_noi.sql + 005_dn_khong_gian_dam_phan.sql.
    Cách chạy: Supabase → SQL Editor → dán toàn bộ file → Run.
    Chạy lại bất cứ lúc nào để ĐẶT LẠI dữ liệu thử DN (xóa rồi nạp lại trong dải ID cố định).
    Sau khi chạy: cd backend && npm run seed:dn-files  (tải tệp PDF minh họa lên bucket "rd-files").
@@ -18,8 +18,9 @@
    | Nhóm                                 | 9801–9813   |
    | Bài toán R&D (084, 079, 071, 091, nháp 904) | 9084, 9079, 9071, 9091, 9904 |
    | Proposal (connection_request)        | 9901–9915   |
-   | Lịch hẹn mẫu                         | 9951–9952   |
-   | Tệp đính kèm                         | 9961–9981   |
+   | Lịch hẹn mẫu (hộp thư + phòng)       | 9951–9957   |
+   | Tin trao đổi trong phòng             | 9001–9014   |
+   | Tệp đính kèm (proposal + phòng)      | 9961–9989   |
    ===================================================================== */
 
 BEGIN;
@@ -28,14 +29,14 @@ BEGIN;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns
-                   WHERE table_name = 'connection_request' AND column_name = 'student_id') THEN
-        RAISE EXCEPTION 'Chưa chạy database/migrations/004_dn_hop_thu_ket_noi.sql';
+                   WHERE table_name = 'connection_request' AND column_name = 'room_opened_at') THEN
+        RAISE EXCEPTION 'Chưa chạy database/migrations/004_dn_hop_thu_ket_noi.sql và 005_dn_khong_gian_dam_phan.sql';
     END IF;
 END $$;
 
 -- 1. Xóa dữ liệu thử DN cũ (kể cả dữ liệu ca kiểm thử tạo thêm trên các proposal thử)
 DELETE FROM rd_attachment WHERE attachment_id BETWEEN 9961 AND 9999
-    OR (owner_type = 'Request' AND owner_id BETWEEN 9901 AND 9950);
+    OR (owner_type IN ('Request','Negotiation') AND owner_id BETWEEN 9901 AND 9950);
 DELETE FROM connection_meeting WHERE request_id BETWEEN 9901 AND 9950;
 DELETE FROM connection_request WHERE request_id BETWEEN 9901 AND 9950 OR business_id = 9501;
 DELETE FROM team_member WHERE team_id BETWEEN 9801 AND 9850;
@@ -241,75 +242,133 @@ LEFT JOIN field AS fd ON fd.name = v.linh_vuc;
 -- 8. Proposal (thời điểm gửi tính lùi từ lúc chạy seed: "2 giờ trước"...; read_at NULL = proposal mới)
 INSERT INTO connection_request (request_id, business_id, team_id, lecturer_id, student_id, problem_id, initiated_by,
     title, proposal_content, cover_letter, tags, trl_label, fit_score, status, decline_reason,
-    student_confirmed, business_confirmed, read_at, created_at, updated_at)
+    student_confirmed, business_confirmed, read_at, created_at, updated_at,
+    room_opened_at, business_last_read_at, proposed_budget, contract_code, contracted_at)
 VALUES
     (9901, 9501, 9801, NULL, NULL, 9084, 'Team',
      'Proposal: Autoencoder nhẹ kết hợp luật eBPF phát hiện HTTP flood trên Jetson', 'Hai tầng phát hiện: luật eBPF lọc nhanh các mẫu tấn công đã biết, autoencoder 1,2 triệu tham số phát hiện bất thường còn lại. Đã thử trên Jetson Orin Nano: độ trễ 9 ms, F1-score 95,4% trên CIC-DDoS2019. Kế hoạch 15 tuần.', 'Nhóm NetGuard UIT gồm 4 sinh viên ngành Mạng máy tính, đã vận hành phòng lab mạng của Khoa trong 2 năm.
 
 Nhóm mong được dùng thử dữ liệu lưu lượng đã ẩn danh của doanh nghiệp để hiệu chỉnh ngưỡng phát hiện.', ARRAY['eBPF', 'Autoencoder', 'NVIDIA Jetson', 'Network Security']::varchar[], 'TRL 3 (Proof of Concept)', 88, 'Submitted', NULL,
-     false, false, NULL, now() - interval '120 minutes', now() - interval '120 minutes'),
+     false, false, NULL, now() - interval '120 minutes', now() - interval '120 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9902, 9501, 9802, NULL, NULL, 9084, 'Team',
      'Proposal: Edge Sentinel – phân loại lưu lượng bằng mô hình cây tăng cường lượng tử hóa', 'Dùng LightGBM đã chuyển sang mã C chạy trực tiếp trên CPU của Jetson, không cần GPU; độ trễ dưới 5 ms. Phù hợp làm tầng lọc đầu, có thể ghép với mô hình học sâu của nhóm khác.', 'Nhóm Edge Sentinel gồm 2 sinh viên Kỹ thuật Máy tính, quan tâm tới tối ưu mô hình trên phần cứng nhúng.', ARRAY['LightGBM', 'Edge AI', 'C/C++']::varchar[], 'TRL 2 (Ý tưởng công nghệ)', 74, 'Submitted', NULL,
-     false, false, NULL, now() - interval '300 minutes', now() - interval '300 minutes'),
+     false, false, NULL, now() - interval '300 minutes', now() - interval '300 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9903, 9501, 9803, NULL, NULL, 9084, 'Team',
      'Proposal: Transformer rút gọn phát hiện tấn công tầng ứng dụng theo chuỗi request', 'Mô hình transformer 4 lớp đọc chuỗi request HTTP theo phiên, chưng cất tri thức từ mô hình lớn rồi lượng tử hóa INT8. F1-score 97,1% trên tập thử, độ trễ 14 ms trên Jetson Orin Nano.', 'AI Researchers Group đã có 2 bài báo hội nghị trong nước về phát hiện xâm nhập bằng học sâu.
 
 Nhóm sẵn sàng trình bày demo trực tuyến khi doanh nghiệp thuận tiện.', ARRAY['Transformer', 'Knowledge Distillation', 'PyTorch', 'TensorRT']::varchar[], 'TRL 3 (Proof of Concept)', 81, 'Submitted', NULL,
-     false, false, NULL, now() - interval '1440 minutes', now() - interval '1440 minutes'),
+     false, false, NULL, now() - interval '1440 minutes', now() - interval '1440 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9904, 9501, 9804, 9701, NULL, 9084, 'Lecturer',
      'Proposal: Hợp tác CyberLab – nền tảng phát hiện DDoS biên có giải thích', 'CyberLab đề xuất nền tảng gồm bộ thu eBPF, mô hình phát hiện và mô-đun giải thích (SHAP) để kỹ sư vận hành hiểu vì sao lưu lượng bị chặn. Có sẵn testbed 40 máy để tái hiện tấn công.', 'CyberLab UIT đã thực hiện 3 dự án an toàn mạng với doanh nghiệp trong 2 năm gần đây.
 
 Lab đề xuất một buổi trao đổi để thống nhất phạm vi dữ liệu và hạ tầng thử nghiệm.', ARRAY['eBPF', 'Explainable AI', 'Testbed', 'Network Security']::varchar[], 'TRL 4 (Lab Prototype)', 90, 'Scheduled', NULL,
-     false, false, now() - interval '4320 minutes' + interval '1 hour', now() - interval '4320 minutes', now() - interval '4320 minutes'),
+     false, false, now() - interval '4320 minutes' + interval '1 hour', now() - interval '4320 minutes', now() - interval '4320 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9905, 9501, 9805, NULL, NULL, 9084, 'Team',
      'Proposal: Phát hiện bất thường DDoS bằng eBPF và học sâu đồ thị', 'Biểu diễn luồng kết nối thành đồ thị theo thời gian, dùng GNN nhẹ để phát hiện HTTP flood và slowloris. Bộ thu thập eBPF chạy ở chế độ XDP, mô hình lượng tử hóa INT8 bằng TensorRT. Kế hoạch 14 tuần, có buổi demo trên dữ liệu ẩn danh của doanh nghiệp ở tuần 8.', 'Nhóm SecLab Fellows gồm 3 sinh viên ngành An toàn thông tin, đã đạt giải Nhì cuộc thi ATTT sinh viên 2026 với đề tài phát hiện tấn công bằng eBPF.
 
 Nhóm mong được trao đổi thêm về dữ liệu thật của doanh nghiệp để điều chỉnh kế hoạch kiểm thử.', ARRAY['Network Security', 'eBPF', 'Graph Neural Network', 'TensorRT']::varchar[], 'TRL 3 (Proof of Concept)', 84, 'In_Discussion', NULL,
-     false, false, now() - interval '20160 minutes' + interval '1 hour', now() - interval '20160 minutes', now() - interval '20160 minutes'),
+     false, false, now() - interval '20160 minutes' + interval '1 hour', now() - interval '20160 minutes', now() - interval '20160 minutes',
+     TIMESTAMPTZ '2026-10-08 09:00+07', TIMESTAMPTZ '2026-11-14 14:20:00+07' - interval '1 minute', NULL, NULL, NULL),
     (9906, 9501, 9806, NULL, NULL, 9084, 'Team',
      'Edge-AI phát hiện bất thường & tấn công DDoS tầng ứng dụng trên thiết bị biên', 'Đề xuất pipeline eBPF thu thập lưu lượng kết hợp mô hình phân loại hành vi đã nén chạy trên NVIDIA Jetson Orin Nano: độ trễ suy luận < 12ms, F1-score 96,8% trên tập CIC-DDoS2019. Bàn giao mã nguồn, mô hình và báo cáo kỹ thuật sau 16 tuần.', 'Em là Nguyễn Văn An, trưởng nhóm VisionLab UIT. Nhóm đã có mô hình mẫu (TRL 4) phát hiện bất thường lưu lượng mạng chạy trên thiết bị biên và rất mong được đồng hành cùng V-Tech Global giải quyết bài toán RD-2026-084, hướng tới triển khai thử nghiệm trên hạ tầng thực tế của doanh nghiệp.
 
 Chúng em xin gửi kèm proposal kỹ thuật và hồ sơ năng lực của nhóm để Quý doanh nghiệp xem xét.', ARRAY['Network Security', 'Edge AI', 'eBPF', 'NVIDIA Jetson']::varchar[], 'TRL 4 (Lab Prototype)', 92, 'In_Discussion', NULL,
-     false, false, now() - interval '30240 minutes' + interval '1 hour', now() - interval '30240 minutes', now() - interval '30240 minutes'),
+     false, false, now() - interval '30240 minutes' + interval '1 hour', now() - interval '30240 minutes', now() - interval '30240 minutes',
+     TIMESTAMPTZ '2026-10-19 09:00+07', TIMESTAMPTZ '2026-11-21 09:30:00+07', 220000000, NULL, NULL),
     (9907, 9501, 9807, NULL, NULL, 9084, 'Team',
      'Proposal: Hệ thống WAF học máy triển khai trên máy chủ trung tâm', 'Tường lửa ứng dụng web (WAF) dùng học máy, chạy trên máy chủ trung tâm thay vì thiết bị biên.', 'Nhóm Blue Team UIT xin gửi proposal cho bài toán RD-2026-084.', ARRAY['WAF', 'Machine Learning']::varchar[], 'TRL 2 (Ý tưởng công nghệ)', 52, 'Declined', 'Giải pháp chạy trên máy chủ trung tâm, không đáp ứng yêu cầu xử lý tại thiết bị biên.',
-     false, false, now() - interval '10080 minutes' + interval '1 hour', now() - interval '10080 minutes', now() - interval '10080 minutes'),
+     false, false, now() - interval '10080 minutes' + interval '1 hour', now() - interval '10080 minutes', now() - interval '10080 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9908, 9501, NULL, NULL, 9621, 9084, 'Student',
      'Proposal: Phát hiện DDoS bằng thống kê entropy lưu lượng', 'Dùng độ đo entropy của địa chỉ nguồn và URL để phát hiện bất thường, không dùng học sâu.', 'Em xin gửi ý tưởng ban đầu và mong nhận góp ý của doanh nghiệp.', ARRAY['Entropy', 'Thống kê']::varchar[], 'TRL 2 (Ý tưởng công nghệ)', 45, 'Declined', 'Phương pháp chưa phát hiện được tấn công tầng ứng dụng (slowloris), chưa có kết quả thử nghiệm.',
-     false, false, now() - interval '12960 minutes' + interval '1 hour', now() - interval '12960 minutes', now() - interval '12960 minutes'),
+     false, false, now() - interval '12960 minutes' + interval '1 hour', now() - interval '12960 minutes', now() - interval '12960 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9909, 9501, 9808, NULL, NULL, 9079, 'Team',
      'Proposal: Nén mô hình LLM 7B chạy suy luận trên hạ tầng Hybrid-Cloud', 'Tập trung vào phần hạ tầng: huấn luyện trên đám mây, suy luận tại chỗ bằng mô hình lượng tử hóa 4-bit; đo độ trễ và chi phí cho 3 cấu hình GPU. Không bao gồm phần đánh giá lâm sàng.', 'Nhóm Data Science Club xin gửi proposal cho phần hạ tầng của bài toán RD-2026-079 và sẵn sàng phối hợp với nhóm khác phụ trách phần mô hình.', ARRAY['LLM', 'Hybrid-Cloud', 'Quantization']::varchar[], 'TRL 3 (Proof of Concept)', 76, 'Submitted', NULL,
-     false, false, NULL, now() - interval '180 minutes', now() - interval '180 minutes'),
+     false, false, NULL, now() - interval '180 minutes', now() - interval '180 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9910, 9501, NULL, NULL, 9624, 9079, 'Business',
      'Phản hồi lời mời: Đồng ý trao đổi về bài toán LLM y tế', 'Đồng ý trao đổi về bài toán RD-2026-079 theo lời mời doanh nghiệp gửi ngày 12/10. Có kinh nghiệm nén mô hình bằng AWQ / GPTQ và triển khai vLLM trên cụm GPU nhỏ; mong muốn tham gia phần nén mô hình và triển khai suy luận.', 'Em cảm ơn Quý doanh nghiệp đã gửi lời mời. Em có thể trao đổi trực tuyến vào chiều thứ 3 hoặc thứ 5 hằng tuần.', ARRAY['LLM', 'vLLM', 'Model Compression']::varchar[], 'Phản hồi lời mời', 79, 'Scheduled', NULL,
-     false, false, now() - interval '2880 minutes' + interval '1 hour', now() - interval '2880 minutes', now() - interval '2880 minutes'),
+     false, false, now() - interval '2880 minutes' + interval '1 hour', now() - interval '2880 minutes', now() - interval '2880 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9911, 9501, 9809, NULL, NULL, 9079, 'Team',
      'Proposal: LLM tiếng Việt cho y tế dự phòng với RAG đa tầng', 'Fine-tune mô hình 7B bằng LoRA trên 40.000 cặp hỏi đáp y tế dự phòng đã chuẩn hóa; RAG hai tầng (chủ đề → đoạn văn) có trích dẫn nguồn Bộ Y tế. Đánh giá với 2 bác sĩ cộng tác theo bộ câu hỏi mẫu của doanh nghiệp.', 'Nhóm AI HealthTech đang làm khóa luận về hỏi đáp y khoa tiếng Việt dưới sự hướng dẫn của NLP Lab UIT.
 
 Nhóm gửi kèm proposal và kết quả thử nghiệm ban đầu trên bộ câu hỏi mẫu.', ARRAY['LLM', 'RAG', 'NLP Tiếng Việt', 'LoRA']::varchar[], 'TRL 3 (Proof of Concept)', 87, 'In_Discussion', NULL,
-     false, false, now() - interval '21600 minutes' + interval '1 hour', now() - interval '21600 minutes', now() - interval '21600 minutes'),
+     false, false, now() - interval '21600 minutes' + interval '1 hour', now() - interval '21600 minutes', now() - interval '21600 minutes',
+     TIMESTAMPTZ '2026-10-12 09:00+07', TIMESTAMPTZ '2026-11-19 17:00:00+07', NULL, NULL, NULL),
     (9912, 9501, 9810, 9702, NULL, 9079, 'Lecturer',
      'Proposal: NLP Lab UIT – trợ lý y tế dự phòng tiếng Việt có kiểm chứng nguồn', 'NLP Lab đảm nhận trọn gói: xây kho tri thức y tế dự phòng, fine-tune mô hình 7B, RAG có kiểm chứng nguồn và đánh giá cùng bác sĩ. Lab có sẵn cụm 8 GPU A100 cho giai đoạn huấn luyện.', 'NLP Lab UIT đã công bố bộ dữ liệu hỏi đáp y khoa tiếng Việt và có kinh nghiệm hợp tác với 2 bệnh viện.
 
 Lab đề xuất mở phòng đàm phán để thống nhất phạm vi dữ liệu và điều khoản sở hữu trí tuệ.', ARRAY['LLM', 'RAG', 'NLP Tiếng Việt', 'Healthcare AI']::varchar[], 'TRL 4 (Lab Prototype)', 93, 'In_Discussion', NULL,
-     false, false, now() - interval '43200 minutes' + interval '1 hour', now() - interval '43200 minutes', now() - interval '43200 minutes'),
+     false, false, now() - interval '43200 minutes' + interval '1 hour', now() - interval '43200 minutes', now() - interval '43200 minutes',
+     TIMESTAMPTZ '2026-10-05 09:00+07', TIMESTAMPTZ '2026-11-24 10:05:00+07' - interval '1 minute', NULL, NULL, NULL),
     (9913, 9501, 9811, NULL, NULL, 9079, 'Team',
      'Proposal: Chatbot y tế dùng API mô hình thương mại', 'Xây chatbot gọi API mô hình ngôn ngữ thương mại, bổ sung kho câu hỏi thường gặp.', 'MedAI Club xin gửi proposal cho bài toán RD-2026-079.', ARRAY['Chatbot', 'API']::varchar[], 'TRL 2 (Ý tưởng công nghệ)', 40, 'Declined', 'Gửi dữ liệu y tế ra API bên ngoài, không đáp ứng yêu cầu dữ liệu không rời hạ tầng doanh nghiệp.',
-     false, false, now() - interval '14400 minutes' + interval '1 hour', now() - interval '14400 minutes', now() - interval '14400 minutes'),
+     false, false, now() - interval '14400 minutes' + interval '1 hour', now() - interval '14400 minutes', now() - interval '14400 minutes',
+     NULL, NULL, NULL, NULL, NULL),
     (9914, 9501, 9812, NULL, NULL, 9071, 'Team',
      'Proposal: SLAM 3D LiDAR–IMU và định vị cm cho AGV nhà xưởng', 'SLAM 3D kết hợp LiDAR và IMU trên ROS2, kiểm thử trong Gazebo trước khi chạy trên AGV VT200. Sai số định vị mục tiêu dưới 2 cm. Proposal đã được chấp nhận và đang thực hiện theo thỏa thuận HĐ-2026-042.', 'Nhóm thuộc Lab Robotics & IoT UIT, dưới sự hướng dẫn của TS. Nguyễn Hoàng Long.', ARRAY['ROS2', 'LiDAR SLAM', 'Sensor Fusion', 'Gazebo']::varchar[], 'TRL 4 (Lab Prototype)', 95, 'Contracted', NULL,
-     true, true, now() - interval '172800 minutes' + interval '1 hour', now() - interval '172800 minutes', now() - interval '172800 minutes'),
+     true, true, now() - interval '172800 minutes' + interval '1 hour', now() - interval '172800 minutes', now() - interval '172800 minutes',
+     TIMESTAMPTZ '2026-08-20 09:00+07', TIMESTAMPTZ '2026-11-20 15:45:00+07' - interval '1 minute', NULL, 'HĐ-2026-042', TIMESTAMPTZ '2026-09-01 10:00+07'),
     (9915, 9501, 9813, NULL, NULL, 9071, 'Team',
      'Proposal: Định vị AGV bằng camera và mã QR dán sàn', 'Dán mã QR trên sàn và dùng camera hướng xuống để định vị AGV.', 'Nhóm AGV K18 xin gửi proposal cho bài toán RD-2026-071.', ARRAY['Computer Vision', 'QR Code']::varchar[], 'TRL 3 (Proof of Concept)', 58, 'Declined', 'Doanh nghiệp đã chọn phương án SLAM không cần dán mốc của Lab Robotics & IoT UIT.',
-     false, false, now() - interval '175000 minutes' + interval '1 hour', now() - interval '175000 minutes', now() - interval '175000 minutes');
+     false, false, now() - interval '175000 minutes' + interval '1 hour', now() - interval '175000 minutes', now() - interval '175000 minutes',
+     NULL, NULL, NULL, NULL, NULL);
+
+-- 8b. Phòng đàm phán: 3 bước, mỗi bước hai bên xác nhận (migration 005)
+INSERT INTO connection_step (request_id, step_code, business_confirmed, partner_confirmed, business_confirmed_at, partner_confirmed_at, note)
+VALUES
+    (9912, 'Technical', true, true, TIMESTAMPTZ '2026-10-12 10:00:00+07', TIMESTAMPTZ '2026-10-12 10:00:00+07', 'Hoàn tất 22/10'),
+    (9912, 'NDA_IP', false, false, NULL, NULL, 'Đang soạn thảo'),
+    (9912, 'Contract', false, false, NULL, NULL, 'Chưa mở'),
+    (9905, 'Technical', false, true, NULL, TIMESTAMPTZ '2026-11-14 14:20:00+07', 'Đối tác đã xác nhận biên bản'),
+    (9905, 'NDA_IP', false, true, NULL, TIMESTAMPTZ '2026-11-14 14:20:00+07', 'Đối tác đã ký 14/11'),
+    (9905, 'Contract', false, false, NULL, NULL, 'Chưa mở'),
+    (9911, 'Technical', true, true, TIMESTAMPTZ '2026-10-19 10:00:00+07', TIMESTAMPTZ '2026-10-19 10:00:00+07', 'Hoàn tất 19/11'),
+    (9911, 'NDA_IP', false, false, NULL, NULL, 'Đang soạn thảo'),
+    (9911, 'Contract', false, false, NULL, NULL, 'Dự kiến 12/2026'),
+    (9914, 'Technical', true, true, TIMESTAMPTZ '2026-08-27 10:00:00+07', TIMESTAMPTZ '2026-08-27 10:00:00+07', 'Hoàn tất'),
+    (9914, 'NDA_IP', true, true, TIMESTAMPTZ '2026-09-03 10:00:00+07', TIMESTAMPTZ '2026-09-03 10:00:00+07', 'Đã ký'),
+    (9914, 'Contract', true, true, TIMESTAMPTZ '2026-09-10 10:00:00+07', TIMESTAMPTZ '2026-09-10 10:00:00+07', 'Đã ký MoA 01/09/2026'),
+    (9906, 'Technical', true, false, TIMESTAMPTZ '2026-10-26 10:00:00+07', NULL, 'Chờ đối tác xác nhận biên bản'),
+    (9906, 'NDA_IP', false, false, NULL, NULL, 'Chưa bắt đầu'),
+    (9906, 'Contract', false, false, NULL, NULL, 'Chưa mở');
+
+-- 8c. Trao đổi theo lượt trong phòng (không phải chat realtime)
+INSERT INTO connection_message (message_id, request_id, sender_type, sender_account_id, content, created_at)
+VALUES
+    (9001, 9912, 'System', NULL, 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.', TIMESTAMPTZ '2026-10-05 09:00:00+07'),
+    (9002, 9912, 'Partner', 9702, 'Cảm ơn doanh nghiệp về buổi trao đổi. Lab gửi biên bản họp, mong hai bên xác nhận phạm vi dữ liệu.', TIMESTAMPTZ '2026-10-22 16:10:00+07'),
+    (9003, 9912, 'Business', 9501, 'V-Tech đã xác nhận biên bản. Bộ phận pháp chế đang soạn dự thảo NDA.', TIMESTAMPTZ '2026-10-23 08:30:00+07'),
+    (9004, 9912, 'Partner', 9702, 'Lab đã nhận dự thảo NDA v1, sẽ góp ý trong tuần này.', TIMESTAMPTZ '2026-11-24 10:05:00+07'),
+    (9005, 9905, 'System', NULL, 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.', TIMESTAMPTZ '2026-10-08 10:00:00+07'),
+    (9006, 9905, 'Partner', 9613, 'Nhóm đã ký NDA v2 và tải lên mục Văn bản. Mong doanh nghiệp xác nhận để chuyển sang bước hợp đồng.', TIMESTAMPTZ '2026-11-14 14:20:00+07'),
+    (9007, 9905, 'Partner', 9613, 'Nhóm xin nhắc hạn xác nhận NDA là 30/11.', TIMESTAMPTZ '2026-11-25 09:00:00+07'),
+    (9008, 9911, 'System', NULL, 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.', TIMESTAMPTZ '2026-10-12 08:00:00+07'),
+    (9009, 9911, 'Business', 9501, 'Cảm ơn nhóm về buổi trao đổi. V-Tech sẽ gửi dự thảo NDA trước 01/12.', TIMESTAMPTZ '2026-11-19 17:00:00+07'),
+    (9010, 9914, 'System', NULL, 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.', TIMESTAMPTZ '2026-08-20 09:00:00+07'),
+    (9011, 9914, 'System', NULL, 'Hai bên đã xác nhận ký hợp đồng. Bài toán chuyển sang Đang thực hiện.', TIMESTAMPTZ '2026-09-01 10:00:00+07'),
+    (9012, 9914, 'Partner', 9634, 'Nhóm đã nộp báo cáo tuần 10, đề xuất nghiệm thu Milestone 2 ngày 03/12.', TIMESTAMPTZ '2026-11-20 15:45:00+07'),
+    (9013, 9906, 'System', NULL, 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.', TIMESTAMPTZ '2026-10-19 11:00:00+07'),
+    (9014, 9906, 'Business', 9501, 'V-Tech đã xác nhận biên bản trao đổi kỹ thuật, mời nhóm rà soát và xác nhận.', TIMESTAMPTZ '2026-11-21 09:30:00+07');
 
 -- 9. Lịch hẹn trao đổi mẫu (tab "Đã hẹn trao đổi"), tính theo ngày chạy seed, giờ Việt Nam
 INSERT INTO connection_meeting (meeting_id, request_id, start_at, mode, agenda, created_by_account_id)
 VALUES
     (9951, 9904, ((current_date + 2) + TIME '14:00') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (Google Meet)', 'Thống nhất phạm vi dữ liệu thử nghiệm', 9501),
-    (9952, 9910, ((current_date + 6) + TIME '15:30') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (MS Teams)', 'Trao đổi kinh nghiệm nén mô hình', 9501);
+    (9952, 9910, ((current_date + 6) + TIME '15:30') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (MS Teams)', 'Trao đổi kinh nghiệm nén mô hình', 9501),
+    (9953, 9912, ((current_date + 8) + TIME '14:00') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (MS Teams)', 'Rà soát dự thảo NDA & điều khoản dữ liệu y tế', 9501),
+    (9954, 9905, ((current_date + 4) + TIME '17:00') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (Google Meet)', 'Hạn rà soát NDA v2', 9501),
+    (9955, 9911, ((current_date + 12) + TIME '15:30') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Văn phòng V-Tech, Khu Công nghệ cao', 'Demo mô hình RAG', 9501),
+    (9956, 9914, ((current_date + 7) + TIME '10:00') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Xưởng Chế tạo Robotics Nhà E', 'Nghiệm thu Milestone 2', 9501),
+    (9957, 9906, ((current_date + 2) + TIME '16:30') AT TIME ZONE 'Asia/Ho_Chi_Minh', 'Trực tuyến (MS Teams)', 'Chốt biên bản trao đổi kỹ thuật', 9501);
 
--- 10. Tệp đính kèm của proposal (nội dung tệp: npm run seed:dn-files tải PDF minh họa lên bucket "rd-files")
+-- 10. Tệp đính kèm của proposal và văn bản trong phòng (nội dung tệp: npm run seed:dn-files tải PDF minh họa lên bucket "rd-files")
 INSERT INTO rd_attachment (attachment_id, owner_type, owner_id, file_name, storage_path, size_bytes, doc_type, uploaded_by_account_id)
 VALUES
     (9961, 'Request', 9901, 'Proposal_NetGuard_DDoS.pdf', 'requests/9901/Proposal_NetGuard_DDoS.pdf', 2202010, 'Proposal kỹ thuật', 9601),
@@ -332,7 +391,15 @@ VALUES
     (9978, 'Request', 9912, 'Ho_so_nang_luc_NLPLab.pdf', 'requests/9912/Ho_so_nang_luc_NLPLab.pdf', 2621440, 'Hồ sơ năng lực', 9702),
     (9979, 'Request', 9913, 'Proposal_Chatbot_MedAI.pdf', 'requests/9913/Proposal_Chatbot_MedAI.pdf', 838861, 'Proposal kỹ thuật', 9631),
     (9980, 'Request', 9914, 'Proposal_SLAM3D_RoboticsLab.pdf', 'requests/9914/Proposal_SLAM3D_RoboticsLab.pdf', 3984589, 'Proposal kỹ thuật', 9634),
-    (9981, 'Request', 9915, 'Proposal_QR_AGV_K18.pdf', 'requests/9915/Proposal_QR_AGV_K18.pdf', 1258291, 'Proposal kỹ thuật', 9637);
+    (9981, 'Request', 9915, 'Proposal_QR_AGV_K18.pdf', 'requests/9915/Proposal_QR_AGV_K18.pdf', 1258291, 'Proposal kỹ thuật', 9637),
+    (9982, 'Negotiation', 9912, 'Du_thao_NDA_NLPLab_v1.pdf', 'negotiations/9912/Du_thao_NDA_NLPLab_v1.pdf', 629146, 'Dự thảo NDA', 9501),
+    (9983, 'Negotiation', 9912, 'Bien_ban_trao_doi_22-10.pdf', 'negotiations/9912/Bien_ban_trao_doi_22-10.pdf', 314573, 'Biên bản họp', 9702),
+    (9984, 'Negotiation', 9905, 'Bien_ban_trao_doi_ky_thuat_SecLab.pdf', 'negotiations/9905/Bien_ban_trao_doi_ky_thuat_SecLab.pdf', 419430, 'Biên bản họp', 9613),
+    (9985, 'Negotiation', 9905, 'NDA_v2_SecLab_da_ky.pdf', 'negotiations/9905/NDA_v2_SecLab_da_ky.pdf', 734003, 'NDA (đối tác đã ký)', 9613),
+    (9986, 'Negotiation', 9911, 'Bien_ban_trao_doi_HealthTech.pdf', 'negotiations/9911/Bien_ban_trao_doi_HealthTech.pdf', 314573, 'Biên bản họp', 9625),
+    (9987, 'Negotiation', 9914, 'MoA_HD-2026-042_ban_scan.pdf', 'negotiations/9914/MoA_HD-2026-042_ban_scan.pdf', 1992294, 'Thỏa thuận đã ký (bản scan)', 9634),
+    (9988, 'Negotiation', 9914, 'NDA_RoboticsLab.pdf', 'negotiations/9914/NDA_RoboticsLab.pdf', 629146, 'NDA', 9501),
+    (9989, 'Negotiation', 9906, 'Bien_ban_trao_doi_VisionLab.pdf', 'negotiations/9906/Bien_ban_trao_doi_VisionLab.pdf', 314573, 'Biên bản họp', 9616);
 
 COMMIT;
 

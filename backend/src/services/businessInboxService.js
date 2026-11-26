@@ -13,13 +13,13 @@
 import { supabase } from '../db.js';
 import { AppError } from '../errors.js';
 
-const BUCKET = 'rd-files';
-const SIGNED_URL_SECONDS = 60;
+export const BUCKET = 'rd-files';
+export const SIGNED_URL_SECONDS = 60;
 const CO_THE_PHAN_HOI = ['Submitted', 'Scheduled'];
 
 const SINH_VIEN = 'full_name, student_code, gpa, training_score, class_name, cohort, ' +
   'major:major!fk_student_profile_major(faculty:faculty!fk_major_faculty(name))';
-const COT_YEU_CAU = 'request_id, problem_id, team_id, lecturer_id, student_id, initiated_by, title, proposal_content, ' +
+export const COT_YEU_CAU = 'request_id, problem_id, team_id, lecturer_id, student_id, initiated_by, title, proposal_content, ' +
   'cover_letter, tags, trl_label, fit_score, status, decline_reason, read_at, created_at, updated_at, ' +
   'team:student_team!fk_connection_request_team(team_name, lab:lab!fk_student_team_lab(name), ' +
   `members:team_member(role_in_team, position_title, student:student_profile!fk_team_member_student(${SINH_VIEN}))), ` +
@@ -41,7 +41,7 @@ function sinhVien(s) {
   };
 }
 
-function chuyenYeuCau(r, problemCode, tep) {
+export function chuyenYeuCau(r, problemCode, tep) {
   const members = (r.team?.members ?? [])
     .map((m) => ({ ...sinhVien(m.student), role: m.position_title, isLeader: m.role_in_team === 'Leader' }))
     .sort((a, b) => Number(b.isLeader) - Number(a.isLeader));
@@ -216,11 +216,24 @@ export async function scheduleMeeting(businessId, requestId, accountId, { startA
   }
 }
 
+// Chấp nhận = mở phòng đàm phán: chuyển In_Discussion, tạo 3 bước (chưa bên nào xác nhận) và tin hệ thống
 export async function acceptRequest(businessId, requestId) {
   const yc = await findOwn(businessId, requestId);
   if (!CO_THE_PHAN_HOI.includes(yc.status)) throw sai(yc.status, 'chấp nhận');
-  return doiTrangThai(businessId, requestId, CO_THE_PHAN_HOI,
-    { status: 'In_Discussion', read_at: new Date().toISOString() }, 'chấp nhận');
+  const now = new Date().toISOString();
+  const ketQua = await doiTrangThai(businessId, requestId, CO_THE_PHAN_HOI,
+    { status: 'In_Discussion', read_at: now, room_opened_at: now, business_last_read_at: now }, 'chấp nhận');
+
+  const { error: stepError } = await supabase
+    .from('connection_step')
+    .upsert(['Technical', 'NDA_IP', 'Contract'].map((step) => ({ request_id: requestId, step_code: step })),
+      { onConflict: 'request_id,step_code', ignoreDuplicates: true });
+  if (stepError) throw stepError;
+  const { error: msgError } = await supabase
+    .from('connection_message')
+    .insert({ request_id: requestId, sender_type: 'System', content: 'Doanh nghiệp đã chấp nhận proposal, phòng đàm phán được mở.' });
+  if (msgError) throw msgError;
+  return { ...ketQua, roomId: requestId };
 }
 
 // Liên kết ký tạm 60 giây để xem / tải tệp đính kèm của proposal (bucket riêng tư)

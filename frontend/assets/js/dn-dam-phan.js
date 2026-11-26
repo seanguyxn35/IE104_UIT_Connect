@@ -19,6 +19,17 @@
   var chonTrangThai = $('dp-trang-thai');
   var cacTab = Array.prototype.slice.call(document.querySelectorAll('[data-tab-dp]'));
 
+  // ---------- Nguồn dữ liệu: API (có máy chủ) hoặc dữ liệu mẫu ----------
+  var A = window.DnApi;
+  var nguon = { api: false, ds: [], loi: '' };
+  function dsPhong() { return nguon.api ? nguon.ds : D.layDanhSachPhong(); }
+  function napNguon() {
+    var thu = A.coMayChu()
+      ? A.goi('/api/business-negotiations').then(function (data) { nguon.api = true; nguon.ds = data.rooms.map(A.phongTuApi); })
+      : Promise.reject(null);
+    return thu.catch(function (err) { nguon.api = false; nguon.loi = A.lyDoDuLieuMau(err); });
+  }
+
   chonBaiToan.insertAdjacentHTML('beforeend', D.layTatCa().map(function (b) {
     var ten = b.tieuDe.length > 44 ? b.tieuDe.slice(0, 42) + '…' : b.tieuDe;
     return '<option value="' + esc(b.ma) + '">' + esc(b.ma + ' · ' + ten) + '</option>';
@@ -69,7 +80,7 @@
     }).join('');
     var nganSach = ph.nganSachDeXuat ? 'Ngân sách đề xuất: ' + ph.nganSachDeXuat + ' triệu VNĐ' : (bt && bt.nganSach ? 'Ngân sách: ' + D.dinhDangNganSach(bt.nganSach) : '');
     var hd = bt && bt.duAn && ph.trangThai === 'da-ky' ? bt.duAn.soHopDong : '';
-    return '<article id="' + esc(ph.id) + '" class="bg-surface-container-lowest rounded-lg p-space-lg shadow-xs hover:shadow-md transition-all flex flex-col lg:flex-row items-start gap-space-lg relative overflow-hidden scroll-mt-20">' +
+    return '<article id="' + esc(ph.cardId || ph.id) + '" class="bg-surface-container-lowest rounded-lg p-space-lg shadow-xs hover:shadow-md transition-all flex flex-col lg:flex-row items-start gap-space-lg relative overflow-hidden scroll-mt-20">' +
       (ph.trangThai === 'cho-xac-nhan' ? '<div class="w-1.5 absolute top-0 left-0 bottom-0 bg-status-warning"></div>' : '') +
       '<div class="w-full sm:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-gradient-to-br ' + ph.nen + ' relative flex items-center justify-center shadow-xs">' +
       '<span class="material-symbols-outlined text-[48px] text-inverse-primary/30">handshake</span>' +
@@ -128,7 +139,7 @@
   var THU_TU = { 'cho-xac-nhan': 0, 'dang-trao-doi': 1, 'cho-doi-tac': 2, 'da-ky': 3 };
 
   function veLai() {
-    var tatCa = D.layDanhSachPhong();
+    var tatCa = dsPhong();
     var daLoc = tatCa.filter(khop);
     var ds = daLoc.filter(trongTab).sort(function (a, b) {
       return (THU_TU[a.trangThai] - THU_TU[b.trangThai]) || (a.moPhong < b.moPhong ? 1 : -1);
@@ -184,18 +195,29 @@
     t.addEventListener('click', function () { tab = t.getAttribute('data-tab-dp'); veLai(); });
   });
 
-  veLai();
+  // ---------- Bắt đầu: nạp phòng (API hoặc mẫu) rồi vẽ ----------
+  dsEl.innerHTML = '<div class="p-6 text-center font-body-sm text-body-sm text-text-muted">Đang tải phòng đàm phán…</div>';
+  napNguon().then(function () {
+    A.veNguon(document.querySelector('[role="tablist"]'), nguon.api, nguon.loi,
+      'xác nhận bước, trao đổi và lịch hẹn trong phòng được lưu vào CSDL.');
+    veLai();
 
-  // ---------- Làm nổi bật thẻ được mở từ Hộp thư ----------
-  var dich = window.location.hash ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null;
-  if (dich && dsEl.contains(dich)) {
-    dich.classList.add('ring-2', 'ring-primary-container');
-    dich.scrollIntoView({ block: 'start' });
-    setTimeout(function () { dich.classList.remove('ring-2', 'ring-primary-container'); }, 4000);
-  }
-  var tuHopThu = new URLSearchParams(window.location.search).get('tu-hop-thu');
-  var p = tuHopThu ? D.layProposal(tuHopThu) : null;
-  if (p && p.trangThai === 'dam-phan') {
-    D.thongBao('Đã chấp nhận proposal của ' + p.nhom + ' cho bài toán ' + p.baiToan + '. Phòng đàm phán được làm nổi bật bên dưới (lưu tạm trên trình duyệt).');
-  }
+    // Làm nổi bật thẻ được mở từ Hộp thư
+    var dich = window.location.hash ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null;
+    if (dich && dsEl.contains(dich)) {
+      dich.classList.add('ring-2', 'ring-primary-container');
+      dich.scrollIntoView({ block: 'start' });
+      setTimeout(function () { dich.classList.remove('ring-2', 'ring-primary-container'); }, 4000);
+    }
+    var tuHopThu = new URLSearchParams(window.location.search).get('tu-hop-thu');
+    var p = null;
+    if (tuHopThu) {
+      var ph = dsPhong().filter(function (x) { return x.p.id === tuHopThu; })[0];
+      p = ph ? ph.p : (nguon.api ? null : D.layProposal(tuHopThu));
+    }
+    if (p && p.trangThai === 'dam-phan') {
+      D.thongBao('Đã chấp nhận proposal của ' + p.nhom + ' cho bài toán ' + p.baiToan + '. Phòng đàm phán được làm nổi bật bên dưới' +
+        (nguon.api ? ' (đã lưu vào CSDL).' : ' (lưu tạm trên trình duyệt).'));
+    }
+  });
 })();
