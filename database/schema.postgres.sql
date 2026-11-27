@@ -709,9 +709,14 @@ CREATE TABLE recruitment_application (
     status       VARCHAR(20) NOT NULL DEFAULT 'Pending',
     applied_at    TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     responded_at  TIMESTAMPTZ(0) NULL,
+    share_gpa               BOOLEAN      NOT NULL DEFAULT false,  -- (+) đồng ý cho nhóm xem GPA trên đơn này
+    response_note           VARCHAR(500) NULL,                    -- (+) lý do từ chối
+    responded_by_account_id INT          NULL CONSTRAINT fk_recruitment_application_responder REFERENCES account(account_id),
     CONSTRAINT uq_recruitment_application UNIQUE (recruit_id, student_id),
-    CONSTRAINT ck_recruitment_application_status CHECK (status IN ('Pending','Accepted','Rejected','Withdrawn'))
+    CONSTRAINT ck_recruitment_application_status CHECK (status IN ('Pending','Accepted','Rejected','Withdrawn')),
+    CONSTRAINT ck_recruitment_application_reject_note CHECK (status <> 'Rejected' OR length(btrim(COALESCE(response_note, ''))) >= 10)
 );
+-- Hàm chấp nhận / từ chối đơn (transaction): chạy thêm migrations/009_sv_don_gia_nhap_nhom.sql
 
 -- 19. [PDF] TeamAchievement (sửa chính tả "TeamAchiement"; + loại, mã chứng nhận, DOI)
 CREATE TABLE team_achievement (
