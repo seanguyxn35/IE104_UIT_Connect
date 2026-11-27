@@ -5,18 +5,17 @@
 //   GET /api/student-cv/pdf -> 200 tệp application/pdf (tải về) | 404 | 429 PDF_BUSY | 503 PDF_UNAVAILABLE
 //   Nội dung PDF giống bản xem trước, cùng quy tắc ẩn / riêng tư.
 import { Router } from 'express';
-import { config } from '../config.js';
 import { getCv } from '../services/studentCvService.js';
 import { cvFileName, renderCvPdf } from '../services/studentCvPdfService.js';
 
 export const studentCvRouter = Router();
 
 studentCvRouter.get('/', async (req, res) => {
-  res.json(await getCv(config.testStudentId));
+  res.json(await getCv(req.user.accountId));
 });
 
 studentCvRouter.get('/pdf', async (req, res) => {
-  const cv = await getCv(config.testStudentId);
+  const cv = await getCv(req.user.accountId);
   const pdf = await renderCvPdf(cv);
   res.attachment(cvFileName(cv)); // Content-Type: application/pdf + Content-Disposition: attachment
   res.set('Cache-Control', 'no-store');

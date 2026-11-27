@@ -16,7 +16,7 @@
       </div>
       <div>
         <div class="font-headline-md text-headline-md tracking-tight leading-none text-surface-container-lowest">UIT Connect</div>
-        <div class="font-caption text-caption text-secondary-fixed opacity-90 mt-0.5">ĐHQG-HCM • NCKH &amp; Doanh nghiệp</div>
+        <div class="font-caption text-caption text-secondary-fixed opacity-90 mt-0.5">Nghiên cứu khoa học &amp; Doanh nghiệp</div>
       </div>
     </div>
     <div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 mt-space-xs rounded-full bg-primary/40 backdrop-blur-sm w-fit font-caption text-caption text-secondary-fixed">
@@ -90,30 +90,32 @@
     </div>
     <!-- Header / Title Section -->
     <div>
-      <!-- Badge: 11px semibold, letter-spacing 0.02em, color #2E86AB, dot 6px, mb-[8px] -->
-      <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.02em] text-[#2E86AB] bg-surface-container-low px-space-sm py-1 rounded-full mb-[8px]">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#2E86AB] animate-pulse"></span>
-        <span class="">CỔNG XÁC THỰC TẬP TRUNG • UIT SSO</span>
+      <!-- Nhãn cổng: biểu tượng + chữ, không dùng dấu chấm tròn -->
+      <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-[#2E86AB] bg-surface-container-low px-space-sm py-1 rounded-full mb-[8px]">
+        <span class="material-symbols-outlined text-[14px]">verified_user</span>
+        <span class="">Cổng xác thực tập trung</span>
       </div>
       <!-- Title: 28px bold, line-height 1.25, color #1A1A1A, mb-[4px] -->
       <h1 class="text-[28px] font-bold text-[#1A1A1A] leading-[1.25] tracking-tight mb-[4px]">
         Đăng nhập bằng UIT SSO
       </h1>
-      <!-- Subtext: 13px regular, line-height 1.5, color #5F6368, truncate/whitespace-nowrap, mb-[24px] -->
-      <p class="text-[13px] leading-[1.5] text-[#5F6368] whitespace-nowrap truncate mb-[24px]">
-        Dùng tài khoản do Nhà trường cấp cho Sinh viên và Giảng viên.
+      <p class="text-[13px] leading-[1.5] text-[#5F6368] mb-[24px]">
+        Dành cho Sinh viên &amp; Giảng viên UIT. Đăng nhập bằng email trường cấp.
       </p>
     </div>
+    <!-- Thông báo của form: lỗi / sai cổng (dang-nhap.js) và chế độ xem thử khi chưa có máy chủ -->
+    <div id="dang-nhap-loi" class="hidden" role="alert" aria-live="assertive"></div>
+    <div id="dang-nhap-xem-thu" class="hidden" role="status"></div>
     <!-- Form Inputs -->
-    <form onsubmit="event.preventDefault(); handleLogin();">
-      <!-- Field 1: Username / MSSV -->
+    <form onsubmit="event.preventDefault(); handleLogin();" data-cong="uit" novalidate>
+      <!-- Field 1: Email UIT (@gm.uit.edu.vn → SV, @uit.edu.vn → GV) -->
       <div class="mb-[16px]">
-        <label class="block text-[13px] font-semibold text-[#1A1A1A] mb-[6px]" for="username">
-          Tài khoản UIT <span class="text-[#D64545]">*</span>
+        <label class="block text-[13px] font-semibold text-[#1A1A1A] mb-[6px]" for="email">
+          Email UIT <span class="text-[#D64545]">*</span>
         </label>
         <div class="relative flex items-center">
           <span class="material-symbols-outlined absolute left-3 text-[16px] text-[#8A8F98] pointer-events-none">account_circle</span>
-          <input id="username" type="text" placeholder="MSSV / Mã GV hoặc email @gm.uit.edu.vn" class="w-full h-[44px] pl-[40px] pr-3 rounded-[6px] border border-[#E1E5EA] bg-surface-container-lowest text-[14px] text-on-surface placeholder-[#8A8F98] focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all" required="">
+          <input id="email" type="email" autocomplete="username" placeholder="24521228@gm.uit.edu.vn hoặc ten@uit.edu.vn" class="w-full h-[44px] pl-[40px] pr-3 rounded-[6px] border border-[#E1E5EA] bg-surface-container-lowest text-[14px] text-on-surface placeholder-[#8A8F98] focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all" required="">
         </div>
       </div>
       <!-- Field 2: Password -->
@@ -172,20 +174,7 @@
       }
     }
 
-    function handleLogin() {
-      const submitBtn = document.getElementById('btn-submit');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span>Đang xác thực...</span>';
-      
-      // Đăng nhập thành công -> vào không gian làm việc theo vai trò (đích khai báo trong assets/js/router.js)
-      setTimeout(() => {
-        window.location.href = window.LOGIN_SUCCESS_URL || '../sv/01_trang-chu.html';
-      }, 900);
-    }
-
-    function handleSSO() {
-      alert('Đang kết nối đến Cổng xác thực đơn ĐHQG-HCM (CAS UIT)...');
-    }
+    // Đăng nhập: handleLogin() ở assets/js/dang-nhap.js (gọi /api/auth/login, cổng UIT SSO)
   </script>
 </div></main><footer class="w-full py-space-lg bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-7xl mx-auto px-margin flex flex-col sm:flex-row items-center justify-between gap-space-sm font-caption text-caption text-on-surface-variant"><span class="">© 2026 Đại học Công nghệ Thông tin - ĐHQG-HCM (UIT). Bản quyền được bảo lưu.</span><div class="flex items-center gap-space-md"><a class="hover:text-on-surface transition-colors" href="mailto:support@uit.edu.vn">Hỗ trợ kỹ thuật: support@uit.edu.vn</a><span class="text-outline-variant">|</span><a class="hover:text-on-surface transition-colors" data-path="dieu-khoan-su-dung" href="#">Điều khoản &amp; Chính sách</a></div></div></footer>
 
@@ -196,4 +185,6 @@
 
 <script src="../../assets/js/ux-effects.js"></script>
 <script src="../../assets/js/router.js"></script>
+<script src="../../assets/js/auth.js"></script>
+<script src="../../assets/js/dang-nhap.js"></script>
 </body></html>

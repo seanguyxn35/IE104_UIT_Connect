@@ -7,7 +7,11 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node --env-file=.env src/server.js",
-    "dev": "node --env-file=.env --watch src/server.js"
+    "dev": "node --env-file=.env --watch src/server.js",
+    "seed:dn-files": "node --env-file=.env scripts/seed-dn-files.js",
+    "test:sv-rd": "node --env-file=.env scripts/test-sv-rd-api.js",
+    "test:auth": "node --env-file=.env scripts/test-auth-api.js",
+    "test:public": "node --env-file=.env scripts/test-public-api.js"
   },
   "engines": {
     "node": ">=20.6"

@@ -41,6 +41,8 @@ tailwind.config = {
 <!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
 <link rel="stylesheet" href="../../assets/css/app-shell.css">
 <link rel="stylesheet" href="../../assets/css/ux-effects.css">
+<script src="../../assets/js/auth.js"></script>
+<script src="../../assets/js/auth-guard.js"></script>
 </head>
 <body class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased selection:bg-[#E6F0F7] selection:text-[#1F4E78]">
 <!-- MOBILE BACKDROP OVERLAY -->
@@ -822,17 +824,17 @@ tailwind.config = {
 </div>
 <!-- Content body -->
 <div class="py-4 text-xs text-[#5F6368] leading-relaxed">
-<p class="">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc sinh viên? Sau khi đăng xuất, bạn có thể đăng nhập lại qua cổng xác thực SSO hoặc chuyển đổi sang tài khoản mới.</p>
+<p class="">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc sinh viên? Sau khi đăng xuất, bạn có thể đăng nhập lại bằng email hoặc chuyển sang tài khoản khác.</p>
 </div>
 <!-- Quick Action / Navigation Pods -->
 <div class="flex flex-col gap-2 pt-2 border-t border-[#E1E5EA]">
-<button class="w-full h-10 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs" onclick="window.location.href='../auth/02_dang-nhap-sso-microsoft365.html'">
-<span class="material-symbols-outlined text-[18px]">login</span>
-<span class="">Đăng nhập lại (SSO UIT)</span>
+<button class="w-full h-10 rounded-lg bg-[#1F4E78] hover:bg-[#163A59] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs" onclick="dangXuat()">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="">Đăng xuất</span>
 </button>
-<button class="w-full h-10 rounded-lg bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center justify-center gap-2 transition-colors" onclick="window.location.href='../auth/03_dang-ky-b1-chon-vai-tro.html'">
+<button class="w-full h-10 rounded-lg bg-white border border-[#1F4E78] hover:bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold flex items-center justify-center gap-2 transition-colors" onclick="dangXuat('dang-ky')">
 <span class="material-symbols-outlined text-[18px]">person_add</span>
-<span class="">Đăng ký tài khoản mới</span>
+<span class="">Đăng xuất và đăng ký tài khoản mới</span>
 </button>
 <button class="w-full h-9 rounded-lg text-slate-700 hover:bg-[#F5F7FA] text-xs font-medium flex items-center justify-center transition-colors mt-1" onclick="closeLogoutModal()">
 <span class="">Hủy / Ở lại phiên làm việc</span>

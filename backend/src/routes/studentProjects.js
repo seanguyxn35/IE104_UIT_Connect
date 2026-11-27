@@ -10,7 +10,6 @@
 //   DELETE /api/student-projects/:id      -> 204 | 403 NOT_TEAM_LEADER | 404 | 409 NOT_DRAFT
 // Không có API nào cho SV đổi trạng thái: gửi thẩm định và công bố đi theo luồng riêng.
 import express, { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import {
   MAX_FILE_BYTES,
@@ -83,11 +82,11 @@ const PARSERS = {
 };
 
 studentProjectsRouter.get('/', async (req, res) => {
-  res.json({ projects: await listProjects(config.testStudentId) });
+  res.json({ projects: await listProjects(req.user.accountId) });
 });
 
 studentProjectsRouter.get('/options', async (req, res) => {
-  res.json(await getOptions(config.testStudentId));
+  res.json(await getOptions(req.user.accountId));
 });
 
 studentProjectsRouter.post('/', async (req, res) => {
@@ -97,7 +96,7 @@ studentProjectsRouter.post('/', async (req, res) => {
   input.type = body.type;
   input.teamId = parseOptionalId(body.teamId, 'Nhóm');
   if (input.type === 'Paper' && input.teamId === null) throw invalid('Bài báo phải thuộc một nhóm của bạn.');
-  res.status(201).json(await createProject(config.testStudentId, input));
+  res.status(201).json(await createProject(req.user.accountId, input));
 });
 
 studentProjectsRouter.patch('/:id', async (req, res) => {
@@ -106,7 +105,7 @@ studentProjectsRouter.patch('/:id', async (req, res) => {
   const fields = Object.keys(PARSERS).filter((f) => req.body?.[f] !== undefined);
   if (fields.length === 0) throw invalid(`Cần gửi ít nhất một trong: ${Object.keys(PARSERS).join(', ')}.`);
   const changes = Object.fromEntries(fields.map((f) => [f, PARSERS[f](req.body[f])]));
-  res.json(await updateProject(config.testStudentId, id, changes));
+  res.json(await updateProject(req.user.accountId, id, changes));
 });
 
 studentProjectsRouter.put(
@@ -115,17 +114,17 @@ studentProjectsRouter.put(
   async (req, res) => {
     const id = parseParamId(req.params.id);
     if (!Buffer.isBuffer(req.body)) throw new AppError(415, 'UNSUPPORTED_TYPE', 'Chỉ nhận tệp PDF.');
-    res.json(await saveFile(config.testStudentId, id, req.body));
+    res.json(await saveFile(req.user.accountId, id, req.body));
   },
 );
 
 studentProjectsRouter.get('/:id/file', async (req, res) => {
   res.set('Cache-Control', 'no-store');
-  res.redirect(302, await getFileUrl(config.testStudentId, parseParamId(req.params.id)));
+  res.redirect(302, await getFileUrl(req.user.accountId, parseParamId(req.params.id)));
 });
 
 studentProjectsRouter.delete('/:id', async (req, res) => {
-  await deleteProject(config.testStudentId, parseParamId(req.params.id));
+  await deleteProject(req.user.accountId, parseParamId(req.params.id));
   res.status(204).end();
 });
 

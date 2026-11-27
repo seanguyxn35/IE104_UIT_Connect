@@ -26,6 +26,9 @@
     'kich-hoat-thanh-cong': withRole('06_dang-ky-b4-kich-hoat-thanh-cong.html'),
     'quen-mk-1': withRole('07_quen-mat-khau-b1-kiem-tra-email.html'),
     'quen-mk-2': withRole('08_quen-mat-khau-b2-dat-lai-mat-khau.html'),
+    // Quên mật khẩu riêng cho Doanh nghiệp (màn 14–15); màn 07–08 dành cho email UIT
+    'quen-mk-dn-1': withRole('14_quen-mat-khau-dn-b1-kiem-tra-email.html', 'dn'),
+    'quen-mk-dn-2': withRole('15_quen-mat-khau-dn-b2-dat-lai-mat-khau.html', 'dn'),
     // Đăng ký doanh nghiệp (màn 09–13); các tab vai trò trên đó chuyển sang form SV / GV
     'dang-ky-dn-1': withRole('09_dang-ky-dn-b1-tai-khoan.html', 'dn'),
     'dang-ky-dn-2': withRole('10_dang-ky-dn-b2-thong-tin.html', 'dn'),
@@ -35,8 +38,9 @@
     'ban-lam-viec-dn': APPS.dn.home,
     'dang-ky-sv': withRole('04_dang-ky-b2-thong-tin-sinh-vien.html', 'sv'),
     'dang-ky-gv': withRole('04_dang-ky-b2-thong-tin-sinh-vien.html', 'gv'),
+    // Logo và "Về trang chủ" trên các màn đăng nhập / đăng ký -> trang tổng quan công khai (index.html)
+    'trang-chu': '../../index.html',
     // Sau khi đăng nhập / kích hoạt tài khoản -> không gian làm việc theo vai trò
-    'trang-chu': APPS[ROLE].home,
     'ban-lam-viec-sinh-vien': APPS[ROLE].home,
     'thiet-lap-ho-so': APPS[ROLE].profile
   };

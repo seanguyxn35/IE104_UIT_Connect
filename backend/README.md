@@ -45,7 +45,12 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
-| `POST` | `/api/lab-applications` | SV (tài khoản thử `TEST_STUDENT_ID`) ứng tuyển đề tài `{ "topicId": 9001 }` |
+| `GET` | `/api/public/overview` | **Không cần đăng nhập.** Trang tổng quan: `{ stats: { openProblems, inProgressProblems, partners, totalFunding }, problems, partners }`. Chỉ bài Open / In_Progress; không có dữ liệu sinh viên, tệp đính kèm, dữ liệu riêng của người xem. Lưu đệm 60 giây |
+| `GET` | `/api/public/problems/:code` | **Không cần đăng nhập.** Chi tiết đề bài (mô tả, mốc, quy mô nhóm...) không có tệp đính kèm → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND`; mã sai → 400 |
+| `POST` | `/api/auth/login` | Đăng nhập `{ email, password, remember?, portal: "uit"|"business" }` → 200 `{ user }` + cookie HttpOnly `uitc_session`. 400 `INVALID_INPUT` / `INVALID_EMAIL` (SV phải là MSSV 8 số @gm.uit.edu.vn), 401 `INVALID_CREDENTIALS`, 403 `WRONG_PORTAL` / `ACCOUNT_DISABLED` / `EMAIL_NOT_VERIFIED`, 429 `TOO_MANY_ATTEMPTS` (sai 5 lần / 15 phút) |
+| `GET` / `POST` | `/api/auth/me`, `/api/auth/logout` | Người dùng của phiên → 200 `{ user }` / 401 `UNAUTHENTICATED`; đăng xuất → 204 (thu hồi phiên) |
+| `POST` | `/api/auth/password-reset/request|verify|confirm` | Quên mật khẩu: gửi mã 6 số (202, gửi lại sau 60 giây, mã in ra log máy chủ vì chưa có dịch vụ email) → xác thực mã (200 `{ resetToken }`, 400 `INVALID_CODE`, 410 `CODE_EXPIRED`) → đặt mật khẩu mới (204, 400 `WEAK_PASSWORD`, 410 `TOKEN_EXPIRED`; thu hồi mọi phiên cũ) |
+| `POST` | `/api/lab-applications` | SV (người đăng nhập; `AUTH_MODE=test` không kèm phiên thì dùng `TEST_STUDENT_ID`) ứng tuyển đề tài `{ "topicId": 9001 }` |
 | `GET` | `/api/student-skills` | Danh sách kỹ năng trên hồ sơ SV: `{ skills: [{ skillId, name, level, category }] }` |
 | `POST` | `/api/student-skills` | Thêm kỹ năng `{ "name", "level": 1-5, "category": "ai"\|"lang"\|"infra" }` → 201; trùng → 409 `ALREADY_EXISTS` |
 | `DELETE` | `/api/student-skills/:skillId` | Xóa kỹ năng khỏi hồ sơ → 204; không có → 404 `SKILL_NOT_FOUND` |
@@ -60,7 +65,7 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-cv` | Dữ liệu xem trước CV (hồ sơ, học vấn, kỹ năng, dự án trên CV, kinh nghiệm, giải thưởng, chứng chỉ). Chỉ số và mục đang ẩn không được trả về, tên của chúng nằm ở `hiddenFields`; thành tích bị từ chối không được trả về |
 | `GET` | `/api/student-achievements` | Thành tích của SV: `{ achievements: [{ achievementId, category, title, issuedBy, issuedDate, detail, visibility, status, hasEvidence }] }` |
 | `POST` | `/api/student-achievements` | Thêm `{ "category": "Award"\|"Publication"\|"Language_Cert"\|"Tech_Cert", "title", "issuedBy", "issuedDate": "YYYY-MM-DD", "detail"?, "visibility"? }` → 201, luôn ở trạng thái `Self_Declared`; sai dữ liệu → 400; trùng tên + tổ chức + ngày → 409 `ALREADY_EXISTS` |
-| | | Loại `Publication` (công bố bên ngoài hệ thống) cần `externalUrl` (URL `https://` hoặc mã DOI) hoặc `hasEvidenceFile: true` khi sẽ tải tệp ngay sau đó; thiếu cả hai → 400 `PROOF_REQUIRED`. Phản hồi có `externalUrl`, `missingProof`; mục `missingProof` không lên CV (cần migration 004) |
+| | | Loại `Publication` (công bố bên ngoài hệ thống) cần `externalUrl` (URL `https://` hoặc mã DOI) hoặc `hasEvidenceFile: true` khi sẽ tải tệp ngay sau đó; thiếu cả hai → 400 `PROOF_REQUIRED`. Phản hồi có `externalUrl`, `missingProof`; mục `missingProof` không lên CV (cần migration 008) |
 | `PATCH` | `/api/student-achievements/:id` | Đổi chế độ hiển thị `{ "visibility" }` → 200; không phải mục của mình → 404 `ACHIEVEMENT_NOT_FOUND` |
 | `DELETE` | `/api/student-achievements/:id` | Xóa mục và tệp minh chứng → 204; 404 |
 | `PUT` | `/api/student-achievements/:id/evidence` | Tải / thay minh chứng: thân là tệp PDF/JPG/PNG ≤ 5 MB → 200; sai loại → 415, quá lớn → 413; mục `Pending`/`Verified` → 409 `ACHIEVEMENT_LOCKED` |
@@ -80,7 +85,18 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
 | `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
+| `GET` | `/api/student-rd-problems` | Bài toán R&D đã được duyệt công khai (Open / In_Progress) cho SV-09: `{ problems: [{ id, code, title, summary, type, fieldName, status, isOpen, funding, fundingMin, deadline, acceptedPartners, skills, business, saved, myProposal, fitScore }], saved: [problemId] }` |
+| `GET` | `/api/student-rd-problems/:code` | Chi tiết cho SV-13 (thêm mô tả, quy mô nhóm, TRL, sản phẩm, NDA, mốc, tệp đề bài, proposal của tôi, nhóm & GV để chọn) → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND` |
+| `PUT` / `DELETE` | `/api/student-rd-problems/:code/saved` | Lưu → 200 `{ saved: true }` (lưu lại vẫn 200) / bỏ lưu → 204; 404 |
+| `POST` | `/api/student-rd-problems/proposal-files` | Bước 1: tải tệp proposal, thân là tệp PDF ≤ 10 MB, header `X-File-Name` → 201 `{ uploadId, fileName, sizeBytes }`; không phải PDF (kiểm tra nội dung) → 415; quá lớn → 413 |
+| `POST` | `/api/student-rd-problems/:code/proposals` | Bước 2: nộp `{ partnerType: "Student"\|"Team"\|"Lab", teamId?, lecturerId?, title, content, trlLabel, durationWeeks?, coverLetter?, ndaAccepted, confirmed: true, uploadId }` → 201. Thứ tự kiểm tra: 404 `PROBLEM_NOT_FOUND` → 409 `PROBLEM_CLOSED` → 409 `PARTNER_TYPE_NOT_ACCEPTED` → 404 `TEAM_NOT_FOUND` / 403 `NOT_TEAM_LEADER` / 409 `TEAM_SIZE_MISMATCH` / 400 `LECTURER_NOT_FOUND` → 409 `ALREADY_APPLIED` → 400 `NDA_REQUIRED` → 400 `UPLOAD_NOT_FOUND`. Proposal hiện ngay trong `/api/business-inbox` của DN |
+| `POST` | `/api/student-rd-problems/:code/proposals/:id/withdraw` | Rút proposal (chỉ người gửi, chỉ khi `Submitted`) → 200 `Cancelled`; không phải của mình → 404; DN đã phản hồi → 409 `INVALID_STATE`. Proposal đã rút không hiện trong hộp thư DN và SV nộp lại được |
+| `GET` | `/api/student-rd-problems/:code/attachments/:attachmentId`, `.../proposals/:id/attachments/:attachmentId` | Liên kết ký tạm 60 giây (`?download=1` để tải về) cho tệp đề bài / tệp proposal của mình |
 
 **Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
+
+Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
+
+Kiểm thử API bài toán R&D phía SV (cần máy chủ đang chạy, đã chạy migration 006 + `database/seed_sv_rd.sql`): `npm run test:sv-rd` (tự dọn dữ liệu đã tạo).
 
 Hợp đồng chi tiết (mã phản hồi, body mẫu): xem DESIGN.md trong gói nộp bài, mục 3.3.
