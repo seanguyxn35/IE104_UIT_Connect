@@ -91,6 +91,9 @@
 }
 
 /* ---------- Footer ---------- */
+/* Trang ngắn hơn cửa sổ (hoặc thu nhỏ trình duyệt): nội dung giãn ra để footer luôn nằm ở đáy */
+#main-wrapper > main { flex: 1 0 auto; }
+
 /* Chia cột theo bề rộng của chính footer, không theo cửa sổ: sidebar làm footer hẹp hơn cửa sổ nhiều. */
 .site-footer { container: site-footer / inline-size; }
 .site-footer-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }

@@ -118,22 +118,27 @@ function request(method, path, body) {
 
 // ---------- Dạng xem: danh sách / ô (lưới) ----------
 var VIEW_KEY = 'uitc_sv05_view'; // chỉ là tùy chọn hiển thị, lưu trên trình duyệt này
-var CARD_BASE = 'project-item bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex gap-space-md cursor-pointer ';
+var CARD_BASE = 'project-item bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md gap-space-md cursor-pointer ';
+// Dạng danh sách co theo bề rộng thật của danh sách (container query), không theo cửa sổ vì còn sidebar:
+// hẹp: xếp dọc; vừa: ảnh + nội dung, nút ở hàng dưới; rộng: ảnh, nội dung, nút trên một hàng
+var TITLE_CLASS = 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 line-clamp-2 break-words text-left max-w-full';
+var META_CLASS = 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2';
+var THUMB_CLASS = 'w-full rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline ';
 var VIEWS = {
   list: {
-    container: 'flex flex-col gap-space-md',
-    card: CARD_BASE + 'w-full flex-col md:flex-row items-start md:items-center justify-between',
-    thumb: 'w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline',
-    title: 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate text-left max-w-full',
-    meta: 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2',
-    actions: 'flex items-center gap-space-sm flex-shrink-0 self-end md:self-center'
+    container: '@container flex flex-col gap-space-md',
+    card: CARD_BASE + 'grid w-full grid-cols-1 items-center @md:grid-cols-[120px_minmax(0,1fr)] @3xl:grid-cols-[130px_minmax(0,1fr)_auto]',
+    thumb: THUMB_CLASS + 'h-24',
+    title: TITLE_CLASS,
+    meta: META_CLASS,
+    actions: 'flex items-center gap-space-sm justify-self-end @md:col-span-2 @3xl:col-span-1'
   },
   grid: {
     container: 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-space-md',
-    card: CARD_BASE + 'min-w-0 flex-col items-stretch',
-    thumb: 'w-full h-36 rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline',
-    title: 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 line-clamp-2 break-words text-left max-w-full',
-    meta: 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2 [&>[data-sep]]:hidden', // thẻ hẹp hay xuống dòng nên bỏ dấu chấm ngăn cách
+    card: CARD_BASE + 'flex min-w-0 flex-col items-stretch',
+    thumb: THUMB_CLASS + 'h-36',
+    title: TITLE_CLASS,
+    meta: META_CLASS,
     actions: 'flex items-center justify-end gap-space-sm mt-auto'
   }
 };
@@ -207,14 +212,8 @@ function buildCard(p) {
   meta.push(h('span', 'text-outline', ['Cập nhật: ' + viDate(p.updatedAt)]));
   var metaRow = h('div');
   metaRow.dataset.part = 'meta';
-  meta.forEach(function (m, i) {
-    if (i) {
-      var sep = h('span', 'text-outline', ['•']);
-      sep.dataset.sep = '';
-      metaRow.appendChild(sep);
-    }
-    metaRow.appendChild(m);
-  });
+  // Các mục cách nhau bằng khoảng trống, không dùng dấu "•" vì khi xuống dòng dấu bị lẻ ở cuối hàng
+  meta.forEach(function (m) { metaRow.appendChild(m); });
 
   var body = h('div', 'flex-1 min-w-0 flex flex-col w-full', [
     h('div', 'flex items-center gap-space-xs flex-wrap', [typeChip(p), statusChip(p)]),
