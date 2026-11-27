@@ -373,21 +373,21 @@ main > :last-child { margin-bottom: 0 !important; }
 </nav>
 <!-- Header Actions Row -->
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mt-1">
-<div>
+<div class="min-w-0">
 <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Đề tài của tôi</h1>
 <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
           Quản lý đề tài nghiên cứu, sản phẩm công nghệ và bài báo bạn đã tạo hoặc tham gia.
         </p>
 </div>
 <!-- Action Create Button with Quick Dropdown Menu -->
-<div class="relative inline-block text-left group">
-<button class="h-10 px-space-lg bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button" data-create-type="Project">
+<div class="relative inline-block self-start md:self-auto shrink-0 text-left group">
+<button class="h-10 px-space-lg whitespace-nowrap bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button" data-create-type="Project">
 <span class="material-symbols-outlined text-[18px]">add_circle</span>
 <span class="">Tạo đề tài mới</span>
 <span class="material-symbols-outlined text-[18px] ml-1">arrow_drop_down</span>
 </button>
 <!-- Dropdown on Hover/Focus -->
-<div class="absolute right-0 top-full mt-1.5 w-60 bg-surface-container-lowest rounded-lg shadow-xl py-1.5 z-30 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
+<div class="absolute left-0 md:left-auto md:right-0 top-full mt-1.5 w-60 bg-surface-container-lowest rounded-lg shadow-xl py-1.5 z-30 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
 <div class="px-space-md py-1 font-label-sm text-label-sm text-outline uppercase tracking-wider">Chọn thể loại khởi tạo</div>
 <button class="w-full text-left flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" type="button" data-create-type="Project">
 <span class="material-symbols-outlined text-[18px] text-secondary">science</span>
@@ -431,17 +431,18 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 </div>
 <!-- Filter & Controls Toolbar -->
-<div class="mt-space-md mb-space-md flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="@container mt-space-md mb-space-md">
+<div class="flex flex-col @5xl:flex-row @5xl:items-center justify-between gap-space-sm @5xl:gap-space-md">
 <!-- Search Left -->
-<div class="relative w-full lg:w-80 flex items-center">
+<div class="relative w-full @5xl:w-auto @5xl:flex-1 @5xl:max-w-xs min-w-0 flex items-center">
 <span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px]">search</span>
 <input class="w-full h-10 pl-10 pr-space-md bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Tìm theo tên đề tài..." type="search" id="project-search" aria-label="Tìm theo tên đề tài" autocomplete="off">
 </div>
 <!-- Controls Right -->
-<div class="flex items-center gap-space-sm flex-wrap">
+<div class="grid grid-cols-2 @xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)_auto] @5xl:flex items-center gap-space-sm">
 <!-- Dropdown 1: Resource Type -->
 <div class="relative">
-<select id="filter-type" aria-label="Lọc theo loại tài nguyên" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<select id="filter-type" aria-label="Lọc theo loại tài nguyên" autocomplete="off" class="w-full h-10 pl-space-md pr-9 truncate bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
 <option value="all">Loại tài nguyên: Tất cả</option>
 <option value="product">Sản phẩm công nghệ</option>
 <option value="paper">Bài báo khoa học</option>
@@ -451,7 +452,7 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <!-- Dropdown 2: Role -->
 <div class="relative">
-<select id="filter-role" aria-label="Lọc theo vai trò" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<select id="filter-role" aria-label="Lọc theo vai trò" autocomplete="off" class="w-full h-10 pl-space-md pr-9 truncate bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
 <option value="all">Vai trò: Tất cả</option>
 <option value="owner">Leader</option>
 <option value="member">Thành viên</option>
@@ -460,33 +461,34 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <!-- Dropdown 3: Sort -->
 <div class="relative">
-<select id="sort-projects" aria-label="Sắp xếp đề tài" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<select id="sort-projects" aria-label="Sắp xếp đề tài" autocomplete="off" class="w-full h-10 pl-space-md pr-9 truncate bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
 <option value="updated">Cập nhật gần nhất</option>
 <option value="name">Tên A-Z</option>
 <option value="progress">Tiến độ thẩm định</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
 </div>
-<button id="clear-filters" class="hidden h-10 px-space-md rounded-lg text-primary hover:bg-surface-container font-label-md text-label-md flex items-center gap-1 transition-colors" type="button">
+<button id="clear-filters" class="hidden order-last col-span-full justify-self-end @5xl:order-none h-10 px-space-md rounded-lg text-primary whitespace-nowrap hover:bg-surface-container font-label-md text-label-md flex items-center gap-1 transition-colors" type="button">
 <span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
 <span>Xóa bộ lọc</span>
 </button>
 <!-- View Switcher -->
-<div class="bg-surface-container p-1 rounded-lg flex items-center gap-0.5 shadow-xs">
-<button class="w-8 h-8 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center justify-center transition-all" title="Dạng danh sách" type="button">
-<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+<div id="view-switcher" class="justify-self-end h-10 bg-surface-container p-1 rounded-lg flex items-center gap-0.5 shadow-xs shrink-0" role="group" aria-label="Chọn dạng xem">
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center justify-center transition-all" title="Dạng danh sách" aria-label="Dạng danh sách" aria-pressed="true" data-view="list" type="button">
+<span class="material-symbols-outlined text-[18px]" aria-hidden="true">format_list_bulleted</span>
 </button>
-<button class="w-8 h-8 rounded text-outline hover:text-on-surface flex items-center justify-center transition-colors" title="Dạng lưới" type="button">
-<span class="material-symbols-outlined text-[18px]">grid_view</span>
+<button class="w-8 h-8 rounded text-outline hover:text-on-surface flex items-center justify-center transition-colors" title="Dạng ô (lưới)" aria-label="Dạng ô (lưới)" aria-pressed="false" data-view="grid" type="button">
+<span class="material-symbols-outlined text-[18px]" aria-hidden="true">grid_view</span>
 </button>
+</div>
 </div>
 </div>
 </div>
 <!-- Cards List Container -->
 <!-- Danh sách đề tài: dựng bằng assets/js/de-tai-cua-toi.js (GET /api/student-projects) -->
 <div class="flex flex-col gap-space-md" id="project-list" aria-live="polite">
-<p id="project-loading" class="font-body-md text-body-md text-on-surface-variant">Đang tải đề tài…</p>
-<div id="empty-state-notice" class="hidden w-full bg-surface-container-lowest rounded-lg shadow-xs p-space-xl flex flex-col items-center justify-center text-center py-12">
+<p id="project-loading" class="col-span-full font-body-md text-body-md text-on-surface-variant">Đang tải đề tài…</p>
+<div id="empty-state-notice" class="hidden col-span-full w-full bg-surface-container-lowest rounded-lg shadow-xs p-space-xl flex flex-col items-center justify-center text-center py-12">
   <div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center text-outline mb-3">
     <span class="material-symbols-outlined text-[32px]">folder_off</span>
   </div>
@@ -525,9 +527,9 @@ main > :last-child { margin-bottom: 0 !important; }
 <!-- ===== HẾT NỘI DUNG TRANG ===== -->
 </main>
 <!-- FOOTER -->
-<footer class="w-full bg-[#163A59] text-white py-12 px-8 md:px-12 mt-12 border-t border-[#1F4E78]">
+<footer class="site-footer w-full bg-[#163A59] text-white py-12 px-8 md:px-12 mt-12 border-t border-[#1F4E78]">
 <div class="max-w-[1280px] mx-auto">
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+  <div class="site-footer-grid">
     <!-- Column 1: Brand & Overview -->
     <div class="flex flex-col">
       <div class="flex items-center gap-2 font-bold text-white text-xl">
@@ -590,7 +592,7 @@ main > :last-child { margin-bottom: 0 !important; }
   </div>
 
   <!-- Bottom divider and row -->
-  <div class="border-t border-slate-700/60 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+  <div class="site-footer-bottom border-t border-slate-700/60 mt-10 pt-6 text-xs text-slate-400">
     <div class="">
       © 2026 Trường Đại học Công nghệ Thông tin – ĐHQG-HCM
     </div>

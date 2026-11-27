@@ -116,6 +116,61 @@ function request(method, path, body) {
   });
 }
 
+// ---------- Dạng xem: danh sách / ô (lưới) ----------
+var VIEW_KEY = 'uitc_sv05_view'; // chỉ là tùy chọn hiển thị, lưu trên trình duyệt này
+var CARD_BASE = 'project-item bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex gap-space-md cursor-pointer ';
+var VIEWS = {
+  list: {
+    container: 'flex flex-col gap-space-md',
+    card: CARD_BASE + 'w-full flex-col md:flex-row items-start md:items-center justify-between',
+    thumb: 'w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline',
+    title: 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate text-left max-w-full',
+    meta: 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2',
+    actions: 'flex items-center gap-space-sm flex-shrink-0 self-end md:self-center'
+  },
+  grid: {
+    container: 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-space-md',
+    card: CARD_BASE + 'min-w-0 flex-col items-stretch',
+    thumb: 'w-full h-36 rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline',
+    title: 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 line-clamp-2 break-words text-left max-w-full',
+    meta: 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2 [&>[data-sep]]:hidden', // thẻ hẹp hay xuống dòng nên bỏ dấu chấm ngăn cách
+    actions: 'flex items-center justify-end gap-space-sm mt-auto'
+  }
+};
+var viewMode = readView();
+
+function readView() {
+  try { return localStorage.getItem(VIEW_KEY) === 'grid' ? 'grid' : 'list'; } catch (e) { return 'list'; }
+}
+
+// Chỉ đổi lớp trình bày, giữ nguyên phần tử nên bộ lọc, thứ tự sắp xếp và sự kiện không bị ảnh hưởng
+function styleCard(card) {
+  var view = VIEWS[viewMode];
+  var hidden = card.classList.contains('hidden');
+  card.className = view.card + (hidden ? ' hidden' : '');
+  card.querySelector('[data-part="thumb"]').className = view.thumb;
+  card.querySelector('[data-title]').className = view.title;
+  card.querySelector('[data-part="meta"]').className = view.meta;
+  card.querySelector('[data-part="actions"]').className = view.actions;
+}
+
+function applyView() {
+  listEl.className = VIEWS[viewMode].container;
+  listEl.querySelectorAll('.project-item').forEach(styleCard);
+  document.querySelectorAll('#view-switcher [data-view]').forEach(function (b) {
+    var on = b.dataset.view === viewMode;
+    b.className = 'w-8 h-8 rounded flex items-center justify-center transition-all ' +
+      (on ? 'bg-surface-container-lowest text-primary shadow-xs' : 'text-outline hover:text-on-surface');
+    b.setAttribute('aria-pressed', String(on));
+  });
+}
+
+function setView(mode) {
+  viewMode = mode === 'grid' ? 'grid' : 'list';
+  try { localStorage.setItem(VIEW_KEY, viewMode); } catch (e) { /* trình duyệt chặn lưu: chỉ áp dụng cho lần xem này */ }
+  applyView();
+}
+
 // ---------- Thẻ đề tài ----------
 function chip(text, className, iconName) {
   return h('span', 'px-2.5 py-0.5 rounded-xl font-label-sm text-label-sm font-semibold inline-flex items-center gap-1 ' + className,
@@ -129,7 +184,8 @@ function roleChip(p) {
 
 function buildCard(p) {
   var t = typeOf(p);
-  var thumb = h('div', 'w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center text-outline');
+  var thumb = h('div');
+  thumb.dataset.part = 'thumb';
   if (p.image) {
     var img = h('img', 'w-full h-full object-cover');
     img.alt = '';
@@ -139,7 +195,7 @@ function buildCard(p) {
     thumb.appendChild(icon(t.icon, 'text-[40px]'));
   }
 
-  var title = h('button', 'font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate text-left max-w-full', [p.title]);
+  var title = h('button', null, [p.title]);
   title.type = 'button';
   title.dataset.title = '';
   title.setAttribute('aria-haspopup', 'dialog');
@@ -149,9 +205,14 @@ function buildCard(p) {
   if (p.lecturer) meta.push(h('span', 'flex items-center gap-1', [icon('school', 'text-[16px] text-outline'), h('span', null, ['GVHD: ' + p.lecturer])]));
   meta.push(roleChip(p));
   meta.push(h('span', 'text-outline', ['Cập nhật: ' + viDate(p.updatedAt)]));
-  var metaRow = h('div', 'flex items-center gap-x-space-md gap-y-1 flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2');
+  var metaRow = h('div');
+  metaRow.dataset.part = 'meta';
   meta.forEach(function (m, i) {
-    if (i) metaRow.appendChild(h('span', 'text-outline', ['•']));
+    if (i) {
+      var sep = h('span', 'text-outline', ['•']);
+      sep.dataset.sep = '';
+      metaRow.appendChild(sep);
+    }
     metaRow.appendChild(m);
   });
 
@@ -171,9 +232,10 @@ function buildCard(p) {
   detail.type = 'button';
   detail.setAttribute('aria-haspopup', 'dialog');
 
-  var card = h('article', 'project-item w-full bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md cursor-pointer', [
-    thumb, body, h('div', 'flex items-center gap-space-sm flex-shrink-0 self-end md:self-center', [detail])
-  ]);
+  var actions = h('div', null, [detail]);
+  actions.dataset.part = 'actions';
+  var card = h('article', 'project-item', [thumb, body, actions]);
+  styleCard(card);
   card.dataset.cardStatus = statusOf(p).tab;
   card.dataset.type = t.filter;
   card.dataset.role = roleKey(p);
@@ -950,6 +1012,11 @@ if (clearButton) {
   });
 }
 
+document.querySelectorAll('#view-switcher [data-view]').forEach(function (b) {
+  b.addEventListener('click', function () { setView(b.dataset.view); });
+});
+applyView();
+
 // ---------- Tải dữ liệu ----------
 request('GET').then(function (data) {
   online = true;
@@ -959,7 +1026,7 @@ request('GET').then(function (data) {
   online = false;
   projects = SAMPLE.slice();
   renderList();
-  var note = h('p', 'font-body-sm text-body-sm text-amber-700', [err.offline
+  var note = h('p', 'col-span-full font-body-sm text-body-sm text-amber-700', [err.offline
     ? 'Chưa kết nối máy chủ: đang hiển thị dữ liệu mẫu, thay đổi sẽ không được lưu.'
     : 'Không tải được đề tài (' + err.message + '): đang hiển thị dữ liệu mẫu.']);
   listEl.insertBefore(note, listEl.firstChild);
