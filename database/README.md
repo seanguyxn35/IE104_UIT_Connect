@@ -27,7 +27,8 @@ database/
 │   ├── 009_sv_don_gia_nhap_nhom.sql    # Duyệt đơn xin vào nhóm: cột share_gpa, lý do từ chối; 2 hàm chạy trong transaction
 │   ├── 010_sv_ho_so_nhom.sql           # Hồ sơ nhóm: bảng team_field (tối đa 3 lĩnh vực), hàm cập nhật hồ sơ
 │   ├── 011_sv_anh_nhom.sql             # Ảnh nhóm: cột student_team.avatar_url
-│   └── 012_sv_loi_moi_vao_nhom.sql     # Lời mời vào nhóm: cột lời nhắn / lý do, trạng thái Cancelled, hàm và trigger
+│   ├── 012_sv_loi_moi_vao_nhom.sql     # Lời mời vào nhóm: cột lời nhắn / lý do, trạng thái Cancelled, hàm và trigger
+│   └── 013_sv_thanh_vien_tin_tuyen_thanh_tich.sql  # Một Leader mỗi nhóm, hàm thành viên / tin tuyển, cột thành tích nhóm
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 

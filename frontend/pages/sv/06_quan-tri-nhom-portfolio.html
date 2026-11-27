@@ -376,10 +376,6 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 </div>
 <div class="flex flex-wrap items-center gap-3 shrink-0 @6xl:self-center">
-<button class="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-lg bg-white text-[#1F4E78] font-semibold text-sm whitespace-nowrap border border-slate-200 shadow-xs hover:bg-slate-50 transition-all" type="button">
-<span class="material-symbols-outlined text-[20px]">open_in_new</span>
-<span class="">Xem Portfolio công khai</span>
-</button>
 <button id="invite-open" aria-haspopup="dialog" class="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-lg bg-[#1F4E78] text-white font-semibold text-sm whitespace-nowrap shadow-xs hover:bg-[#163A59] transition-all" type="button">
 <span class="material-symbols-outlined text-[20px]">person_add</span>
 <span class="">Mời thành viên mới (+)</span>
@@ -632,14 +628,17 @@ Lời mời dành cho bạn
 </div>
 <!-- ================= TAB 2: QUẢN TRỊ THÀNH VIÊN ================= -->
 <div class="tab-content flex flex-col gap-4 hidden" id="tab-members">
-<p class="sample-tab-note hidden items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800"><span class="material-symbols-outlined text-[18px]">info</span>Tab này đang hiển thị dữ liệu mẫu, chưa lấy từ nhóm của bạn.</p>
 <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
 <div class="flex items-center gap-3">
-<span class="text-base font-bold text-[#1A1A1A]">Danh sách thành viên hiện diện (4/6)</span>
-<span class="text-xs text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-xl font-medium border border-slate-200">Kỳ 1 (2024-2025)</span>
+<h2 id="members-heading" class="text-base font-bold text-[#1A1A1A]">Danh sách thành viên hiện diện (4/6)</h2>
+<span id="members-semester" class="text-xs text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-xl font-medium border border-slate-200">Kỳ 1 (2024-2025)</span>
 </div>
-<div class="flex items-center gap-2">
-<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium text-xs shadow-xs hover:bg-slate-50 transition-colors" type="button">
+<div class="flex flex-wrap items-center gap-2">
+<button id="members-leave" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-red-200 text-red-600 font-medium text-xs shadow-xs hover:bg-red-50 transition-colors" type="button" aria-haspopup="dialog">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="">Rời nhóm</span>
+</button>
+<button id="members-export" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium text-xs shadow-xs hover:bg-slate-50 transition-colors" type="button">
 <span class="material-symbols-outlined text-[18px]">file_download</span>
 <span class="">Xuất danh sách (CSV)</span>
 </button>
@@ -662,7 +661,7 @@ Lời mời dành cho bạn
 <th class="py-3.5 px-6 text-right">Thao tác</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-slate-100">
+<tbody id="members-body" class="divide-y divide-slate-100">
 <tr class="hover:bg-slate-50 transition-colors">
 <td class="py-3.5 px-6">
 <div class="flex items-center gap-3">
@@ -831,24 +830,17 @@ Lời mời dành cho bạn
 </div>
 <!-- ================= TAB 3: ĐƠN XIN GIA NHẬP ================= -->
 <div class="tab-content flex flex-col gap-4 hidden" id="tab-applicants">
-<p class="sample-tab-note hidden items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800"><span class="material-symbols-outlined text-[18px]">info</span>Tab này đang hiển thị dữ liệu mẫu, chưa lấy từ nhóm của bạn.</p>
 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-2">
-<div class="flex items-center gap-2">
-<button class="px-4 py-1.5 rounded-xl bg-[#1F4E78] text-white text-xs font-bold shadow-xs" type="button">
-        Chờ duyệt (3)
-      </button>
-<button class="px-4 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium transition-colors border border-slate-200" type="button">
-        Đã chấp nhận (12)
-      </button>
-<button class="px-4 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium transition-colors border border-slate-200" type="button">
-        Đã từ chối (4)
-      </button>
+<div id="applicants-filter" class="flex flex-wrap items-center gap-2" role="group" aria-label="Lọc đơn theo trạng thái">
+<button data-app-filter="Pending" aria-pressed="true" class="px-4 py-1.5 rounded-xl bg-[#1F4E78] text-white text-xs font-bold shadow-xs border border-[#1F4E78]" type="button">Chờ duyệt (<span data-app-count>3</span>)</button>
+<button data-app-filter="Accepted" aria-pressed="false" class="px-4 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium transition-colors border border-slate-200" type="button">Đã chấp nhận (<span data-app-count>12</span>)</button>
+<button data-app-filter="Rejected" aria-pressed="false" class="px-4 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium transition-colors border border-slate-200" type="button">Đã từ chối (<span data-app-count>4</span>)</button>
 </div>
-<span class="text-xs text-slate-500">
+<span id="applicants-hint" class="text-xs text-slate-500">
       Ưu tiên phản hồi trong vòng 72 giờ để đảm bảo chỉ số phản hồi của nhóm (hiện tại: 98%).
     </span>
 </div>
-<div class="grid grid-cols-1 gap-4">
+<div id="applicants-list" class="grid grid-cols-1 gap-4" aria-live="polite">
 <!-- Applicant 1 -->
 <div class="p-6 rounded-lg bg-white border border-slate-200 shadow-xs flex flex-col gap-4 hover:shadow-md transition-shadow">
 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -937,18 +929,17 @@ Lời mời dành cho bạn
 </div>
 <!-- ================= TAB 4: TIN TUYỂN QUÂN ================= -->
 <div class="tab-content flex flex-col gap-4 hidden" id="tab-recruitment">
-<p class="sample-tab-note hidden items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800"><span class="material-symbols-outlined text-[18px]">info</span>Tab này đang hiển thị dữ liệu mẫu, chưa lấy từ nhóm của bạn.</p>
 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
 <div>
 <h2 class="text-base font-bold text-[#1A1A1A]">Quản lý tin tuyển thành viên đổi mới sáng tạo</h2>
-<p class="text-xs text-slate-500 mt-0.5">Tin tuyển tự động đồng bộ trên Bảng Tin Ghép Đội Sinh viên Toàn trường (UC-A7).</p>
+<p class="text-xs text-slate-500 mt-0.5">Đơn ứng tuyển vào các tin được duyệt ở tab "Đơn xin gia nhập". Tối đa 5 tin đang mở mỗi nhóm.</p>
 </div>
-<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1F4E78] text-white font-semibold text-xs shadow-xs hover:bg-[#163A59] transition-all" type="button">
+<button id="recruit-new" aria-haspopup="dialog" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1F4E78] text-white font-semibold text-xs shadow-xs hover:bg-[#163A59] transition-all" type="button">
 <span class="material-symbols-outlined text-[18px]">add_circle</span>
 <span class="">Đăng tin tuyển mới</span>
 </button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div id="recruit-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <!-- Post 1: Open -->
 <div class="p-6 rounded-lg bg-white border border-slate-200 shadow-xs flex flex-col justify-between gap-4 border-l-4 border-emerald-600">
 <div class="flex flex-col gap-1">
@@ -1024,19 +1015,18 @@ Lời mời dành cho bạn
 </div>
 <!-- ================= TAB 5: PORTFOLIO & THÀNH TÍCH ================= -->
 <div class="tab-content flex flex-col gap-5 hidden" id="tab-portfolio">
-<p class="sample-tab-note hidden items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800"><span class="material-symbols-outlined text-[18px]">info</span>Tab này đang hiển thị dữ liệu mẫu, chưa lấy từ nhóm của bạn.</p>
 <div class="flex flex-col gap-4">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-[#1F4E78] text-[22px]">workspace_premium</span>
 <h2 class="text-base font-bold text-[#1A1A1A]">Thành tích &amp; Giải thưởng nổi bật</h2>
 </div>
-<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs" type="button">
+<button id="achievement-new" aria-haspopup="dialog" class="shrink-0 whitespace-nowrap inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs" type="button">
 <span class="material-symbols-outlined text-[16px]">add</span>
         Thêm thành tích
       </button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div id="achievement-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <div class="p-5 rounded-lg bg-white border border-slate-200 shadow-xs flex flex-col gap-2 relative">
 <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200">
 <span class="material-symbols-outlined text-[22px]">emoji_events</span>
@@ -1075,6 +1065,20 @@ Lời mời dành cho bạn
 <span class="font-mono px-2 py-0.5 rounded-sm bg-slate-100 text-slate-700 font-bold border border-slate-200">DOI: 10.1109/RIVF2024</span>
 <span class="material-symbols-outlined text-[18px] text-slate-400">open_in_new</span>
 </div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1F4E78] text-[22px]">verified</span>
+<h2 class="text-base font-bold text-[#1A1A1A]">Công trình đã công khai</h2>
+</div>
+<p class="text-xs text-slate-500 -mt-2">Đề tài, sản phẩm, bài báo của nhóm đã được giảng viên thẩm định và cho công khai.</p>
+<div id="works-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-5 rounded-lg bg-white border border-slate-200 shadow-xs flex flex-col gap-1.5">
+<span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Đề tài · TRL 6</span>
+<h3 class="text-sm font-bold text-[#1A1A1A]">EdgeVision-Traffic: Nhận diện phương tiện thời gian thực trên thiết bị biên</h3>
+<p class="text-xs text-slate-500">Đã thẩm định bởi PGS.TS. Trần Quốc Dũng</p>
 </div>
 </div>
 </div>
@@ -1212,6 +1216,10 @@ Lời mời dành cho bạn
 <script src="../../assets/js/ux-effects.js"></script>
 <script src="../../assets/js/nhom-thong-tin.js"></script>
 <script src="../../assets/js/nhom-loi-moi.js"></script>
+<script src="../../assets/js/nhom-thanh-vien.js"></script>
+<script src="../../assets/js/nhom-don-gia-nhap.js"></script>
+<script src="../../assets/js/nhom-tin-tuyen.js"></script>
+<script src="../../assets/js/nhom-portfolio.js"></script>
 <script>
 var TAB_ON = ['font-bold', 'text-[#1F4E78]', 'border-[#1F4E78]', 'bg-slate-50/50'];
 var TAB_OFF = ['font-semibold', 'text-slate-500', 'hover:text-slate-800', 'border-transparent'];
