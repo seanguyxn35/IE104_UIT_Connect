@@ -5,6 +5,7 @@
 // - "Cập nhật hồ sơ" (chỉ Leader, máy chủ quyết định qua canEdit): PATCH .../:teamId/profile, chỉ gửi phần đã đổi.
 // - "Gửi báo cáo tiến độ tuần": soạn email cho cố vấn, hệ thống KHÔNG lưu báo cáo.
 // - Không có máy chủ (file://, GitHub Pages): giữ nội dung mẫu có sẵn trong trang và báo "chưa lưu".
+// - Lời mời vào nhóm nằm ở nhom-loi-moi.js, dùng chung tiện ích qua window.UitTeamPage.
 // Mọi nội dung lấy từ dữ liệu đều gán bằng textContent, không ghép chuỗi HTML.
 (function () {
   'use strict';
@@ -110,6 +111,7 @@
   function renderHeader(p) {
     logoContent($('team-logo'), p, p.avatarUrl);
     toggle(avatarButton, p.canEdit);
+    window.dispatchEvent(new CustomEvent('uit:team-profile', { detail: p })); // nút mời hiện theo quyền
     text('team-title', p.name);
     var active = p.status === 'Active';
     $('team-status').className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm font-semibold border ' +
@@ -251,6 +253,11 @@
     document.body.style.overflow = '';
     if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   }
+
+  // Nút đang bấm bị khóa trong lúc chờ máy chủ thì con trỏ rơi ra ngoài popup: Esc vẫn phải đóng được
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && openModalEl) closeModal();
+  });
 
   function labelled(labelText, control, hint) {
     var id = control.id;
@@ -662,6 +669,16 @@
     toggle($('team-empty'), true);
     doneLoading();
   }
+
+  window.UitTeamPage = {
+    h: h, icon: icon, toggle: toggle, tidy: tidy, toast: toast, labelled: labelled, logoContent: logoContent,
+    buildModal: buildModal, showModal: showModal, closeModal: closeModal,
+    isOpen: function (overlay) { return openModalEl === overlay; },
+    reload: function (teamId) { return loadTeam(teamId); },
+    profile: function () { return profile; },
+    online: function () { return online; },
+    classes: { input: INPUT, primary: BTN_PRIMARY, plain: BTN_PLAIN }
+  };
 
   avatarButton.addEventListener('click', function () {
     if (online && profile) openAvatar();

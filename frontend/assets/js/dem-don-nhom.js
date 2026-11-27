@@ -1,6 +1,6 @@
 // Dùng chung cho MỌI trang pages/sv:
 //   1. Huy hiệu ở menu trái, mục "Nhóm nghiên cứu & Lab": số đơn xin vào nhóm đang chờ ở các nhóm mình làm Leader
-//      (GET /api/student-teams/pending-count).
+//      cộng số lời mời vào nhóm đang chờ mình trả lời (GET /api/student-teams/pending-count); chú thích tách rõ.
 //   2. window.UitLive: hỏi lại máy chủ định kỳ để số liệu tự cập nhật (SV-06 dùng cho thẻ thống kê và thanh tab).
 // Cập nhật gần thời gian thực bằng cách hỏi lại ~10 giây một lần (không phải đẩy tức thời):
 //   - tạm dừng khi tab bị ẩn, hỏi ngay khi quay lại; mất mạng thì giãn dần (tối đa 60 giây);
@@ -68,7 +68,15 @@
   var link = document.querySelector('#sidebar a[href="06_quan-tri-nhom-portfolio.html"]');
   if (!link || location.protocol === 'file:') return;
 
-  function render(count) {
+  function describe(data) {
+    return [
+      data.applications && data.applications + ' đơn xin vào nhóm chờ bạn duyệt',
+      data.invitations && data.invitations + ' lời mời vào nhóm chờ bạn trả lời'
+    ].filter(Boolean).join(', ');
+  }
+
+  function render(data) {
+    var count = data ? data.pending : 0;
     var badge = link.querySelector('[data-team-pending]');
     if (!count) {
       if (badge) badge.remove();
@@ -82,20 +90,20 @@
       var number = document.createElement('span');
       var hidden = document.createElement('span');
       hidden.className = 'sr-only';
-      hidden.textContent = ' đơn xin vào nhóm đang chờ duyệt';
       badge.append(number, hidden);
       link.appendChild(badge);
     }
     badge.firstChild.textContent = count > 99 ? '99+' : String(count);
-    badge.title = count + ' đơn xin vào nhóm đang chờ bạn duyệt';
+    badge.title = describe(data);
+    badge.lastChild.textContent = ': ' + describe(data); // trình đọc màn hình đọc cả số lẫn loại
     link.classList.add('has-badge');
   }
 
   var badgePoll = poll(function () {
     return getJson('/api/student-teams/pending-count').then(function (data) {
-      render(data.pending);
+      render(data);
     }, function (err) {
-      if (err.stop) render(0); // hết phiên: không để lại số cũ
+      if (err.stop) render(null); // hết phiên: không để lại số cũ
       throw err;
     });
   });

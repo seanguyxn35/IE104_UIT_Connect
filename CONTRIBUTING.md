@@ -161,6 +161,7 @@ Khởi động lại máy chủ trước mỗi lần chạy. `test:public` chỉ
 | `npm run test:sv-rd` | Bài toán R&D phía SV (cần `TEST_STUDENT_ID=9101`) |
 | `npm run test:auth` | Đăng nhập và phân quyền; **tạm đổi mật khẩu SV 9102**, báo nhóm trước khi chạy |
 | `npm run test:team-join` | Duyệt đơn xin vào nhóm (cần migration 009, `seed_auth.sql`); tạo nhóm tạm `9490`, sửa tạm hồ sơ SV 9601 |
+| `npm run test:team-invite` | Lời mời vào nhóm (cần migration 012, `seed_auth.sql`; **khởi động lại máy chủ trước khi chạy**); tạo nhóm tạm `9470` (tin `9470`, đơn `9470`–`9472`) |
 | `npm run test:team-profile` | Hồ sơ nhóm, ảnh nhóm, đếm đơn chờ (cần migration 010, 011, `seed_auth.sql`); tạo nhóm tạm `9480` (tin `9480`, đơn `9480`–`9481`, ảnh trong `avatars/team-9480/`), lịch tiếp SV tạm `9480` của GV 9201 |
 
 Các bộ này chưa phủ hết các API; phần còn lại phải thử bằng tay trên giao diện.
@@ -193,7 +194,7 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 - Dùng ID dải 9xxx, toàn bộ là dữ liệu giả. Không đụng dữ liệu ngoài dải này khi thử.
 - Đã dùng: tài khoản `9101`, `9102`, `9111`, `9201`; đề tài `9001`–`9003`;
   tài nguyên học thuật `9301`–`9306` và nhóm `9301` (`seed_showcase.sql`); tin tuyển `9401`–`9402` và đơn `9411`–`9417`
-  (`seed_team_applications.sql`); `9490`–`9501` dành cho `test:team-join`, `9480`–`9481` dành cho `test:team-profile`.
+  (`seed_team_applications.sql`); `9490`–`9501` dành cho `test:team-join`, `9480`–`9481` dành cho `test:team-profile`, `9470`–`9472` cho `test:team-invite`.
 - Dải ID riêng cho từng thành viên: `TBD`.
 - `reset.sql` đặt lại dữ liệu thử của chức năng ứng tuyển, **kể cả khi người khác đang thử** trên cùng CSDL: báo nhóm trước khi chạy.
 
