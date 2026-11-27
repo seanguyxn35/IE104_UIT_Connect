@@ -2,7 +2,7 @@
 // Mở bằng phần tử có thuộc tính data-cv-preview-open. Có phóng to / thu nhỏ, Tải PDF (GET /api/student-cv/pdf)
 // và In (hộp thoại in của trình duyệt, dùng được cả khi máy chủ không tạo được PDF).
 // Nút tải ngoài popup: thuộc tính data-cv-pdf-download.
-// Máy chủ cũng nạp tệp này để dựng PDF (backend/src/services/studentCvPdfService.js) qua window.uitCvPreview.buildSheet.
+// Máy chủ cũng nạp tệp này để dựng PDF (backend/src/sv/04-ho-so-nang-luc-cv/cv-pdf.service.js) qua window.uitCvPreview.buildSheet.
 // Mọi nội dung được gán bằng textContent, không ghép chuỗi HTML từ dữ liệu.
 // Cần: assets/css/cv-preview.css. Nạp SAU đoạn script khai báo triggerToast trong trang.
 (function () {

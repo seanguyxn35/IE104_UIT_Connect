@@ -31,7 +31,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
   - Sửa bài đã được duyệt → quay về chờ Admin duyệt, gắn nhãn "Đã sửa".
   - Xóa bài chưa từng được duyệt: chỉ cần xác nhận. Xóa bài đã được duyệt: bắt buộc nêu lý do (≥ 10 ký tự). Bài đang thực hiện (đã ký thỏa thuận): không xóa được.
   - Proposal của SV cá nhân: thêm cột `student_id` vào `connection_request` (không coi là nhóm 1 người).
-- Ứng tuyển đề tài Lab (đã làm, `labApplicationService.js`):
+- Ứng tuyển đề tài Lab (đã làm, `sv/07-cho-ghep-nhom/ung-tuyen-lab.service.js`):
   - R1: còn chỗ và chưa ứng tuyển → tạo một đơn `Pending` (201).
   - R2: đã có đơn cho đề tài (mọi trạng thái) → 409 `ALREADY_APPLIED`; CSDL chặn thêm bằng `uq_lab_application`.
   - R3: số đơn `Accepted` ≥ `slots` → 409 `TOPIC_FULL`. CSDL không chặn R3, server phải chặn.
@@ -42,7 +42,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài và mục Học vấn / Kỹ năng (`is_*_public`). Phần đang ẩn không đưa lên CV; GPA và DRL có công tắc riêng, không phụ thuộc mục Học vấn.
 - Thành tích / chứng chỉ: SV tự khai, lưu ở `Self_Declared` và hiện ngay, không cần duyệt. Xác minh là tùy chọn (cần tệp minh chứng): `Self_Declared`/`Rejected` → `Pending` → `Verified`/`Rejected`. Mỗi mục có chế độ hiển thị riêng; mục `Private` và mục bị từ chối không đưa lên CV. Minh chứng PDF/JPG/PNG ≤ 5 MB, lưu riêng tư.
 - Loại `Publication` là **"Công bố bên ngoài hệ thống"** (SV tự cung cấp, ví dụ bài ở hội nghị / tạp chí ngoài): **bắt buộc** có liên kết DOI/URL `https://` hoặc tệp minh chứng; thiếu cả hai thì không lên CV. CV xếp ở mục "Thành tích", luôn gắn nhãn "SV tự cung cấp", tách khỏi công trình đã thẩm định.
-- Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của nhóm SV **đang là thành viên**, hoặc tài nguyên cá nhân (không nhóm) do SV tạo. SV đã rời nhóm không được ghi sở hữu / tác quyền trên hồ sơ và CV, kể cả khi là người tạo: mục đã chọn không lên CV, không sửa được, chỉ gỡ được (quy tắc dùng chung ở `backend/src/services/resourceOwnership.js`). **CV chỉ nhận công trình `Published`** (và có phiếu `Approved` trong `academic_review_log`); `Approved` nghĩa là đạt nhưng không cho công bố nên không được chọn (409 `NOT_PUBLISHED`) và không lên CV. Khi đọc CV, lọc `Published` ngay trong truy vấn. Mục đã chọn mà không còn `Published` vẫn hiện (mờ, nhãn "Chưa công khai") cho chủ hồ sơ. CV xếp ở mục "Công trình & Project trưng bày", ghi "Đã thẩm định bởi" GV.
+- Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của nhóm SV **đang là thành viên**, hoặc tài nguyên cá nhân (không nhóm) do SV tạo. SV đã rời nhóm không được ghi sở hữu / tác quyền trên hồ sơ và CV, kể cả khi là người tạo: mục đã chọn không lên CV, không sửa được, chỉ gỡ được (quy tắc dùng chung ở `backend/src/shared/resourceOwnership.js`). **CV chỉ nhận công trình `Published`** (và có phiếu `Approved` trong `academic_review_log`); `Approved` nghĩa là đạt nhưng không cho công bố nên không được chọn (409 `NOT_PUBLISHED`) và không lên CV. Khi đọc CV, lọc `Published` ngay trong truy vấn. Mục đã chọn mà không còn `Published` vẫn hiện (mờ, nhãn "Chưa công khai") cho chủ hồ sơ. CV xếp ở mục "Công trình & Project trưng bày", ghi "Đã thẩm định bởi" GV.
 - "Đề tài của tôi" (SV-05): quyền theo **vai trò trong nhóm** (`team_member.role_in_team`), không theo người tạo. Mọi thành viên được xem, tạo, sửa, tải PDF; chỉ **Leader** được xóa bản nháp và gửi thẩm định. Đề tài cá nhân (không nhóm) chỉ người tạo thấy và có quyền như Leader. Bài báo (`Paper`) bắt buộc thuộc một nhóm.
 - Luồng thẩm định bài báo (đã chốt): `Draft` → `Pending_Review` → `Published` hoặc `Revision_Needed` (nộp lại → `Pending_Review`). SV chọn GV khi gửi. GV từ chối → `Rejected`; duyệt nhưng không cho công bố → `Approved`. **Chỉ GV thẩm định được cho công khai**, SV không có đường tự đổi trạng thái. Chỉ sửa / thay tệp khi `Draft` hoặc `Revision_Needed`. Tệp PDF ≤ 10 MB, lưu riêng tư (bucket `papers`), server kiểm tra nội dung tệp; tệp đã nằm trong một lần nộp không được xóa.
 - Ảnh đại diện: JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp, không tin `Content-Type`.
@@ -61,7 +61,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 ```
 prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 ├── frontend/   index.html (trang tổng quan công khai), pages/{auth,sv,gv,dn,khach}/, assets/{css,js,img}/
-├── backend/    src/{server,config,db,errors}.js, routes/, services/
+├── backend/    src/{server,config,db}.js, shared/, auth/, public/, sv/<NN-màn>/, dn/<NN-màn>/
 ├── database/   schema.postgres.sql, migrations/, seed*.sql, reset.sql, test_supabase.sql
 ├── docs/       DESIGN.md (design system), datab.pdf (yêu cầu dữ liệu)
 ├── design/     export Google Stitch + ảnh chụp màn (tham khảo)
@@ -74,13 +74,14 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 ## 5. Kiến trúc backend
 
 - `server.js` phục vụ cả API (`/api/...`) và thư mục `frontend/` trên cùng cổng, nên không vướng CORS.
-- Tách lớp: `routes/` kiểm tra đầu vào → `services/` nghiệp vụ + truy vấn Supabase. Không truy vấn CSDL trong route.
+- Thư mục theo **vai trò → màn hình → chức năng**: `src/<sv|dn|gv|admin>/<số>-<tên-màn>/<chức-năng>.routes.js` + `.service.js` (sơ đồ đầy đủ ở `backend/README.md`). Đăng nhập ở `auth/`, API khách ở `public/`, code dùng chung ở `shared/` (`authMiddleware`, `errors`, `validation`, `resourceOwnership`, `rdFiles`).
+- Tách lớp: `*.routes.js` kiểm tra đầu vào → `*.service.js` nghiệp vụ + truy vấn Supabase. Không truy vấn CSDL trong route. Được import service của màn khác, không import route của màn khác.
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s; riêng đẩy tệp lên kho lưu trữ 180 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
 - **Đăng nhập theo vai trò** (nhánh `feature/nhan-dang-nhap` giao diện, `feature/nhan-backend-dang-nhap` backend):
   - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
-  - `services/authService.js`, `routes/auth.js` (`/api/auth/*`), `authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
+  - `auth/auth.service.js`, `auth/auth.routes.js` (`/api/auth/*`), `shared/authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
   - Route lấy danh tính từ `req.user.accountId`. `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho `Student`; `/api/business-*` chỉ cho `Business`.
   - `AUTH_MODE=test` (mặc định): gọi API không kèm phiên thì dùng `TEST_STUDENT_ID` / `TEST_BUSINESS_ID` (script test cũ vẫn chạy). `AUTH_MODE=session`: bắt buộc đăng nhập (401).
   - Quên mật khẩu: mã 6 số trong `verification_code` (`Password_Reset`), sau đó `Reset_Token`. Chưa có dịch vụ email nên mã **in ra log máy chủ** – `TBD`.
@@ -115,9 +116,9 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     - `POST|DELETE .../:id/steps/:step/confirm` (`step` = `Technical|NDA_IP|Contract`)
     - `POST .../:id/messages`, `POST .../:id/meetings`, `GET .../:id/documents/:attachmentId[?download=1]`
   - DN-01 Bàn làm việc: `GET /api/business-dashboard`.
-  - Công khai, không cần đăng nhập (`routes/public.js`, `services/publicService.js`): `GET /api/public/overview`, `GET /api/public/problems/:code`.
+  - Công khai, không cần đăng nhập (`public/public.routes.js`, `public/public.service.js`): `GET /api/public/overview`, `GET /api/public/problems/:code`.
     Chỉ bài Open/In_Progress; không trả tệp đính kèm, dữ liệu sinh viên, dữ liệu riêng của người xem. Dùng chung `tomTatCongKhai` / `chiTietCongKhai` với API SV.
-  - SV-09 / SV-13 Bài toán R&D phía SV (`studentRdProblemService.js`):
+  - SV-09 / SV-13 Bài toán R&D phía SV (`sv/09-13-bai-toan-rd/bai-toan-rd.service.js`):
     - `GET /api/student-rd-problems`, `GET .../:code`, `PUT|DELETE .../:code/saved`
     - `POST .../proposal-files` (tải PDF, bước 1) → `POST .../:code/proposals` (nộp, bước 2), `POST .../:code/proposals/:id/withdraw`
     - `GET .../:code/attachments/:id`, `GET .../:code/proposals/:id/attachments/:aid`
