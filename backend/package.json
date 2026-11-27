@@ -12,7 +12,8 @@
     "test:sv-rd": "node --env-file=.env scripts/test-sv-rd-api.js",
     "test:auth": "node --env-file=.env scripts/test-auth-api.js",
     "test:public": "node --env-file=.env scripts/test-public-api.js",
-    "test:team-join": "node --env-file=.env scripts/test-team-join-api.js"
+    "test:team-join": "node --env-file=.env scripts/test-team-join-api.js",
+    "test:team-profile": "node --env-file=.env scripts/test-team-profile-api.js"
   },
   "engines": {
     "node": ">=20.6"

@@ -128,6 +128,17 @@ export async function listMyTeams(studentId) {
   }));
 }
 
+// Số đơn đang chờ ở các nhóm mình làm Leader (huy hiệu trên menu trái). Được gọi định kỳ nên chỉ truy vấn tối thiểu.
+export async function getPendingCount(studentId) {
+  const leading = (await getTeams(studentId)).filter((t) => t.role === 'Leader').map((t) => t.teamId);
+  if (leading.length === 0) return 0;
+  const { count, error } = await supabase.from('recruitment_application')
+    .select('apply_id, team_recruitment!inner(team_id)', { count: 'exact', head: true })
+    .eq('status', 'Pending').in('team_recruitment.team_id', leading);
+  if (error) throw error;
+  return count ?? 0;
+}
+
 // Số liệu cho các thẻ đầu trang
 export async function getTeamOverview(studentId, teamId) {
   const { team, role } = await requireMembership(studentId, teamId);

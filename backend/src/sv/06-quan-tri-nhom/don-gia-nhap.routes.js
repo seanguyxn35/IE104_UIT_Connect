@@ -1,5 +1,6 @@
 // API Quản trị nhóm (SV-06): đơn xin gia nhập. Danh tính lấy ở máy chủ, không lấy từ client:
 //   GET  /api/student-teams                     -> 200 { teams: [...] }  (nhóm tôi đang tham gia)
+//   GET  /api/student-teams/pending-count       -> 200 { pending }  (đơn chờ ở các nhóm mình làm Leader)
 //   GET  /api/student-teams/:teamId             -> 200 số liệu tổng quan | 404 TEAM_NOT_FOUND
 //   GET  /api/student-teams/:teamId/applications[?status=Pending|Accepted|Rejected]
 //                                               -> 200 { viewer, team, counts, applications } | 400 | 404
@@ -15,6 +16,7 @@ import { AppError } from '../../shared/errors.js';
 import {
   LIST_STATUSES,
   acceptApplication,
+  getPendingCount,
   getTeamOverview,
   listMyTeams,
   listTeamApplications,
@@ -45,6 +47,12 @@ function parseReason(value) {
 
 studentTeamsRouter.get('/', async (req, res) => {
   res.json({ teams: await listMyTeams(req.user.accountId) });
+});
+
+// Khai báo trước '/:teamId', nếu không "pending-count" bị hiểu là mã nhóm
+studentTeamsRouter.get('/pending-count', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json({ pending: await getPendingCount(req.user.accountId) });
 });
 
 studentTeamsRouter.get('/:teamId', async (req, res) => {

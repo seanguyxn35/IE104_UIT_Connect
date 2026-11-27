@@ -31,14 +31,14 @@ backend/
 │   │   │   ├── cv.*                   # /api/student-cv (gom dữ liệu CV)
 │   │   │   └── cv-pdf.service.js      # dựng PDF của CV bằng trình duyệt chạy ẩn
 │   │   ├── 05-de-tai-cua-toi/         # de-tai.* – /api/student-projects
-│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* – /api/student-teams (duyệt đơn xin vào nhóm)
+│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* (duyệt đơn xin vào nhóm), ho-so-nhom.* (tab Thông tin nhóm), anh-nhom.* (ảnh nhóm) – /api/student-teams
 │   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3)
 │   │   └── 09-13-bai-toan-rd/         # bai-toan-rd.* – /api/student-rd-problems
 │   └── dn/
 │       ├── 01-ban-lam-viec/           # ban-lam-viec.* – /api/business-dashboard
 │       ├── 08-hop-thu-ket-noi/        # hop-thu.* – /api/business-inbox
 │       └── 09-16-dam-phan/            # dam-phan.* – /api/business-negotiations
-├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, seed:dn-files
+├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, seed:dn-files
 ├── .env.example                   # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
@@ -103,10 +103,16 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
 | `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-teams` | Nhóm SV đang tham gia: `{ teams: [{ teamId, name, shortName, code, semester, status, role, memberCount, maxMembers, pendingCount }] }` |
+| `GET` | `/api/student-teams/pending-count` | `{ pending }`: số đơn đang chờ ở các nhóm SV làm Leader (huy hiệu menu trái, được gọi định kỳ) |
 | `GET` | `/api/student-teams/:teamId` | Số liệu đầu trang SV-06: `memberCount`, `applications { pending, newLast24h, responseRate }`, `recruitments { total, open, filled, closed, expired }`, `highestTrl`; không phải thành viên → 404 `TEAM_NOT_FOUND` |
 | `GET` | `/api/student-teams/:teamId/applications?status=Pending\|Accepted\|Rejected` | Mọi thành viên xem được: `{ viewer { role, canDecide }, team, counts, applications }` (mặc định `Pending`; đơn đã rút không hiện). Đơn chờ có `response { dueAt, level: normal\|urgent\|overdue }` (hạn 72 giờ từ lúc nộp, gấp khi còn dưới 24 giờ), `gpa` (chỉ khi người nộp đồng ý trên đơn), `skills`, `evidence { reviewed, selfDeclared }`, `canAccept`, `canReject`, `acceptBlockedReason`. Đơn đã xử lý chỉ còn danh tính, kết quả, `responseNote`, `stillMember` |
 | `POST` | `/api/student-teams/:teamId/applications/:applyId/accept` | Chỉ Leader → 200 `{ applyId, status, memberCount, maxMembers, recruitmentStatus }`. Thứ tự kiểm tra: 404 `TEAM_NOT_FOUND` → 403 `NOT_TEAM_LEADER` → 404 `APPLICATION_NOT_FOUND` → 409 `APPLICATION_NOT_PENDING` → `TEAM_INACTIVE` → `TEAM_FULL` → `ALREADY_MEMBER` → `APPLICANT_INACTIVE` → `POST_FILLED`. Tin đã đóng / hết hạn vẫn nhận được đơn đã nộp |
 | `POST` | `/api/student-teams/:teamId/applications/:applyId/reject` | Chỉ Leader, `{ "reason" }` 10–500 ký tự (400 `INVALID_INPUT`) → 200; 403; 404; 409 `APPLICATION_NOT_PENDING` |
+| `GET` | `/api/student-teams/:teamId/profile` | Hồ sơ nhóm (tab "Thông tin nhóm"), mọi thành viên: `{ name, shortName, code, description, semester, status, memberCount, maxMembers, role, canEdit, faculty, memberMajors, fields (lĩnh vực chính đứng đầu), skills, advisor }`; `advisor` = `null` hoặc `{ fullName, academicTitle, positionTitle, email, lab { name, room }, officeHours }`; không phải thành viên → 404 `TEAM_NOT_FOUND` |
+| `PATCH` | `/api/student-teams/:teamId/profile` | Chỉ Leader, gửi ít nhất một trong `{ "name" (3–150), "description" (≤ 2000, rỗng = xóa), "facultyId" (hoặc null), "fieldIds" (≤ 3, mục đầu là lĩnh vực chính), "skills" (≤ 15 tên, mỗi tên ≤ 100; chưa có thì thêm vào danh mục) }` → 200 hồ sơ mới; 400 `INVALID_INPUT` / `FACULTY_NOT_FOUND` / `FIELD_NOT_FOUND`; 403 `NOT_TEAM_LEADER`; 404; nhóm ngừng hoạt động → 409 `TEAM_INACTIVE`. Mã nhóm, cố vấn, trạng thái, số thành viên tối đa không sửa được ở đây. Lưu bằng hàm CSDL `cap_nhat_ho_so_nhom` (một transaction, cần migration 010) |
+| `PUT` | `/api/student-teams/:teamId/avatar` | Chỉ Leader của nhóm `Active`: thân là ảnh, `Content-Type: image/jpeg\|png\|webp`, ≤ 2 MB (kiểm tra nội dung tệp) → 200 `{ avatarUrl }`; ảnh lưu ở bucket công khai `avatars`, thư mục `team-<id>/`, ảnh cũ bị xóa; 403; 404; 409 `TEAM_INACTIVE`; 413 `FILE_TOO_LARGE`; 415 `UNSUPPORTED_TYPE` (cần migration 011). `profile` trả thêm `avatarUrl` |
+| `DELETE` | `/api/student-teams/:teamId/avatar` | Xóa ảnh nhóm → 204 (chưa có ảnh vẫn 204) |
+| `GET` | `/api/student-teams/profile-options` | Lựa chọn cho biểu mẫu: `{ faculties, fields, skills }` |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
 | `GET` | `/api/student-rd-problems` | Bài toán R&D đã được duyệt công khai (Open / In_Progress) cho SV-09: `{ problems: [{ id, code, title, summary, type, fieldName, status, isOpen, funding, fundingMin, deadline, acceptedPartners, skills, business, saved, myProposal, fitScore }], saved: [problemId] }` |
 | `GET` | `/api/student-rd-problems/:code` | Chi tiết cho SV-13 (thêm mô tả, quy mô nhóm, TRL, sản phẩm, NDA, mốc, tệp đề bài, proposal của tôi, nhóm & GV để chọn) → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND` |
@@ -119,6 +125,8 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 **Xuất PDF cần:** thư viện `playwright-core` (đã khai báo trong `package.json`: chạy `npm install` sau khi pull; thư viện này không tải kèm trình duyệt) và Microsoft Edge hoặc Google Chrome cài sẵn trên máy chạy máy chủ (đặt `PDF_BROWSER_CHANNEL` trong `.env` nếu muốn chỉ định). Máy chủ cũng cần Internet để tải phông chữ. Thiếu thư viện thì các API khác vẫn chạy, người dùng dùng nút "In" trong bản xem trước.
 
 **Đơn xin gia nhập nhóm (SV-06):** cần migration `009`. Chấp nhận / từ chối chạy bằng hàm CSDL `chap_nhan_don_gia_nhap`, `tu_choi_don_gia_nhap`: một transaction, khóa dòng `student_team` nên hai lần chấp nhận cùng lúc không vượt được số thành viên tối đa; kèm thông báo (`notification`, loại `Team`, không tạo nếu SV đã tắt loại này). Chưa có API cho SV nộp / rút đơn, quản lý tin tuyển và đọc thông báo. Dữ liệu thử: `database/seed_team_applications.sql`. Kiểm thử: `npm run test:team-join` (cần `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
+
+Hồ sơ nhóm: dữ liệu thử `database/seed_team_profile.sql`; kiểm thử `npm run test:team-profile` (cần migration 010 và 011, `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
 
 Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
 
