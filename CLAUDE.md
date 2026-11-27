@@ -62,7 +62,7 @@ Bản hướng dẫn từng bước trên VS Code cho thành viên mới dùng G
 ```
 prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 ├── frontend/   index.html (trang tổng quan công khai), pages/{auth,sv,gv,dn,khach}/, assets/{css,js,img}/
-├── backend/    src/{server,config,db}.js, shared/, auth/, public/, sv/<NN-màn>/, dn/<NN-màn>/
+├── backend/    src/{server,config,db}.js, src/{shared,auth,public}/, src/{sv,dn}/<NN-màn>/, scripts/
 ├── database/   schema.postgres.sql, migrations/, seed*.sql, reset.sql, test_supabase.sql
 ├── docs/       DESIGN.md (design system), datab.pdf (yêu cầu dữ liệu)
 ├── design/     export Google Stitch + ảnh chụp màn (tham khảo)
@@ -81,8 +81,8 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s; riêng đẩy tệp lên kho lưu trữ 180 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
-- Storage: bucket công khai `avatars` (ảnh đại diện), bucket riêng tư `evidence` (minh chứng, đọc qua liên kết ký tạm 60 s). Backend tự tạo bucket lần đầu.
-- **Đăng nhập theo vai trò** (nhánh `feature/nhan-dang-nhap` giao diện, `feature/nhan-backend-dang-nhap` backend):
+- Storage: bucket công khai `avatars` (ảnh đại diện); bucket riêng tư `evidence` (minh chứng), `papers` (PDF đề tài SV-05), `rd-files` (tệp đề bài và proposal R&D), đọc qua liên kết ký tạm 60 s. Backend tự tạo `avatars`, `evidence`, `papers` lần đầu; `rd-files` do `npm run seed:dn-files` tạo.
+- **Đăng nhập theo vai trò:**
   - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
   - `auth/auth.service.js`, `auth/auth.routes.js` (`/api/auth/*`), `shared/authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
   - Route lấy danh tính từ `req.user.accountId`. `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho `Student`; `/api/business-*` chỉ cho `Business`.
@@ -129,7 +129,9 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     - Frontend gọi qua `sv-bai-toan-rd-data.js`; không có máy chủ thì dùng dữ liệu mẫu và báo "chưa lưu".
   - Frontend gọi các API DN qua `assets/js/dn-api.js`. Mở bằng `file://` hoặc máy chủ lỗi thì dùng dữ liệu mẫu và báo "chưa lưu".
     DN-04/05/14/15 (bài toán R&D) chưa có API.
-- Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
+- Thêm API mới: tạo file trong thư mục màn hình, gắn route ở `server.js` kèm `chiSv` / `chiDn` / `chiChoVaiTro(...)`, cập nhật `backend/README.md` (các bước ở `CONTRIBUTING.md` mục 6).
+- `sv/04-ho-so-nang-luc-cv/cv-pdf.service.js` đọc `frontend/assets/` bằng đường dẫn tương đối: đổi độ sâu thư mục thì phải sửa và thử xuất PDF (3 bộ test không phủ phần này).
+- Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql` (số tiếp theo: `009`), chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
 
 ## 6. Giao diện
 

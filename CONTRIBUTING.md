@@ -25,7 +25,11 @@ npm start                # http://localhost:3000   (npm run dev: tự chạy l�
 
 - Xin giá trị `.env` qua kênh riêng của nhóm. **Không gửi khóa vào issue, PR, commit hay ảnh chụp màn hình.**
 - Mở trang có gọi API qua `http://localhost:3000/pages/...`. Không mở bằng cách bấm đúp file (`file://`) hay Live Preview.
-- Chưa có đăng nhập: máy chủ coi người dùng là sinh viên có mã `TEST_STUDENT_ID`.
+- Đăng nhập: trong `.env`, `AUTH_MODE=test` (mặc định) cho phép gọi API không đăng nhập, khi đó máy chủ dùng
+  `TEST_STUDENT_ID` / `TEST_BUSINESS_ID`; `AUTH_MODE=session` bắt buộc đăng nhập.
+- Tài khoản thử (mật khẩu chung `MatKhau@123`):
+  - SV `23529101@gm.uit.edu.vn`, `23529102@gm.uit.edu.vn`: đăng nhập ở `pages/auth/02_dang-nhap-sso-microsoft365.html`.
+  - DN `test.dn@vtech-global.example`: đăng nhập ở `pages/auth/01_dang-nhap-email.html`.
 
 Danh sách API: [backend/README.md](backend/README.md).
 
@@ -102,7 +106,8 @@ Dạng `type(scope): mô tả`, viết tiếng Việt, mỗi commit một việc
 **Trước khi mở PR, người làm tự kiểm tra:**
 
 - [ ] Máy chủ khởi động được và chức năng chạy đúng trên máy mình.
-- [ ] Đã thử cả trường hợp đúng và trường hợp sai (400 / 409...). Lỗi 401 / 403: `TBD` vì chưa có đăng nhập.
+- [ ] Đã thử cả trường hợp đúng và trường hợp sai (400 / 401 / 403 / 409). Ca 401 cần `AUTH_MODE=session`.
+- [ ] Nếu sửa backend: đã chạy các bộ test ở mục 6 và không có ca trượt.
 - [ ] Không có `.env`, khóa, `node_modules/` trong danh sách file.
 - [ ] Đã gộp `develop` mới nhất vào nhánh.
 - [ ] Đã cập nhật tài liệu liên quan (ví dụ thêm API thì sửa `backend/README.md`).
@@ -111,7 +116,7 @@ Dạng `type(scope): mô tả`, viết tiếng Việt, mỗi commit một việc
 **Review và gộp:**
 
 - Cần ít nhất **1 người khác** duyệt.
-- Hiện chưa có kiểm tra tự động trên PR và chưa có `npm test`, nên người review **kéo nhánh về chạy thử** khi PR đổi hành vi.
+- Hiện chưa có kiểm tra tự động trên PR và chưa có lệnh `npm test` chạy tất cả, nên người review **kéo nhánh về chạy thử** khi PR đổi hành vi.
 - Cần sửa thì commit tiếp trên đúng nhánh đó; PR tự cập nhật.
 - `feature/...` hoặc `fix/...` → `develop`: chọn **Squash and merge**.
 - `develop` → `main`: chọn **Create a merge commit**, chỉ làm khi `develop` đã chạy ổn.
@@ -123,11 +128,40 @@ Dạng `type(scope): mô tả`, viết tiếng Việt, mỗi commit một việc
 
 **Backend**
 
-- Thư mục theo vai trò → màn hình → chức năng: `backend/src/<sv|dn|gv|admin>/<số>-<tên-màn>/`. Ví dụ chức năng mới của GV-03: `backend/src/gv/03-de-tai-huong-dan/de-tai.routes.js` và `de-tai.service.js`. Xem sơ đồ trong `backend/README.md`.
-- `*.routes.js` chỉ kiểm tra đầu vào; `*.service.js` chứa nghiệp vụ và truy vấn CSDL.
+Thư mục chia theo **vai trò → màn hình → chức năng** (sơ đồ đầy đủ ở [backend/README.md](backend/README.md)):
+
+| Thư mục trong `backend/src/` | Chứa gì |
+| --- | --- |
+| `sv/`, `dn/`, sau này `gv/`, `admin/` → `<số>-<tên-màn>/` | API của một màn hình; số trùng số trang trong `frontend/pages/` |
+| `auth/` | Đăng nhập, đăng xuất, quên mật khẩu |
+| `public/` | API cho khách, không cần đăng nhập |
+| `shared/` | Code dùng chung nhiều vai trò |
+
+- Nhiều màn dùng chung một API thì gộp một thư mục, ví dụ `sv/09-13-bai-toan-rd/`, `dn/09-16-dam-phan/`.
+- Chỉ tạo thư mục khi đã có code (Git không lưu thư mục rỗng). Hiện chưa có `gv/` và `admin/`.
+- Mỗi chức năng thường gồm `<chức-năng>.routes.js` (chỉ kiểm tra đầu vào) và `<chức-năng>.service.js` (nghiệp vụ, truy vấn CSDL).
+- Được import service của màn khác; không import file `*.routes.js` của màn khác.
 - Lỗi: ném `AppError(status, code, message)`; phản hồi lỗi luôn có dạng `{ code, message }`.
-- **Danh tính người dùng lấy ở máy chủ.** Không nhận `studentId` / `accountId` từ client.
+- **Danh tính người dùng lấy ở máy chủ** (`req.user.accountId`). Không nhận `studentId` / `accountId` từ client.
 - Secret key chỉ dùng trong backend.
+
+**Thêm chức năng mới**, ví dụ đề tài hướng dẫn của GV (GV-03):
+
+1. Tạo `backend/src/gv/03-de-tai-huong-dan/de-tai.service.js` và `de-tai.routes.js`.
+2. Trong hai file đó, import code chung bằng `../../shared/...` và `../../db.js`.
+3. Gắn route trong `server.js`, luôn kèm chặn vai trò: `chiSv`, `chiDn` hoặc `chiChoVaiTro('Lecturer')`.
+4. Ghi API mới vào `backend/README.md` và thêm thư mục vào sơ đồ ở đó.
+
+**Chạy test khi sửa backend:** mở máy chủ (`npm start`) ở một terminal, chạy lệnh test ở terminal khác trong `backend/`.
+Khởi động lại máy chủ trước mỗi lần chạy. `test:public` chỉ đọc; hai bộ còn lại ghi vào CSDL chung rồi tự dọn.
+
+| Lệnh | Kiểm tra |
+| --- | --- |
+| `npm run test:public` | API công khai |
+| `npm run test:sv-rd` | Bài toán R&D phía SV (cần `TEST_STUDENT_ID=9101`) |
+| `npm run test:auth` | Đăng nhập và phân quyền; **tạm đổi mật khẩu SV 9102**, báo nhóm trước khi chạy |
+
+Ba bộ này chưa phủ hết các API; phần còn lại phải thử bằng tay trên giao diện.
 
 **Frontend**
 
@@ -147,6 +181,8 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 
 **Dựng CSDL mới** (project Supabase còn trống): chạy `schema.postgres.sql` rồi `seed.sql` trong SQL Editor.
 `seed_student_skills.sql` thêm kỹ năng mẫu (tùy chọn).
+`schema.postgres.sql` **chưa gộp đủ** migration `004_dn` – `007`. Các file đó và seed đi kèm xem ở [CLAUDE.md](CLAUDE.md) mục 8
+(`TBD`: chưa ai chạy thử trọn quy trình trên một CSDL trống).
 
 > **Nhóm đang dùng chung một Supabase thì không chạy lại `schema.postgres.sql` trên đó.**
 
@@ -165,7 +201,7 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 | File                                                                | Quy tắc                          |
 | ------------------------------------------------------------------- | -------------------------------- |
 | `backend/src/server.js`                                             | Chỉ thêm phần gắn route của mình |
-| `backend/src/config.js`, `db.js`, thư mục `shared/`                 | Báo nhóm trước khi sửa           |
+| `backend/src/config.js`, `db.js`, thư mục `shared/` và `auth/`      | Báo nhóm trước khi sửa           |
 | `database/schema.postgres.sql`                                      | Chỉ sửa kèm migration            |
 | `frontend/assets/js/app-shell.js`, `ux-effects.js` và CSS tương ứng | Tách PR riêng                    |
 
@@ -176,6 +212,7 @@ Người phụ trách từng thư mục và từng mảng chức năng: `TBD`.
 | Tình huống                      | Cách xử lý                                                                                                           |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Push bị từ chối                 | `git pull` rồi push lại. **Không dùng `--force`**                                                                    |
+| Nhánh tạo trước khi chia lại backend (còn `backend/src/routes/`, `services/`) | `git merge origin/develop`, kiểm tra thay đổi của mình đã nằm trong file mới (bảng thư mục ở `backend/README.md`), chuyển file mới tạo sang đúng thư mục, sửa `import`, chạy test. Không chắc thì hỏi nhóm |
 | Conflict khi merge              | Sửa các đoạn `<<<<<<<` … `>>>>>>>`, chạy thử, `git add <file>`, `git commit`. Không chắc thì hỏi người viết đoạn kia |
 | Muốn hủy lần merge đang dở      | `git merge --abort`                                                                                                  |
 | Lỡ `git add` nhầm file          | `git restore --staged <file>`                                                                                        |
