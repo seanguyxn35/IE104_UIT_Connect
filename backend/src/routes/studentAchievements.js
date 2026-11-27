@@ -1,7 +1,9 @@
 // API thành tích / chứng chỉ SV tự khai (danh tính lấy ở máy chủ, không lấy từ client):
 //   GET    /api/student-achievements                          -> 200 { achievements: [...] }
 //   POST   /api/student-achievements                          -> 201 mục | 400 INVALID_INPUT | 409 ALREADY_EXISTS
-//          { category, title, issuedBy, issuedDate: "YYYY-MM-DD", detail?, visibility? }
+//          { category, title, issuedBy, issuedDate: "YYYY-MM-DD", detail?, visibility?, externalUrl?, hasEvidenceFile? }
+//          category 'Publication' (công bố bên ngoài hệ thống): cần externalUrl (https hoặc DOI), hoặc
+//          hasEvidenceFile = true nếu tải tệp ngay sau đó; thiếu cả hai -> 400 PROOF_REQUIRED
 //   PATCH  /api/student-achievements/:id { visibility }       -> 200 mục | 400 | 404 ACHIEVEMENT_NOT_FOUND
 //   DELETE /api/student-achievements/:id                      -> 204 | 404
 //   PUT    /api/student-achievements/:id/evidence  (thân = tệp PDF/JPG/PNG ≤ 5 MB)
@@ -58,6 +60,25 @@ function parseDate(value) {
   return value;
 }
 
+// Liên kết của công bố: nhận URL https hoặc mã DOI ("10.xxxx/..." được đổi thành https://doi.org/...)
+function parsePublicationLink(value) {
+  const text = parseText(value, 'Liên kết DOI/URL', 255, false);
+  if (!text) return null;
+  const doi = text.replace(/^doi:\s*/i, '');
+  let url;
+  try {
+    url = new URL(/^10\.\d{4,9}\/\S+$/.test(doi) ? `https://doi.org/${doi}` : text);
+  } catch {
+    throw invalid('Liên kết DOI/URL không hợp lệ.');
+  }
+  // Phải là https, có tên miền thật và không kèm tài khoản đăng nhập trong liên kết
+  if (url.protocol !== 'https:' || !url.hostname.includes('.') || url.username || url.password) {
+    throw invalid('Liên kết DOI/URL phải bắt đầu bằng https:// (hoặc là mã DOI dạng 10.xxxx/...).');
+  }
+  if (url.href.length > 255) throw invalid('Liên kết DOI/URL tối đa 255 ký tự.');
+  return url.href;
+}
+
 function parseVisibility(value) {
   if (!PROFILE_MODES.includes(value)) throw invalid(`Chế độ hiển thị phải là một trong: ${PROFILE_MODES.join(', ')}.`);
   return value;
@@ -80,7 +101,13 @@ studentAchievementsRouter.post('/', async (req, res) => {
     issuedDate: parseDate(body.issuedDate),
     detail: parseText(body.detail, 'Mô tả thêm', 500, false),
     visibility: body.visibility === undefined ? 'Public' : parseVisibility(body.visibility),
+    // Chỉ công bố bên ngoài hệ thống mới có liên kết; loại khác bỏ qua trường này
+    externalUrl: body.category === 'Publication' ? parsePublicationLink(body.externalUrl) : null,
   };
+  // hasEvidenceFile chỉ cho phép lưu trước rồi tải tệp; nếu tệp không tới, mục vẫn bị giữ ngoài CV (missingProof)
+  if (input.category === 'Publication' && !input.externalUrl && body.hasEvidenceFile !== true) {
+    throw new AppError(400, 'PROOF_REQUIRED', 'Công bố bên ngoài hệ thống cần liên kết DOI/URL https:// hoặc tệp minh chứng.');
+  }
   res.status(201).json(await createAchievement(config.testStudentId, input));
 });
 

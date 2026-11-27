@@ -1,4 +1,4 @@
-// SV-04: Công trình & Project trưng bày trên CV – chọn từ tài nguyên học thuật đã được GV thẩm định,
+// SV-04: Công trình & Project trưng bày trên CV – chọn từ tài nguyên học thuật đã công bố (GV thẩm định cho công khai),
 // ghi vai trò + kết quả nổi bật, ẩn/hiện trên CV, sắp xếp thứ tự, gỡ khỏi danh sách.
 // Dữ liệu qua /api/student-showcase. CV (assets/js/cv-preview.js) đọc cùng dữ liệu này.
 // Khi không có máy chủ: hiện danh sách mẫu, thay đổi chỉ nằm trong trang và được báo "chưa lưu".
@@ -102,7 +102,7 @@
   }
 
   function renderFilters() {
-    var shown = items.filter(function (i) { return i.isShownOnCv; }).length;
+    var shown = items.filter(onCvNow).length;
     var counts = { all: items.length, shown: shown, hidden: items.length - shown };
     var labels = { all: 'Tất cả', shown: 'Hiển thị trên CV', hidden: 'Đang ẩn' };
     filtersEl.querySelectorAll('[data-showcase-filter]').forEach(function (btn) {
@@ -114,18 +114,21 @@
         ? 'bg-white border border-[#E1E5EA] text-[#1F4E78] font-semibold shadow-xs'
         : 'text-[#5F6368] hover:text-[#1F4E78] font-medium');
     });
-    var onCv = items.filter(function (i) { return i.isShownOnCv && i.eligible; }).length;
+    var onCv = items.filter(onCvNow).length;
     counterEl.textContent = 'Đang hiển thị trên CV: ' + onCv + ' / ' + items.length;
   }
+
+  // Mục thực sự đang nằm trên CV: SV bật hiển thị VÀ còn đủ điều kiện
+  function onCvNow(item) { return Boolean(item.isShownOnCv && item.eligible); }
 
   function render() {
     renderFilters();
     var visible = items.filter(function (i) {
-      return filter === 'all' || (filter === 'shown') === i.isShownOnCv;
+      return filter === 'all' || (filter === 'shown') === onCvNow(i);
     });
     var content = visible.length ? visible.map(card) : [message(items.length
       ? 'Không có công trình nào trong bộ lọc này.'
-      : 'Chưa chọn công trình nào. Bấm "Thêm dự án" để chọn từ các công trình đã được thẩm định.')];
+      : 'Chưa chọn công trình nào. Bấm "Thêm dự án" để chọn từ các công trình đã được công bố.')];
     if (offline) content.unshift(h('p', 'text-xs text-amber-700', ['Chưa kết nối máy chủ: đang hiển thị dữ liệu mẫu, thay đổi sẽ không được lưu.']));
     listEl.replaceChildren.apply(listEl, content);
   }
@@ -157,7 +160,7 @@
     checkbox.setAttribute('aria-label', 'Hiển thị trên CV: ' + item.title);
     checkbox.addEventListener('change', function () { toggleShown(item, checkbox); });
     var toggle = h('label', 'relative inline-flex items-center gap-2 cursor-pointer select-none', [
-      h('span', 'text-xs font-semibold ' + (item.isShownOnCv ? 'text-[#1F4E78]' : 'text-[#5F6368]'), [item.isShownOnCv ? 'Hiển thị trên CV' : 'Ẩn khỏi CV']),
+      h('span', 'text-xs font-semibold ' + (item.isShownOnCv && item.eligible ? 'text-[#1F4E78]' : 'text-[#5F6368]'), [!item.isShownOnCv ? 'Ẩn khỏi CV' : item.eligible ? 'Hiển thị trên CV' : 'Hiện khi đủ điều kiện']),
       checkbox,
       h('span', "relative w-9 h-5 shrink-0 bg-[#E1E5EA] rounded-xl peer-focus-visible:ring-2 peer-focus-visible:ring-[#2E86AB] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-xl after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:bg-[#1F4E78]")
     ]);
@@ -165,7 +168,18 @@
     toggle.dataset.noRipple = ''; // cùng cách hoạt động với các công tắc ẩn/hiện khác trên trang
 
     var bullets = lines(item.highlights);
-    var el = h('article', 'rounded-lg bg-white p-4 sm:p-5 border shadow-xs flex items-start gap-3 ' + (item.isShownOnCv && item.eligible ? 'border-[#E1E5EA]' : 'border-dashed border-slate-300'), [
+    // Đã rời nhóm: không còn quyền ghi tác quyền lên hồ sơ, chỉ còn sắp xếp hoặc gỡ
+    var leftTeam = item.ineligibleReason === 'NOT_MEMBER';
+    // Chưa công khai: chủ hồ sơ vẫn thấy mục (làm mờ) để không tưởng nó đã biến mất
+    var notPublic = item.ineligibleReason === 'NOT_PUBLISHED';
+    var badge = leftTeam ? 'Đã rời nhóm' : notPublic ? 'Chưa công khai' : 'Không còn đủ điều kiện';
+    var reasonText = leftTeam
+      ? 'Bạn không còn trong nhóm sở hữu công trình này nên không được ghi sở hữu hay tác quyền trên hồ sơ và CV. Bạn chỉ có thể gỡ mục này.'
+      : notPublic
+        ? 'Công trình này chưa được công khai nên không hiện trên CV. Khi được công bố, mục này tự hiện lại.'
+        : 'Công trình này không có phiếu thẩm định đạt nên không được đưa lên CV.';
+
+    var el = h('article', 'rounded-lg bg-white p-4 sm:p-5 border shadow-xs flex items-start gap-3 ' + (item.isShownOnCv && item.eligible ? 'border-[#E1E5EA]' : 'border-dashed border-slate-300') + (notPublic ? ' opacity-70' : ''), [
       h('div', 'flex flex-col items-center gap-1 shrink-0', [
         up,
         h('span', 'w-5 h-5 rounded-sm bg-[#1F4E78] text-white text-xs font-bold flex items-center justify-center', [index + 1]),
@@ -176,19 +190,19 @@
           h('div', 'flex flex-wrap items-center gap-2', [
             h('span', 'px-2.5 py-0.5 rounded-xl text-xs font-semibold border ' + type.chip, [type.label]),
             item.eligible
-              ? h('span', 'px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200', ['✓ Đã thẩm định'])
-              : h('span', 'px-2.5 py-0.5 rounded-xl bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-200', ['Không còn đủ điều kiện']),
+              ? h('span', 'px-2.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200', ['✓ Đã thẩm định bởi GV'])
+              : h('span', 'px-2.5 py-0.5 rounded-xl bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-200', [badge]),
             item.trlLevel && h('span', 'px-1.5 py-0.5 rounded-sm bg-[#1F4E78] text-white font-mono text-xs font-medium', ['TRL ' + item.trlLevel])
           ]),
-          toggle
+          !leftTeam && toggle
         ]),
         h('h3', 'text-base font-semibold text-[#1F4E78] break-words', [item.title]),
         item.role && h('p', 'text-xs font-medium text-[#1A1A1A] mt-0.5 break-words', [item.role]),
         metaText(item) && h('p', 'text-xs text-[#5F6368] mt-0.5 break-words', [metaText(item)]),
-        !item.eligible && h('p', 'mt-1 text-xs text-amber-700', ['Công trình này hiện không đạt điều kiện thẩm định nên không được đưa lên CV.']),
+        !item.eligible && h('p', 'mt-1 text-xs text-amber-700', [reasonText]),
         bullets.length > 0 && h('ul', 'mt-2 list-disc pl-4 text-xs text-[#334155] space-y-0.5 break-words', bullets.map(function (b) { return h('li', null, [b]); })),
         h('div', 'mt-3 pt-2 border-t border-[#E1E5EA] flex flex-wrap items-center gap-1', [
-          smallButton('edit', 'Sửa vai trò và kết quả nổi bật', function (btn) { openModal(btn, item); }, null, 'Sửa mô tả'),
+          !leftTeam && smallButton('edit', 'Sửa vai trò và kết quả nổi bật', function (btn) { openModal(btn, item); }, null, 'Sửa mô tả'),
           smallButton('remove_circle', 'Gỡ khỏi danh sách trưng bày', function (btn) { remove(item, btn); }, 'ml-auto text-red-700', 'Gỡ')
         ])
       ])
@@ -212,7 +226,8 @@
     if (offline) { done(Object.assign({}, item, { isShownOnCv: next }), UNSAVED); return; }
     checkbox.disabled = true;
     request('/' + item.resourceId, 'PATCH', { isShownOnCv: next }).then(function (data) {
-      done(data, data.isShownOnCv ? 'Đã đưa công trình lên CV' : 'Đã ẩn công trình khỏi CV');
+      done(data, !data.isShownOnCv ? 'Đã ẩn công trình khỏi CV'
+        : data.eligible ? 'Đã đưa công trình lên CV' : 'Đã lưu. Công trình chỉ lên CV khi đủ điều kiện');
     }, function (err) {
       checkbox.checked = !next;
       checkbox.disabled = false;
@@ -302,7 +317,7 @@
     if (!resources.length) {
       var link = h('a', 'font-semibold text-[#1F4E78] hover:underline', ['Đề tài của tôi']);
       link.href = '05_de-tai-cua-toi.html';
-      pickerMessage(['Không còn công trình nào đã được thẩm định để chọn. Xem trạng thái thẩm định ở ', link, '.']);
+      pickerMessage(['Không còn công trình nào đã được công bố để chọn. Xem trạng thái thẩm định ở ', link, '.']);
       return;
     }
     picker.replaceChildren.apply(picker, resources.map(function (r, i) { return option(r, i === 0); }));
