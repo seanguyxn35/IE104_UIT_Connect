@@ -136,6 +136,11 @@ CREATE TABLE student_profile (
     linkedin_url          VARCHAR(255)  NULL,
     is_open_to_opportunity  BOOLEAN NOT NULL DEFAULT true,   -- (+) "Sẵn sàng nhận Lab / Đề tài DN"
     profile_visibility    VARCHAR(20) NOT NULL DEFAULT 'Public',
+    is_gpa_public            BOOLEAN NOT NULL DEFAULT true,   -- (+) ẩn/công khai riêng từng chỉ số trên SV-04
+    is_training_score_public BOOLEAN NOT NULL DEFAULT true,
+    is_achievements_public   BOOLEAN NOT NULL DEFAULT true,
+    is_education_public      BOOLEAN NOT NULL DEFAULT true,   -- (+) ẩn/công khai mục Học vấn, Kỹ năng trên SV-04
+    is_skills_public         BOOLEAN NOT NULL DEFAULT true,
     generated_cv_url      VARCHAR(255)  NULL,    -- [PDF] link CV hệ thống tạo tự động
     updated_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     CONSTRAINT ck_student_profile_gpa CHECK (gpa BETWEEN 0 AND 10),
@@ -227,12 +232,18 @@ CREATE TABLE student_achievement (
     issued_date           DATE NULL,
     detail               VARCHAR(500) NULL,    -- DOI, điểm từng kỹ năng IELTS...
     evidence_url          VARCHAR(255)  NULL,    -- tệp minh chứng (PDF/JPG/PNG)
-    verification_status   VARCHAR(20) NOT NULL DEFAULT 'Pending',
+    external_url          VARCHAR(255)  NULL     -- (+) migration 008: liên kết DOI/URL của công bố bên ngoài hệ thống
+                         CONSTRAINT ck_student_achievement_external_url CHECK (external_url LIKE 'https://%'),
+    visibility           VARCHAR(20) NOT NULL DEFAULT 'Public',   -- (+) migration 002: chế độ hiển thị từng mục
+    verification_status   VARCHAR(20) NOT NULL DEFAULT 'Self_Declared',  -- (+) migration 002: SV tự khai, xác minh tùy chọn
     verified_by_account_id  INT NULL CONSTRAINT fk_student_achievement_verifier REFERENCES account(account_id),
     created_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     CONSTRAINT ck_student_achievement_category CHECK (category IN ('Award','Publication','Language_Cert','Tech_Cert')),
-    CONSTRAINT ck_student_achievement_status   CHECK (verification_status IN ('Pending','Verified','Rejected'))
+    CONSTRAINT ck_student_achievement_visibility CHECK (visibility IN ('Public','Partners_Only','Private')),
+    CONSTRAINT ck_student_achievement_status   CHECK (verification_status IN ('Self_Declared','Pending','Verified','Rejected'))
 );
+CREATE UNIQUE INDEX ux_student_achievement_entry
+    ON student_achievement (student_id, lower(title), lower(coalesce(issued_by, '')), issued_date) NULLS NOT DISTINCT;
 
 -- [MỚI] Lĩnh vực & kỹ năng chuyên môn của GV (bộ lọc danh bạ GV, "Lĩnh vực Chuyên môn & Kỹ năng Cốt lõi")
 CREATE TABLE lecturer_field (

@@ -1,0 +1,193 @@
+/* SV-04: popup xem trước CV khổ A4 – đi kèm assets/js/cv-preview.js.
+   Bố cục 2 cột (cột trái màu đậm, cột phải các mục có nhãn bo tròn), màu theo design system (#1F4E78).
+   CSS thuần (không dùng Tailwind) để bản in / lưu PDF hiển thị đúng. */
+
+.cvp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: rgba(22, 58, 89, 0.55);
+  backdrop-filter: blur(2px);
+}
+.cvp-overlay[hidden] { display: none; }
+
+/* ---------- Thanh công cụ ---------- */
+.cvp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid #E1E5EA;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+.cvp-title { display: flex; align-items: center; gap: 8px; min-width: 0; margin-right: auto; }
+.cvp-title h2 { margin: 0; font-size: 15px; font-weight: 700; color: #1A1A1A; white-space: nowrap; }
+.cvp-note { font-size: 12px; color: #5F6368; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cvp-note.cvp-warn { color: #B45309; }
+.cvp-actions { display: flex; align-items: center; gap: 6px; }
+.cvp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 10px;
+  border: 1px solid #E1E5EA;
+  border-radius: 6px;
+  background: #fff;
+  color: #1A1A1A;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cvp-btn:hover { background: #E6F0F7; color: #1F4E78; }
+.cvp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cvp-btn.cvp-primary { background: #1F4E78; border-color: #1F4E78; color: #fff; }
+.cvp-btn.cvp-primary:hover { background: #163A59; }
+.cvp-btn .material-symbols-outlined { font-size: 18px; }
+.cvp-zoom-label { min-width: 44px; text-align: center; font-size: 12px; font-weight: 600; color: #5F6368; }
+
+/* ---------- Vùng xem ---------- */
+.cvp-stage { flex: 1; overflow: auto; padding: 24px 16px 40px; }
+.cvp-state {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 24px;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+  color: #1A1A1A;
+  font-size: 14px;
+}
+.cvp-state .material-symbols-outlined { font-size: 32px; color: #1F4E78; }
+.cvp-spin { animation: cvp-spin 1s linear infinite; }
+@keyframes cvp-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Tờ A4 ---------- */
+.cvp-sheet {
+  --cvp-primary: #1F4E78;
+  --cvp-dark: #163A59;
+  --cvp-accent: #2E86AB;
+  width: 794px;           /* 210 mm ở 96 dpi */
+  min-height: 1123px;     /* 297 mm */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background: #fff;
+  color: #1A1A1A;
+  font-size: 13px;
+  line-height: 1.55;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.cvp-sheet * { box-sizing: border-box; }
+.cvp-sheet p { margin: 0; }
+.cvp-sheet ul { margin: 4px 0 0; padding-left: 18px; list-style: disc; } /* Tailwind preflight bỏ dấu đầu dòng */
+.cvp-sheet a { color: inherit; text-decoration: none; word-break: break-all; }
+
+/* Cột trái */
+.cvp-side { background: var(--cvp-dark); color: #E6F0F7; display: flex; flex-direction: column; }
+.cvp-hero { background: var(--cvp-primary); padding: 32px 24px 24px; text-align: center; }
+.cvp-avatar {
+  width: 168px;
+  height: 168px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.35);
+  background: #CBD5E1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cvp-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cvp-avatar .material-symbols-outlined { font-size: 110px; color: #94A3B8; }
+.cvp-name { font-size: 24px; font-weight: 700; line-height: 1.25; color: #fff; }
+.cvp-headline { margin-top: 6px; font-size: 14px; color: #D6E6F2; }
+.cvp-side-body { padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 18px; }
+.cvp-contact { display: flex; flex-direction: column; gap: 9px; font-size: 12.5px; }
+.cvp-contact div { display: flex; align-items: flex-start; gap: 10px; }
+.cvp-contact .material-symbols-outlined { font-size: 17px; color: #9CC9E3; flex-shrink: 0; }
+
+/* Tiêu đề mục: nhãn bo tròn + đường kẻ */
+.cvp-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cvp-heading span {
+  flex-shrink: 0;
+  padding: 5px 16px;
+  border-radius: 9999px;
+  background: var(--cvp-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.cvp-heading::after { content: ''; flex: 1; height: 1.5px; background: var(--cvp-primary); }
+.cvp-side .cvp-heading span { background: var(--cvp-accent); }
+.cvp-side .cvp-heading::after { background: rgba(156, 201, 227, 0.6); }
+
+.cvp-edu + .cvp-edu { margin-top: 10px; }
+.cvp-edu strong { display: block; color: #fff; }
+.cvp-muted { color: #9CC9E3; font-size: 12px; }
+.cvp-skill-group + .cvp-skill-group { margin-top: 10px; }
+.cvp-skill-group > p { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #9CC9E3; margin-bottom: 4px; }
+.cvp-skill { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.cvp-dots { display: flex; gap: 3px; flex-shrink: 0; }
+.cvp-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); }
+.cvp-dots i.on { background: #9CC9E3; }
+
+/* Cột phải */
+.cvp-main { padding: 28px 28px 32px; display: flex; flex-direction: column; gap: 20px; }
+.cvp-item + .cvp-item { margin-top: 12px; }
+.cvp-item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 700; }
+.cvp-item-head time { flex-shrink: 0; font-weight: 700; color: var(--cvp-primary); }
+.cvp-item-sub { font-weight: 600; font-style: italic; color: #334155; }
+.cvp-item ul li { margin-top: 2px; }
+.cvp-row { display: grid; grid-template-columns: 64px 1fr; gap: 12px; }
+.cvp-row + .cvp-row { margin-top: 8px; }
+.cvp-row time { font-weight: 700; color: var(--cvp-primary); }
+.cvp-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 10.5px;
+  font-weight: 600;
+  vertical-align: 1px;
+}
+.cvp-tag-self { background: #F1F5F9; color: #475569; }
+.cvp-tag-ok { background: #D1FAE5; color: #065F46; }
+.cvp-muted-dark, .cvp-row small { color: #5F6368; font-size: 12px; }
+.cvp-sheet .cvp-ext-link a { color: #1F4E78; font-size: 12px; text-decoration: underline; }
+.cvp-metrics { display: flex; gap: 10px; }
+.cvp-metric { flex: 1; padding: 10px 12px; border: 1px solid #E1E5EA; border-radius: 8px; background: #F5F7FA; }
+.cvp-metric b { display: block; font-size: 18px; color: var(--cvp-primary); }
+.cvp-metric small { color: #5F6368; font-size: 11.5px; }
+.cvp-empty { padding: 16px; border: 1.5px dashed #CBD5E1; border-radius: 8px; color: #5F6368; font-size: 12.5px; text-align: center; }
+.cvp-footer { margin-top: auto; padding-top: 12px; text-align: right; font-size: 10.5px; color: #94A3B8; }
+
+/* ---------- Màn hình nhỏ ---------- */
+@media (max-width: 640px) {
+  .cvp-toolbar { padding: 8px 12px; }
+  .cvp-note, .cvp-btn-text { display: none; }
+  .cvp-stage { padding: 12px 8px 24px; }
+}
+
+/* ---------- In / Lưu PDF: chỉ in tờ CV ---------- */
+@media print {
+  @page { size: A4; margin: 0; }
+  body.cvp-printing > *:not(.cvp-overlay) { display: none !important; }
+  body.cvp-printing { background: #fff !important; overflow: visible !important; }
+  body.cvp-printing .cvp-overlay { position: static; display: block; background: none; backdrop-filter: none; }
+  body.cvp-printing .cvp-toolbar,
+  body.cvp-printing .cvp-empty { display: none !important; }
+  body.cvp-printing .cvp-stage { padding: 0; overflow: visible; }
+  body.cvp-printing .cvp-sheet { zoom: 1 !important; box-shadow: none; margin: 0; }
+  .cvp-item, .cvp-row { break-inside: avoid; }
+}

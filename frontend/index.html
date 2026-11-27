@@ -1,56 +1,359 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UIT Connect</title>
-<!-- Trang vào của frontend: chọn vai trò -> SV.html / GV.html / DN.html -> màn đăng nhập (pages/auth) -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UIT Connect | Cổng kết nối Sinh viên, Giảng viên và Doanh nghiệp</title>
+<meta name="description" content="UIT Connect kết nối năng lực nghiên cứu của Trường ĐH Công nghệ Thông tin với bài toán R&amp;D thực tế của doanh nghiệp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  "darkMode": "class",
+  "theme": {
+    "extend": {
+      "colors": {
+        "primary-fixed-dim": "#a0cafb",
+        "text-main": "#1A1A1A",
+        "on-surface-variant": "#42474e",
+        "surface-container-highest": "#dfe3e8",
+        "background": "#f7f9ff",
+        "tertiary-fixed-dim": "#68dba9",
+        "primary": "#00375e",
+        "on-tertiary-fixed": "#002114",
+        "surface-container-lowest": "#ffffff",
+        "surface-container": "#ebeef4",
+        "tertiary": "#003d29",
+        "error-container": "#ffdad6",
+        "secondary": "#006687",
+        "primary-fixed": "#d0e4ff",
+        "nav-active-bg": "#D3E3FD",
+        "surface-dim": "#d7dae0",
+        "surface-tint": "#35618c",
+        "text-secondary": "#5F6368",
+        "surface-bright": "#f7f9ff",
+        "outline": "#72777f",
+        "on-surface": "#181c20",
+        "primary-container": "#1f4e78",
+        "tertiary-fixed": "#85f8c4",
+        "on-error-container": "#93000a",
+        "brand-bg": "#F5F7FA",
+        "badge-red": "#DC2626",
+        "on-secondary-container": "#005d7c",
+        "error": "#ba1a1a",
+        "border-color": "#E1E5EA",
+        "secondary-container": "#87d6fe",
+        "on-tertiary-container": "#5cd19f",
+        "on-secondary": "#ffffff",
+        "surface-variant": "#dfe3e8",
+        "outline-variant": "#c2c7cf",
+        "on-secondary-fixed": "#001e2b",
+        "brand-blue-hover": "#163A59",
+        "on-primary-fixed-variant": "#194973",
+        "brand-light": "#E6F0F7",
+        "on-secondary-fixed-variant": "#004d67",
+        "on-primary-fixed": "#001d35",
+        "on-primary-container": "#95bff0",
+        "inverse-primary": "#a0cafb",
+        "tertiary-container": "#00573b",
+        "surface-container-low": "#f1f4fa",
+        "on-tertiary": "#ffffff",
+        "inverse-on-surface": "#eef1f7",
+        "secondary-fixed-dim": "#81d0f8",
+        "on-background": "#181c20",
+        "surface": "#f7f9ff",
+        "secondary-fixed": "#c1e8ff",
+        "on-primary": "#ffffff",
+        "on-error": "#ffffff",
+        "on-tertiary-fixed-variant": "#005137",
+        "nav-active-text": "#001D35",
+        "inverse-surface": "#2d3135",
+        "surface-container-high": "#e5e8ee",
+        "brand-blue": "#1F4E78",
+        "brand-cyan": "#2E86AB"
+      },
+      "fontFamily": {
+        "headline-lg": [
+          "Inter"
+        ],
+        "headline-md": [
+          "Inter"
+        ],
+        "title-sm": [
+          "Inter"
+        ],
+        "body-xs": [
+          "Inter"
+        ],
+        "label-code": [
+          "JetBrains Mono"
+        ],
+        "body-md": [
+          "Inter"
+        ],
+        "body-sm": [
+          "Inter"
+        ],
+        "label-caps": [
+          "Inter"
+        ],
+        "headline-xl": [
+          "Inter"
+        ],
+        "sans": [
+          "Inter",
+          "sans-serif"
+        ],
+        "mono": [
+          "JetBrains Mono",
+          "monospace"
+        ]
+      },
+      "fontSize": {
+        "body-md": [
+          "13px",
+          {
+            "lineHeight": "18px",
+            "fontWeight": "400"
+          }
+        ],
+        "body-sm": [
+          "12px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "400"
+          }
+        ],
+        "body-xs": [
+          "11px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "400"
+          }
+        ],
+        "label-caps": [
+          "11px",
+          {
+            "lineHeight": "14px",
+            "letterSpacing": "0.04em",
+            "fontWeight": "700"
+          }
+        ]
+      }
+    }
+  }
+};
+</script>
+<!-- Khung dùng chung (header, sidebar, footer) theo trang chủ -->
+
+<link rel="stylesheet" href="assets/css/ux-effects.css">
+<link rel="stylesheet" href="assets/css/dn-bai-toan.css">
 <style>
-  :root { --primary: #1F4E78; --primary-hover: #163A59; --primary-soft: #E6F0F7; --text: #1A1A1A; --muted: #5B6573; --border: #E2E8F0; --bg: #F7F9FF; }
-  * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); }
-  main { width: 100%; max-width: 760px; }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--primary); font-weight: 700; font-size: 20px; }
-  h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.25; }
-  p.lead { margin: 0 0 28px; color: var(--muted); font-size: 15px; }
-  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .role { display: flex; flex-direction: column; gap: 10px; padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: #fff; color: inherit; text-decoration: none; transition: border-color .2s, box-shadow .2s, transform .2s; }
-  .role:hover, .role:focus-visible { border-color: var(--primary); box-shadow: 0 6px 18px rgba(31, 78, 120, .12); transform: translateY(-2px); outline: none; }
-  .role .icon { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
-  .role strong { font-size: 16px; }
-  .role span.desc { color: var(--muted); font-size: 13px; line-height: 1.5; }
-  .role .go { margin-top: auto; color: var(--primary); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #c2c7cf; border-radius: 4px; }
+</style>
+<style>
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 80px; }
 </style>
 </head>
-<body>
-<main>
-  <div class="brand"><span class="material-symbols-outlined">hub</span>UIT Connect</div>
-  <h1>Chọn vai trò để xem prototype</h1>
-  <p class="lead">Mỗi vai trò bắt đầu từ màn đăng nhập, sau đó vào không gian làm việc riêng.</p>
-  <div class="roles">
-    <a class="role" href="SV.html">
-      <div class="icon"><span class="material-symbols-outlined">school</span></div>
-      <strong>Sinh viên</strong>
-      <span class="desc">Hồ sơ năng lực, đề tài, ghép nhóm, học bổng.</span>
-      <span class="go">Vào <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span>
-    </a>
-    <a class="role" href="GV.html">
-      <div class="icon"><span class="material-symbols-outlined">co_present</span></div>
-      <strong>Giảng viên</strong>
-      <span class="desc">Hướng dẫn đề tài, thẩm định, nhóm nghiên cứu.</span>
-      <span class="go">Vào <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span>
-    </a>
-    <a class="role" href="DN.html">
-      <div class="icon"><span class="material-symbols-outlined">apartment</span></div>
-      <strong>Doanh nghiệp</strong>
-      <span class="desc">Bài toán R&amp;D, săn nhân tài, đàm phán, tài trợ.</span>
-      <span class="go">Vào <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span>
-    </a>
-  </div>
+<body class="bg-[#F5F7FA] font-sans text-[#1A1A1A] antialiased" data-goc="">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:px-3 focus:py-2 focus:rounded" href="#noi-dung">Bỏ qua tới nội dung</a>
+<header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur border-b border-slate-200">
+<div class="max-w-[1200px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+<a class="flex items-center gap-2.5 shrink-0" href="index.html">
+<div class="w-9 h-9 rounded-lg bg-[#1F4E78] flex items-center justify-center text-white font-bold text-base tracking-tight">UIT</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-bold text-[17px] text-[#1F4E78] leading-none tracking-tight">UIT CONNECT</span>
+<span class="text-[11px] text-[#5F6368] font-medium leading-none mt-1">Cổng Kết Nối Tri Thức UIT</span>
+</div>
+</a>
+<nav class="hidden lg:flex items-center gap-6 text-body-md font-medium text-text-secondary" aria-label="Điều hướng trang">
+<a class="hover:text-primary-container" href="#bai-toan">Bài toán R&amp;D</a>
+<a class="hover:text-primary-container" href="#cach-hoat-dong">Cách hoạt động</a>
+<a class="hover:text-primary-container" href="#doi-tac">Đối tác</a>
+<a class="hover:text-primary-container" href="#tin-tuc">Tin tức</a>
+</nav>
+<!-- cong-khai.js: khách → Đăng nhập (2 cổng) + Đăng ký; đã đăng nhập → Vào trang của tôi -->
+<div class="flex items-center gap-2" id="ck-tai-khoan"></div>
+</div>
+</header>
+<div id="ck-thong-bao"></div>
+<main id="noi-dung">
+<!-- Giới thiệu + bài toán tiêu điểm -->
+<section class="bg-gradient-to-br from-[#163A59] via-[#1F4E78] to-[#2E86AB] text-white">
+<div class="max-w-[1200px] mx-auto px-4 sm:px-6 pt-12 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+<div class="lg:col-span-7 space-y-5">
+<p class="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.06em] text-white/80"><span class="material-symbols-outlined text-[16px]">hub</span>Trường ĐH Công nghệ Thông tin, ĐHQG-HCM</p>
+<h1 class="text-3xl md:text-[40px] font-bold leading-tight tracking-tight">Kết nối nghiên cứu UIT với bài toán thực tế của doanh nghiệp</h1>
+<p class="text-base md:text-lg text-white/85 leading-relaxed max-w-2xl">Doanh nghiệp đặt bài toán R&amp;D, sinh viên và giảng viên UIT nộp giải pháp, hai bên trao đổi và ký kết ngay trên một nền tảng.</p>
+<div class="flex flex-col sm:flex-row gap-3 pt-2">
+<a class="h-12 px-5 rounded-lg bg-white text-primary-container hover:bg-brand-light font-bold flex items-center justify-center gap-2" data-cta-khach href="pages/auth/02_dang-nhap-sso-microsoft365.html"><span class="material-symbols-outlined text-[20px]">school</span>Tôi là Sinh viên / Giảng viên</a>
+<a class="h-12 px-5 rounded-lg border border-white/70 text-white hover:bg-white/10 font-bold flex items-center justify-center gap-2" data-cta-khach href="pages/auth/01_dang-nhap-email.html?role=dn"><span class="material-symbols-outlined text-[20px]">corporate_fare</span>Tôi là Doanh nghiệp</a>
+<a class="hidden h-12 px-5 rounded-lg bg-white text-primary-container hover:bg-brand-light font-bold flex items-center justify-center gap-2" id="tq-cta-da-dang-nhap" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span>Vào trang của tôi</a>
+</div>
+</div>
+<aside class="lg:col-span-5" id="tq-tieu-diem" aria-labelledby="tq-tieu-diem-nhan">
+<div class="rounded-xl bg-white/10 border border-white/20 backdrop-blur p-6 space-y-3">
+<p class="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.06em] text-amber-300" id="tq-tieu-diem-nhan"><span class="material-symbols-outlined text-[16px]">bolt</span>Tiêu điểm</p>
+<div class="space-y-3" id="tq-tieu-diem-noi-dung"><p class="text-white/70 text-body-sm">Đang tải…</p></div>
+</div>
+</aside>
+</div>
+</section>
+<!-- Số liệu -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 -mt-12 relative" aria-label="Số liệu nền tảng">
+<dl class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+<div class="bg-surface-container-lowest rounded-lg border border-border-color shadow-sm p-5"><dt class="text-body-sm text-text-secondary">Bài toán đang nhận hồ sơ</dt><dd class="text-2xl font-bold text-primary-container mt-1" id="tq-so-dang-mo">–</dd></div>
+<div class="bg-surface-container-lowest rounded-lg border border-border-color shadow-sm p-5"><dt class="text-body-sm text-text-secondary">Doanh nghiệp, Lab đặt bài</dt><dd class="text-2xl font-bold text-primary-container mt-1" id="tq-so-doi-tac">–</dd></div>
+<div class="bg-surface-container-lowest rounded-lg border border-border-color shadow-sm p-5"><dt class="text-body-sm text-text-secondary">Kinh phí đang mở (VNĐ)</dt><dd class="text-2xl font-bold text-primary-container mt-1" id="tq-so-kinh-phi">–</dd></div>
+<div class="bg-surface-container-lowest rounded-lg border border-border-color shadow-sm p-5"><dt class="text-body-sm text-text-secondary">Dự án đang thực hiện</dt><dd class="text-2xl font-bold text-primary-container mt-1" id="tq-so-thuc-hien">–</dd></div>
+</dl>
+</section>
+<!-- Bài toán R&D công khai -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-14 space-y-5" id="bai-toan" aria-labelledby="tq-bai-toan-tieu-de">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-2">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-text-main" id="tq-bai-toan-tieu-de">Bài toán R&amp;D đang công khai</h2>
+<p class="text-body-md text-text-secondary mt-1">Đề bài đã được duyệt. Xem chi tiết tự do; đăng nhập để ứng tuyển và tải tài liệu.</p>
+</div>
+<p class="hidden text-body-xs text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1" id="tq-nguon">Dữ liệu minh họa (chưa kết nối máy chủ)</p>
+</div>
+<form class="bg-surface-container-lowest rounded-lg border border-border-color p-4 grid grid-cols-1 md:grid-cols-12 gap-3" id="tq-form-loc" role="search">
+<div class="md:col-span-5 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px] pointer-events-none">search</span>
+<input class="w-full h-11 rounded border border-border-color bg-surface-bright pl-10 pr-3 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" id="tq-tim" type="search" placeholder="Tên bài toán, doanh nghiệp, công nghệ..." aria-label="Từ khóa">
+</div>
+<select class="md:col-span-3 h-11 rounded border border-border-color bg-surface-bright px-3 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" id="tq-loc-linh-vuc" aria-label="Lĩnh vực"><option value="">Lĩnh vực: Tất cả</option></select>
+<select class="md:col-span-2 h-11 rounded border border-border-color bg-surface-bright px-3 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" id="tq-loc-loai" aria-label="Loại bài toán">
+<option value="">Loại: Tất cả</option><option value="ung-tuyen">Đang mở ứng tuyển</option><option value="hop-tac-lab">Hợp tác Lab</option><option value="tai-tro">Doanh nghiệp tài trợ</option>
+</select>
+<div class="md:col-span-2 flex gap-2">
+<button class="flex-1 h-11 rounded bg-primary-container hover:bg-brand-blue-hover text-white text-body-sm font-bold flex items-center justify-center gap-1" type="submit"><span class="material-symbols-outlined text-[18px]">filter_alt</span>Lọc</button>
+<button class="h-11 px-3 rounded border border-border-color hover:bg-surface-container text-text-secondary" type="button" id="tq-dat-lai" title="Bỏ lọc" aria-label="Bỏ lọc"><span class="material-symbols-outlined text-[18px]">filter_alt_off</span></button>
+</div>
+</form>
+<p class="text-body-sm text-text-secondary">Có <b class="text-text-main" id="tq-dem">0</b> bài toán phù hợp.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="tq-luoi" aria-live="polite"></div>
+<div class="hidden bg-surface-container-lowest rounded-lg border border-dashed border-border-color py-10 text-center" id="tq-rong">
+<span class="material-symbols-outlined text-[36px] text-text-secondary">search_off</span>
+<p class="mt-1 text-sm font-semibold text-text-main">Chưa có bài toán phù hợp</p>
+</div>
+<div class="text-center"><button class="hidden h-10 px-5 rounded-lg border border-primary-container text-primary-container hover:bg-brand-light text-body-sm font-semibold" id="tq-xem-them" type="button">Xem thêm bài toán</button></div>
+</section>
+<!-- Cách hoạt động -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-16" id="cach-hoat-dong" aria-labelledby="tq-cach-tieu-de">
+<h2 class="text-2xl font-bold tracking-tight text-text-main" id="tq-cach-tieu-de">Cách hoạt động</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+<div class="bg-surface-container-lowest rounded-lg border border-border-color p-6 space-y-4">
+<h3 class="text-lg font-bold text-text-main flex items-center gap-2"><span class="material-symbols-outlined text-primary-container">school</span>Sinh viên / Giảng viên UIT</h3>
+<ol class="space-y-4">
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">1</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">login</span>Đăng nhập UIT SSO</p><p class="text-body-sm text-text-secondary mt-0.5">Bằng email trường cấp: MSSV@gm.uit.edu.vn hoặc email @uit.edu.vn.</p></div></li>
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">2</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">manage_search</span>Chọn bài toán, nộp proposal</p><p class="text-body-sm text-text-secondary mt-0.5">Cá nhân, theo nhóm hoặc nhóm có giảng viên hướng dẫn.</p></div></li>
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">3</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">handshake</span>Trao đổi và ký kết</p><p class="text-body-sm text-text-secondary mt-0.5">Doanh nghiệp hẹn trao đổi, hai bên xác nhận từng bước đàm phán.</p></div></li>
+</ol>
+<a class="inline-flex h-10 px-4 rounded-lg bg-primary-container hover:bg-brand-blue-hover text-white text-body-sm font-semibold items-center gap-1.5" data-cta-khach href="pages/auth/02_dang-nhap-sso-microsoft365.html">Đăng nhập UIT SSO<span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+</div>
+<div class="bg-surface-container-lowest rounded-lg border border-border-color p-6 space-y-4">
+<h3 class="text-lg font-bold text-text-main flex items-center gap-2"><span class="material-symbols-outlined text-primary-container">corporate_fare</span>Doanh nghiệp</h3>
+<ol class="space-y-4">
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">1</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">how_to_reg</span>Đăng ký tài khoản doanh nghiệp</p><p class="text-body-sm text-text-secondary mt-0.5">Khai thông tin công ty và giấy tờ để Ban quản trị xác minh.</p></div></li>
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">2</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">post_add</span>Đăng bài toán R&D</p><p class="text-body-sm text-text-secondary mt-0.5">Mô tả đề bài, kinh phí, đối tượng nhận; bài được duyệt rồi mới công khai.</p></div></li>
+<li class="flex gap-3"><span class="size-9 rounded-full bg-brand-light text-primary-container font-bold flex items-center justify-center shrink-0">3</span>
+<div><p class="font-semibold text-text-main flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px] text-primary-container">inbox</span>Nhận proposal và chọn đối tác</p><p class="text-body-sm text-text-secondary mt-0.5">Xem hồ sơ nhóm, hẹn trao đổi, mở phòng đàm phán ngay trên nền tảng.</p></div></li>
+</ol>
+<a class="inline-flex h-10 px-4 rounded-lg border border-primary-container text-primary-container hover:bg-brand-light text-body-sm font-semibold items-center gap-1.5" data-cta-khach href="pages/auth/09_dang-ky-dn-b1-tai-khoan.html?role=dn">Đăng ký doanh nghiệp<span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+</div>
+</div>
+</section>
+<!-- Đối tác -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-16" id="doi-tac" aria-labelledby="tq-doi-tac-tieu-de">
+<h2 class="text-2xl font-bold tracking-tight text-text-main" id="tq-doi-tac-tieu-de">Doanh nghiệp và Lab đang đặt bài</h2>
+<p class="text-body-md text-text-secondary mt-1">Đơn vị có bài toán R&amp;D đã được duyệt công khai trên UIT Connect.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-5" id="tq-doi-tac"></div>
+</section>
+<!-- Tin tức -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-16" id="tin-tuc" aria-labelledby="tq-tin-tieu-de">
+<h2 class="text-2xl font-bold tracking-tight text-text-main" id="tq-tin-tieu-de">Tin tức</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+<article class="bg-surface-container-lowest rounded-lg border border-border-color p-5 space-y-2">
+<p class="text-[11px] font-bold tracking-[0.04em] uppercase text-secondary">Vi mạch &amp; Bán dẫn</p>
+<h3 class="text-base font-bold text-text-main leading-snug">Khai trương phòng thử nghiệm chiplet và bộ vi xử lý RISC-V thế hệ mới</h3>
+<p class="text-body-sm text-text-secondary line-clamp-3">Cơ sở kiểm thử vi mạch phục vụ đo đạc băng thông bộ nhớ HBM và xác thực thiết kế vi điều khiển mã nguồn mở.</p>
+<p class="text-body-xs text-text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span>16/03/2026</p>
+</article>
+<article class="bg-surface-container-lowest rounded-lg border border-border-color p-5 space-y-2">
+<p class="text-[11px] font-bold tracking-[0.04em] uppercase text-secondary">An ninh mạng</p>
+<h3 class="text-base font-bold text-text-main leading-snug">Diễn tập phòng thủ mạng đô thị thông minh: tìm 15 thực tập sinh an ninh mạng</h3>
+<p class="text-body-sm text-text-secondary line-clamp-3">Mô phỏng xử lý tấn công APT diện rộng, bảo vệ hạ tầng dữ liệu y tế và mạng lưới IoT giao thông.</p>
+<p class="text-body-xs text-text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span>15/03/2026</p>
+</article>
+<article class="bg-surface-container-lowest rounded-lg border border-border-color p-5 space-y-2">
+<p class="text-[11px] font-bold tracking-[0.04em] uppercase text-secondary">AI Y tế &amp; Dữ liệu</p>
+<h3 class="text-base font-bold text-text-main leading-snug">Hợp tác chẩn đoán hình ảnh y khoa ứng dụng học sâu cùng bệnh viện ĐHQG</h3>
+<p class="text-body-sm text-text-secondary line-clamp-3">Mô hình phát hiện tổn thương phổi và khối u từ ảnh CT, hỗ trợ bác sĩ giảm thời gian hội chẩn.</p>
+<p class="text-body-xs text-text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span>14/03/2026</p>
+</article>
+</div>
+</section>
+<!-- Lời mời tham gia -->
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-16" aria-labelledby="tq-moi-tieu-de">
+<div class="rounded-xl bg-brand-light border border-primary-fixed p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+<div>
+<h2 class="text-xl font-bold text-text-main" id="tq-moi-tieu-de">Sẵn sàng tham gia UIT Connect?</h2>
+<p class="text-body-md text-text-secondary mt-1">Sinh viên, giảng viên dùng email trường. Doanh nghiệp đăng ký tài khoản để đăng bài toán.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-2 shrink-0">
+<a class="h-11 px-5 rounded-lg bg-primary-container hover:bg-brand-blue-hover text-white font-semibold flex items-center justify-center" data-cta-khach href="pages/auth/02_dang-nhap-sso-microsoft365.html">Đăng nhập UIT SSO</a>
+<a class="h-11 px-5 rounded-lg border border-primary-container text-primary-container hover:bg-white font-semibold flex items-center justify-center" data-cta-khach href="pages/auth/09_dang-ky-dn-b1-tai-khoan.html?role=dn">Đăng ký doanh nghiệp</a>
+</div>
+</div>
+</section>
 </main>
+<footer class="w-full bg-[#163A59] text-white py-12 px-4 sm:px-6 mt-16">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+<div>
+<div class="flex items-center gap-2 font-bold text-xl"><div class="w-8 h-8 rounded-lg bg-white text-[#163A59] flex items-center justify-center font-extrabold text-sm">UIT</div><span>UIT Connect</span></div>
+<p class="text-sm text-slate-300 mt-3 leading-relaxed">Nền tảng kết nối năng lực nghiên cứu, chuyển giao công nghệ và hợp tác doanh nghiệp của Trường Đại học Công nghệ Thông tin, ĐHQG-HCM.</p>
+</div>
+<div>
+<h2 class="font-semibold mb-3 text-base">Tham gia</h2>
+<ul class="space-y-2 text-sm text-slate-300">
+<li><a class="hover:text-white" href="pages/auth/02_dang-nhap-sso-microsoft365.html">Đăng nhập Sinh viên / Giảng viên</a></li>
+<li><a class="hover:text-white" href="pages/auth/01_dang-nhap-email.html?role=dn">Đăng nhập Doanh nghiệp</a></li>
+<li><a class="hover:text-white" href="pages/auth/09_dang-ky-dn-b1-tai-khoan.html?role=dn">Đăng ký tài khoản doanh nghiệp</a></li>
+</ul>
+</div>
+<div>
+<h2 class="font-semibold mb-3 text-base">Liên hệ</h2>
+<ul class="space-y-2 text-sm text-slate-300">
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-[18px] text-slate-400">location_on</span>Khu phố 6, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-slate-400">mail</span><a class="hover:text-white" href="mailto:support@uit.edu.vn">support@uit.edu.vn</a></li>
+</ul>
+</div>
+</div>
+<p class="max-w-[1200px] mx-auto border-t border-slate-700/60 mt-10 pt-6 text-xs text-slate-400">© 2026 Trường Đại học Công nghệ Thông tin, ĐHQG-HCM</p>
+</footer>
+<script src="assets/js/dn-bai-toan-data.js"></script>
+<script src="assets/js/sv-bai-toan-rd-data.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/cong-khai.js"></script>
+<script src="assets/js/ux-effects.js"></script>
+<script src="assets/js/tong-quan.js"></script>
 </body>
 </html>

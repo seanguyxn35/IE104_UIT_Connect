@@ -1,12 +1,24 @@
 # UIT Connect
 
-Nền tảng kết nối Sinh viên – Giảng viên – Doanh nghiệp của UIT (đồ án IE104).
-Hiện có prototype giao diện cho 3 vai trò; backend và CSDL đang ở giai đoạn thiết kế.
+Nền tảng kết nối Sinh viên – Giảng viên – Doanh nghiệp của UIT, phạm vi một Khoa (đồ án IE104).
+
+Hiện trạng:
+
+- Frontend: prototype giao diện đủ 3 vai trò (SV, GV, DN). Chưa có màn hình Admin.
+- Backend: Node.js + Express + Supabase (PostgreSQL). Trang đã gọi API: SV-04, SV-05, SV-07, SV-09, SV-13
+  và DN-01, DN-08, DN-09, DN-16; trang tổng quan công khai `index.html`. Các trang GV còn dữ liệu tĩnh.
+- Đã có đăng nhập theo vai trò (phiên phía máy chủ). Với `AUTH_MODE=test` (mặc định), gọi API không kèm phiên
+  thì máy chủ dùng tài khoản thử `TEST_STUDENT_ID` / `TEST_BUSINESS_ID` trong `backend/.env`.
+
+Hướng dẫn cho thành viên nhóm:
+
+- Mới dùng Git: [HUONGDANGIT.md](HUONGDANGIT.md) (các bước trên VS Code, từ clone đến Pull Request).
+- Quy ước đầy đủ (nhánh, Pull Request, code, CSDL): [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Cấu trúc thư mục
 
 ```
-├── frontend/                  # Giao diện web (HTML + Tailwind CDN + JS thuần)
+├── frontend/                  # Giao diện web (HTML + Tailwind CDN + JS thuần, không build)
 │   ├── index.html             # Trang vào: chọn vai trò
 │   ├── SV.html, GV.html, DN.html   # Lối vào theo vai trò -> màn đăng nhập
 │   ├── pages/
@@ -15,27 +27,37 @@ Hiện có prototype giao diện cho 3 vai trò; backend và CSDL đang ở giai
 │   │   ├── gv/                # Không gian Giảng viên (15 màn)
 │   │   └── dn/                # Không gian Doanh nghiệp (13 màn)
 │   └── assets/
-│       ├── css/               # app-shell.css (header, sidebar, footer), ux-effects.css
-│       ├── js/                # app-shell.js, ux-effects.js, router.js (điều hướng màn auth theo vai trò)
+│       ├── css/               # app-shell.css, ux-effects.css, cv-preview.css
+│       ├── js/                # app-shell.js, ux-effects.js, router.js (màn auth) và các file gọi API theo chức năng
 │       └── img/               # Ảnh dùng trong các màn
-├── backend/                   # API server (chưa có mã nguồn)
-├── database/                  # Lược đồ CSDL SQL Server
+├── backend/                   # API server (Express 5 + Supabase), đồng thời phục vụ frontend/ – xem backend/README.md
+├── database/                  # Lược đồ PostgreSQL (Supabase), migration, dữ liệu thử – xem database/README.md
 ├── docs/
 │   ├── DESIGN.md              # Design system "Academic Nexus" (màu, chữ, bo góc, thành phần)
-│   └── datab.pdf              # Requirement Draft
+│   └── datab.pdf              # Requirement Draft (yêu cầu dữ liệu)
 ├── design/
 │   ├── stitch/                # Export gốc từ Google Stitch (code.html + screen.png từng màn)
 │   └── screenshots/           # Ảnh chụp các màn (auth, sv, gv)
 ├── archive/                   # Bản cũ, chỉ để tham khảo – không sửa
-│   ├── pages/                 # Prototype trước milestone 1 (main screen, main screen 2, FN-proto cũ)
-│   └── academic_corporate_nexus/   # DESIGN.md bản đầu
 └── .github/workflows/         # Tự động deploy frontend/ lên GitHub Pages
 ```
 
 ## Chạy trên máy
 
-Không cần cài đặt hay build. Mở `frontend/index.html` bằng trình duyệt, hoặc dùng extension
-**Live Server** của VS Code (chuột phải `frontend/index.html` → *Open with Live Server*).
+Cần Node.js 20.6 trở lên.
+
+```powershell
+cd backend
+copy .env.example .env   # lần đầu: điền SUPABASE_URL, SUPABASE_SECRET_KEY, giữ TEST_STUDENT_ID=9101
+npm install
+npm start                # http://localhost:3000   (npm run dev: tự chạy lại khi sửa code)
+```
+
+- Giá trị `.env` xin qua kênh riêng của nhóm, **không commit**.
+- Trang có gọi API phải mở qua máy chủ, ví dụ `http://localhost:3000/pages/sv/04_ho-so-nang-luc-cv.html`.
+  Mở bằng `file://` hay Live Server thì trang vẫn hiển thị nhưng không lưu được dữ liệu.
+- Xuất CV ra PDF cần Microsoft Edge hoặc Google Chrome cài trên máy chạy máy chủ (xem `backend/README.md`).
+- CSDL và dữ liệu thử: xem [database/README.md](database/README.md).
 
 Lối vào trực tiếp:
 
@@ -46,12 +68,13 @@ Lối vào trực tiếp:
 | Doanh nghiệp | `frontend/DN.html` | `pages/dn/01_ban-lam-viec.html` |
 
 Vai trò được truyền qua tham số `?role=gv` / `?role=dn` trên các màn trong `pages/auth/`
-(không có tham số = sinh viên).
+(không có tham số = sinh viên). Đăng nhập (auth/01, auth/02) và quên mật khẩu đã gọi API; màn đăng ký vẫn là giả lập.
 
 ## Deploy (GitHub Pages)
 
 Mỗi lần push lên `main` có thay đổi trong `frontend/`, workflow `.github/workflows/deploy-pages.yml`
-sẽ đưa thư mục `frontend/` lên GitHub Pages.
+sẽ đưa thư mục `frontend/` lên GitHub Pages. Backend không chạy trên GitHub Pages, nên bản deploy
+chỉ xem được giao diện.
 Bật một lần: **Settings → Pages → Source: GitHub Actions**.
 
 ## Quy ước
@@ -64,3 +87,4 @@ Bật một lần: **Settings → Pages → Source: GitHub Actions**.
 - Phần nội dung của mỗi trang nằm giữa `<!-- ===== NỘI DUNG TRANG ... ===== -->` và
   `<!-- ===== HẾT NỘI DUNG TRANG ===== -->`; header, sidebar, footer dùng chung giữa các trang
   cùng vai trò, sửa ở một trang thì sửa đồng loạt.
+- Code gọi API đặt trong `frontend/assets/js/<chức-năng>.js`, không viết thẳng trong HTML.
