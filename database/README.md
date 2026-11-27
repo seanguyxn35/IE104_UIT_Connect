@@ -4,8 +4,8 @@ Lược đồ CSDL của UIT Connect.
 
 ```
 database/
-├── schema.sql            # Bản gốc cho Microsoft SQL Server 2017+ (tên PascalCase: LabApplication.TopicID)
-├── schema.postgres.sql   # Bản PostgreSQL đang chạy trên Supabase (tên snake_case: lab_application.topic_id)
+├── schema.postgres.sql   # BẢN CHÍNH THỨC: PostgreSQL đang chạy trên Supabase (tên snake_case: lab_application.topic_id)
+├── schema.sql            # Bản SQL Server cũ (PascalCase), chỉ tham khảo, KHÔNG cập nhật – đã lệch bản PostgreSQL
 ├── seed.sql              # Dữ liệu thử cho chức năng "SV ứng tuyển đề tài Lab" (TC01–TC03)
 ├── reset.sql             # Đặt lại dữ liệu thử trước mỗi ca kiểm thử
 ├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
@@ -14,6 +14,9 @@ database/
 ├── seed_auth.sql            # Đăng nhập: Admin 9001, mật khẩu thử MatKhau@123, email SV dạng MSSV; chạy SAU seed_sv_rd.sql
 ├── seed_sv_rd.sql           # Bài toán R&D phía SV (SV-09/13): 15 bài của DN/Lab khác, chi tiết đề bài V-Tech, nhóm thử 9821–9823; chạy SAU seed_dn.sql
 ├── migrations/           # Thay đổi lược đồ sau bản đầu (chạy trên Supabase rồi gộp vào schema.postgres.sql)
+│   ├── 001_student_profile_visibility.sql      # ẩn/công khai GPA, DRL, đề tài; chế độ hiển thị hồ sơ
+│   ├── 002_student_achievement_self_declared.sql  # thành tích tự khai: Self_Declared, visibility từng mục
+│   ├── 003_student_section_visibility.sql      # ẩn/công khai mục Học vấn, Kỹ năng
 │   ├── 004_dn_hop_thu_ket_noi.sql      # Hộp thư kết nối DN: proposal SV cá nhân, lịch hẹn, tệp đính kèm
 │   ├── 005_dn_khong_gian_dam_phan.sql  # Phòng đàm phán: 3 bước xác nhận hai bên, trao đổi theo lượt
 │   ├── 006_sv_bai_toan_rd.sql          # Bài toán R&D phía SV: chi tiết đề bài, mốc, chặn nộp trùng, lưu bài
@@ -44,7 +47,9 @@ rồi nạp lại 2 đơn có sẵn; không đụng dữ liệu khác. Câu `SEL
 - Project: `uit-connect` (region Singapore, ref `rhqoitsmiuijefglhdoy`), tổ chức IE104.
 - Đã chạy `schema.postgres.sql`: 65 bảng, 3 view, dữ liệu danh mục (khoa, chuyên ngành, lĩnh vực, Lab, tiêu chí thẩm định).
 - **RLS bật cho mọi bảng, chưa có policy** → frontend (khóa `anon`) không đọc/ghi được.
-  Backend truy cập bằng `service_role key` đặt trong `backend/.env` (không commit).
+  Backend truy cập bằng secret key (`SUPABASE_SECRET_KEY`) đặt trong `backend/.env` (không commit).
+- Storage: bucket công khai `avatars` (ảnh đại diện) và bucket riêng tư `evidence` (minh chứng thành tích,
+  chỉ đọc qua liên kết ký tạm). Backend tự tạo bucket ở lần dùng đầu tiên.
 - Sửa lược đồ: viết thay đổi thành file SQL mới và chạy trong SQL Editor (hoặc Supabase CLI),
   đồng thời cập nhật `schema.postgres.sql` để file này luôn khớp với CSDL.
 

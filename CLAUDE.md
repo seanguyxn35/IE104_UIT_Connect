@@ -3,6 +3,7 @@
 Đọc file này trước mọi việc. Viết code, chú thích, tài liệu, giao diện bằng **tiếng Việt**.
 Chỗ ghi `TBD` là chưa chốt: hỏi nhóm, không tự quyết.
 Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dùng chung: [CONTRIBUTING.md](CONTRIBUTING.md).
+Bản hướng dẫn từng bước trên VS Code cho thành viên mới dùng Git: [HUONGDANGIT.md](HUONGDANGIT.md). Sửa quy trình thì sửa cả hai file.
 
 ## 1. Tổng quan
 
@@ -68,6 +69,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 ├── archive/    prototype cũ (không sửa)
 ├── .github/workflows/deploy-pages.yml
 ├── CONTRIBUTING.md
+├── HUONGDANGIT.md   hướng dẫn Git từng bước trên VS Code
 └── README.md
 ```
 
@@ -78,6 +80,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
 - Mọi lệnh gọi CSDL có timeout 10 s; riêng đẩy tệp lên kho lưu trữ 180 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
+- Storage: bucket công khai `avatars` (ảnh đại diện), bucket riêng tư `evidence` (minh chứng, đọc qua liên kết ký tạm 60 s). Backend tự tạo bucket lần đầu.
 - **Đăng nhập theo vai trò** (nhánh `feature/nhan-dang-nhap` giao diện, `feature/nhan-backend-dang-nhap` backend):
   - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
   - `services/authService.js`, `routes/auth.js` (`/api/auth/*`), `authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
@@ -182,6 +185,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - `seed.sql` (lần đầu)
   - `reset.sql` (trước mỗi ca test)
   - `seed_student_skills.sql` (kỹ năng mẫu SV 9101)
+  - `seed_showcase.sql` (tài nguyên 9301–9306 cho công trình trưng bày; mặc định gắn SV **9111**, sửa `v_student` thành `TEST_STUDENT_ID` của mình)
   - `test_supabase.sql` (bảng PASS/FAIL tầng CSDL)
   - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` → `005_dn_khong_gian_dam_phan.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
   - Bài toán R&D phía SV: `migrations/006_sv_bai_toan_rd.sql` (một lần) → `seed_sv_rd.sql` (sau `seed_dn.sql`; chạy lại `seed_dn.sql` thì chạy lại file này) → `npm run seed:dn-files`.
@@ -198,7 +202,6 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 
 - Trạng thái nhánh (27/11/2026): backend được ghép trên `develop`; `main` chưa có backend.
 - Nhánh `thuc-hanh/ung-tuyen-de-tai` (commit `bea23cb`) là bản nộp bài cá nhân: không sửa, không gộp.
-- `README.md` gốc đã cũ: vẫn ghi "backend chưa có mã nguồn", "CSDL SQL Server", chạy bằng Live Server. Cần cập nhật.
 - `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
 - CSDL chung đã có các cột / bảng chính của migration 001, 003 – 008.
 - Đã có đăng nhập + phân quyền theo vai trò ở backend (mục 5); chưa có policy RLS, chưa có API đăng ký tài khoản, chưa có dịch vụ gửi email.
