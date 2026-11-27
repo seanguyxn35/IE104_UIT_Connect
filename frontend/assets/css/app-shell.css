@@ -89,3 +89,30 @@
   }
   #sidebar.is-open { transform: translateX(0); }
 }
+
+/* ---------- Footer ---------- */
+/* Chia cột theo bề rộng của chính footer, không theo cửa sổ: sidebar làm footer hẹp hơn cửa sổ nhiều. */
+.site-footer { container: site-footer / inline-size; }
+.site-footer-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+.site-footer-grid > * { min-width: 0; }
+/* Hàng logo: không bóp ô logo, không bẻ chữ "UIT Connect" */
+.site-footer-grid > :first-child > :first-child { white-space: nowrap; }
+.site-footer-grid > :first-child > :first-child > *,
+.site-footer .material-symbols-outlined { flex-shrink: 0; }
+.site-footer a[href^="mailto:"] { min-width: 0; overflow-wrap: anywhere; }
+.site-footer a[href^="tel:"] { white-space: nowrap; }
+
+/* Hàng bản quyền: mặc định xếp dọc, căn giữa */
+.site-footer-bottom { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+.site-footer-bottom > :last-child { justify-content: center; row-gap: 0.5rem; }
+
+@container site-footer (max-width: 29.99rem) {
+  .site-footer-bottom > :last-child > span { display: none; } /* bỏ dấu "·" để không bị lẻ khi xuống dòng */
+}
+@container site-footer (min-width: 30rem) {
+  .site-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container site-footer (min-width: 56rem) {
+  .site-footer-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .site-footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
+}
