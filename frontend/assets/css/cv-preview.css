@@ -164,6 +164,7 @@
 .cvp-tag-self { background: #F1F5F9; color: #475569; }
 .cvp-tag-ok { background: #D1FAE5; color: #065F46; }
 .cvp-muted-dark, .cvp-row small { color: #5F6368; font-size: 12px; }
+.cvp-sheet .cvp-ext-link a { color: #1F4E78; font-size: 12px; text-decoration: underline; }
 .cvp-metrics { display: flex; gap: 10px; }
 .cvp-metric { flex: 1; padding: 10px 12px; border: 1px solid #E1E5EA; border-radius: 8px; background: #F5F7FA; }
 .cvp-metric b { display: block; font-size: 18px; color: var(--cvp-primary); }

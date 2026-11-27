@@ -7,12 +7,13 @@
 
    | resource_id | Tình huống                                              | Chọn được? |
    |-------------|---------------------------------------------------------|------------|
-   | 9301        | SV tạo, Approved, có phiếu thẩm định đạt                | Có         |
+   | 9301        | SV tạo, Approved, có phiếu thẩm định đạt                | Không      |
    | 9302        | SV tạo, Published, có phiếu thẩm định đạt               | Có         |
    | 9303        | SV tạo, đang chờ thẩm định (Pending_Review)             | Không      |
    | 9304        | SV tạo, Approved nhưng KHÔNG có phiếu thẩm định         | Không      |
    | 9305        | Của SV khác (9102), đã thẩm định đạt                    | Không      |
-   | 9306        | Của nhóm 9301 (SV là thành viên), đã thẩm định đạt      | Có         |
+   | 9306        | Của nhóm 9301 (SV là thành viên), đã thẩm định đạt      | Không      |
+   Chỉ công trình Published mới chọn được (Approved = đạt nhưng không cho công bố). 9301, 9306 dùng để thử trạng thái này.
 
    Xóa dữ liệu thử: xem khối "DỌN DỮ LIỆU" ở cuối file.
    ===================================================================== */
@@ -33,8 +34,8 @@ BEGIN
     ON CONFLICT (team_id) DO NOTHING;
 
     INSERT INTO team_member (team_id, student_id, role_in_team)
-    VALUES (9301, v_student, 'Member')
-    ON CONFLICT (team_id, student_id) DO NOTHING;
+    VALUES (9301, v_student, 'Leader')  -- SV thử là trưởng nhóm để thử được quyền gửi thẩm định / xóa nháp
+    ON CONFLICT (team_id, student_id) DO UPDATE SET role_in_team = EXCLUDED.role_in_team;
 
     INSERT INTO academic_resource
         (resource_id, created_by_account_id, owner_team_id, type, title, venue, trl_level, status, lecturer_id, published_at)

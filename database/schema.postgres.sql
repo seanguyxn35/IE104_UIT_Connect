@@ -232,6 +232,8 @@ CREATE TABLE student_achievement (
     issued_date           DATE NULL,
     detail               VARCHAR(500) NULL,    -- DOI, điểm từng kỹ năng IELTS...
     evidence_url          VARCHAR(255)  NULL,    -- tệp minh chứng (PDF/JPG/PNG)
+    external_url          VARCHAR(255)  NULL     -- (+) migration 008: liên kết DOI/URL của công bố bên ngoài hệ thống
+                         CONSTRAINT ck_student_achievement_external_url CHECK (external_url LIKE 'https://%'),
     visibility           VARCHAR(20) NOT NULL DEFAULT 'Public',   -- (+) migration 002: chế độ hiển thị từng mục
     verification_status   VARCHAR(20) NOT NULL DEFAULT 'Self_Declared',  -- (+) migration 002: SV tự khai, xác minh tùy chọn
     verified_by_account_id  INT NULL CONSTRAINT fk_student_achievement_verifier REFERENCES account(account_id),

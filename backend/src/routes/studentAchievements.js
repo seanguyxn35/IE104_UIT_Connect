@@ -1,7 +1,9 @@
 // API thành tích / chứng chỉ SV tự khai (danh tính lấy ở máy chủ, không lấy từ client):
 //   GET    /api/student-achievements                          -> 200 { achievements: [...] }
 //   POST   /api/student-achievements                          -> 201 mục | 400 INVALID_INPUT | 409 ALREADY_EXISTS
-//          { category, title, issuedBy, issuedDate: "YYYY-MM-DD", detail?, visibility? }
+//          { category, title, issuedBy, issuedDate: "YYYY-MM-DD", detail?, visibility?, externalUrl?, hasEvidenceFile? }
+//          category 'Publication' (công bố bên ngoài hệ thống): cần externalUrl (https hoặc DOI), hoặc
+//          hasEvidenceFile = true nếu tải tệp ngay sau đó; thiếu cả hai -> 400 PROOF_REQUIRED
 //   PATCH  /api/student-achievements/:id { visibility }       -> 200 mục | 400 | 404 ACHIEVEMENT_NOT_FOUND
 //   DELETE /api/student-achievements/:id                      -> 204 | 404
 //   PUT    /api/student-achievements/:id/evidence  (thân = tệp PDF/JPG/PNG ≤ 5 MB)
@@ -9,7 +11,6 @@
 //   GET    /api/student-achievements/:id/evidence             -> 302 liên kết tạm | 404 EVIDENCE_NOT_FOUND
 //   POST   /api/student-achievements/:id/verification-request -> 200 mục | 404 | 409 EVIDENCE_REQUIRED / INVALID_STATUS
 import express, { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import { PROFILE_MODES } from '../services/profileVisibilityService.js';
 import {
@@ -58,13 +59,32 @@ function parseDate(value) {
   return value;
 }
 
+// Liên kết của công bố: nhận URL https hoặc mã DOI ("10.xxxx/..." được đổi thành https://doi.org/...)
+function parsePublicationLink(value) {
+  const text = parseText(value, 'Liên kết DOI/URL', 255, false);
+  if (!text) return null;
+  const doi = text.replace(/^doi:\s*/i, '');
+  let url;
+  try {
+    url = new URL(/^10\.\d{4,9}\/\S+$/.test(doi) ? `https://doi.org/${doi}` : text);
+  } catch {
+    throw invalid('Liên kết DOI/URL không hợp lệ.');
+  }
+  // Phải là https, có tên miền thật và không kèm tài khoản đăng nhập trong liên kết
+  if (url.protocol !== 'https:' || !url.hostname.includes('.') || url.username || url.password) {
+    throw invalid('Liên kết DOI/URL phải bắt đầu bằng https:// (hoặc là mã DOI dạng 10.xxxx/...).');
+  }
+  if (url.href.length > 255) throw invalid('Liên kết DOI/URL tối đa 255 ký tự.');
+  return url.href;
+}
+
 function parseVisibility(value) {
   if (!PROFILE_MODES.includes(value)) throw invalid(`Chế độ hiển thị phải là một trong: ${PROFILE_MODES.join(', ')}.`);
   return value;
 }
 
 studentAchievementsRouter.get('/', async (req, res) => {
-  res.json({ achievements: await listAchievements(config.testStudentId) });
+  res.json({ achievements: await listAchievements(req.user.accountId) });
 });
 
 studentAchievementsRouter.post('/', async (req, res) => {
@@ -80,18 +100,24 @@ studentAchievementsRouter.post('/', async (req, res) => {
     issuedDate: parseDate(body.issuedDate),
     detail: parseText(body.detail, 'Mô tả thêm', 500, false),
     visibility: body.visibility === undefined ? 'Public' : parseVisibility(body.visibility),
+    // Chỉ công bố bên ngoài hệ thống mới có liên kết; loại khác bỏ qua trường này
+    externalUrl: body.category === 'Publication' ? parsePublicationLink(body.externalUrl) : null,
   };
-  res.status(201).json(await createAchievement(config.testStudentId, input));
+  // hasEvidenceFile chỉ cho phép lưu trước rồi tải tệp; nếu tệp không tới, mục vẫn bị giữ ngoài CV (missingProof)
+  if (input.category === 'Publication' && !input.externalUrl && body.hasEvidenceFile !== true) {
+    throw new AppError(400, 'PROOF_REQUIRED', 'Công bố bên ngoài hệ thống cần liên kết DOI/URL https:// hoặc tệp minh chứng.');
+  }
+  res.status(201).json(await createAchievement(req.user.accountId, input));
 });
 
 studentAchievementsRouter.patch('/:id', async (req, res) => {
   const id = parseId(req.params.id);
   const visibility = parseVisibility(req.body?.visibility);
-  res.json(await setAchievementVisibility(config.testStudentId, id, visibility));
+  res.json(await setAchievementVisibility(req.user.accountId, id, visibility));
 });
 
 studentAchievementsRouter.delete('/:id', async (req, res) => {
-  await deleteAchievement(config.testStudentId, parseId(req.params.id));
+  await deleteAchievement(req.user.accountId, parseId(req.params.id));
   res.status(204).end();
 });
 
@@ -103,17 +129,17 @@ studentAchievementsRouter.put(
     if (!Buffer.isBuffer(req.body)) {
       throw new AppError(415, 'UNSUPPORTED_TYPE', 'Minh chứng chỉ nhận tệp PDF, JPG hoặc PNG.');
     }
-    res.json(await saveEvidence(config.testStudentId, id, req.body, req.get('content-type').split(';')[0]));
+    res.json(await saveEvidence(req.user.accountId, id, req.body, req.get('content-type').split(';')[0]));
   },
 );
 
 studentAchievementsRouter.get('/:id/evidence', async (req, res) => {
   res.set('Cache-Control', 'no-store');
-  res.redirect(302, await getEvidenceUrl(config.testStudentId, parseId(req.params.id)));
+  res.redirect(302, await getEvidenceUrl(req.user.accountId, parseId(req.params.id)));
 });
 
 studentAchievementsRouter.post('/:id/verification-request', async (req, res) => {
-  res.json(await requestVerification(config.testStudentId, parseId(req.params.id)));
+  res.json(await requestVerification(req.user.accountId, parseId(req.params.id)));
 });
 
 // Tệp quá lớn: báo đúng giới hạn của minh chứng (bộ xử lý chung trong server.js dành cho ảnh đại diện)

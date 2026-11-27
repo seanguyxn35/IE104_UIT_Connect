@@ -3,7 +3,6 @@
 //   PUT /api/student-profile/links { githubUrl?, linkedinUrl? } -> 200 { githubUrl, linkedinUrl } | 400 INVALID_INPUT
 //   Gửi liên kết nào thì đổi liên kết đó; null hoặc chuỗi rỗng = xóa.
 import { Router } from 'express';
-import { config } from '../config.js';
 import { AppError } from '../errors.js';
 import { LINK_FIELDS, getLinks, updateLinks } from '../services/studentProfileService.js';
 
@@ -47,7 +46,7 @@ function parseLink(field, value) {
 }
 
 studentProfileRouter.get('/links', async (req, res) => {
-  res.json(await getLinks(config.testStudentId));
+  res.json(await getLinks(req.user.accountId));
 });
 
 studentProfileRouter.put('/links', async (req, res) => {
@@ -56,5 +55,5 @@ studentProfileRouter.put('/links', async (req, res) => {
     throw new AppError(400, 'INVALID_INPUT', `Cần gửi ít nhất một trong: ${LINK_FIELDS.join(', ')}.`);
   }
   const changes = Object.fromEntries(fields.map((f) => [f, parseLink(f, req.body[f])]));
-  res.json(await updateLinks(config.testStudentId, changes));
+  res.json(await updateLinks(req.user.accountId, changes));
 });

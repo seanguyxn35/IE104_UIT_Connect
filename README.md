@@ -5,9 +5,10 @@ Nền tảng kết nối Sinh viên – Giảng viên – Doanh nghiệp của U
 Hiện trạng:
 
 - Frontend: prototype giao diện đủ 3 vai trò (SV, GV, DN). Chưa có màn hình Admin.
-- Backend: Node.js + Express + Supabase (PostgreSQL). Đã nối một phần trang Sinh viên:
-  SV-04 (hồ sơ năng lực & CV) và SV-07 (ứng tuyển đề tài Lab). Các trang GV/DN còn dữ liệu tĩnh.
-- Chưa có đăng nhập: máy chủ coi người dùng là sinh viên thử `TEST_STUDENT_ID` trong `backend/.env`.
+- Backend: Node.js + Express + Supabase (PostgreSQL). Trang đã gọi API: SV-04, SV-05, SV-07, SV-09, SV-13
+  và DN-01, DN-08, DN-09, DN-16; trang tổng quan công khai `index.html`. Các trang GV còn dữ liệu tĩnh.
+- Đã có đăng nhập theo vai trò (phiên phía máy chủ). Với `AUTH_MODE=test` (mặc định), gọi API không kèm phiên
+  thì máy chủ dùng tài khoản thử `TEST_STUDENT_ID` / `TEST_BUSINESS_ID` trong `backend/.env`.
 
 Hướng dẫn cho thành viên nhóm:
 
@@ -67,7 +68,7 @@ Lối vào trực tiếp:
 | Doanh nghiệp | `frontend/DN.html` | `pages/dn/01_ban-lam-viec.html` |
 
 Vai trò được truyền qua tham số `?role=gv` / `?role=dn` trên các màn trong `pages/auth/`
-(không có tham số = sinh viên). Màn đăng nhập hiện chỉ là giao diện, chưa xác thực thật.
+(không có tham số = sinh viên). Đăng nhập (auth/01, auth/02) và quên mật khẩu đã gọi API; màn đăng ký vẫn là giả lập.
 
 ## Deploy (GitHub Pages)
 
