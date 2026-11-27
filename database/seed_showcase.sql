@@ -34,8 +34,8 @@ BEGIN
     ON CONFLICT (team_id) DO NOTHING;
 
     INSERT INTO team_member (team_id, student_id, role_in_team)
-    VALUES (9301, v_student, 'Member')
-    ON CONFLICT (team_id, student_id) DO NOTHING;
+    VALUES (9301, v_student, 'Leader')  -- SV thử là trưởng nhóm để thử được quyền gửi thẩm định / xóa nháp
+    ON CONFLICT (team_id, student_id) DO UPDATE SET role_in_team = EXCLUDED.role_in_team;
 
     INSERT INTO academic_resource
         (resource_id, created_by_account_id, owner_team_id, type, title, venue, trl_level, status, lecturer_id, published_at)

@@ -39,6 +39,8 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Thành tích / chứng chỉ: SV tự khai, lưu ở `Self_Declared` và hiện ngay, không cần duyệt. Xác minh là tùy chọn (cần tệp minh chứng): `Self_Declared`/`Rejected` → `Pending` → `Verified`/`Rejected`. Mỗi mục có chế độ hiển thị riêng; mục `Private` và mục bị từ chối không đưa lên CV. Minh chứng PDF/JPG/PNG ≤ 5 MB, lưu riêng tư.
 - Loại `Publication` là **"Công bố bên ngoài hệ thống"** (SV tự cung cấp, ví dụ bài ở hội nghị / tạp chí ngoài): **bắt buộc** có liên kết DOI/URL `https://` hoặc tệp minh chứng; thiếu cả hai thì không lên CV. CV xếp ở mục "Thành tích", luôn gắn nhãn "SV tự cung cấp", tách khỏi công trình đã thẩm định.
 - Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của nhóm SV **đang là thành viên**, hoặc tài nguyên cá nhân (không nhóm) do SV tạo. SV đã rời nhóm không được ghi sở hữu / tác quyền trên hồ sơ và CV, kể cả khi là người tạo: mục đã chọn không lên CV, không sửa được, chỉ gỡ được (quy tắc dùng chung ở `backend/src/services/resourceOwnership.js`). **CV chỉ nhận công trình `Published`** (và có phiếu `Approved` trong `academic_review_log`); `Approved` nghĩa là đạt nhưng không cho công bố nên không được chọn (409 `NOT_PUBLISHED`) và không lên CV. Khi đọc CV, lọc `Published` ngay trong truy vấn. Mục đã chọn mà không còn `Published` vẫn hiện (mờ, nhãn "Chưa công khai") cho chủ hồ sơ. CV xếp ở mục "Công trình & Project trưng bày", ghi "Đã thẩm định bởi" GV.
+- "Đề tài của tôi" (SV-05): quyền theo **vai trò trong nhóm** (`team_member.role_in_team`), không theo người tạo. Mọi thành viên được xem, tạo, sửa, tải PDF; chỉ **Leader** được xóa bản nháp và gửi thẩm định. Đề tài cá nhân (không nhóm) chỉ người tạo thấy và có quyền như Leader. Bài báo (`Paper`) bắt buộc thuộc một nhóm.
+- Luồng thẩm định bài báo (đã chốt): `Draft` → `Pending_Review` → `Published` hoặc `Revision_Needed` (nộp lại → `Pending_Review`). SV chọn GV khi gửi. GV từ chối → `Rejected`; duyệt nhưng không cho công bố → `Approved`. **Chỉ GV thẩm định được cho công khai**, SV không có đường tự đổi trạng thái. Chỉ sửa / thay tệp khi `Draft` hoặc `Revision_Needed`. Tệp PDF ≤ 10 MB, lưu riêng tư (bucket `papers`), server kiểm tra nội dung tệp; tệp đã nằm trong một lần nộp không được xóa.
 - Ảnh đại diện: JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp, không tin `Content-Type`.
 - **Danh tính lấy ở server**, không bao giờ nhận `studentId`/`accountId` từ client.
 
@@ -70,7 +72,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - `server.js` phục vụ cả API (`/api/...`) và thư mục `frontend/` trên cùng cổng, nên không vướng CORS.
 - Tách lớp: `routes/` kiểm tra đầu vào → `services/` nghiệp vụ + truy vấn Supabase. Không truy vấn CSDL trong route.
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
-- Mọi lệnh gọi CSDL có timeout 10 s (`db.js`).
+- Mọi lệnh gọi CSDL có timeout 10 s; riêng đẩy tệp lên kho lưu trữ 180 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
 - **Chưa có đăng nhập**: danh tính lấy từ `TEST_STUDENT_ID` trong `.env`. Cơ chế xác thực thật: `TBD`.
 - API hiện có:
@@ -81,6 +83,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `GET|PUT /api/student-profile/links`
   - `GET /api/student-cv`, `GET /api/student-cv/pdf` (cần `playwright-core` và Edge/Chrome trên máy chủ)
   - `GET|POST /api/student-showcase`, `GET .../available`, `PUT .../order`, `PATCH|DELETE /api/student-showcase/:resourceId`
+  - `GET|POST /api/student-projects`, `GET .../options`, `PATCH|DELETE /api/student-projects/:id`, `GET|PUT .../:id/file`
   - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
 - Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql`, chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
 
@@ -141,7 +144,8 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - CSDL chung đã có các cột của migration 001.
 - Chưa có xác thực, phân quyền, policy RLS.
 - Chưa có màn hình và API cho Admin.
-- Chỉ trang SV-04 và SV-07 gọi API (SV-05 mới lọc tab trên giao diện); các trang GV/DN còn dữ liệu tĩnh.
+- Chỉ trang SV-04, SV-05 và SV-07 gọi API; các trang GV/DN còn dữ liệu tĩnh.
+- SV-05: đã có tạo, xem, sửa bản nháp và tải PDF. **Chưa có** chọn GV, gửi thẩm định, lịch sử nộp và API thẩm định cho GV (GV-06, GV-07).
 - Code gọi `/api/student-skills` đang viết thẳng trong HTML của SV-04, trái quy ước ở mục 6. Cần tách ra `assets/js/`.
 - Mâu thuẫn cần nhóm chốt:
   - Schema có `external_login` (`UIT_SSO`, `Microsoft365`) và màn auth 02 "SSO Microsoft 365", nhưng SSO UIT nằm ngoài phạm vi.
