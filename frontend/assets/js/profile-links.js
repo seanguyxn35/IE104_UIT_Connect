@@ -56,7 +56,7 @@
     });
   }
 
-  // Dùng khi không có máy chủ: cùng quy tắc với backend/src/routes/studentProfile.js
+  // Dùng khi không có máy chủ: cùng quy tắc với backend/src/sv/04-ho-so-nang-luc-cv/lien-ket.routes.js
   function parseLocal(field, value) {
     var text = value.trim();
     if (!text) return { url: null };

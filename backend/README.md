@@ -2,35 +2,52 @@
 
 API server của UIT Connect (Node.js 20.6+, Express 5, Supabase). Đồng thời phục vụ thư mục `frontend/`.
 
+Code chia theo **vai trò → màn hình → chức năng**. Mỗi chức năng có hai file:
+`<chức-năng>.routes.js` (kiểm tra đầu vào, gọi service) và `<chức-năng>.service.js` (nghiệp vụ, truy vấn Supabase).
+Thư mục màn hình đặt theo số trang trong `frontend/pages/<vai trò>/`; nhiều màn dùng chung một API thì gộp (vd `09-13-bai-toan-rd`).
+
 ```
 backend/
 ├── src/
-│   ├── server.js                       # khởi động, gắn route, phục vụ frontend/, xử lý lỗi chung
-│   ├── config.js                       # đọc biến môi trường
-│   ├── db.js                           # kết nối Supabase (secret key – chỉ dùng ở máy chủ)
-│   ├── errors.js                       # AppError(status, code, message)
-│   ├── routes/labApplications.js       # POST /api/lab-applications
-│   ├── routes/studentSkills.js         # GET/POST/DELETE /api/student-skills
-│   ├── routes/studentAvatar.js         # GET/POST /api/student-avatar
-│   ├── routes/profileVisibility.js     # GET/PUT /api/profile-visibility, /mode
-│   ├── routes/studentProfile.js        # GET/PUT /api/student-profile/links
-│   ├── routes/studentCv.js             # GET /api/student-cv
-│   ├── routes/studentShowcase.js       # /api/student-showcase (công trình trưng bày trên CV)
-│   ├── routes/studentProjects.js       # /api/student-projects (Đề tài của tôi – SV-05)
-│   ├── routes/studentAchievements.js   # /api/student-achievements (thành tích tự khai, minh chứng)
-│   └── services/
-│       ├── labApplicationService.js    # nghiệp vụ ứng tuyển đề tài: R1, R2, R3
-│       ├── studentSkillService.js      # kỹ năng trên hồ sơ SV (skill, student_skill)
-│       ├── avatarService.js            # ảnh đại diện SV (Supabase Storage + account.avatar_url)
-│       ├── profileVisibilityService.js # ẩn/công khai chỉ số và chế độ hiển thị hồ sơ (student_profile)
-│       ├── studentProfileService.js    # liên kết GitHub, LinkedIn trên hồ sơ (student_profile)
-│       ├── studentCvService.js         # gom dữ liệu CV từ các bảng hồ sơ
-│       ├── studentCvPdfService.js      # dựng tệp PDF của CV bằng trình duyệt chạy ẩn
-│       ├── studentShowcaseService.js   # chọn công trình đã thẩm định để trưng bày (cv_showcase_item)
-│       └── studentAchievementService.js # thành tích, chứng chỉ SV tự khai (student_achievement, Storage "evidence")
-├── .env.example                        # mẫu biến môi trường (file .env thật không commit)
+│   ├── server.js                  # khởi động, gắn route, phục vụ frontend/, xử lý lỗi chung
+│   ├── config.js                  # đọc biến môi trường
+│   ├── db.js                      # kết nối Supabase (secret key – chỉ dùng ở máy chủ)
+│   ├── shared/                    # dùng chung mọi vai trò
+│   │   ├── authMiddleware.js      # napPhien (đọc phiên), chiChoVaiTro (chặn sai vai trò)
+│   │   ├── errors.js              # AppError(status, code, message)
+│   │   ├── validation.js          # kiểm tra số nguyên, chuỗi, lịch hẹn
+│   │   ├── resourceOwnership.js   # quy tắc SV sở hữu tài nguyên (nhóm đang tham gia / cá nhân)
+│   │   └── rdFiles.js             # bucket "rd-files" của bài toán R&D, thời hạn liên kết ký tạm
+│   ├── auth/                      # /api/auth – đăng nhập, đăng xuất, quên mật khẩu (auth/01, 02, 07, 08, 14, 15)
+│   ├── public/                    # /api/public – trang tổng quan, trang khách (không cần đăng nhập)
+│   ├── sv/
+│   │   ├── 04-ho-so-nang-luc-cv/
+│   │   │   ├── ky-nang.*              # /api/student-skills
+│   │   │   ├── anh-dai-dien.*         # /api/student-avatar (Storage "avatars")
+│   │   │   ├── che-do-hien-thi.*      # /api/profile-visibility, /mode
+│   │   │   ├── lien-ket.*             # /api/student-profile/links (GitHub, LinkedIn)
+│   │   │   ├── thanh-tich.*           # /api/student-achievements (Storage "evidence")
+│   │   │   ├── cong-trinh-trung-bay.* # /api/student-showcase
+│   │   │   ├── cv.*                   # /api/student-cv (gom dữ liệu CV)
+│   │   │   └── cv-pdf.service.js      # dựng PDF của CV bằng trình duyệt chạy ẩn
+│   │   ├── 05-de-tai-cua-toi/         # de-tai.* – /api/student-projects
+│   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3)
+│   │   └── 09-13-bai-toan-rd/         # bai-toan-rd.* – /api/student-rd-problems
+│   └── dn/
+│       ├── 01-ban-lam-viec/           # ban-lam-viec.* – /api/business-dashboard
+│       ├── 08-hop-thu-ket-noi/        # hop-thu.* – /api/business-inbox
+│       └── 09-16-dam-phan/            # dam-phan.* – /api/business-negotiations
+├── scripts/                       # test:public, test:sv-rd, test:auth, seed:dn-files
+├── .env.example                   # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
+
+Chưa có backend: các màn SV khác, DN 02–07 và 10–15 (DN-04/05/14/15 đang lưu tạm ở trình duyệt), toàn bộ GV và Admin.
+Thư mục của vai trò / màn hình chỉ tạo khi có code.
+
+**Thêm chức năng mới:** tạo `src/<vai trò>/<số>-<tên-màn>/<chức-năng>.routes.js` và `.service.js`,
+rồi gắn route trong `server.js` kèm `chiSv` / `chiDn` (hoặc `chiChoVaiTro(...)`). Code dùng cho nhiều vai trò đặt ở `shared/`.
+Service của màn khác được phép import (vd DN-01 dùng hộp thư và đàm phán), nhưng không import file `*.routes.js` của màn khác.
 
 ## Chạy
 

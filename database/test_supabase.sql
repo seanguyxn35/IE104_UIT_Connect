@@ -12,7 +12,7 @@
    Nhóm kiểm tra:
      1. Lược đồ: bảng, ràng buộc UNIQUE (R2), RLS
      2. Dữ liệu thử đúng như seed/reset
-     3. Logic R2, R3 – cùng câu đếm mà máy chủ dùng (labApplicationService.js)
+     3. Logic R2, R3 – cùng câu đếm mà máy chủ dùng (ung-tuyen-lab.service.js)
      4. Ràng buộc CSDL khi chèn trực tiếp (bỏ qua máy chủ)
      5. Script không để lại thay đổi
    ===================================================================== */

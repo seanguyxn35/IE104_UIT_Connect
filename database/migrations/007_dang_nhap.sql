@@ -7,7 +7,7 @@
    2. Chỉ mục cho tra phiên theo tài khoản (thu hồi mọi phiên khi đổi mật khẩu) và tra mã mới nhất của tài khoản.
 
    Không thêm CHECK định dạng email (MSSV 8 chữ số @gm.uit.edu.vn, GV @uit.edu.vn): dữ liệu cũ chưa khớp thì mọi
-   lệnh UPDATE trên dòng đó (kể cả đổi ảnh đại diện) sẽ lỗi. Định dạng được kiểm tra ở backend (authService.js).
+   lệnh UPDATE trên dòng đó (kể cả đổi ảnh đại diện) sẽ lỗi. Định dạng được kiểm tra ở backend (backend/src/auth/auth.service.js).
 */
 
 BEGIN;

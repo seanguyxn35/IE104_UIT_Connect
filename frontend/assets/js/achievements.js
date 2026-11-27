@@ -308,7 +308,7 @@
     if (lastFocus) lastFocus.focus();
   }
 
-  // Cùng quy tắc với backend/src/routes/studentAchievements.js (máy chủ vẫn kiểm tra lại)
+  // Cùng quy tắc với backend/src/sv/04-ho-so-nang-luc-cv/thanh-tich.routes.js (máy chủ vẫn kiểm tra lại)
   function readForm() {
     var values = {
       category: form.elements.category.value,

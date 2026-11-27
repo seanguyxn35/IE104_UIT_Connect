@@ -123,7 +123,8 @@ Dạng `type(scope): mô tả`, viết tiếng Việt, mỗi commit một việc
 
 **Backend**
 
-- `routes/` chỉ kiểm tra đầu vào; `services/` chứa nghiệp vụ và truy vấn CSDL.
+- Thư mục theo vai trò → màn hình → chức năng: `backend/src/<sv|dn|gv|admin>/<số>-<tên-màn>/`. Ví dụ chức năng mới của GV-03: `backend/src/gv/03-de-tai-huong-dan/de-tai.routes.js` và `de-tai.service.js`. Xem sơ đồ trong `backend/README.md`.
+- `*.routes.js` chỉ kiểm tra đầu vào; `*.service.js` chứa nghiệp vụ và truy vấn CSDL.
 - Lỗi: ném `AppError(status, code, message)`; phản hồi lỗi luôn có dạng `{ code, message }`.
 - **Danh tính người dùng lấy ở máy chủ.** Không nhận `studentId` / `accountId` từ client.
 - Secret key chỉ dùng trong backend.
@@ -164,7 +165,7 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 | File                                                                | Quy tắc                          |
 | ------------------------------------------------------------------- | -------------------------------- |
 | `backend/src/server.js`                                             | Chỉ thêm phần gắn route của mình |
-| `backend/src/config.js`, `db.js`, `errors.js`                       | Báo nhóm trước khi sửa           |
+| `backend/src/config.js`, `db.js`, thư mục `shared/`                 | Báo nhóm trước khi sửa           |
 | `database/schema.postgres.sql`                                      | Chỉ sửa kèm migration            |
 | `frontend/assets/js/app-shell.js`, `ux-effects.js` và CSS tương ứng | Tách PR riêng                    |
 
