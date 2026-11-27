@@ -8,7 +8,7 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 
 - UIT Connect: cổng kết nối Sinh viên – Giảng viên – Doanh nghiệp của UIT, phạm vi **một Khoa**.
 - Yêu cầu dữ liệu gốc: `docs/datab.pdf` (Requirement Draft, 8 nhóm luồng, 22 bảng).
-- Hiện trạng: frontend prototype đủ 3 vai trò; backend mới nối một phần trang SV (xem mục 5).
+- Hiện trạng: frontend prototype đủ 3 vai trò; backend đã có đăng nhập và nối một phần trang SV, DN (xem mục 5).
 
 ## 2. Vai trò và phạm vi
 
@@ -39,9 +39,12 @@ Quy trình nhánh, Pull Request, cách cài đặt và quy tắc dữ liệu dù
 - Kết nối DN: chỉ sang `Contracted`/`Completed` khi **cả hai bên** xác nhận. Chỉ là trạng thái, không làm hợp đồng điện tử.
 - Đánh giá đối tác chỉ khi kết nối `Completed`, điểm 1.0–5.0.
 - Tài nguyên học thuật: GV thẩm định `Approved|Rejected|Revision_Needed`; mọi quyết định của Admin ghi vào `moderation_log`.
-- Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài (`is_*_public`).
+- Hồ sơ SV: GPA 0–10, điểm rèn luyện 0–100, kỹ năng mức 1–5, ẩn/công khai riêng GPA / DRL / Đề tài và mục Học vấn / Kỹ năng (`is_*_public`). Phần đang ẩn không đưa lên CV; GPA và DRL có công tắc riêng, không phụ thuộc mục Học vấn.
 - Thành tích / chứng chỉ: SV tự khai, lưu ở `Self_Declared` và hiện ngay, không cần duyệt. Xác minh là tùy chọn (cần tệp minh chứng): `Self_Declared`/`Rejected` → `Pending` → `Verified`/`Rejected`. Mỗi mục có chế độ hiển thị riêng; mục `Private` và mục bị từ chối không đưa lên CV. Minh chứng PDF/JPG/PNG ≤ 5 MB, lưu riêng tư.
-- Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của mình hoặc nhóm mình. Điều kiện "đã được GV thẩm định": trạng thái `Approved`/`Published` **và** có phiếu `Approved` trong `academic_review_log`. Kiểm tra lại mỗi lần đọc; mất điều kiện thì không lên CV.
+- Loại `Publication` là **"Công bố bên ngoài hệ thống"** (SV tự cung cấp, ví dụ bài ở hội nghị / tạp chí ngoài): **bắt buộc** có liên kết DOI/URL `https://` hoặc tệp minh chứng; thiếu cả hai thì không lên CV. CV xếp ở mục "Thành tích", luôn gắn nhãn "SV tự cung cấp", tách khỏi công trình đã thẩm định.
+- Công trình trưng bày trên CV: SV chỉ chọn từ `academic_resource` có sẵn của nhóm SV **đang là thành viên**, hoặc tài nguyên cá nhân (không nhóm) do SV tạo. SV đã rời nhóm không được ghi sở hữu / tác quyền trên hồ sơ và CV, kể cả khi là người tạo: mục đã chọn không lên CV, không sửa được, chỉ gỡ được (quy tắc dùng chung ở `backend/src/services/resourceOwnership.js`). **CV chỉ nhận công trình `Published`** (và có phiếu `Approved` trong `academic_review_log`); `Approved` nghĩa là đạt nhưng không cho công bố nên không được chọn (409 `NOT_PUBLISHED`) và không lên CV. Khi đọc CV, lọc `Published` ngay trong truy vấn. Mục đã chọn mà không còn `Published` vẫn hiện (mờ, nhãn "Chưa công khai") cho chủ hồ sơ. CV xếp ở mục "Công trình & Project trưng bày", ghi "Đã thẩm định bởi" GV.
+- "Đề tài của tôi" (SV-05): quyền theo **vai trò trong nhóm** (`team_member.role_in_team`), không theo người tạo. Mọi thành viên được xem, tạo, sửa, tải PDF; chỉ **Leader** được xóa bản nháp và gửi thẩm định. Đề tài cá nhân (không nhóm) chỉ người tạo thấy và có quyền như Leader. Bài báo (`Paper`) bắt buộc thuộc một nhóm.
+- Luồng thẩm định bài báo (đã chốt): `Draft` → `Pending_Review` → `Published` hoặc `Revision_Needed` (nộp lại → `Pending_Review`). SV chọn GV khi gửi. GV từ chối → `Rejected`; duyệt nhưng không cho công bố → `Approved`. **Chỉ GV thẩm định được cho công khai**, SV không có đường tự đổi trạng thái. Chỉ sửa / thay tệp khi `Draft` hoặc `Revision_Needed`. Tệp PDF ≤ 10 MB, lưu riêng tư (bucket `papers`), server kiểm tra nội dung tệp; tệp đã nằm trong một lần nộp không được xóa.
 - Ảnh đại diện: JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp, không tin `Content-Type`.
 - **Danh tính lấy ở server**, không bao giờ nhận `studentId`/`accountId` từ client.
 
@@ -73,7 +76,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - `server.js` phục vụ cả API (`/api/...`) và thư mục `frontend/` trên cùng cổng, nên không vướng CORS.
 - Tách lớp: `routes/` kiểm tra đầu vào → `services/` nghiệp vụ + truy vấn Supabase. Không truy vấn CSDL trong route.
 - Lỗi: ném `AppError(status, code, message)`; trả về luôn có dạng `{ code, message }`.
-- Mọi lệnh gọi CSDL có timeout 10 s (`db.js`).
+- Mọi lệnh gọi CSDL có timeout 10 s; riêng đẩy tệp lên kho lưu trữ 180 s (`db.js`).
 - Backend dùng **secret key**, nên bỏ qua RLS. RLS bật trên mọi bảng nhưng chưa có policy, nên frontend không gọi Supabase trực tiếp.
 - **Đăng nhập theo vai trò** (nhánh `feature/nhan-dang-nhap` giao diện, `feature/nhan-backend-dang-nhap` backend):
   - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
@@ -100,8 +103,9 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `GET|PUT /api/student-profile/links`
   - `GET /api/student-cv`, `GET /api/student-cv/pdf` (cần `playwright-core` và Edge/Chrome trên máy chủ)
   - `GET|POST /api/student-showcase`, `GET .../available`, `PUT .../order`, `PATCH|DELETE /api/student-showcase/:resourceId`
+  - `GET|POST /api/student-projects`, `GET .../options`, `PATCH|DELETE /api/student-projects/:id`, `GET|PUT .../:id/file`
   - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
-  - DN-08 Hộp thư kết nối (danh tính DN từ `TEST_BUSINESS_ID`):
+  - DN-08 Hộp thư kết nối (danh tính DN từ phiên đăng nhập; `AUTH_MODE=test` thì dùng `TEST_BUSINESS_ID`):
     - `GET /api/business-inbox`
     - `POST /api/business-inbox/:id/decline|reopen|accept`, `POST .../:id/meetings`
     - `GET .../:id/attachments/:attachmentId[?download=1]` (liên kết ký tạm 60 s, bucket riêng tư `rd-files`)
@@ -192,30 +196,29 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 
 ## 9. Việc đang mở / lưu ý
 
-- Trạng thái nhánh (26/11/2026): code backend nằm ở `feature/hai-ho-so-sv`, **chưa gộp vào `develop`**
-  (`develop` và `main` chưa có backend). Cập nhật dòng này sau khi PR được gộp.
+- Trạng thái nhánh (27/11/2026): backend được ghép trên `develop`; `main` chưa có backend.
 - Nhánh `thuc-hanh/ung-tuyen-de-tai` (commit `bea23cb`) là bản nộp bài cá nhân: không sửa, không gộp.
 - `README.md` gốc đã cũ: vẫn ghi "backend chưa có mã nguồn", "CSDL SQL Server", chạy bằng Live Server. Cần cập nhật.
 - `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
-- CSDL chung đã có các cột của migration 001.
+- CSDL chung đã có các cột / bảng chính của migration 001, 003 – 008.
 - Đã có đăng nhập + phân quyền theo vai trò ở backend (mục 5); chưa có policy RLS, chưa có API đăng ký tài khoản, chưa có dịch vụ gửi email.
 - Màn đăng ký (03–06, 09–13) vẫn là giả lập, chưa gọi API. "UIT SSO" thực chất là đăng nhập email + mật khẩu giới hạn email UIT (SSO thật nằm ngoài phạm vi).
 - Chưa có màn hình và API cho Admin.
-- Trang SV gọi API: SV-04, SV-07, SV-09, SV-13 (SV-05 mới lọc tab trên giao diện); trang GV còn dữ liệu tĩnh.
-- Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16) đã có tương tác nhưng **chưa có API**:
+- Trang gọi API: SV-04, SV-05, SV-07, SV-09, SV-13 và DN-01, DN-08, DN-09, DN-16; trang GV còn dữ liệu tĩnh.
+- SV-05: đã có tạo, xem, sửa bản nháp và tải PDF. **Chưa có** chọn GV, gửi thẩm định, lịch sử nộp và API thẩm định cho GV (GV-06, GV-07).
+- Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16): dn/08, 09, 16 đã có API (mục 5), còn dn/04, 05, 14, 15 **chưa có API**:
   - Phòng đàm phán (dn/16): 3 bước Trao đổi kỹ thuật → NDA & IP → Hợp đồng, mỗi bước xong khi cả hai bên xác nhận. "Hợp đồng" chỉ ghi nhận đã ký ngoài hệ thống. "Nhắn tin" là trao đổi theo lượt, không phải chat realtime.
   - Chưa có phía đối tác (SV/GV) để xác nhận, nên phòng mới mở sẽ dừng ở "Chờ đối tác".
   - Dữ liệu mẫu dùng chung ở `assets/js/dn-bai-toan-data.js` (5 bài toán, 15 proposal).
   - Bài DN tạo / sửa và thao tác Từ chối / Hẹn / Chấp nhận proposal chỉ lưu tạm trong `localStorage`; trang báo "chưa lưu lên máy chủ".
   - Chỉ bài toán đã công khai (Đang mở, Đang thực hiện) mới có proposal; tệp đính kèm là PDF minh họa tạo trên trình duyệt.
   - Sửa / xóa bài đăng theo quy tắc ở mục 3. Proposal và phòng đàm phán của bài đã xóa bị ẩn.
-  - Backend DN (sắp làm): tạm lấy danh tính từ `TEST_BUSINESS_ID` trong `.env`, giống `TEST_STUDENT_ID`.
 - Bài toán R&D phía SV (sv/09, sv/13) đã có API (mục 5). Khi không có máy chủ:
   - Dữ liệu mẫu: bài DN (`dn-bai-toan-data.js`) ở trạng thái Đang mở / Đang thực hiện cộng 15 bài của DN/Lab khác (`sv-bai-toan-rd-data.js`).
   - Lưu bài và proposal lưu tạm trong `localStorage` (`uitc.sv.baiToanDaLuu.v1`, `uitc.sv.proposal.v1`), hiện trong Hộp thư DN-08 cùng trình duyệt.
   - Bài DN mới đăng ở DN-05 chưa lên CSDL (DN-05 chưa có API) và cần Admin duyệt (chưa có màn Admin) mới hiện cho SV.
   - Chỉ trưởng nhóm nộp proposal thay nhóm (403 `NOT_TEAM_LEADER`).
-- `schema.postgres.sql` chưa gộp migration 004–006 (chỉ có tới 003).
+- `schema.postgres.sql` chưa gộp các bảng, chỉ mục của migration `004_dn`, `005`, `006`, `007` (đã có đến 003 và cột `external_url` của `008`).
 - Code gọi `/api/student-skills` đang viết thẳng trong HTML của SV-04, trái quy ước ở mục 6. Cần tách ra `assets/js/`.
 - Mâu thuẫn cần nhóm chốt:
   - Schema có `external_login` (`UIT_SSO`, `Microsoft365`) và màn auth 02 "SSO Microsoft 365", nhưng SSO UIT nằm ngoài phạm vi.
@@ -223,4 +226,4 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - Popup "Xem trước CV" ở SV-04 đã lấy dữ liệu thật (`/api/student-cv`); chưa có API thêm học vấn, kinh nghiệm nên các mục đó còn trống.
 - Công trình trưng bày: chưa có chức năng SV nộp tài nguyên và GV thẩm định, nên dữ liệu thử lấy từ `database/seed_showcase.sql`.
 - Thành tích: SV gửi xác minh được nhưng **chưa có ai duyệt** (chưa có API/màn hình duyệt; người duyệt: `TBD`).
-- Chủ sở hữu thư mục, mã UC chính thức, tiêu chí chặn DN chưa xác minh: `TBD`.
+- Chủ sở hữu thư mục, mã UC chính thức: `TBD`.

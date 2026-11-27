@@ -1,9 +1,10 @@
 // API công trình trưng bày trên CV (danh tính lấy ở máy chủ, không lấy từ client):
 //   GET    /api/student-showcase             -> 200 { items: [...] }  (theo thứ tự hiển thị)
-//   GET    /api/student-showcase/available   -> 200 { resources: [...] }  (đã thẩm định, chưa chọn)
+//   GET    /api/student-showcase/available   -> 200 { resources: [...] }  (đã công bố, chưa chọn)
 //   POST   /api/student-showcase  { resourceId, role?, highlights?, isShownOnCv? }
-//                                            -> 201 | 400 | 404 RESOURCE_NOT_FOUND | 409 NOT_REVIEWED / ALREADY_EXISTS
-//   PATCH  /api/student-showcase/:resourceId { role?, highlights?, isShownOnCv? } -> 200 | 400 | 404 SHOWCASE_NOT_FOUND
+//                                            -> 201 | 400 | 404 RESOURCE_NOT_FOUND | 409 NOT_PUBLISHED / NOT_REVIEWED / ALREADY_EXISTS
+//   PATCH  /api/student-showcase/:resourceId { role?, highlights?, isShownOnCv? }
+//                                            -> 200 | 400 | 403 NOT_TEAM_MEMBER (đã rời nhóm) | 404 SHOWCASE_NOT_FOUND
 //   DELETE /api/student-showcase/:resourceId -> 204 | 404 SHOWCASE_NOT_FOUND
 //   PUT    /api/student-showcase/order  { resourceIds: [...] } -> 200 { items } | 400 INVALID_INPUT
 import { Router } from 'express';

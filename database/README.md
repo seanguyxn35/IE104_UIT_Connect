@@ -17,7 +17,8 @@ database/
 │   ├── 004_dn_hop_thu_ket_noi.sql      # Hộp thư kết nối DN: proposal SV cá nhân, lịch hẹn, tệp đính kèm
 │   ├── 005_dn_khong_gian_dam_phan.sql  # Phòng đàm phán: 3 bước xác nhận hai bên, trao đổi theo lượt
 │   ├── 006_sv_bai_toan_rd.sql          # Bài toán R&D phía SV: chi tiết đề bài, mốc, chặn nộp trùng, lưu bài
-│   └── 007_dang_nhap.sql               # Đăng nhập: mã đặt lại mật khẩu (Reset_Token), chỉ mục phiên
+│   ├── 007_dang_nhap.sql               # Đăng nhập: mã đặt lại mật khẩu (Reset_Token), chỉ mục phiên
+│   └── 008_student_achievement_external_url.sql  # Công bố bên ngoài hệ thống: cột external_url
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 

@@ -1279,7 +1279,7 @@
                             </h2>
                           </div>
                           <p class="text-xs text-[#5F6368] mt-1">
-                            Chọn từ các công trình của bạn hoặc nhóm bạn đã được giảng viên thẩm định.
+                            Chọn từ các công trình của bạn hoặc nhóm bạn đã được giảng viên thẩm định và công bố.
                             Dùng nút mũi tên để sắp xếp thứ tự trên CV.
                           </p>
                         </div>
@@ -1386,7 +1386,7 @@
                           <div
                             class="font-bold text-[7px] text-[#1F4E78] border-b border-slate-200 pb-0.5 mb-1"
                           >
-                            DỰ ÁN TIÊU BIỂU
+                            CÔNG TRÌNH &amp; PROJECT
                           </div>
                           <div
                             class="h-1 bg-slate-200 rounded-sm w-full mb-1"
@@ -1400,7 +1400,7 @@
                           <div
                             class="font-bold text-[7px] text-[#1F4E78] border-b border-slate-200 pb-0.5 mb-1"
                           >
-                            GIẢI THƯỞNG
+                            THÀNH TÍCH
                           </div>
                           <div class="h-1 bg-slate-100 rounded-sm w-3/4"></div>
                         </div>
@@ -1462,7 +1462,7 @@
                   </div>
                   <form class="space-y-4" id="form-showcase" novalidate>
                     <fieldset>
-                      <legend class="block text-xs font-semibold text-[#1A1A1A] mb-1" id="showcase-picker-label">Công trình đã được GV thẩm định *</legend>
+                      <legend class="block text-xs font-semibold text-[#1A1A1A] mb-1" id="showcase-picker-label">Công trình đã được công bố *</legend>
                       <div class="space-y-2 max-h-64 overflow-y-auto" id="showcase-picker"></div>
                     </fieldset>
                     <div>
@@ -1528,7 +1528,7 @@
                           class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
                         >
                           <input class="mr-1.5 text-[#1F4E78] focus:ring-[#1F4E78]" name="category" type="radio" value="Publication" />
-                          Bài báo / Công bố
+                          Công bố bên ngoài hệ thống
                         </label>
                         <label
                           class="flex items-center justify-center min-h-[44px] px-2 py-2 rounded bg-[#F5F7FA] border border-[#E1E5EA] text-[#1A1A1A] text-xs font-medium text-center cursor-pointer hover:bg-[#E6F0F7] has-[:checked]:bg-[#E6F0F7] has-[:checked]:border-[#1F4E78]"
@@ -1562,8 +1562,15 @@
                       <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-detail">Mô tả thêm</label>
                       <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-detail" name="detail" type="text" maxlength="500" placeholder="VD: điểm từng kỹ năng, mã DOI" />
                     </div>
+                    <div class="hidden" id="achievement-link-group">
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-link">Liên kết DOI / URL</label>
+                      <input class="w-full h-11 px-3 rounded-[6px] border border-[#E1E5EA] bg-white text-sm text-[#1A1A1A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F4E78]" id="achievement-link" name="externalUrl" type="text" inputmode="url" maxlength="255" placeholder="https://... hoặc 10.1109/ACCESS.2026.1234567" autocomplete="off" />
+                      <p class="text-[11px] text-[#5F6368] mt-1">
+                        Dành cho bài đăng ngoài UIT Connect, cần liên kết hoặc tệp minh chứng; CV ghi rõ “SV tự cung cấp”. Bài đã công bố trong UIT Connect: ghim ở mục “Công trình &amp; Project Trưng bày trên CV”.
+                      </p>
+                    </div>
                     <div>
-                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-file">Tệp minh chứng (không bắt buộc)</label>
+                      <label class="block text-xs font-semibold text-[#1A1A1A] mb-1" for="achievement-file" id="achievement-file-label">Tệp minh chứng (không bắt buộc)</label>
                       <input
                         class="block w-full text-xs text-[#5F6368] border border-dashed border-slate-300 rounded-lg p-3 cursor-pointer file:mr-3 file:h-8 file:px-3 file:rounded file:border-0 file:bg-[#E6F0F7] file:text-[#1F4E78] file:text-xs file:font-semibold file:cursor-pointer"
                         id="achievement-file"

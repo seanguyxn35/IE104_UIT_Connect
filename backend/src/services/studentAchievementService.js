@@ -1,4 +1,6 @@
-// Thành tích / chứng chỉ SV tự khai (bảng student_achievement, cần migration 002).
+// Thành tích / chứng chỉ SV tự khai (bảng student_achievement, cần migration 002 và 004).
+// Loại 'Publication' là "Công bố bên ngoài hệ thống" (SV tự cung cấp, KHÔNG phải bài đã thẩm định trong UIT Connect):
+// bắt buộc có liên kết DOI/URL https hoặc tệp minh chứng; thiếu cả hai thì không đưa lên CV.
 // Trạng thái: Self_Declared (Tự khai, mặc định) -> Pending (SV gửi xác minh) -> Verified / Rejected.
 // Tệp minh chứng lưu ở bucket RIÊNG TƯ "evidence"; cột evidence_url giữ đường dẫn trong bucket,
 // chỉ xem được qua liên kết ký tạm thời do máy chủ cấp.
@@ -7,7 +9,7 @@ import { supabase } from '../db.js';
 import { AppError } from '../errors.js';
 
 const TABLE = 'student_achievement';
-const COLUMNS = 'achievement_id, category, title, issued_by, issued_date, detail, visibility, verification_status, evidence_url, created_at';
+const COLUMNS = 'achievement_id, category, title, issued_by, issued_date, detail, visibility, verification_status, evidence_url, external_url, created_at';
 const PG_UNIQUE_VIOLATION = '23505';
 // Chỉ được đổi minh chứng / gửi xác minh khi mục chưa nằm trong quy trình xác minh
 const EDITABLE_STATUSES = ['Self_Declared', 'Rejected'];
@@ -24,6 +26,11 @@ const EVIDENCE_TYPES_MAP = {
 };
 export const EVIDENCE_TYPES = Object.keys(EVIDENCE_TYPES_MAP);
 
+// Công bố bên ngoài hệ thống chưa có gì để người xem đối chiếu
+export function isMissingProof(row) {
+  return row.category === 'Publication' && !row.external_url && !row.evidence_url;
+}
+
 function toDto(row) {
   return {
     achievementId: row.achievement_id,
@@ -35,6 +42,8 @@ function toDto(row) {
     visibility: row.visibility,
     status: row.verification_status,
     hasEvidence: Boolean(row.evidence_url), // không trả đường dẫn lưu trữ ra ngoài
+    externalUrl: row.external_url,
+    missingProof: isMissingProof(row),
     createdAt: row.created_at,
   };
 }
@@ -85,7 +94,7 @@ export async function listAchievements(studentId) {
   return data.map(toDto);
 }
 
-export async function createAchievement(studentId, { category, title, issuedBy, issuedDate, detail, visibility }) {
+export async function createAchievement(studentId, { category, title, issuedBy, issuedDate, detail, visibility, externalUrl }) {
   const { data, error } = await supabase
     .from(TABLE)
     .insert({
@@ -96,6 +105,7 @@ export async function createAchievement(studentId, { category, title, issuedBy, 
       issued_date: issuedDate,
       detail,
       visibility,
+      external_url: externalUrl,
       verification_status: 'Self_Declared', // trạng thái do máy chủ quyết định, không nhận từ client
     })
     .select(COLUMNS)

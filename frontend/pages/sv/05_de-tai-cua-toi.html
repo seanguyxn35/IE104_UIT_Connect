@@ -381,7 +381,7 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 <!-- Action Create Button with Quick Dropdown Menu -->
 <div class="relative inline-block text-left group">
-<button class="h-10 px-space-lg bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button">
+<button class="h-10 px-space-lg bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-title-md text-title-md shadow-sm transition-all flex items-center gap-space-xs" type="button" data-create-type="Project">
 <span class="material-symbols-outlined text-[18px]">add_circle</span>
 <span class="">Tạo đề tài mới</span>
 <span class="material-symbols-outlined text-[18px] ml-1">arrow_drop_down</span>
@@ -389,18 +389,18 @@ main > :last-child { margin-bottom: 0 !important; }
 <!-- Dropdown on Hover/Focus -->
 <div class="absolute right-0 top-full mt-1.5 w-60 bg-surface-container-lowest rounded-lg shadow-xl py-1.5 z-30 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
 <div class="px-space-md py-1 font-label-sm text-label-sm text-outline uppercase tracking-wider">Chọn thể loại khởi tạo</div>
-<a class="flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" href="#">
+<button class="w-full text-left flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" type="button" data-create-type="Project">
 <span class="material-symbols-outlined text-[18px] text-secondary">science</span>
 <span class="">Đề tài NCKH sinh viên</span>
-</a>
-<a class="flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" href="#">
+</button>
+<button class="w-full text-left flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" type="button" data-create-type="Product">
 <span class="material-symbols-outlined text-[18px] text-tertiary">devices</span>
 <span class="">Sản phẩm công nghệ / Ứng dụng</span>
-</a>
-<a class="flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" href="#">
+</button>
+<button class="w-full text-left flex items-center gap-space-sm px-space-md py-2.5 text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-body-md" type="button" data-create-type="Paper">
 <span class="material-symbols-outlined text-[18px] text-primary">menu_book</span>
 <span class="">Bài báo – Luận văn tốt nghiệp</span>
-</a>
+</button>
 </div>
 </div>
 </div>
@@ -435,38 +435,42 @@ main > :last-child { margin-bottom: 0 !important; }
 <!-- Search Left -->
 <div class="relative w-full lg:w-80 flex items-center">
 <span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px]">search</span>
-<input class="w-full h-10 pl-10 pr-space-md bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Tìm theo tên đề tài..." type="text">
+<input class="w-full h-10 pl-10 pr-space-md bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Tìm theo tên đề tài..." type="search" id="project-search" aria-label="Tìm theo tên đề tài" autocomplete="off">
 </div>
 <!-- Controls Right -->
 <div class="flex items-center gap-space-sm flex-wrap">
 <!-- Dropdown 1: Resource Type -->
 <div class="relative">
-<select class="h-10 pl-space-md pr-8 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
-<option>Loại tài nguyên: Tất cả</option>
-<option>Sản phẩm công nghệ</option>
-<option>Bài báo khoa học</option>
-<option>Đề tài NCKH</option>
+<select id="filter-type" aria-label="Lọc theo loại tài nguyên" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option value="all">Loại tài nguyên: Tất cả</option>
+<option value="product">Sản phẩm công nghệ</option>
+<option value="paper">Bài báo khoa học</option>
+<option value="research">Đề tài NCKH</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
 </div>
 <!-- Dropdown 2: Role -->
 <div class="relative">
-<select class="h-10 pl-space-md pr-8 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
-<option>Vai trò: Tất cả</option>
-<option>Chủ nhiệm</option>
-<option>Thành viên</option>
+<select id="filter-role" aria-label="Lọc theo vai trò" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option value="all">Vai trò: Tất cả</option>
+<option value="owner">Leader</option>
+<option value="member">Thành viên</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
 </div>
 <!-- Dropdown 3: Sort -->
 <div class="relative">
-<select class="h-10 pl-space-md pr-8 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
-<option>Cập nhật gần nhất</option>
-<option>Tên A-Z</option>
-<option>Tiến độ thẩm định</option>
+<select id="sort-projects" aria-label="Sắp xếp đề tài" autocomplete="off" class="h-10 pl-space-md pr-9 bg-none bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option value="updated">Cập nhật gần nhất</option>
+<option value="name">Tên A-Z</option>
+<option value="progress">Tiến độ thẩm định</option>
 </select>
 <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
 </div>
+<button id="clear-filters" class="hidden h-10 px-space-md rounded-lg text-primary hover:bg-surface-container font-label-md text-label-md flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
+<span>Xóa bộ lọc</span>
+</button>
 <!-- View Switcher -->
 <div class="bg-surface-container p-1 rounded-lg flex items-center gap-0.5 shadow-xs">
 <button class="w-8 h-8 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center justify-center transition-all" title="Dạng danh sách" type="button">
@@ -479,236 +483,23 @@ main > :last-child { margin-bottom: 0 !important; }
 </div>
 </div>
 <!-- Cards List Container -->
-<div class="flex flex-col gap-space-md"><!-- CARD 1: Approved Project -->
-<div id="card-edgevision" data-card-status="approved" class="w-full bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md project-item">
-  <div class="w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container relative">
-    <img class="w-full h-full object-cover" data-alt="A clean modern high-tech visual of AI edge cameras and autonomous intelligent traffic monitoring systems" src="../../assets/img/img-10.jpg">
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col">
-    <div class="flex items-center gap-space-xs flex-wrap">
-      <span class="px-2 py-0.5 rounded-sm font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed font-semibold">Sản phẩm</span>
-      <span class="px-2.5 py-0.5 rounded-xl font-label-sm text-label-sm bg-tertiary-fixed text-on-tertiary-fixed font-semibold flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">check_circle</span>
-        <span class="">Đã thẩm định</span>
-      </span>
-    </div>
-    <a class="font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate" href="03_chi-tiet-tai-nguyen.html">
-      Hệ thống AI Edge giám sát an toàn giao thông (EdgeVision-Traffic)
-    </a>
-    <div class="flex items-center gap-space-md flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2">
-      <span class="flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px] text-outline">group</span>
-        <span class="">Nhóm: VisionLab UIT</span>
-      </span>
-      <span class="">•</span>
-      <span class="flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px] text-outline">school</span>
-        <span class="">GVHD: TS. Nguyễn Văn A</span>
-      </span>
-      <span class="">•</span>
-      <span class="px-2 py-0.5 rounded-xl bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
-        Chủ nhiệm
-      </span>
-      <span class="">•</span>
-      <span class="text-outline">Cập nhật: 12/10/2026</span>
-    </div>
-  </div>
-  <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-primary hover:bg-[#1F4E78] text-on-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button" data-href="03_chi-tiet-tai-nguyen.html">
-      <span class="material-symbols-outlined text-[16px]">visibility</span>
-      <span class="">Xem trên Kho tài liệu</span>
-    </button>
-    <div class="relative group">
-      <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
-        <span class="material-symbols-outlined text-[20px]">more_vert</span>
-      </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">info</span>
-          <span class="">Chi tiết</span>
-        </a>
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">content_copy</span>
-          <span class="">Sao chép</span>
-        </a>
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-error hover:bg-error-container transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">delete</span>
-          <span class="">Xóa</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CARD 2: Action Required Project -->
-<div id="card-federated" data-card-status="changes_requested" class="w-full bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md project-item">
-  <div class="w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container relative">
-    <img class="w-full h-full object-cover" data-alt="Modern medical healthcare informatics visual" src="../../assets/img/img-15.jpg">
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col">
-    <div class="flex items-center gap-space-xs flex-wrap">
-      <span class="px-2 py-0.5 rounded-sm font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed font-semibold">Bài báo</span>
-      <span class="px-2.5 py-0.5 rounded-xl font-label-sm text-label-sm bg-status-warning/15 text-status-warning font-semibold flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">warning</span>
-        <span class="">Cần bổ sung</span>
-      </span>
-    </div>
-    <a class="font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate" href="#">
-      Federated Learning bảo mật dữ liệu y tế đa trung tâm
-    </a>
-    <div class="flex items-center gap-space-md flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2">
-      <span class="flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px] text-outline">school</span>
-        <span class="">GVHD: TS. Nguyễn Văn A</span>
-      </span>
-      <span class="">•</span>
-      <span class="px-2 py-0.5 rounded-xl bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
-        Thành viên
-      </span>
-      <span class="">•</span>
-      <span class="text-outline">Cập nhật: 10/10/2026</span>
-    </div>
-    <div class="mt-2.5 p-2 bg-status-warning/10 rounded font-body-sm text-body-sm text-on-surface flex items-start gap-2">
-      <span class="material-symbols-outlined text-[18px] text-status-warning flex-shrink-0 mt-0.5">announcement</span>
-      <span class=""><strong>Giảng viên yêu cầu:</strong> Bổ sung kết quả thực nghiệm benchmark độ trễ và cập nhật danh mục tài liệu tham khảo IEEE.</span>
-    </div>
-  </div>
-  <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-status-warning text-on-surface rounded-lg font-label-md text-label-md font-bold shadow-xs transition-colors hover:brightness-95 flex items-center gap-1.5" type="button">
-      <span class="material-symbols-outlined text-[16px]">edit_note</span>
-      <span class="">Bổ sung ngay</span>
-    </button>
-    <div class="relative group">
-      <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
-        <span class="material-symbols-outlined text-[20px]">more_vert</span>
-      </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">info</span>
-          <span class="">Chi tiết</span>
-        </a>
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">history</span>
-          <span class="">Lịch sử phản hồi</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CARD 3: In Review with Stepper -->
-<div id="card-vit" data-card-status="pending" class="w-full bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md project-item">
-  <div class="w-full md:w-[130px] h-28 rounded overflow-hidden flex-shrink-0 bg-surface-container relative">
-    <img class="w-full h-full object-cover" data-alt="High precision edge SoC microchip processor circuitry" src="../../assets/img/img-01.jpg">
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col">
-    <div class="flex items-center gap-space-xs flex-wrap">
-      <span class="px-2 py-0.5 rounded-sm font-label-sm text-label-sm bg-tertiary-fixed-dim text-on-tertiary-fixed font-semibold">Đề tài NCKH</span>
-      <span class="px-2.5 py-0.5 rounded-xl font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed font-semibold flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">hourglass_top</span>
-        <span class="">Chờ thẩm định</span>
-      </span>
-    </div>
-    <a class="font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate" href="#">
-      Tối ưu mô hình Vision Transformers trên SoC biên nhúng
-    </a>
-    <div class="flex items-center gap-space-md flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2">
-      <span class="px-2 py-0.5 rounded-xl bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
-        Chủ nhiệm
-      </span>
-      <span class="">•</span>
-      <span class="text-outline">Cập nhật: 05/10/2026</span>
-      <span class="">•</span>
-      <span class="text-on-secondary-container">Hội đồng: Khoa Kỹ thuật Máy tính</span>
-    </div>
-    
-  </div>
-  <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-surface-container-lowest text-primary border border-primary/30 hover:bg-brand-light-blue hover:border-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button">
-      <span class="material-symbols-outlined text-[16px]">timeline</span>
-      <span class="">Xem tiến trình</span>
-    </button>
-    <div class="relative group">
-      <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
-        <span class="material-symbols-outlined text-[20px]">more_vert</span>
-      </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">info</span>
-          <span class="">Chi tiết</span>
-        </a>
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">download</span>
-          <span class="">Tải biên bản</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CARD 4: Draft Project -->
-<div id="card-supplychain" data-card-status="draft" class="w-full bg-surface-container-lowest rounded-lg shadow-xs hover:shadow-md transition-all p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md project-item">
-  <div class="w-full md:w-[130px] h-24 rounded overflow-hidden flex-shrink-0 bg-surface-container relative">
-    <img class="w-full h-full object-cover" data-alt="Modern logistics digital twin" src="../../assets/img/img-14.jpg">
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col">
-    <div class="flex items-center gap-space-xs flex-wrap">
-      <span class="px-2 py-0.5 rounded-sm font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed font-semibold">Sản phẩm</span>
-      <span class="px-2.5 py-0.5 rounded-xl font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant font-semibold flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">edit</span>
-        <span class="">Bản nháp</span>
-      </span>
-    </div>
-    <a class="font-headline-sm text-headline-sm text-on-surface hover:text-primary transition-colors mt-1.5 truncate" href="#">
-      Hệ thống truy xuất nguồn gốc chuỗi cung ứng nông sản thông minh
-    </a>
-    <div class="flex items-center gap-space-md flex-wrap font-body-sm text-body-sm text-on-surface-variant mt-2">
-      <span class="px-2 py-0.5 rounded-xl bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
-        Chủ nhiệm
-      </span>
-      <span class="">•</span>
-      <span class="text-outline">Cập nhật: 01/10/2026</span>
-      <span class="">•</span>
-      <span class="text-outline">Đã lưu trữ tự động trên đám mây UIT</span>
-    </div>
-  </div>
-  <div class="flex items-center gap-space-sm flex-shrink-0 self-end md:self-center">
-    <button class="h-9 px-space-md bg-brand-navy-dark hover:bg-brand-hero-dark text-on-primary rounded-lg font-label-md text-label-md shadow-xs transition-colors flex items-center gap-1.5" type="button">
-      <span class="material-symbols-outlined text-[16px]">edit_document</span>
-      <span class="">Tiếp tục chỉnh sửa</span>
-    </button>
-    <div class="relative group">
-      <button class="w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
-        <span class="material-symbols-outlined text-[20px]">more_vert</span>
-      </button>
-      <div class="absolute right-0 top-full mt-1 w-40 bg-surface-container-lowest rounded-lg shadow-lg py-1 z-20 hidden group-hover:block group-focus-within:block hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">content_copy</span>
-          <span class="">Nhân bản bản nháp</span>
-        </a>
-        <a class="flex items-center gap-2 px-space-md py-2 font-body-sm text-body-sm text-error hover:bg-error-container transition-colors" href="#">
-          <span class="material-symbols-outlined text-[16px]">delete</span>
-          <span class="">Xóa đề tài</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- Danh sách đề tài: dựng bằng assets/js/de-tai-cua-toi.js (GET /api/student-projects) -->
+<div class="flex flex-col gap-space-md" id="project-list" aria-live="polite">
+<p id="project-loading" class="font-body-md text-body-md text-on-surface-variant">Đang tải đề tài…</p>
 <div id="empty-state-notice" class="hidden w-full bg-surface-container-lowest rounded-lg shadow-xs p-space-xl flex flex-col items-center justify-center text-center py-12">
   <div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center text-outline mb-3">
     <span class="material-symbols-outlined text-[32px]">folder_off</span>
   </div>
   <h3 class="font-headline-sm text-headline-sm text-on-surface">Không có đề tài nào</h3>
-  <p class="font-body-md text-body-md text-on-surface-variant max-w-md mt-1">Không tìm thấy đề tài nào phù hợp với bộ lọc trạng thái được chọn.</p>
-  <button type="button" onclick="document.querySelector('[data-status-filter=\'all\']').click()" class="mt-4 h-9 px-space-md bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-md text-label-md transition-colors">
+  <p id="empty-state-message" class="font-body-md text-body-md text-on-surface-variant max-w-md mt-1">Không tìm thấy đề tài nào phù hợp với bộ lọc trạng thái được chọn.</p>
+  <button type="button" onclick="resetProjectFilters()" class="mt-4 h-9 px-space-md bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-md text-label-md transition-colors">
     Xem tất cả đề tài
   </button>
 </div></div>
 <!-- Pagination Footer -->
 <div class="mt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm py-space-sm">
 <div class="flex items-center gap-2">
-<span class="">Hiển thị <strong>1 - 4</strong> trên tổng số <strong>4</strong> đề tài</span>
+<span id="project-count" class="" aria-live="polite">Hiển thị <strong>1 - 4</strong> trên tổng số <strong>4</strong> đề tài</span>
 </div>
 <!-- Pager Controls -->
 <div class="flex items-center gap-1">

@@ -16,6 +16,7 @@ backend/
 │   ├── routes/studentProfile.js        # GET/PUT /api/student-profile/links
 │   ├── routes/studentCv.js             # GET /api/student-cv
 │   ├── routes/studentShowcase.js       # /api/student-showcase (công trình trưng bày trên CV)
+│   ├── routes/studentProjects.js       # /api/student-projects (Đề tài của tôi – SV-05)
 │   ├── routes/studentAchievements.js   # /api/student-achievements (thành tích tự khai, minh chứng)
 │   └── services/
 │       ├── labApplicationService.js    # nghiệp vụ ứng tuyển đề tài: R1, R2, R3
@@ -64,17 +65,25 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-cv` | Dữ liệu xem trước CV (hồ sơ, học vấn, kỹ năng, dự án trên CV, kinh nghiệm, giải thưởng, chứng chỉ). Chỉ số và mục đang ẩn không được trả về, tên của chúng nằm ở `hiddenFields`; thành tích bị từ chối không được trả về |
 | `GET` | `/api/student-achievements` | Thành tích của SV: `{ achievements: [{ achievementId, category, title, issuedBy, issuedDate, detail, visibility, status, hasEvidence }] }` |
 | `POST` | `/api/student-achievements` | Thêm `{ "category": "Award"\|"Publication"\|"Language_Cert"\|"Tech_Cert", "title", "issuedBy", "issuedDate": "YYYY-MM-DD", "detail"?, "visibility"? }` → 201, luôn ở trạng thái `Self_Declared`; sai dữ liệu → 400; trùng tên + tổ chức + ngày → 409 `ALREADY_EXISTS` |
+| | | Loại `Publication` (công bố bên ngoài hệ thống) cần `externalUrl` (URL `https://` hoặc mã DOI) hoặc `hasEvidenceFile: true` khi sẽ tải tệp ngay sau đó; thiếu cả hai → 400 `PROOF_REQUIRED`. Phản hồi có `externalUrl`, `missingProof`; mục `missingProof` không lên CV (cần migration 008) |
 | `PATCH` | `/api/student-achievements/:id` | Đổi chế độ hiển thị `{ "visibility" }` → 200; không phải mục của mình → 404 `ACHIEVEMENT_NOT_FOUND` |
 | `DELETE` | `/api/student-achievements/:id` | Xóa mục và tệp minh chứng → 204; 404 |
 | `PUT` | `/api/student-achievements/:id/evidence` | Tải / thay minh chứng: thân là tệp PDF/JPG/PNG ≤ 5 MB → 200; sai loại → 415, quá lớn → 413; mục `Pending`/`Verified` → 409 `ACHIEVEMENT_LOCKED` |
 | `GET` | `/api/student-achievements/:id/evidence` | Chuyển hướng 302 tới liên kết ký tạm (60 giây) trong bucket riêng tư `evidence`; chưa có tệp → 404 `EVIDENCE_NOT_FOUND` |
 | `POST` | `/api/student-achievements/:id/verification-request` | Gửi xác minh (tùy chọn): `Self_Declared`/`Rejected` → `Pending`; chưa có tệp → 409 `EVIDENCE_REQUIRED`; trạng thái khác → 409 `INVALID_STATUS` |
-| `GET` | `/api/student-showcase` | Công trình SV trưng bày trên CV, theo thứ tự: `{ items: [{ resourceId, type, title, venue, trlLevel, reviewerName, reviewedAt, reviewScore, role, highlights, isShownOnCv, displayOrder, eligible }] }` |
-| `GET` | `/api/student-showcase/available` | Tài nguyên chọn được (của SV hoặc nhóm SV, đã được GV thẩm định đạt) mà chưa chọn: `{ resources }` |
-| `POST` | `/api/student-showcase` | Thêm `{ "resourceId", "role"?, "highlights"?, "isShownOnCv"? }` → 201; không phải của mình → 404 `RESOURCE_NOT_FOUND`; chưa thẩm định đạt → 409 `NOT_REVIEWED`; đã chọn → 409 `ALREADY_EXISTS` |
-| `PATCH` | `/api/student-showcase/:resourceId` | Đổi `role`, `highlights`, `isShownOnCv` → 200; 404 `SHOWCASE_NOT_FOUND` |
+| `GET` | `/api/student-showcase` | Công trình SV trưng bày trên CV, theo thứ tự: `{ items: [{ resourceId, type, title, venue, trlLevel, reviewerName, reviewedAt, reviewScore, role, highlights, isShownOnCv, displayOrder, eligible, ineligibleReason }] }`. `ineligibleReason`: `NOT_MEMBER` (đã rời nhóm; chỉ còn tên và loại), `NOT_PUBLISHED` (chưa / không còn công khai) hoặc `NOT_REVIEWED` (không có phiếu thẩm định đạt) |
+| `GET` | `/api/student-showcase/available` | Công trình chọn được mà chưa chọn: của nhóm SV đang tham gia hoặc tài nguyên cá nhân của SV, trạng thái `Published` và có phiếu thẩm định đạt: `{ resources }` |
+| `POST` | `/api/student-showcase` | Thêm `{ "resourceId", "role"?, "highlights"?, "isShownOnCv"? }` → 201; không phải của mình → 404 `RESOURCE_NOT_FOUND`; chưa công khai (kể cả `Approved`) → 409 `NOT_PUBLISHED`; không có phiếu thẩm định đạt → 409 `NOT_REVIEWED`; đã chọn → 409 `ALREADY_EXISTS` |
+| `PATCH` | `/api/student-showcase/:resourceId` | Đổi `role`, `highlights`, `isShownOnCv` → 200; đã rời nhóm sở hữu → 403 `NOT_TEAM_MEMBER`; 404 `SHOWCASE_NOT_FOUND` |
 | `DELETE` | `/api/student-showcase/:resourceId` | Gỡ khỏi danh sách (giữ nguyên tài nguyên gốc) → 204; 404 `SHOWCASE_NOT_FOUND` |
 | `PUT` | `/api/student-showcase/order` | Sắp xếp `{ "resourceIds": [...] }` (đúng đủ các mục đang chọn) → 200 `{ items }`; sai → 400 |
+| `GET` | `/api/student-projects` | Đề tài cá nhân của SV và đề tài của nhóm SV đang tham gia (`Project`/`Product`/`Paper`/`Thesis`), mới cập nhật trước: `{ projects: [{ resourceId, type, status, title, abstract, authors, keywords, venue, doi, fieldId, field, team, lecturer, role, hasFile, fileSizeKb, latestReview, canEdit, canDelete, ... }] }`. `role` là vai trò trong nhóm (`Leader`/`Member`); đề tài cá nhân là `Leader` |
+| `GET` | `/api/student-projects/options` | Lựa chọn cho biểu mẫu: `{ fields, teams: [{ teamId, name, role }] }` (chỉ nhóm đang hoạt động) |
+| `POST` | `/api/student-projects` | Tạo bản nháp `{ "type", "title" (5–255), "teamId"? (bắt buộc với `Paper`), "abstract"?, "authors"?, "keywords"?, "venue"?, "doi"?, "fieldId"?, "sourceCodeUrl"?, "demoUrl"? (https) }` → 201, luôn ở `Draft`; sai dữ liệu → 400 `INVALID_INPUT`; không thuộc nhóm → 403 `NOT_TEAM_MEMBER`; nhóm ngừng hoạt động → 409 `TEAM_INACTIVE` |
+| `PATCH` | `/api/student-projects/:id` | Sửa các trường ở trên (trừ `type`, `teamId`; `status` bị bỏ qua) → 200; chỉ khi `Draft`/`Revision_Needed`, ngoài ra → 409 `PROJECT_LOCKED`; không được xem → 404 `PROJECT_NOT_FOUND` |
+| `PUT` | `/api/student-projects/:id/file` | Thân yêu cầu là tệp PDF (`Content-Type: application/pdf`) ≤ 10 MB → 200; 404; 409 `PROJECT_LOCKED`; 413 `FILE_TOO_LARGE`; 415 `UNSUPPORTED_TYPE`; mạng quá chậm → 504 `UPLOAD_TIMEOUT` (máy chủ chờ kho tối đa 180 giây) |
+| `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
+| `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
 | `GET` | `/api/student-rd-problems` | Bài toán R&D đã được duyệt công khai (Open / In_Progress) cho SV-09: `{ problems: [{ id, code, title, summary, type, fieldName, status, isOpen, funding, fundingMin, deadline, acceptedPartners, skills, business, saved, myProposal, fitScore }], saved: [problemId] }` |
 | `GET` | `/api/student-rd-problems/:code` | Chi tiết cho SV-13 (thêm mô tả, quy mô nhóm, TRL, sản phẩm, NDA, mốc, tệp đề bài, proposal của tôi, nhóm & GV để chọn) → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND` |
