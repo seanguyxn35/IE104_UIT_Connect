@@ -17,6 +17,7 @@ import { studentShowcaseRouter } from './sv/04-ho-so-nang-luc-cv/cong-trinh-trun
 import { studentProjectsRouter } from './sv/05-de-tai-cua-toi/de-tai.routes.js';
 import { teamProfileRouter } from './sv/06-quan-tri-nhom/ho-so-nhom.routes.js';
 import { teamAvatarRouter } from './sv/06-quan-tri-nhom/anh-nhom.routes.js';
+import { teamInviteRouter, myInvitationRouter } from './sv/06-quan-tri-nhom/loi-moi.routes.js';
 import { studentTeamsRouter } from './sv/06-quan-tri-nhom/don-gia-nhap.routes.js';
 import { businessInboxRouter } from './dn/08-hop-thu-ket-noi/hop-thu.routes.js';
 import { businessNegotiationsRouter } from './dn/09-16-dam-phan/dam-phan.routes.js';
@@ -63,7 +64,8 @@ app.use('/api/student-achievements', chiSv, studentAchievementsRouter);
 app.use('/api/student-showcase', chiSv, studentShowcaseRouter);
 app.use('/api/student-rd-problems', chiSv, studentRdProblemsRouter);
 app.use('/api/student-projects', chiSv, studentProjectsRouter);
-app.use('/api/student-teams', chiSv, teamProfileRouter, teamAvatarRouter, studentTeamsRouter);
+app.use('/api/student-teams', chiSv, teamProfileRouter, teamAvatarRouter, teamInviteRouter, studentTeamsRouter);
+app.use('/api/student-invitations', chiSv, myInvitationRouter);
 app.use('/api/business-inbox', chiDn, businessInboxRouter);
 app.use('/api/business-negotiations', chiDn, businessNegotiationsRouter);
 app.use('/api/business-dashboard', chiDn, businessDashboardRouter);

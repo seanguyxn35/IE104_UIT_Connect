@@ -351,8 +351,13 @@ CREATE TABLE team_invitation (
     status              VARCHAR(20) NOT NULL DEFAULT 'Pending',
     created_at           TIMESTAMPTZ(0) NOT NULL DEFAULT now(),
     responded_at         TIMESTAMPTZ(0) NULL,
-    CONSTRAINT ck_team_invitation_status CHECK (status IN ('Pending','Accepted','Declined','Expired'))
+    message              VARCHAR(500) NULL,    -- (+) migration 012: lời nhắn của người mời
+    response_note        VARCHAR(500) NULL,    -- (+) migration 012: lý do từ chối (không bắt buộc)
+    CONSTRAINT ck_team_invitation_status CHECK (status IN ('Pending','Accepted','Declined','Expired','Cancelled'))
 );
+CREATE UNIQUE INDEX ux_team_invitation_pending ON team_invitation (team_id, student_id) WHERE status = 'Pending';
+CREATE INDEX ix_team_invitation_student ON team_invitation (student_id, status);
+-- Hàm gửi / trả lời / thu hồi và trigger tự hủy lời mời: chạy thêm migrations/012_sv_loi_moi_vao_nhom.sql
 
 -- 7. [PDF] AcademicResource (+ mã, người tạo, lĩnh vực, khoa/lab, TRL, thông tin xuất bản, các bước thẩm định)
 --    Kho tài liệu (SV 02 / GV 09), chi tiết tài liệu (SV 03 / GV 10), "Đề tài của tôi" (SV 05)

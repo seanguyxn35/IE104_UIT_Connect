@@ -49,7 +49,13 @@ Bản hướng dẫn từng bước trên VS Code cho thành viên mới dùng G
   - CSDL không lưu lịch họp riêng của nhóm: thẻ cố vấn hiện **lịch tiếp sinh viên** (`office_hour`).
   - "Gửi báo cáo tiến độ tuần" chỉ **soạn email** cho cố vấn; hệ thống không gửi, không lưu báo cáo.
   - Ảnh nhóm: **chỉ Leader** đổi / xóa; JPG/PNG/WebP ≤ 2 MB, server kiểm tra nội dung tệp; ảnh công khai trong bucket `avatars/team-<id>/`.
-- Số liệu nhóm **tự cập nhật** (chốt 27/11/2026): số thành viên, đơn chờ trên SV-06 và huy hiệu "đơn chờ duyệt" (nhóm mình làm Leader) ở menu trái mọi trang SV. Làm bằng **hỏi lại máy chủ ~10 giây một lần** (`assets/js/dem-don-nhom.js`), không dùng Supabase Realtime vì frontend không gọi Supabase trực tiếp. Tạm dừng khi tab ẩn, dừng khi hết phiên.
+- Lời mời vào nhóm (`team_invitation`, chốt 27/11/2026):
+  - **Chỉ Leader** tra cứu, gửi, xem, thu hồi (kể cả lời mời của Leader trước); **chỉ người được mời** trả lời. Không ai bị thêm vào nhóm khi chưa đồng ý. GV mời: để khi có cổng GV.
+  - Tra cứu bằng đúng MSSV / email, chỉ hiện tên, MSSV, ngành; tối đa 30 người khác nhau / 10 phút.
+  - Hết hạn 7 ngày; bị từ chối thì 7 ngày sau mới mời lại (đã thu hồi / hết hạn: mời lại ngay); tối đa 10 lời mời chờ mỗi nhóm; lời mời không giữ chỗ; từ chối không bắt buộc lý do.
+  - Người đang có đơn chờ vào nhóm thì không gửi lời mời (duyệt đơn). Đồng ý lời mời thì đơn chờ vào nhóm đó chuyển `Withdrawn`; ai vào nhóm bằng đường khác thì lời mời chờ tự `Cancelled`.
+  - **Bỏ** "đường dẫn tham gia nhanh, duyệt tức thời" (bỏ qua quyền Leader và giới hạn thành viên).
+- Số liệu nhóm **tự cập nhật** (chốt 27/11/2026): số thành viên, đơn chờ trên SV-06 và huy hiệu ở menu trái mọi trang SV (đơn chờ duyệt ở nhóm mình làm Leader + lời mời chờ mình trả lời). Làm bằng **hỏi lại máy chủ ~10 giây một lần** (`assets/js/dem-don-nhom.js`), không dùng Supabase Realtime vì frontend không gọi Supabase trực tiếp. Tạm dừng khi tab ẩn, dừng khi hết phiên.
 - Kết nối DN: chỉ sang `Contracted`/`Completed` khi **cả hai bên** xác nhận. Chỉ là trạng thái, không làm hợp đồng điện tử.
 - Đánh giá đối tác chỉ khi kết nối `Completed`, điểm 1.0–5.0.
 - Tài nguyên học thuật: GV thẩm định `Approved|Rejected|Revision_Needed`; mọi quyết định của Admin ghi vào `moderation_log`.
@@ -124,6 +130,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - `GET /api/student-teams`, `GET .../:teamId`, `GET .../:teamId/applications`, `POST .../:teamId/applications/:applyId/accept|reject` (SV-06)
   - `GET /api/student-teams/profile-options`, `GET|PATCH /api/student-teams/:teamId/profile` (SV-06 hồ sơ nhóm)
   - `GET /api/student-teams/pending-count`, `PUT|DELETE /api/student-teams/:teamId/avatar` (SV-06 đếm đơn chờ, ảnh nhóm)
+  - `GET /api/student-teams/:teamId/invite-lookup`, `GET|POST .../:teamId/invitations`, `POST .../invitations/:invitationId/cancel`; `GET /api/student-invitations`, `POST .../:invitationId/accept|decline` (lời mời)
   - `GET|POST /api/student-achievements`, `PATCH|DELETE /api/student-achievements/:id`, `GET|PUT .../:id/evidence`, `POST .../:id/verification-request`
   - DN-08 Hộp thư kết nối (danh tính DN từ phiên đăng nhập; `AUTH_MODE=test` thì dùng `TEST_BUSINESS_ID`):
     - `GET /api/business-inbox`
@@ -147,7 +154,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
     DN-04/05/14/15 (bài toán R&D) chưa có API.
 - Thêm API mới: tạo file trong thư mục màn hình, gắn route ở `server.js` kèm `chiSv` / `chiDn` / `chiChoVaiTro(...)`, cập nhật `backend/README.md` (các bước ở `CONTRIBUTING.md` mục 6).
 - `sv/04-ho-so-nang-luc-cv/cv-pdf.service.js` đọc `frontend/assets/` bằng đường dẫn tương đối: đổi độ sâu thư mục thì phải sửa và thử xuất PDF (3 bộ test không phủ phần này).
-- Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql` (số tiếp theo: `012`), chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
+- Đổi lược đồ: viết file mới trong `database/migrations/NNN_*.sql` (số tiếp theo: `013`), chạy trên Supabase, rồi cập nhật `schema.postgres.sql`.
 
 ## 6. Giao diện
 
@@ -210,6 +217,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - Luồng DN: `migrations/004_dn_hop_thu_ket_noi.sql` → `005_dn_khong_gian_dam_phan.sql` (một lần) → `seed_dn.sql` (lần đầu và mỗi khi cần đặt lại dữ liệu thử DN) → `cd backend && npm run seed:dn-files` (tải PDF minh họa cho tệp đính kèm).
   - Bài toán R&D phía SV: `migrations/006_sv_bai_toan_rd.sql` (một lần) → `seed_sv_rd.sql` (sau `seed_dn.sql`; chạy lại `seed_dn.sql` thì chạy lại file này) → `npm run seed:dn-files`.
   - Đơn xin gia nhập nhóm: `migrations/009_sv_don_gia_nhap_nhom.sql` (một lần) → `seed_team_applications.sql` (sau `seed_dn.sql`, `seed_showcase.sql`).
+  - Lời mời vào nhóm: `migrations/012_sv_loi_moi_vao_nhom.sql` (một lần, sau 009).
   - Hồ sơ nhóm: `migrations/010_sv_ho_so_nhom.sql`, `011_sv_anh_nhom.sql` (một lần) → `seed_team_profile.sql` (sau `seed_showcase.sql`).
     Bảng nối mới nối hai bảng đã có khóa ngoại trực tiếp (như `team_field`) phải dùng **khóa chính riêng**: khóa chính ghép hai khóa ngoại làm PostgREST thấy hai đường quan hệ và các truy vấn cũ lỗi `PGRST201`.
   - Đăng nhập: `migrations/007_dang_nhap.sql` (một lần) → `seed_auth.sql` (sau `seed_sv_rd.sql`; chạy lại seed khác thì chạy lại file này).
@@ -219,18 +227,18 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915
     - Lịch 9951–9957; tin 9001–9014; tệp 9961–9989
-- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth`; đơn xin vào nhóm: `npm run test:team-join`; hồ sơ nhóm: `npm run test:team-profile`; API công khai: `npm run test:public` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
+- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth`; đơn xin vào nhóm: `npm run test:team-join`; hồ sơ nhóm: `npm run test:team-profile`; lời mời: `npm run test:team-invite`; API công khai: `npm run test:public` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
 
 ## 9. Việc đang mở / lưu ý
 
 - Trạng thái nhánh (27/11/2026): backend được ghép trên `develop`; `main` chưa có backend.
 - Nhánh `thuc-hanh/ung-tuyen-de-tai` (commit `bea23cb`) là bản nộp bài cá nhân: không sửa, không gộp.
 - `schema.sql` (SQL Server) đã lệch `schema.postgres.sql` (ví dụ thiếu các cột của migration 001).
-- CSDL chung đã có các cột / bảng chính của migration 001, 003 – 011.
+- CSDL chung đã có các cột / bảng chính của migration 001, 003 – 012.
 - Đã có đăng nhập + phân quyền theo vai trò ở backend (mục 5); chưa có policy RLS, chưa có API đăng ký tài khoản, chưa có dịch vụ gửi email.
 - Màn đăng ký (03–06, 09–13) vẫn là giả lập, chưa gọi API. "UIT SSO" thực chất là đăng nhập email + mật khẩu giới hạn email UIT (SSO thật nằm ngoài phạm vi).
 - Chưa có màn hình và API cho Admin.
-- SV-06: đầu trang, thẻ thống kê và tab "Thông tin nhóm" đã nối API (`nhom-thong-tin.js`). Đã có API duyệt đơn xin vào nhóm nhưng **4 tab còn lại vẫn là dữ liệu tĩnh** (trang ghi rõ "dữ liệu mẫu"). Nút "Xem Portfolio công khai", "Mời thành viên mới" chưa có chức năng. Chưa có API cho SV nộp / rút đơn (SV-07), quản lý tin tuyển, thành viên, và đọc thông báo. Đường dẫn "tham gia nhanh, duyệt tức thời" trên trang bỏ qua quyền Leader và giới hạn thành viên: chưa làm, cần nhóm chốt (`TBD`).
+- SV-06: đầu trang, thẻ thống kê và tab "Thông tin nhóm" đã nối API (`nhom-thong-tin.js`). Đã có API duyệt đơn xin vào nhóm nhưng **4 tab còn lại vẫn là dữ liệu tĩnh** (trang ghi rõ "dữ liệu mẫu"). Lời mời đã nối API (`nhom-loi-moi.js`); nút "Xem Portfolio công khai" chưa có chức năng. `TBD`: thành viên mới (qua đơn hoặc lời mời) có được ghim lên CV công trình nhóm công bố trước khi họ vào hay không (hiện: được). Chưa có API cho SV nộp / rút đơn (SV-07), quản lý tin tuyển, thành viên, và đọc thông báo.
 - Trang gọi API: SV-04, SV-05, SV-06, SV-07, SV-09, SV-13 và DN-01, DN-08, DN-09, DN-16; trang GV còn dữ liệu tĩnh.
 - SV-05: đã có tạo, xem, sửa bản nháp và tải PDF. **Chưa có** chọn GV, gửi thẩm định, lịch sử nộp và API thẩm định cho GV (GV-06, GV-07).
 - Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16): dn/08, 09, 16 đã có API (mục 5), còn dn/04, 05, 14, 15 **chưa có API**:

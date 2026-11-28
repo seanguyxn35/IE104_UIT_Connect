@@ -31,14 +31,14 @@ backend/
 │   │   │   ├── cv.*                   # /api/student-cv (gom dữ liệu CV)
 │   │   │   └── cv-pdf.service.js      # dựng PDF của CV bằng trình duyệt chạy ẩn
 │   │   ├── 05-de-tai-cua-toi/         # de-tai.* – /api/student-projects
-│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* (duyệt đơn xin vào nhóm), ho-so-nhom.* (tab Thông tin nhóm), anh-nhom.* (ảnh nhóm) – /api/student-teams
+│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* (duyệt đơn xin vào nhóm), ho-so-nhom.* (tab Thông tin nhóm), anh-nhom.* (ảnh nhóm), loi-moi.* (lời mời) – /api/student-teams, /api/student-invitations
 │   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3)
 │   │   └── 09-13-bai-toan-rd/         # bai-toan-rd.* – /api/student-rd-problems
 │   └── dn/
 │       ├── 01-ban-lam-viec/           # ban-lam-viec.* – /api/business-dashboard
 │       ├── 08-hop-thu-ket-noi/        # hop-thu.* – /api/business-inbox
 │       └── 09-16-dam-phan/            # dam-phan.* – /api/business-negotiations
-├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, seed:dn-files
+├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, test:team-invite, seed:dn-files
 ├── .env.example                   # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
@@ -103,7 +103,14 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
 | `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-teams` | Nhóm SV đang tham gia: `{ teams: [{ teamId, name, shortName, code, semester, status, role, memberCount, maxMembers, pendingCount }] }` |
-| `GET` | `/api/student-teams/pending-count` | `{ pending }`: số đơn đang chờ ở các nhóm SV làm Leader (huy hiệu menu trái, được gọi định kỳ) |
+| `GET` | `/api/student-teams/pending-count` | Huy hiệu menu trái (được gọi định kỳ): `{ pending, applications, invitations }`; `applications` = đơn chờ ở các nhóm SV làm Leader, `invitations` = lời mời gửi cho SV, `pending` = tổng |
+| `GET` | `/api/student-teams/:teamId/invite-lookup?student=` | Chỉ Leader: tra **đúng** MSSV (8 số) hoặc email `@gm.uit.edu.vn` → `{ student { fullName, studentCode, major }, canInvite, blockedReason, blockedMessage }`; 400; 403; 404 `TEAM_NOT_FOUND` / `STUDENT_NOT_FOUND` (tài khoản khóa / chưa xác thực coi như không có); 429 `TOO_MANY_ATTEMPTS` khi tra quá 30 người khác nhau trong 10 phút |
+| `GET` | `/api/student-teams/:teamId/invitations` | Chỉ Leader: lời mời còn hiệu lực `{ maxPending, invitations }` |
+| `POST` | `/api/student-teams/:teamId/invitations` | Chỉ Leader: `{ "student": "<MSSV \| email>", "message"? ≤ 500 }` → 201 (không nhận `studentId`). Thứ tự: 404 `TEAM_NOT_FOUND` → 403 `NOT_TEAM_LEADER` → 409 `TEAM_INACTIVE` → 404 `STUDENT_NOT_FOUND` → 409 `ALREADY_MEMBER` → `TEAM_FULL` → `ALREADY_INVITED` → `HAS_PENDING_APPLICATION` → `DECLINED_RECENTLY` → `INVITE_LIMIT` (10 lời mời chờ) |
+| `POST` | `/api/student-teams/:teamId/invitations/:invitationId/cancel` | Leader hiện tại thu hồi → 200 `Cancelled`; 403; 404; 409 `INVITATION_NOT_PENDING` |
+| `GET` | `/api/student-invitations` | Lời mời còn hiệu lực gửi cho SV: `{ invitations: [{ invitationId, team, invitedBy, message, createdAt, expiresAt, canAccept, acceptBlockedReason }] }` |
+| `POST` | `/api/student-invitations/:invitationId/accept` | Chỉ người được mời → 200 `{ teamId, memberCount, maxMembers, withdrawnApplications }`; 404 `INVITATION_NOT_FOUND`; 409 `INVITATION_NOT_PENDING` / `INVITATION_EXPIRED` / `TEAM_INACTIVE` / `ALREADY_MEMBER` / `TEAM_FULL` |
+| `POST` | `/api/student-invitations/:invitationId/decline` | Chỉ người được mời, `{ "reason"? ≤ 500 }` → 200; 400; 404; 409 |
 | `GET` | `/api/student-teams/:teamId` | Số liệu đầu trang SV-06: `memberCount`, `applications { pending, newLast24h, responseRate }`, `recruitments { total, open, filled, closed, expired }`, `highestTrl`; không phải thành viên → 404 `TEAM_NOT_FOUND` |
 | `GET` | `/api/student-teams/:teamId/applications?status=Pending\|Accepted\|Rejected` | Mọi thành viên xem được: `{ viewer { role, canDecide }, team, counts, applications }` (mặc định `Pending`; đơn đã rút không hiện). Đơn chờ có `response { dueAt, level: normal\|urgent\|overdue }` (hạn 72 giờ từ lúc nộp, gấp khi còn dưới 24 giờ), `gpa` (chỉ khi người nộp đồng ý trên đơn), `skills`, `evidence { reviewed, selfDeclared }`, `canAccept`, `canReject`, `acceptBlockedReason`. Đơn đã xử lý chỉ còn danh tính, kết quả, `responseNote`, `stillMember` |
 | `POST` | `/api/student-teams/:teamId/applications/:applyId/accept` | Chỉ Leader → 200 `{ applyId, status, memberCount, maxMembers, recruitmentStatus }`. Thứ tự kiểm tra: 404 `TEAM_NOT_FOUND` → 403 `NOT_TEAM_LEADER` → 404 `APPLICATION_NOT_FOUND` → 409 `APPLICATION_NOT_PENDING` → `TEAM_INACTIVE` → `TEAM_FULL` → `ALREADY_MEMBER` → `APPLICANT_INACTIVE` → `POST_FILLED`. Tin đã đóng / hết hạn vẫn nhận được đơn đã nộp |
@@ -127,6 +134,8 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 **Đơn xin gia nhập nhóm (SV-06):** cần migration `009`. Chấp nhận / từ chối chạy bằng hàm CSDL `chap_nhan_don_gia_nhap`, `tu_choi_don_gia_nhap`: một transaction, khóa dòng `student_team` nên hai lần chấp nhận cùng lúc không vượt được số thành viên tối đa; kèm thông báo (`notification`, loại `Team`, không tạo nếu SV đã tắt loại này). Chưa có API cho SV nộp / rút đơn, quản lý tin tuyển và đọc thông báo. Dữ liệu thử: `database/seed_team_applications.sql`. Kiểm thử: `npm run test:team-join` (cần `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
 
 Hồ sơ nhóm: dữ liệu thử `database/seed_team_profile.sql`; kiểm thử `npm run test:team-profile` (cần migration 010 và 011, `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
+
+**Lời mời vào nhóm:** cần migration `012`. Gửi, đồng ý / từ chối, thu hồi chạy bằng hàm CSDL (một transaction, khóa dòng nhóm). Hết hạn sau 7 ngày, tính khi đọc. Trigger trên `team_member` tự hủy lời mời đang chờ khi người đó đã vào nhóm. Giới hạn tra cứu đếm trong bộ nhớ máy chủ. Kiểm thử: `npm run test:team-invite` (khởi động lại máy chủ trước khi chạy; ghi vào CSDL rồi tự dọn).
 
 Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
 
