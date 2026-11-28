@@ -108,7 +108,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
 - **Đăng nhập theo vai trò:**
   - Phiên phía máy chủ: cookie HttpOnly `uitc_session` + bảng `login_session` (chỉ lưu SHA-256 của token). Mật khẩu băm scrypt.
   - `auth/auth.service.js`, `auth/auth.routes.js` (`/api/auth/*`), `shared/authMiddleware.js` (`napPhien`, `chiChoVaiTro`). Hợp đồng ở đầu `frontend/assets/js/auth.js`.
-  - Route lấy danh tính từ `req.user.accountId`. `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho `Student`; `/api/business-*` chỉ cho `Business`.
+  - Route lấy danh tính từ `req.user.accountId`. `/api/student-*`, `/api/lab-applications`, `/api/lab-topics`, `/api/profile-visibility` chỉ cho `Student`; `/api/business-*` chỉ cho `Business`.
   - `AUTH_MODE=test` (mặc định): gọi API không kèm phiên thì dùng `TEST_STUDENT_ID` / `TEST_BUSINESS_ID` (script test cũ vẫn chạy). `AUTH_MODE=session`: bắt buộc đăng nhập (401).
   - Quên mật khẩu: mã 6 số trong `verification_code` (`Password_Reset`), sau đó `Reset_Token`. Chưa có dịch vụ email nên mã **in ra log máy chủ** – `TBD`.
   - Đếm "sai 5 lần / 15 phút" và "gửi lại sau 60 giây" nằm trong bộ nhớ máy chủ (khởi động lại thì xóa).
@@ -124,6 +124,7 @@ prototyp@/                 (chủ sở hữu từng thư mục: TBD)
   - Admin là tài khoản riêng `admin.uitconnect@uit.edu.vn` (role `Admin`, đăng nhập qua UIT SSO). CSDL chưa có tài khoản này, backend phải seed.
 - API hiện có:
   - `POST /api/lab-applications`
+  - `GET /api/lab-topics?q=&faculty=&field=&page=` (SV-07 tìm kiếm, lọc, phân trang đề tài Lab; `sv/07-cho-ghep-nhom/de-tai-lab.service.js`)
   - `GET|POST /api/student-skills`, `DELETE /api/student-skills/:skillId`
   - `GET|POST /api/student-avatar`
   - `GET|PUT /api/profile-visibility`, `GET|PUT /api/profile-visibility/mode`
@@ -228,6 +229,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
   - Thành viên, tin tuyển, thành tích nhóm: `migrations/013_sv_thanh_vien_tin_tuyen_thanh_tich.sql` (một lần, sau 009, 010).
   - Hồ sơ nhóm: `migrations/010_sv_ho_so_nhom.sql`, `011_sv_anh_nhom.sql` (một lần) → `seed_team_profile.sql` (sau `seed_showcase.sql`).
     Bảng nối mới nối hai bảng đã có khóa ngoại trực tiếp (như `team_field`) phải dùng **khóa chính riêng**: khóa chính ghép hai khóa ngoại làm PostgREST thấy hai đường quan hệ và các truy vấn cũ lỗi `PGRST201`.
+  - Chợ ghép nhóm (SV-07): `seed_lab_topics.sql` (đề tài Lab mẫu 9011–9022, sau `seed.sql`, `seed_dn.sql`).
   - Đăng nhập: `migrations/007_dang_nhap.sql` (một lần) → `seed_auth.sql` (sau `seed_sv_rd.sql`; chạy lại seed khác thì chạy lại file này).
     Mật khẩu chung các tài khoản thử: `MatKhau@123`. Admin 9001 `admin.uitconnect@uit.edu.vn`; SV 9103 chưa xác thực email, 9104 bị khóa.
     ID: DN/Lab khác 9511–9525; bài toán 9301–9315 (RD-2026-101..115); nhóm thử 9821 (SV 9101 trưởng nhóm), 9822 (9101 là thành viên), 9823 (5 người); tệp đề bài 9931–9950.
@@ -235,7 +237,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
     - DN 9501; SV 9601–9639; GV 9701–9703; nhóm 9801–9813
     - Bài toán 9084/9079/9071/9091/9904; proposal 9901–9915
     - Lịch 9951–9957; tin 9001–9014; tệp 9961–9989
-- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth`; đơn xin vào nhóm: `npm run test:team-join`; hồ sơ nhóm: `npm run test:team-profile`; lời mời: `npm run test:team-invite`; thành viên / tin tuyển / thành tích: `npm run test:team-manage`; API công khai: `npm run test:public` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
+- Test tự động: chưa có script `npm test` – `TBD`. Riêng bài toán R&D phía SV: `cd backend && npm run test:sv-rd`; đăng nhập: `npm run test:auth`; đơn xin vào nhóm: `npm run test:team-join`; hồ sơ nhóm: `npm run test:team-profile`; lời mời: `npm run test:team-invite`; thành viên / tin tuyển / thành tích: `npm run test:team-manage`; tìm kiếm đề tài Lab: `npm run test:lab-topics`; API công khai: `npm run test:public` (máy chủ đang chạy, khởi động lại trước mỗi lần; tự dọn dữ liệu).
 
 ## 9. Việc đang mở / lưu ý
 
@@ -247,6 +249,7 @@ npm start                # http://localhost:3000  (npm run dev: tự chạy lạ
 - Màn đăng ký (03–06, 09–13) vẫn là giả lập, chưa gọi API. "UIT SSO" thực chất là đăng nhập email + mật khẩu giới hạn email UIT (SSO thật nằm ngoài phạm vi).
 - Chưa có màn hình và API cho Admin.
 - SV-06: cả 5 tab đã nối API (`nhom-thong-tin.js`, `nhom-thanh-vien.js`, `nhom-don-gia-nhap.js`, `nhom-tin-tuyen.js`, `nhom-portfolio.js`), lời mời ở `nhom-loi-moi.js`. Đã bỏ nút "Xem Portfolio công khai" (chưa có trang công khai, `TBD`) và nút "Nhắn tin" / "Xem Portfolio cá nhân" trên thẻ đơn (chat ngoài phạm vi). Chợ ghép nhóm (SV-07) chưa hiện tin tuyển của nhóm. `TBD`: thành viên mới (qua đơn hoặc lời mời) có được ghim lên CV công trình nhóm công bố trước khi họ vào hay không (hiện: được). Chưa có API cho SV nộp / rút đơn (SV-07) và đọc thông báo.
+- SV-07: thanh tìm kiếm, lọc khoa / lĩnh vực, phân trang đã nối `GET /api/lab-topics` (`cho-ghep-nhom.js`; bộ lọc ghi lên địa chỉ trang). Không có máy chủ thì lọc trên 6 thẻ mẫu. Thẻ thống kê đầu trang, "Đề tài đã lưu", "Đăng tin tuyển quân", "Chi tiết Lab" chưa có chức năng.
 - Trang gọi API: SV-04, SV-05, SV-06, SV-07, SV-09, SV-13 và DN-01, DN-08, DN-09, DN-16; trang GV còn dữ liệu tĩnh.
 - SV-05: đã có tạo, xem, sửa bản nháp và tải PDF. **Chưa có** chọn GV, gửi thẩm định, lịch sử nộp và API thẩm định cho GV (GV-06, GV-07).
 - Nhóm trang Bài toán R&D của DN (dn/04, 05, 08, 09, 14, 15, 16): dn/08, 09, 16 đã có API (mục 5), còn dn/04, 05, 14, 15 **chưa có API**:

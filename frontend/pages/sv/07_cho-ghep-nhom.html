@@ -223,9 +223,10 @@ tailwind.config = {
 <main class="w-full bg-[#F5F7FA] p-4 sm:p-6 lg:p-8">
 <!-- ===== NỘI DUNG TRANG: Chợ ghép nhóm liên ngành ===== -->
 <div class="max-w-[1280px] mx-auto w-full">
-<div class="max-w-[1280px] mx-auto space-y-8">
+<div class="@container max-w-[1280px] mx-auto space-y-8">
+<!-- Chia cột theo bề rộng thật của vùng nội dung (container query), không theo cửa sổ vì còn sidebar -->
 <!-- Breadcrumb -->
-<nav class="flex items-center gap-2 text-xs text-slate-500">
+<nav class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
 <a class="hover:text-[#1F4E78] transition-colors flex items-center gap-1" href="01_trang-chu.html">
 <span class="material-symbols-outlined text-[15px]">home</span>
 <span class="">Trang chủ</span>
@@ -236,14 +237,14 @@ tailwind.config = {
 <span class="text-[#1A1A1A] font-semibold">Ghép nhóm nghiên cứu &amp; đề tài</span>
 </nav>
 <!-- HERO & CALL TO ACTION -->
-<section class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-slate-200">
-<div class="space-y-2.5 max-w-2xl"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold"><span class="material-symbols-outlined text-[16px]">groups</span><span class="">Nền tảng liên kết nghiên cứu học thuật ĐHQG-HCM</span></div><h1 class="text-2xl lg:text-[28px] font-bold text-[#1A1A1A] leading-tight">Ghép nhóm nghiên cứu &amp; đề tài</h1><p class="text-xs md:text-sm text-slate-600 leading-relaxed">Tìm kiếm cộng sự xuất sắc, tham gia các phòng lab nghiên cứu trọng điểm và hiện thực hóa đề tài tốt nghiệp, NCKH cấp Trường và liên ngành UIT.</p></div>
-<div class="flex items-center gap-3 shrink-0">
-<button class="h-10 px-4 rounded-lg bg-white border border-slate-200 text-[#1F4E78] font-semibold text-xs hover:bg-[#F5F7FA] transition-colors flex items-center gap-2 shadow-xs cursor-pointer">
+<section class="flex flex-col @4xl:flex-row @4xl:items-end justify-between gap-5 pb-4 border-b border-slate-200">
+<div class="space-y-2.5 max-w-2xl"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-[#E6F0F7] text-[#1F4E78] text-xs font-semibold"><span class="material-symbols-outlined text-[16px]">groups</span><span class="">Nền tảng liên kết nghiên cứu học thuật ĐHQG-HCM</span></div><h1 class="text-2xl @2xl:text-[28px] font-bold text-[#1A1A1A] leading-tight">Ghép nhóm nghiên cứu &amp; đề tài</h1><p class="text-sm text-slate-600 leading-relaxed">Tìm kiếm cộng sự xuất sắc, tham gia các phòng lab nghiên cứu trọng điểm và hiện thực hóa đề tài tốt nghiệp, NCKH cấp Trường và liên ngành UIT.</p></div>
+<div class="flex flex-wrap items-center gap-3 shrink-0">
+<button class="h-10 px-4 rounded-lg bg-white border border-slate-200 text-[#1F4E78] font-semibold text-xs hover:bg-[#F5F7FA] transition-colors flex items-center justify-center gap-2 whitespace-nowrap shadow-xs cursor-pointer">
 <span class="material-symbols-outlined text-[18px]">bookmark_add</span>
 <span class="">Đề tài đã lưu</span>
 </button>
-<button class="h-10 px-5 rounded-lg bg-[#1F4E78] text-white font-semibold text-xs hover:bg-[#163A59] transition-colors shadow-xs flex items-center gap-2 cursor-pointer">
+<button class="h-10 px-5 rounded-lg bg-[#1F4E78] text-white font-semibold text-xs hover:bg-[#163A59] transition-colors shadow-xs flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer">
 <span class="material-symbols-outlined text-[18px]">add_circle</span>
 <span class="">Đăng tin tuyển quân</span>
 </button>
@@ -251,63 +252,63 @@ tailwind.config = {
 </section>
 <!-- STAT SUMMARY CARDS -->
 <section>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+<div class="grid grid-cols-2 @4xl:grid-cols-4 gap-3 @2xl:gap-5">
 <!-- Stat 1 -->
-<div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
-<div class="flex items-center justify-between mb-4">
-<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Nhóm đang tuyển</span>
-<div class="w-10 h-10 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+<div class="bg-white border border-slate-200 rounded-lg p-4 @2xl:p-5 min-w-0 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
+<div class="flex items-start justify-between gap-3 mb-4">
+<span class="min-w-0 text-xs font-semibold uppercase tracking-wider leading-5 text-slate-500">Nhóm đang tuyển</span>
+<div class="w-10 h-10 shrink-0 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
 <span class="material-symbols-outlined">group_add</span>
 </div>
 </div>
-<div class="flex items-baseline justify-between">
+<div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 <span class="text-3xl font-bold text-[#1A1A1A] tracking-tight">128</span>
-<span class="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
+<span class="inline-flex items-center whitespace-nowrap text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
                     +12% tuần này
                   </span>
 </div>
 </div>
 <!-- Stat 2 -->
-<div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
-<div class="flex items-center justify-between mb-4">
-<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Đề tài liên khoa</span>
-<div class="w-10 h-10 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+<div class="bg-white border border-slate-200 rounded-lg p-4 @2xl:p-5 min-w-0 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
+<div class="flex items-start justify-between gap-3 mb-4">
+<span class="min-w-0 text-xs font-semibold uppercase tracking-wider leading-5 text-slate-500">Đề tài liên khoa</span>
+<div class="w-10 h-10 shrink-0 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
 <span class="material-symbols-outlined">hub</span>
 </div>
 </div>
-<div class="flex items-baseline justify-between">
+<div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 <span class="text-3xl font-bold text-[#1A1A1A] tracking-tight">42</span>
-<span class="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
+<span class="inline-flex items-center whitespace-nowrap text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
                     +8% chỉ số mới
                   </span>
 </div>
 </div>
 <!-- Stat 3 -->
-<div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
-<div class="flex items-center justify-between mb-4">
-<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Giảng viên hướng dẫn</span>
-<div class="w-10 h-10 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+<div class="bg-white border border-slate-200 rounded-lg p-4 @2xl:p-5 min-w-0 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
+<div class="flex items-start justify-between gap-3 mb-4">
+<span class="min-w-0 text-xs font-semibold uppercase tracking-wider leading-5 text-slate-500">Giảng viên hướng dẫn</span>
+<div class="w-10 h-10 shrink-0 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
 <span class="material-symbols-outlined">school</span>
 </div>
 </div>
-<div class="flex items-baseline justify-between">
+<div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 <span class="text-3xl font-bold text-[#1A1A1A] tracking-tight">85</span>
-<span class="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
+<span class="inline-flex items-center whitespace-nowrap text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
                     +5% lab mở rộng
                   </span>
 </div>
 </div>
 <!-- Stat 4 -->
-<div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
-<div class="flex items-center justify-between mb-4">
-<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Thành viên đã ghép</span>
-<div class="w-10 h-10 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
+<div class="bg-white border border-slate-200 rounded-lg p-4 @2xl:p-5 min-w-0 shadow-xs flex flex-col justify-between hover:border-[#1F4E78]/40 transition-all">
+<div class="flex items-start justify-between gap-3 mb-4">
+<span class="min-w-0 text-xs font-semibold uppercase tracking-wider leading-5 text-slate-500">Thành viên đã ghép</span>
+<div class="w-10 h-10 shrink-0 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center">
 <span class="material-symbols-outlined">handshake</span>
 </div>
 </div>
-<div class="flex items-baseline justify-between">
+<div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 <span class="text-3xl font-bold text-[#1A1A1A] tracking-tight">560+</span>
-<span class="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
+<span class="inline-flex items-center whitespace-nowrap text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-xl">
                     +18% hoàn tất
                   </span>
 </div>
@@ -316,316 +317,347 @@ tailwind.config = {
 </section>
 <!-- SEARCH & ADVANCED FILTERS -->
 <section class="space-y-4">
-<div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs flex flex-col md:flex-row gap-3">
-<div class="flex-1 flex items-center bg-[#F5F7FA] rounded-lg px-4 py-2 border border-transparent focus-within:border-[#1F4E78]">
+<form id="market-form" role="search" novalidate class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs flex flex-col @3xl:flex-row gap-3">
+<div class="flex-1 min-w-0 flex items-center bg-[#F5F7FA] rounded-lg px-4 py-2 border border-transparent focus-within:border-[#1F4E78]">
 <span class="material-symbols-outlined text-[#1F4E78] mr-3">search</span>
-<input class="w-full bg-transparent border-none p-0 text-xs md:text-sm focus:ring-0 text-[#1A1A1A] placeholder-[#5F6368]" placeholder="Tìm theo tên đề tài, phòng Lab, kỹ năng (PyTorch, Verilog, ROS2) hoặc Giảng viên..." type="text">
+<input id="market-search" name="q" maxlength="100" autocomplete="off" class="w-full bg-transparent border-none p-0 text-xs md:text-sm focus:ring-0 text-[#1A1A1A] placeholder-[#5F6368]" placeholder="Tìm đề tài, phòng Lab, kỹ năng, giảng viên…" aria-label="Tìm theo tên đề tài, phòng Lab, kỹ năng hoặc giảng viên" type="search">
 </div>
-<div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-<select class="h-10 px-3 bg-[#F5F7FA] border border-slate-200 rounded-lg text-xs font-medium text-[#1A1A1A] focus:ring-[#1F4E78]">
-<option>Tất cả khoa &amp; bộ môn</option>
-<option>Khoa Khoa học Máy tính</option>
-<option>Khoa Kỹ thuật Máy tính</option>
-<option>Khoa Mạng máy tính &amp; TT</option>
-<option>Khoa Hệ thống Thông tin</option>
+<div class="flex items-center gap-2">
+<select id="market-faculty" name="faculty" aria-label="Lọc theo khoa" class="flex-1 @3xl:flex-none min-w-0 h-10 pl-3 pr-8 bg-[#F5F7FA] border border-slate-200 rounded-lg text-xs font-medium text-[#1A1A1A] focus:ring-[#1F4E78]">
+<option value="">Tất cả khoa &amp; bộ môn</option>
+<option value="1">Khoa Khoa học Máy tính</option>
+<option value="2">Khoa Kỹ thuật Máy tính</option>
+<option value="5">Khoa Mạng máy tính &amp; TT</option>
+<option value="3">Khoa Hệ thống Thông tin</option>
 </select>
-<button class="h-10 px-4 rounded-lg bg-[#1F4E78] text-white text-xs font-semibold hover:bg-[#163A59] whitespace-nowrap shadow-xs transition-colors cursor-pointer">
+<button id="market-submit" type="submit" class="shrink-0 h-10 px-4 rounded-lg bg-[#1F4E78] text-white text-xs font-semibold hover:bg-[#163A59] whitespace-nowrap shadow-xs transition-colors cursor-pointer">
                   Lọc kết quả
                 </button>
 </div>
-</div>
+</form>
 <!-- Quick Filter Pills -->
-<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 text-xs">
+<div id="market-fields" role="group" aria-label="Lọc theo lĩnh vực" class="flex flex-wrap items-center gap-2 py-1 text-xs">
 <span class="text-slate-500 font-medium shrink-0">Lĩnh vực:</span>
-<button class="px-3.5 py-1.5 rounded-xl bg-[#1F4E78] text-white font-medium shrink-0 shadow-xs cursor-pointer">Tất cả (128)</button>
-<button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Trí tuệ nhân tạo (AI/ML)</button>
-<button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Thiết kế Vi mạch &amp; Bán dẫn</button>
-<button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Hệ thống Nhúng &amp; IoT</button>
-<button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">An toàn thông tin</button>
-<button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Xe tự hành &amp; Robotics</button>
+<button type="button" data-field="" aria-pressed="true" class="px-3.5 py-1.5 rounded-xl bg-[#1F4E78] text-white font-medium shrink-0 shadow-xs cursor-pointer">Tất cả (6)</button>
+<button type="button" data-field="1" aria-pressed="false" class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Trí tuệ nhân tạo (AI/ML)</button>
+<button type="button" data-field="4" aria-pressed="false" class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Thiết kế Vi mạch &amp; Bán dẫn</button>
+<button type="button" data-field="5" aria-pressed="false" class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Hệ thống Nhúng &amp; IoT</button>
+<button type="button" data-field="6" aria-pressed="false" class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">An toàn thông tin</button>
+<button type="button" data-field="8" aria-pressed="false" class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#1F4E78] hover:bg-[#E6F0F7] font-medium shrink-0 transition-colors cursor-pointer">Xe tự hành &amp; Robotics</button>
 </div>
 </section>
 <!-- RECRUITMENT TEAM CARDS GRID -->
 <section class="space-y-6">
-<div class="flex items-center justify-between">
-<h2 class="text-xl font-bold text-[#1A1A1A] tracking-tight">Đề tài &amp; nhóm nghiên cứu đang tuyển thành viên</h2>
-<span class="text-xs text-slate-500">Hiển thị 6 trong 128 bài đăng</span>
+<div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+<h2 class="text-lg @2xl:text-xl font-bold text-[#1A1A1A] tracking-tight">Đề tài &amp; nhóm nghiên cứu đang tuyển thành viên</h2>
+<span id="market-count" class="text-xs text-slate-500" aria-live="polite">Hiển thị 6 trong 128 bài đăng</span>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<p id="market-note" class="hidden items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800" role="status"></p>
+<div id="market-grid" class="grid grid-cols-1 @2xl:grid-cols-2 @5xl:grid-cols-3 gap-5">
 <!-- CARD 1 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
+<div data-sample-card data-faculty="1" data-field="1" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-4</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-4</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Hệ thống giám sát &amp; phân loại khuyết tật bán dẫn sử dụng Edge AI và thị giác máy tính
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">PGS.TS. Trần Văn C</strong> (Lab AILab-UIT)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">PGS.TS. Trần Văn C</strong></span>
+<span class="block text-slate-500">Lab AILab-UIT</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Phòng E8.2 - Tòa nhà Công nghệ cao</span>
+<span class="min-w-0 leading-5">Phòng E8.2 - Tòa nhà Công nghệ cao</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Dự án hợp tác cùng Viện Nghiên cứu Vi điện tử ĐHQG-HCM nhằm tối ưu hóa đường truyền dữ liệu quang học và phân loại mẫu silicon wafer với độ trễ dưới 15ms.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">PyTorch</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">NVIDIA TensorRT</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">C++ / CUDA</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+3</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button type="button" data-topic-id="9001" title="Nối với đề tài thử 9001 (database/seed.sql)" class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button type="button" data-topic-id="9001" title="Nối với đề tài thử 9001 (database/seed.sql)" class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </div>
 </div>
 <!-- CARD 2 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<div data-sample-card data-faculty="2" data-field="4" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-3</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-3</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Thiết kế vi kiến trúc RISC-V tùy biến tăng tốc mật mã lượng tử nhẹ (Post-Quantum Cryptography)
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">TS. Nguyễn Văn A</strong> (Khoa Kỹ thuật Máy tính)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">TS. Nguyễn Văn A</strong></span>
+<span class="block text-slate-500">Khoa Kỹ thuật Máy tính</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Phòng C3.12 - Phòng Lab Vi mạch Số</span>
+<span class="min-w-0 leading-5">Phòng C3.12 - Phòng Lab Vi mạch Số</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Hiện thực và mô phỏng trên nền tảng FPGA Xilinx UltraScale+, tối ưu thuật toán Kyber/Dilithium cho các thiết bị nhúng hạn chế năng lượng.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">SystemVerilog</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">UVM Verification</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">FPGA / Vivado</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+2</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button type="button" data-topic-id="9002" title="Nối với đề tài thử 9002 (database/seed.sql)" class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button type="button" data-topic-id="9002" title="Nối với đề tài thử 9002 (database/seed.sql)" class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </div>
 </div>
 <!-- CARD 3 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
+<div data-sample-card data-faculty="5" data-field="8" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-5</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-5</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Nền tảng tự hành AGV trong kho vận thông minh kết hợp SLAM đa cảm biến LiDAR-Camera
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">TS. Lê Thị B</strong> (Khoa Mạng Máy tính &amp; TT)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">TS. Lê Thị B</strong></span>
+<span class="block text-slate-500">Khoa Mạng Máy tính &amp; TT</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Phòng Thí nghiệm Robotics &amp; IoT</span>
+<span class="min-w-0 leading-5">Phòng Thí nghiệm Robotics &amp; IoT</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Triển khai bản đồ 3D thời gian thực với độ chính xác dưới 2cm trong điều kiện ánh sáng thay đổi. Cần sinh viên KTMT và KHMT để đồng bộ firmware.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">ROS2 Humble</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">LiDAR SLAM</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Python / C++</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+1</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button type="button" data-topic-id="9003" title="Nối với đề tài thử 9003 (database/seed.sql)" class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button type="button" data-topic-id="9003" title="Nối với đề tài thử 9003 (database/seed.sql)" class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </div>
 </div>
 <!-- CARD 4 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<div data-sample-card data-faculty="1" data-field="1" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-2</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-2</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Mô hình ngôn ngữ lớn y tế tiếng Việt (VN-MedLLM) phục vụ hỗ trợ chẩn đoán lâm sàng tuyến cơ sở
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">PGS.TS. Trần Văn C</strong> (Lab Xử lý Ngôn ngữ Tự nhiên)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">PGS.TS. Trần Văn C</strong></span>
+<span class="block text-slate-500">Lab Xử lý Ngôn ngữ Tự nhiên</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Phòng B2.10 - Khoa KHMT</span>
+<span class="min-w-0 leading-5">Phòng B2.10 - Khoa KHMT</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Huấn luyện tinh chỉnh LoRA/QLoRA trên tập dữ liệu lâm sàng ẩn danh, tối ưu cơ chế Retrieval-Augmented Generation (RAG) bảo mật cao.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Transformers</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Milvus / Chroma</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">vLLM Engine</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+4</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </div>
 </div>
 <!-- CARD 5 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
+<div data-sample-card data-faculty="5" data-field="6" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-[#E6F0F7] text-[#1F4E78]">Ưu tiên liên khoa</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-4</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-4</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Phát hiện tấn công APT và Zero-Day trong mạng công nghiệp SCADA dựa trên phân tích hành vi eBPF
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">TS. Nguyễn Văn A</strong> (Khoa An toàn Thông tin)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">TS. Nguyễn Văn A</strong></span>
+<span class="block text-slate-500">Khoa An toàn Thông tin</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Phòng CyberSecurity Lab UIT</span>
+<span class="min-w-0 leading-5">Phòng CyberSecurity Lab UIT</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Triển khai bộ thu thập gói tin tầng hạt nhân bằng eBPF trên Linux, trích xuất đặc trưng mạng và phân tích chuỗi log để dự đoán bất thường.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">eBPF / Cilium</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Kernel Tracing</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Golang / C</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+2</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </div>
 </div>
 <!-- CARD 6 -->
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
+<div data-sample-card data-faculty="3" data-field="10" class="bg-white border border-slate-200 rounded-lg p-5 min-w-0 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col">
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 min-w-0">
+<span class="whitespace-nowrap px-2.5 py-0.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Đang tuyển</span>
 </div>
-<span class="font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-6</span>
+<span class="shrink-0 whitespace-nowrap font-mono text-xs px-2 py-0.5 bg-[#F5F7FA] border border-slate-200 text-[#1F4E78] font-bold rounded-sm">TRL-6</span>
 </div>
-<h3 class="text-base font-bold text-[#1A1A1A] line-clamp-2 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
+<h3 class="@2xl:min-h-[4.125rem] text-base font-bold text-[#1A1A1A] line-clamp-3 leading-snug hover:text-[#1F4E78] transition-colors cursor-pointer">
                     Kiến trúc microservices quản lý chuỗi cung ứng nông sản tích hợp hợp đồng thông minh DID
                   </h3>
-<div class="space-y-1.5 text-xs text-slate-600">
-<div class="flex items-center gap-2">
+<div class="space-y-2 text-xs text-slate-600">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">person</span>
 </div>
-<span class="">GVHD: <strong class="text-[#1A1A1A]">TS. Lê Thị B</strong> (Khoa Hệ thống Thông tin)</span>
+<span class="min-w-0 leading-5">
+<span class="block">GVHD: <strong class="text-[#1A1A1A]">TS. Lê Thị B</strong></span>
+<span class="block text-slate-500">Khoa Hệ thống Thông tin</span>
+</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-start gap-2">
 <div class="w-5 h-5 rounded-xl bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[13px]">location_on</span>
 </div>
-<span class="">Trung tâm Phát triển Phần mềm UIT</span>
+<span class="min-w-0 leading-5">Trung tâm Phát triển Phần mềm UIT</span>
 </div>
 </div>
-<p class="text-xs text-slate-600 line-clamp-2 leading-normal">
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                     Đề tài được doanh nghiệp tài trợ trực tiếp, ứng dụng công nghệ định danh số phi tập trung (Decentralized ID) chứng thực nguồn gốc xuất xứ.
                   </p>
-<div class="pt-2 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+<div class="mt-auto pt-2 flex flex-wrap items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Solidity</span>
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Node.js / Nest</span>
+<span class="flex items-center gap-1.5">
 <span class="text-[11px] px-2.5 py-1 rounded-md bg-[#F5F7FA] text-[#1F4E78] border border-slate-200 font-medium shrink-0">Docker / K8s</span>
 <span class="text-[11px] px-2 py-1 rounded-md bg-[#E6F0F7] text-[#1F4E78] font-bold shrink-0">+3</span>
+</span>
 </div>
 </div>
-<div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-<button class="flex-1 py-2 text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
+<div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-[#1F4E78] border border-[#1F4E78] hover:bg-[#E6F0F7] rounded-lg transition-colors cursor-pointer">
                     Chi tiết Lab
                   </button>
-<button class="flex-1 py-2 text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+<button class="h-10 px-2 whitespace-nowrap text-xs font-semibold text-white bg-[#1F4E78] hover:bg-[#163A59] rounded-lg transition-colors flex items-center justify-center gap-1 shadow-xs cursor-pointer">
 <span class="">Ứng tuyển ngay</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
@@ -633,7 +665,7 @@ tailwind.config = {
 </div>
 </div>
 <!-- Pagination -->
-<div class="flex items-center justify-center gap-2 pt-6">
+<nav id="market-pages" aria-label="Phân trang đề tài" class="flex flex-wrap items-center justify-center gap-2 pt-2">
 <button class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 flex items-center justify-center hover:bg-[#F5F7FA] cursor-pointer">
 <span class="material-symbols-outlined text-[16px]">chevron_left</span>
 </button>
@@ -645,34 +677,7 @@ tailwind.config = {
 <button class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 flex items-center justify-center hover:bg-[#F5F7FA] cursor-pointer">
 <span class="material-symbols-outlined text-[16px]">chevron_right</span>
 </button>
-</div>
-</section>
-<!-- LEGAL / IP NOTICE BOX AT BOTTOM -->
-<section>
-<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-xs">
-<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-<div class="flex items-start gap-4">
-<div class="w-12 h-12 rounded-lg bg-[#E6F0F7] text-[#1F4E78] flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-[24px]">verified_user</span>
-</div>
-<div class="space-y-1">
-<h4 class="text-base font-bold text-[#1A1A1A]">Quy định bảo mật sở hữu trí tuệ (IP) &amp; thỏa thuận NDA sinh viên</h4>
-<p class="text-xs text-slate-600 max-w-3xl leading-relaxed">
-                      Tất cả các đề tài hợp tác nghiên cứu cùng đối tác doanh nghiệp và đề tài cấp ĐHQG-HCM yêu cầu sinh viên tham gia ký kết Thỏa thuận Bảo mật Thông tin (Non-Disclosure Agreement) và tuân thủ khung bản quyền phát minh khoa học của UIT trước khi tiếp nhận mã nguồn/tài liệu Lab.
-                    </p>
-</div>
-</div>
-<div class="shrink-0 flex items-center gap-3 w-full md:w-auto">
-<a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-[#1F4E78] bg-[#E6F0F7] text-[#1F4E78] font-semibold text-xs hover:bg-[#d8e8f3] transition-colors w-full md:w-auto" href="#">
-<span class="material-symbols-outlined text-[18px]">download</span>
-<span class="">Tải mẫu NDA (.PDF)</span>
-</a>
-<a class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#1F4E78] text-white font-semibold text-xs hover:bg-[#163A59] transition-colors w-full md:w-auto whitespace-nowrap" href="#">
-<span class="">Đăng ký sở hữu IP</span>
-</a>
-</div>
-</div>
-</div>
+</nav>
 </section>
 </div>
 </div>
@@ -804,6 +809,8 @@ tailwind.config = {
 <script src="../../assets/js/dem-don-nhom.js"></script>
 <script src="../../assets/js/ux-effects.js"></script>
 <!-- Bài thực hành: nút "Ứng tuyển ngay" (data-topic-id) gọi POST /api/lab-applications -->
+<!-- Tìm kiếm, lọc, phân trang đề tài: GET /api/lab-topics -->
+<script src="../../assets/js/cho-ghep-nhom.js"></script>
 <script src="../../assets/js/lab-application.js"></script>
 </body>
 </html>

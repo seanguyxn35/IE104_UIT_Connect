@@ -15,7 +15,8 @@
     "test:team-join": "node --env-file=.env scripts/test-team-join-api.js",
     "test:team-profile": "node --env-file=.env scripts/test-team-profile-api.js",
     "test:team-invite": "node --env-file=.env scripts/test-team-invite-api.js",
-    "test:team-manage": "node --env-file=.env scripts/test-team-manage-api.js"
+    "test:team-manage": "node --env-file=.env scripts/test-team-manage-api.js",
+    "test:lab-topics": "node --env-file=.env scripts/test-lab-topics-api.js"
   },
   "engines": {
     "node": ">=20.6"
