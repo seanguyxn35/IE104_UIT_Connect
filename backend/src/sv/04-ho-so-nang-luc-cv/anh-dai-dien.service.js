@@ -3,7 +3,8 @@
 import { supabase } from '../../db.js';
 import { AppError } from '../../shared/errors.js';
 
-const BUCKET = 'avatars';
+export const AVATAR_BUCKET = 'avatars';
+const BUCKET = AVATAR_BUCKET;
 export const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 const TYPES = {
   'image/jpeg': { ext: 'jpg', magic: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
@@ -14,7 +15,7 @@ export const AVATAR_TYPES = Object.keys(TYPES);
 
 // Tạo bucket ở lần dùng đầu tiên (bucket công khai: ảnh đại diện là thông tin hiển thị công khai)
 let bucketReady;
-function ensureBucket() {
+export function ensureBucket() {
   bucketReady ??= (async () => {
     const { data } = await supabase.storage.getBucket(BUCKET);
     if (data) return;
@@ -39,7 +40,8 @@ export async function getAvatarUrl(accountId) {
   return data.avatar_url;
 }
 
-export async function saveAvatar(accountId, buffer, contentType) {
+// Kiểm tra ảnh tải lên (dùng chung với ảnh nhóm ở SV-06); trả đuôi tệp
+export function assertImage(buffer, contentType) {
   const type = TYPES[contentType];
   if (!type) {
     throw new AppError(415, 'UNSUPPORTED_TYPE', 'Chỉ chấp nhận ảnh JPG, PNG hoặc WebP.');
@@ -51,11 +53,26 @@ export async function saveAvatar(accountId, buffer, contentType) {
   if (!type.magic(buffer)) {
     throw new AppError(415, 'UNSUPPORTED_TYPE', 'Nội dung tệp không phải ảnh hợp lệ.');
   }
+  return type.ext;
+}
+
+// Xóa ảnh cũ trong kho. Chỉ xóa tệp nằm trong thư mục của chính chủ (folder), không đụng đường dẫn khác.
+// Lỗi ở bước này không làm hỏng việc đã lưu.
+export async function removeStoredImage(url, folder) {
+  const marker = `/${BUCKET}/`;
+  if (!url || !url.includes(marker)) return;
+  const path = decodeURIComponent(url.split(marker)[1]);
+  if (!path.startsWith(`${folder}/`)) return;
+  await supabase.storage.from(BUCKET).remove([path]).catch(() => {});
+}
+
+export async function saveAvatar(accountId, buffer, contentType) {
+  const ext = assertImage(buffer, contentType);
 
   const oldUrl = await getAvatarUrl(accountId);
   await ensureBucket();
 
-  const path = `account-${accountId}/${Date.now()}.${type.ext}`;
+  const path = `account-${accountId}/${Date.now()}.${ext}`;
   const { error: uploadError } = await supabase.storage
     .from(BUCKET)
     .upload(path, buffer, { contentType, upsert: false });
@@ -71,11 +88,6 @@ export async function saveAvatar(accountId, buffer, contentType) {
     throw updateError;
   }
 
-  // Xóa ảnh cũ (nếu có) – lỗi ở bước này không làm hỏng việc đã lưu
-  const marker = `/${BUCKET}/`;
-  if (oldUrl && oldUrl.includes(marker)) {
-    const oldPath = decodeURIComponent(oldUrl.split(marker)[1]);
-    await supabase.storage.from(BUCKET).remove([oldPath]).catch(() => {});
-  }
+  await removeStoredImage(oldUrl, `account-${accountId}`);
   return pub.publicUrl;
 }
