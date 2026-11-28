@@ -744,8 +744,16 @@ CREATE TABLE team_achievement (
     issued_date       DATE NULL,
     certificate_code  VARCHAR(50)  NULL,        -- (+) 'UIT-NCKH-01'
     doi              VARCHAR(100) NULL,        -- (+)
-    evidence_url      VARCHAR(255) NULL
+    evidence_url      VARCHAR(255) NULL,
+    detail                VARCHAR(500) NULL,    -- (+) migration 013: mô tả ngắn
+    external_url          VARCHAR(255) NULL     -- (+) migration 013: liên kết minh chứng
+                          CONSTRAINT ck_team_achievement_external_url CHECK (external_url LIKE 'https://%'),
+    created_by_account_id INT NULL CONSTRAINT fk_team_achievement_creator REFERENCES account(account_id),  -- (+) migration 013
+    created_at            TIMESTAMPTZ(0) NOT NULL DEFAULT now(),  -- (+) migration 013
+    CONSTRAINT ck_team_achievement_category CHECK (category IN ('Award','Publication','Patent','Certificate','Other'))  -- (+) migration 013
 );
+CREATE INDEX ix_team_achievement_team ON team_achievement (team_id);
+-- Hàm rời nhóm / mời ra / chuyển quyền / lưu, đóng, xóa tin tuyển: chạy thêm migrations/013_sv_thanh_vien_tin_tuyen_thanh_tich.sql
 
 /* =====================================================================
    NHÓM 8: CỐ VẤN & THẨM ĐỊNH HỌC THUẬT (SV – GV)

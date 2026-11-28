@@ -5,7 +5,10 @@
 // - "Cập nhật hồ sơ" (chỉ Leader, máy chủ quyết định qua canEdit): PATCH .../:teamId/profile, chỉ gửi phần đã đổi.
 // - "Gửi báo cáo tiến độ tuần": soạn email cho cố vấn, hệ thống KHÔNG lưu báo cáo.
 // - Không có máy chủ (file://, GitHub Pages): giữ nội dung mẫu có sẵn trong trang và báo "chưa lưu".
-// - Lời mời vào nhóm nằm ở nhom-loi-moi.js, dùng chung tiện ích qua window.UitTeamPage.
+// - Lời mời vào nhóm (nhom-loi-moi.js) và 4 tab còn lại (nhom-thanh-vien.js, nhom-don-gia-nhap.js, nhom-tin-tuyen.js,
+//   nhom-portfolio.js) dùng chung tiện ích qua window.UitTeamPage; các file đó nghe sự kiện:
+//     uit:team-profile      – đã tải / đổi nhóm, vai trò, trạng thái (detail = hồ sơ nhóm)
+//     uit:team-data-changed – số liệu nhóm vừa đổi (thành viên, đơn, tin tuyển, portfolio)
 // Mọi nội dung lấy từ dữ liệu đều gán bằng textContent, không ghép chuỗi HTML.
 (function () {
   'use strict';
@@ -13,6 +16,7 @@
   var API_URL = '/api/student-teams';
   var MAX_FIELDS = 3; // khớp giới hạn của máy chủ
   var MAX_SKILLS = 15;
+  var MAX_DESCRIPTION = 2000;
   var MAX_REPORT = 1500; // thư mở bằng liên kết mailto không nên quá dài
   var MAX_AVATAR_BYTES = 2 * 1024 * 1024; // khớp giới hạn của máy chủ
   var AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -146,7 +150,7 @@
     text('count-members', o.memberCount);
     text('count-applicants', o.applications.pending);
     text('count-recruitment', r.total);
-    toggle($('count-portfolio'), false); // tab Portfolio chưa có dữ liệu thật
+    text('count-portfolio', o.portfolio ? o.portfolio.achievements + o.portfolio.works : 0);
   }
 
   // ---------- Tab Thông tin nhóm ----------
@@ -292,8 +296,23 @@
     name.value = p.name;
     var description = h('textarea', INPUT + ' h-28 py-2 leading-relaxed');
     description.id = 'edit-description';
-    description.maxLength = 2000;
+    description.maxLength = MAX_DESCRIPTION;
     description.value = p.description || '';
+    var counter = h('span', null);
+    counter.id = 'edit-description-count';
+    description.setAttribute('aria-describedby', counter.id);
+    // Gần đầy thì đổi màu cam, đầy thì đỏ và nói rõ vì sao không gõ thêm được
+    function syncCounter() {
+      var length = description.value.length;
+      var full = length >= MAX_DESCRIPTION;
+      counter.className = 'self-end text-xs tabular-nums ' +
+        (full ? 'font-semibold text-red-600' : length >= MAX_DESCRIPTION * 0.9 ? 'font-semibold text-amber-700' : 'text-slate-500');
+      counter.textContent = (full ? 'Đã đạt giới hạn: ' : '') + length + '/' + MAX_DESCRIPTION + ' ký tự';
+    }
+    description.addEventListener('input', syncCounter);
+    syncCounter();
+    var descriptionField = labelled('Tôn chỉ & hướng nghiên cứu cốt lõi', description);
+    descriptionField.appendChild(counter);
     var faculty = h('select', INPUT);
     faculty.id = 'edit-faculty';
     [{ facultyId: '', name: 'Chưa chọn' }].concat(data.faculties).forEach(function (f) {
@@ -383,7 +402,7 @@
 
     var form = h('form', 'flex flex-col gap-4', [
       labelled('Tên chính thức', name),
-      labelled('Tôn chỉ & hướng nghiên cứu cốt lõi', description),
+      descriptionField,
       labelled('Khoa trực thuộc', faculty, 'Ngành được lấy từ hồ sơ của các thành viên.'),
       fieldSet,
       h('div', 'flex flex-col gap-1.5', [skillLabel, skillList, h('div', 'flex gap-2', [skillInput, addButton]), datalist])
@@ -581,13 +600,17 @@
   }
 
   // ---------- Cập nhật số liệu định kỳ ----------
+  function statsKeyOf(o) {
+    return JSON.stringify([o.memberCount, o.maxMembers, o.applications, o.recruitments, o.highestTrl, o.portfolio]);
+  }
+
   function refreshStats() {
     if (!online || !profile) return Promise.resolve();
     var seq = loadSeq, teamId = profile.teamId;
     return window.UitLive.getJson(API_URL + '/' + teamId).then(function (o) {
       if (seq !== loadSeq) return null;
       note('');
-      var key = JSON.stringify([o.memberCount, o.maxMembers, o.applications, o.recruitments, o.highestTrl]);
+      var key = statsKeyOf(o);
       if (key !== statsKey) {
         statsKey = key;
         renderStats(o);
@@ -647,13 +670,9 @@
       renderProfile(profile);
       renderAdvisor(profile.advisor);
       renderStats(results[1]);
-      statsKey = JSON.stringify([results[1].memberCount, results[1].maxMembers, results[1].applications, results[1].recruitments, results[1].highestTrl]);
+      statsKey = statsKeyOf(results[1]);
       startLive();
       note('');
-      Array.prototype.forEach.call(document.querySelectorAll('.sample-tab-note'), function (el) {
-        el.classList.remove('hidden');
-        el.classList.add('flex');
-      });
       doneLoading();
     }, function (err) {
       if (seq !== loadSeq) return;
@@ -670,8 +689,24 @@
     doneLoading();
   }
 
+  function viDate(value) {
+    // Ngày dạng YYYY-MM-DD giữ nguyên ngày; thời điểm đầy đủ đổi theo giờ Việt Nam
+    var d = /^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(value + 'T00:00:00+07:00') : new Date(value);
+    return d.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  function button(className, children, onClick) {
+    var el = h('button', className, children);
+    el.type = 'button';
+    if (onClick) el.addEventListener('click', onClick);
+    return el;
+  }
+
   window.UitTeamPage = {
     h: h, icon: icon, toggle: toggle, tidy: tidy, toast: toast, labelled: labelled, logoContent: logoContent,
+    request: request, viDate: viDate, button: button,
+    // Hỏi lại số liệu ngay (sau khi vừa thay đổi); số đổi thì phát uit:team-data-changed
+    refresh: function () { if (live) live.now(); },
     buildModal: buildModal, showModal: showModal, closeModal: closeModal,
     isOpen: function (overlay) { return openModalEl === overlay; },
     reload: function (teamId) { return loadTeam(teamId); },
