@@ -1,5 +1,7 @@
 // API Quản trị nhóm (SV-06): đơn xin gia nhập. Danh tính lấy ở máy chủ, không lấy từ client:
 //   GET  /api/student-teams                     -> 200 { teams: [...] }  (nhóm tôi đang tham gia)
+//   GET  /api/student-teams/pending-count       -> 200 { pending, applications, invitations }
+//        applications: đơn chờ ở các nhóm mình làm Leader; invitations: lời mời gửi cho mình; pending: tổng
 //   GET  /api/student-teams/:teamId             -> 200 số liệu tổng quan | 404 TEAM_NOT_FOUND
 //   GET  /api/student-teams/:teamId/applications[?status=Pending|Accepted|Rejected]
 //                                               -> 200 { viewer, team, counts, applications } | 400 | 404
@@ -15,11 +17,13 @@ import { AppError } from '../../shared/errors.js';
 import {
   LIST_STATUSES,
   acceptApplication,
+  getPendingCount,
   getTeamOverview,
   listMyTeams,
   listTeamApplications,
   rejectApplication,
 } from './don-gia-nhap.service.js';
+import { countMyInvitations } from './loi-moi.service.js';
 
 export const studentTeamsRouter = Router();
 
@@ -45,6 +49,16 @@ function parseReason(value) {
 
 studentTeamsRouter.get('/', async (req, res) => {
   res.json({ teams: await listMyTeams(req.user.accountId) });
+});
+
+// Khai báo trước '/:teamId', nếu không "pending-count" bị hiểu là mã nhóm
+studentTeamsRouter.get('/pending-count', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const [applications, invitations] = await Promise.all([
+    getPendingCount(req.user.accountId),
+    countMyInvitations(req.user.accountId),
+  ]);
+  res.json({ pending: applications + invitations, applications, invitations });
 });
 
 studentTeamsRouter.get('/:teamId', async (req, res) => {

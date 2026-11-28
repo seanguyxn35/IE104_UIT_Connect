@@ -31,14 +31,14 @@ backend/
 │   │   │   ├── cv.*                   # /api/student-cv (gom dữ liệu CV)
 │   │   │   └── cv-pdf.service.js      # dựng PDF của CV bằng trình duyệt chạy ẩn
 │   │   ├── 05-de-tai-cua-toi/         # de-tai.* – /api/student-projects
-│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* – /api/student-teams (duyệt đơn xin vào nhóm)
-│   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3)
+│   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* (duyệt đơn xin vào nhóm), ho-so-nhom.* (tab Thông tin nhóm), anh-nhom.* (ảnh nhóm), loi-moi.* (lời mời), thanh-vien.*, tin-tuyen.*, thanh-tich-nhom.* (3 tab còn lại) – /api/student-teams, /api/student-invitations
+│   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3); de-tai-lab.* – /api/lab-topics (tìm kiếm, lọc)
 │   │   └── 09-13-bai-toan-rd/         # bai-toan-rd.* – /api/student-rd-problems
 │   └── dn/
 │       ├── 01-ban-lam-viec/           # ban-lam-viec.* – /api/business-dashboard
 │       ├── 08-hop-thu-ket-noi/        # hop-thu.* – /api/business-inbox
 │       └── 09-16-dam-phan/            # dam-phan.* – /api/business-negotiations
-├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, seed:dn-files
+├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, test:team-invite, test:team-manage, test:lab-topics, seed:dn-files
 ├── .env.example                   # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
@@ -69,6 +69,7 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` / `POST` | `/api/auth/me`, `/api/auth/logout` | Người dùng của phiên → 200 `{ user }` / 401 `UNAUTHENTICATED`; đăng xuất → 204 (thu hồi phiên) |
 | `POST` | `/api/auth/password-reset/request|verify|confirm` | Quên mật khẩu: gửi mã 6 số (202, gửi lại sau 60 giây, mã in ra log máy chủ vì chưa có dịch vụ email) → xác thực mã (200 `{ resetToken }`, 400 `INVALID_CODE`, 410 `CODE_EXPIRED`) → đặt mật khẩu mới (204, 400 `WEAK_PASSWORD`, 410 `TOKEN_EXPIRED`; thu hồi mọi phiên cũ) |
 | `POST` | `/api/lab-applications` | SV (người đăng nhập; `AUTH_MODE=test` không kèm phiên thì dùng `TEST_STUDENT_ID`) ứng tuyển đề tài `{ "topicId": 9001 }` |
+| `GET` | `/api/lab-topics?q=&faculty=&field=&page=&pageSize=` | SV-07: đề tài Lab `Open` / `Filled` còn hạn. `q` ≤ 100 ký tự, tìm theo tên, mô tả, Lab, kỹ năng, GV, đối tác (không phân biệt dấu, mọi từ phải khớp); `faculty` = khoa của Lab (không có Lab thì khoa của GV); `pageSize` 1–24 (mặc định 6); trang vượt quá → trang cuối. → `{ total, page, pageSize, totalPages, items, filters, summary, faculties, fields }`; `fields` có số đề tài tính trước khi áp lĩnh vực; mỗi đề tài có `isFull`, `remaining`, `applied` (người xem đã ứng tuyển). 400 `INVALID_INPUT` |
 | `GET` | `/api/student-skills` | Danh sách kỹ năng trên hồ sơ SV: `{ skills: [{ skillId, name, level, category }] }` |
 | `POST` | `/api/student-skills` | Thêm kỹ năng `{ "name", "level": 1-5, "category": "ai"\|"lang"\|"infra" }` → 201; trùng → 409 `ALREADY_EXISTS` |
 | `DELETE` | `/api/student-skills/:skillId` | Xóa kỹ năng khỏi hồ sơ → 204; không có → 404 `SKILL_NOT_FOUND` |
@@ -103,10 +104,36 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` | `/api/student-projects/:id/file` | 302 sang đường dẫn ký có hạn 60 giây (thành viên nhóm); 404 `PROJECT_NOT_FOUND` / `FILE_NOT_FOUND` |
 | `DELETE` | `/api/student-projects/:id` | Leader xóa bản nháp (kèm tệp) → 204; Member → 403 `NOT_TEAM_LEADER`; không được xem → 404; không còn là bản nháp → 409 `NOT_DRAFT` |
 | `GET` | `/api/student-teams` | Nhóm SV đang tham gia: `{ teams: [{ teamId, name, shortName, code, semester, status, role, memberCount, maxMembers, pendingCount }] }` |
+| `GET` | `/api/student-teams/pending-count` | Huy hiệu menu trái (được gọi định kỳ): `{ pending, applications, invitations }`; `applications` = đơn chờ ở các nhóm SV làm Leader, `invitations` = lời mời gửi cho SV, `pending` = tổng |
+| `GET` | `/api/student-teams/:teamId/invite-lookup?student=` | Chỉ Leader: tra **đúng** MSSV (8 số) hoặc email `@gm.uit.edu.vn` → `{ student { fullName, studentCode, major }, canInvite, blockedReason, blockedMessage }`; 400; 403; 404 `TEAM_NOT_FOUND` / `STUDENT_NOT_FOUND` (tài khoản khóa / chưa xác thực coi như không có); 429 `TOO_MANY_ATTEMPTS` khi tra quá 30 người khác nhau trong 10 phút |
+| `GET` | `/api/student-teams/:teamId/invitations` | Chỉ Leader: lời mời còn hiệu lực `{ maxPending, invitations }` |
+| `POST` | `/api/student-teams/:teamId/invitations` | Chỉ Leader: `{ "student": "<MSSV \| email>", "message"? ≤ 500 }` → 201 (không nhận `studentId`). Thứ tự: 404 `TEAM_NOT_FOUND` → 403 `NOT_TEAM_LEADER` → 409 `TEAM_INACTIVE` → 404 `STUDENT_NOT_FOUND` → 409 `ALREADY_MEMBER` → `TEAM_FULL` → `ALREADY_INVITED` → `HAS_PENDING_APPLICATION` → `DECLINED_RECENTLY` → `INVITE_LIMIT` (10 lời mời chờ) |
+| `POST` | `/api/student-teams/:teamId/invitations/:invitationId/cancel` | Leader hiện tại thu hồi → 200 `Cancelled`; 403; 404; 409 `INVITATION_NOT_PENDING` |
+| `GET` | `/api/student-invitations` | Lời mời còn hiệu lực gửi cho SV: `{ invitations: [{ invitationId, team, invitedBy, message, createdAt, expiresAt, canAccept, acceptBlockedReason }] }` |
+| `POST` | `/api/student-invitations/:invitationId/accept` | Chỉ người được mời → 200 `{ teamId, memberCount, maxMembers, withdrawnApplications }`; 404 `INVITATION_NOT_FOUND`; 409 `INVITATION_NOT_PENDING` / `INVITATION_EXPIRED` / `TEAM_INACTIVE` / `ALREADY_MEMBER` / `TEAM_FULL` |
+| `POST` | `/api/student-invitations/:invitationId/decline` | Chỉ người được mời, `{ "reason"? ≤ 500 }` → 200; 400; 404; 409 |
+| `GET` | `/api/student-teams/:teamId/members` | Mọi thành viên: `{ viewer { role, canManage, canLeave }, team, members }`; mỗi người có tên, MSSV, email trường, ngành, khóa, vai trò, chức danh, đóng góp, ngày vào và quyền theo dòng (`canEditTitle`, `canEditContribution`, `canRemove`, `canMakeLeader`). Không trả mã tài khoản |
+| `PATCH` | `/api/student-teams/:teamId/members/:studentCode` | `{ positionTitle? ≤ 100, contribution? ≤ 255 }` (null = xóa). Leader sửa của mọi người; thành viên chỉ sửa `contribution` của mình (403 `NOT_TEAM_LEADER`); 404 `MEMBER_NOT_FOUND`; 409 `TEAM_INACTIVE` |
+| `POST` | `/api/student-teams/:teamId/members/:studentCode/remove` | Chỉ Leader, `{ reason }` 10–500 ký tự → 200 `{ memberCount }`; người bị mời ra nhận thông báo kèm lý do; 409 `CANNOT_REMOVE_SELF` / `TEAM_INACTIVE` |
+| `POST` | `/api/student-teams/:teamId/transfer-leader` | Chỉ Leader, `{ "student": "<MSSV>" }` → 200; người chuyển thành Member; 404 `MEMBER_NOT_FOUND`; 409 `ALREADY_LEADER` / `TEAM_INACTIVE` |
+| `POST` | `/api/student-teams/:teamId/leave` | Tự rời nhóm → 200 `{ memberCount }`; Leader → 409 `LEADER_MUST_TRANSFER` |
+| `GET` | `/api/student-teams/:teamId/recruitments` | Mọi thành viên: `{ viewer, maxOpen, posts, options }`; `state` = `Open` / `Filled` / `Closed` / `Expired`, số đơn chờ / đã nhận, quyền `canEdit` / `canClose` / `canDelete`; `options` (lĩnh vực, đề tài của nhóm) chỉ cho Leader |
+| `POST` | `/api/student-teams/:teamId/recruitments` | Chỉ Leader: `{ title 5–255, slots 1–20, requirement? ≤ 4000, deadline? (hôm nay – 365 ngày), fieldId?, isInterdisciplinary?, relatedResourceId?, skills? ≤ 10 }` → 201; 400 `FIELD_NOT_FOUND` / `RESOURCE_NOT_FOUND`; 409 `POST_LIMIT` (5 tin đang mở) / `TEAM_INACTIVE` |
+| `PATCH` | `/api/student-teams/:teamId/recruitments/:recruitId` | Chỉ Leader, chỉ gửi trường cần đổi → 200; 409 `POST_CLOSED` / `SLOTS_BELOW_ACCEPTED`. Chỉ tiêu bằng số đã nhận → `Filled`, tăng lên → mở lại |
+| `POST` | `/api/student-teams/:teamId/recruitments/:recruitId/close` | Chỉ Leader → 200 `Closed` (đơn đã nộp vẫn xử lý nốt); 409 `POST_CLOSED` |
+| `DELETE` | `/api/student-teams/:teamId/recruitments/:recruitId` | Chỉ Leader, tin chưa có đơn nào → 204; 409 `POST_HAS_APPLICATIONS` |
+| `GET` | `/api/student-teams/:teamId/portfolio` | Mọi thành viên: `{ viewer { canEdit }, maxAchievements, achievements, works }`; `works` = công trình của nhóm `Published` có phiếu `Approved` (như CV) |
+| `POST` | `/api/student-teams/:teamId/achievements` | Chỉ Leader: `{ category: Award\|Publication\|Patent\|Certificate\|Other, title 3–255, issuedBy?, issuedDate? (không ở tương lai), certificateCode?, doi? (10.xxxx/...), externalUrl? (https://), detail? ≤ 500 }` → 201; 409 `ACHIEVEMENT_LIMIT` (50) / `TEAM_INACTIVE` |
+| `PATCH` / `DELETE` | `/api/student-teams/:teamId/achievements/:achievementId` | Chỉ Leader → 200 / 204; 404 `ACHIEVEMENT_NOT_FOUND` |
 | `GET` | `/api/student-teams/:teamId` | Số liệu đầu trang SV-06: `memberCount`, `applications { pending, newLast24h, responseRate }`, `recruitments { total, open, filled, closed, expired }`, `highestTrl`; không phải thành viên → 404 `TEAM_NOT_FOUND` |
 | `GET` | `/api/student-teams/:teamId/applications?status=Pending\|Accepted\|Rejected` | Mọi thành viên xem được: `{ viewer { role, canDecide }, team, counts, applications }` (mặc định `Pending`; đơn đã rút không hiện). Đơn chờ có `response { dueAt, level: normal\|urgent\|overdue }` (hạn 72 giờ từ lúc nộp, gấp khi còn dưới 24 giờ), `gpa` (chỉ khi người nộp đồng ý trên đơn), `skills`, `evidence { reviewed, selfDeclared }`, `canAccept`, `canReject`, `acceptBlockedReason`. Đơn đã xử lý chỉ còn danh tính, kết quả, `responseNote`, `stillMember` |
 | `POST` | `/api/student-teams/:teamId/applications/:applyId/accept` | Chỉ Leader → 200 `{ applyId, status, memberCount, maxMembers, recruitmentStatus }`. Thứ tự kiểm tra: 404 `TEAM_NOT_FOUND` → 403 `NOT_TEAM_LEADER` → 404 `APPLICATION_NOT_FOUND` → 409 `APPLICATION_NOT_PENDING` → `TEAM_INACTIVE` → `TEAM_FULL` → `ALREADY_MEMBER` → `APPLICANT_INACTIVE` → `POST_FILLED`. Tin đã đóng / hết hạn vẫn nhận được đơn đã nộp |
 | `POST` | `/api/student-teams/:teamId/applications/:applyId/reject` | Chỉ Leader, `{ "reason" }` 10–500 ký tự (400 `INVALID_INPUT`) → 200; 403; 404; 409 `APPLICATION_NOT_PENDING` |
+| `GET` | `/api/student-teams/:teamId/profile` | Hồ sơ nhóm (tab "Thông tin nhóm"), mọi thành viên: `{ name, shortName, code, description, semester, status, memberCount, maxMembers, role, canEdit, faculty, memberMajors, fields (lĩnh vực chính đứng đầu), skills, advisor }`; `advisor` = `null` hoặc `{ fullName, academicTitle, positionTitle, email, lab { name, room }, officeHours }`; không phải thành viên → 404 `TEAM_NOT_FOUND` |
+| `PATCH` | `/api/student-teams/:teamId/profile` | Chỉ Leader, gửi ít nhất một trong `{ "name" (3–150), "description" (≤ 2000, rỗng = xóa), "facultyId" (hoặc null), "fieldIds" (≤ 3, mục đầu là lĩnh vực chính), "skills" (≤ 15 tên, mỗi tên ≤ 100; chưa có thì thêm vào danh mục) }` → 200 hồ sơ mới; 400 `INVALID_INPUT` / `FACULTY_NOT_FOUND` / `FIELD_NOT_FOUND`; 403 `NOT_TEAM_LEADER`; 404; nhóm ngừng hoạt động → 409 `TEAM_INACTIVE`. Mã nhóm, cố vấn, trạng thái, số thành viên tối đa không sửa được ở đây. Lưu bằng hàm CSDL `cap_nhat_ho_so_nhom` (một transaction, cần migration 010) |
+| `PUT` | `/api/student-teams/:teamId/avatar` | Chỉ Leader của nhóm `Active`: thân là ảnh, `Content-Type: image/jpeg\|png\|webp`, ≤ 2 MB (kiểm tra nội dung tệp) → 200 `{ avatarUrl }`; ảnh lưu ở bucket công khai `avatars`, thư mục `team-<id>/`, ảnh cũ bị xóa; 403; 404; 409 `TEAM_INACTIVE`; 413 `FILE_TOO_LARGE`; 415 `UNSUPPORTED_TYPE` (cần migration 011). `profile` trả thêm `avatarUrl` |
+| `DELETE` | `/api/student-teams/:teamId/avatar` | Xóa ảnh nhóm → 204 (chưa có ảnh vẫn 204) |
+| `GET` | `/api/student-teams/profile-options` | Lựa chọn cho biểu mẫu: `{ faculties, fields, skills }` |
 | `GET` | `/api/student-cv/pdf` | Tải CV dạng tệp PDF A4, giống bản xem trước (cùng quy tắc ẩn / riêng tư) → 200 `application/pdf`; đang tạo quá nhiều tệp → 429 `PDF_BUSY`; máy chủ thiếu thư viện hoặc trình duyệt → 503 `PDF_UNAVAILABLE` |
 | `GET` | `/api/student-rd-problems` | Bài toán R&D đã được duyệt công khai (Open / In_Progress) cho SV-09: `{ problems: [{ id, code, title, summary, type, fieldName, status, isOpen, funding, fundingMin, deadline, acceptedPartners, skills, business, saved, myProposal, fitScore }], saved: [problemId] }` |
 | `GET` | `/api/student-rd-problems/:code` | Chi tiết cho SV-13 (thêm mô tả, quy mô nhóm, TRL, sản phẩm, NDA, mốc, tệp đề bài, proposal của tôi, nhóm & GV để chọn) → 200; chưa công khai / không có → 404 `PROBLEM_NOT_FOUND` |
@@ -120,7 +147,13 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 
 **Đơn xin gia nhập nhóm (SV-06):** cần migration `009`. Chấp nhận / từ chối chạy bằng hàm CSDL `chap_nhan_don_gia_nhap`, `tu_choi_don_gia_nhap`: một transaction, khóa dòng `student_team` nên hai lần chấp nhận cùng lúc không vượt được số thành viên tối đa; kèm thông báo (`notification`, loại `Team`, không tạo nếu SV đã tắt loại này). Chưa có API cho SV nộp / rút đơn, quản lý tin tuyển và đọc thông báo. Dữ liệu thử: `database/seed_team_applications.sql`. Kiểm thử: `npm run test:team-join` (cần `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
 
-Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
+Hồ sơ nhóm: dữ liệu thử `database/seed_team_profile.sql`; kiểm thử `npm run test:team-profile` (cần migration 010 và 011, `seed.sql`, `seed_dn.sql`, `seed_auth.sql`; ghi vào CSDL rồi tự dọn).
+
+**Lời mời vào nhóm:** cần migration `012`. Gửi, đồng ý / từ chối, thu hồi chạy bằng hàm CSDL (một transaction, khóa dòng nhóm). Hết hạn sau 7 ngày, tính khi đọc. Trigger trên `team_member` tự hủy lời mời đang chờ khi người đó đã vào nhóm. Giới hạn tra cứu đếm trong bộ nhớ máy chủ. Kiểm thử: `npm run test:team-invite` (khởi động lại máy chủ trước khi chạy; ghi vào CSDL rồi tự dọn).
+
+**Thành viên, tin tuyển, thành tích nhóm:** cần migration `013`. Rời nhóm, mời ra, chuyển quyền, lưu / đóng / xóa tin chạy bằng hàm CSDL (khóa dòng nhóm); chỉ mục `ux_team_member_leader` chặn hai Leader. Thành tích nhóm là tự khai, ghi thẳng bằng service. Thành viên được chỉ định bằng MSSV, không nhận `studentId`. `GET /api/student-teams/:teamId` trả thêm `portfolio { achievements, works }`; `.../applications` trả thêm `responseRate`. Kiểm thử: `npm run test:team-manage`.
+
+Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/lab-topics`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
 
 Kiểm thử API bài toán R&D phía SV (cần máy chủ đang chạy, đã chạy migration 006 + `database/seed_sv_rd.sql`): `npm run test:sv-rd` (tự dọn dữ liệu đã tạo).
 

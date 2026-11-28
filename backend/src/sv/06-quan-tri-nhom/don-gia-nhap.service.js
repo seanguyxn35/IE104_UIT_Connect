@@ -8,6 +8,7 @@ import { supabase } from '../../db.js';
 import { AppError } from '../../shared/errors.js';
 import { getTeams } from '../../shared/resourceOwnership.js';
 import { listCvProjects } from '../04-ho-so-nang-luc-cv/cong-trinh-trung-bay.service.js';
+import { countPortfolio } from './thanh-tich-nhom.service.js';
 
 export const LIST_STATUSES = ['Pending', 'Accepted', 'Rejected']; // đơn SV đã rút (Withdrawn) không hiện ở tab nào
 const SLA_HOURS = 72; // cam kết phản hồi
@@ -40,10 +41,10 @@ function check({ data, error }) {
 }
 
 // Hôm nay theo giờ Việt Nam, dạng YYYY-MM-DD (cùng dạng với cột deadline)
-const todayInVietnam = () => new Date(Date.now() + 7 * HOUR).toISOString().slice(0, 10);
+export const todayInVietnam = () => new Date(Date.now() + 7 * HOUR).toISOString().slice(0, 10);
 
 // Trạng thái thực của tin tuyển: đủ chỉ tiêu được ưu tiên hơn đóng / hết hạn vì nó chặn chấp nhận
-function postState(post, acceptedCount) {
+export function postState(post, acceptedCount) {
   if (post.status === 'Filled' || acceptedCount >= post.slots) return 'Filled';
   if (post.status === 'Closed') return 'Closed';
   if (post.deadline && post.deadline < todayInVietnam()) return 'Expired';
@@ -128,16 +129,28 @@ export async function listMyTeams(studentId) {
   }));
 }
 
+// Số đơn đang chờ ở các nhóm mình làm Leader (huy hiệu trên menu trái). Được gọi định kỳ nên chỉ truy vấn tối thiểu.
+export async function getPendingCount(studentId) {
+  const leading = (await getTeams(studentId)).filter((t) => t.role === 'Leader').map((t) => t.teamId);
+  if (leading.length === 0) return 0;
+  const { count, error } = await supabase.from('recruitment_application')
+    .select('apply_id, team_recruitment!inner(team_id)', { count: 'exact', head: true })
+    .eq('status', 'Pending').in('team_recruitment.team_id', leading);
+  if (error) throw error;
+  return count ?? 0;
+}
+
 // Số liệu cho các thẻ đầu trang
 export async function getTeamOverview(studentId, teamId) {
   const { team, role } = await requireMembership(studentId, teamId);
-  const [memberIds, posts, applications, top] = await Promise.all([
+  const [memberIds, posts, applications, top, portfolio] = await Promise.all([
     teamMemberIds(teamId),
     supabase.from('team_recruitment').select('recruit_id, slots, status, deadline').eq('team_id', teamId).then(check),
     teamApplications(teamId),
     supabase.from('academic_resource').select('title, trl_level')
       .eq('owner_team_id', teamId).not('trl_level', 'is', null).not('status', 'in', '(Rejected,Hidden)')
       .order('trl_level', { ascending: false }).order('resource_id').limit(1).then(check),
+    countPortfolio(teamId),
   ]);
   const accepted = countBy(applications.filter((a) => a.status === 'Accepted'), 'recruit_id');
   const states = countBy(posts.map((p) => ({ state: postState(p, accepted.get(p.recruit_id) ?? 0) })), 'state');
@@ -161,6 +174,7 @@ export async function getTeamOverview(studentId, teamId) {
       expired: states.get('Expired') ?? 0,
     },
     highestTrl: top[0] ? { level: top[0].trl_level, title: top[0].title } : null,
+    portfolio, // { achievements, works }: số mục ở tab Portfolio
   };
 }
 
@@ -292,6 +306,7 @@ export async function listTeamApplications(studentId, teamId, status) {
     team: { teamId, status: team.status, memberCount: memberIds.size, maxMembers: team.max_members },
     // "Accepted" tính mọi đơn từng được chấp nhận, kể cả người đã rời nhóm (xem stillMember)
     counts: Object.fromEntries(LIST_STATUSES.map((s) => [s, counts.get(s) ?? 0])),
+    responseRate: responseRate(rows, now), // % đơn được phản hồi trong 72 giờ; null = chưa có gì để tính
     applications,
   };
 }

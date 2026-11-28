@@ -40,7 +40,8 @@
 
   // ---------- Trạng thái nút ----------
   function setButtonState(button, state) {
-    var label = button.querySelector('span');
+    // Bỏ qua lớp hiệu ứng gợn sóng: ux-effects.js chèn thêm một <span> vào đầu nút khi bấm
+    var label = button.querySelector(':scope > span:not(.ux-ripple-host)');
     if (!button.dataset.label) button.dataset.label = label.textContent;
 
     if (state === 'sending') {
@@ -107,10 +108,11 @@
     }
   }
 
-  document.querySelectorAll('button[data-topic-id]').forEach(function (button) {
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (!button.disabled) apply(button);
-    });
+  // Bắt sự kiện ở document: thẻ đề tài được cho-ghep-nhom.js vẽ lại khi tìm kiếm / lọc / sang trang
+  document.addEventListener('click', function (e) {
+    var button = e.target.closest('button[data-topic-id]');
+    if (!button) return;
+    e.preventDefault();
+    if (!button.disabled) apply(button);
   });
 })();
