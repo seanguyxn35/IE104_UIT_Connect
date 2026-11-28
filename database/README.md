@@ -10,6 +10,7 @@ database/
 ├── reset.sql             # Đặt lại dữ liệu thử trước mỗi ca kiểm thử
 ├── seed_student_skills.sql  # 15 kỹ năng mẫu cho hồ sơ SV 9101 (trang SV-04)
 ├── seed_showcase.sql        # tài nguyên đã / chưa thẩm định (ID 9301–9306) cho mục "Công trình trưng bày trên CV"
+├── seed_team_applications.sql  # đơn xin vào nhóm 9301 (tin 9401–9402, đơn 9411–9417); chạy SAU seed_dn, seed_showcase, migration 009
 ├── seed_dn.sql              # Dữ liệu thử luồng Doanh nghiệp (DN 9501, 5 bài toán, 15 proposal); chạy lại để đặt lại
 ├── seed_auth.sql            # Đăng nhập: Admin 9001, mật khẩu thử MatKhau@123, email SV dạng MSSV; chạy SAU seed_sv_rd.sql
 ├── seed_sv_rd.sql           # Bài toán R&D phía SV (SV-09/13): 15 bài của DN/Lab khác, chi tiết đề bài V-Tech, nhóm thử 9821–9823; chạy SAU seed_dn.sql
@@ -21,7 +22,8 @@ database/
 │   ├── 005_dn_khong_gian_dam_phan.sql  # Phòng đàm phán: 3 bước xác nhận hai bên, trao đổi theo lượt
 │   ├── 006_sv_bai_toan_rd.sql          # Bài toán R&D phía SV: chi tiết đề bài, mốc, chặn nộp trùng, lưu bài
 │   ├── 007_dang_nhap.sql               # Đăng nhập: mã đặt lại mật khẩu (Reset_Token), chỉ mục phiên
-│   └── 008_student_achievement_external_url.sql  # Công bố bên ngoài hệ thống: cột external_url
+│   ├── 008_student_achievement_external_url.sql  # Công bố bên ngoài hệ thống: cột external_url
+│   └── 009_sv_don_gia_nhap_nhom.sql    # Duyệt đơn xin vào nhóm: cột share_gpa, lý do từ chối; 2 hàm chạy trong transaction
 └── test_supabase.sql     # Kiểm thử ở tầng CSDL (bảng PASS/FAIL), không thay đổi dữ liệu
 ```
 

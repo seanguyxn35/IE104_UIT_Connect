@@ -153,15 +153,16 @@ Thư mục chia theo **vai trò → màn hình → chức năng** (sơ đồ đ�
 4. Ghi API mới vào `backend/README.md` và thêm thư mục vào sơ đồ ở đó.
 
 **Chạy test khi sửa backend:** mở máy chủ (`npm start`) ở một terminal, chạy lệnh test ở terminal khác trong `backend/`.
-Khởi động lại máy chủ trước mỗi lần chạy. `test:public` chỉ đọc; hai bộ còn lại ghi vào CSDL chung rồi tự dọn.
+Khởi động lại máy chủ trước mỗi lần chạy. `test:public` chỉ đọc; các bộ còn lại ghi vào CSDL chung rồi tự dọn.
 
 | Lệnh | Kiểm tra |
 | --- | --- |
 | `npm run test:public` | API công khai |
 | `npm run test:sv-rd` | Bài toán R&D phía SV (cần `TEST_STUDENT_ID=9101`) |
 | `npm run test:auth` | Đăng nhập và phân quyền; **tạm đổi mật khẩu SV 9102**, báo nhóm trước khi chạy |
+| `npm run test:team-join` | Duyệt đơn xin vào nhóm (cần migration 009, `seed_auth.sql`); tạo nhóm tạm `9490`, sửa tạm hồ sơ SV 9601 |
 
-Ba bộ này chưa phủ hết các API; phần còn lại phải thử bằng tay trên giao diện.
+Các bộ này chưa phủ hết các API; phần còn lại phải thử bằng tay trên giao diện.
 
 **Frontend**
 
@@ -190,7 +191,8 @@ Bản chính thức là `database/schema.postgres.sql` cùng `database/migration
 
 - Dùng ID dải 9xxx, toàn bộ là dữ liệu giả. Không đụng dữ liệu ngoài dải này khi thử.
 - Đã dùng: tài khoản `9101`, `9102`, `9111`, `9201`; đề tài `9001`–`9003`;
-  tài nguyên học thuật `9301`–`9306` và nhóm `9301` (`seed_showcase.sql`).
+  tài nguyên học thuật `9301`–`9306` và nhóm `9301` (`seed_showcase.sql`); tin tuyển `9401`–`9402` và đơn `9411`–`9417`
+  (`seed_team_applications.sql`); `9490`–`9501` dành cho `test:team-join`.
 - Dải ID riêng cho từng thành viên: `TBD`.
 - `reset.sql` đặt lại dữ liệu thử của chức năng ứng tuyển, **kể cả khi người khác đang thử** trên cùng CSDL: báo nhóm trước khi chạy.
 
