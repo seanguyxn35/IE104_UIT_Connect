@@ -32,13 +32,13 @@ backend/
 │   │   │   └── cv-pdf.service.js      # dựng PDF của CV bằng trình duyệt chạy ẩn
 │   │   ├── 05-de-tai-cua-toi/         # de-tai.* – /api/student-projects
 │   │   ├── 06-quan-tri-nhom/          # don-gia-nhap.* (duyệt đơn xin vào nhóm), ho-so-nhom.* (tab Thông tin nhóm), anh-nhom.* (ảnh nhóm), loi-moi.* (lời mời), thanh-vien.*, tin-tuyen.*, thanh-tich-nhom.* (3 tab còn lại) – /api/student-teams, /api/student-invitations
-│   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3)
+│   │   ├── 07-cho-ghep-nhom/          # ung-tuyen-lab.* – /api/lab-applications (R1, R2, R3); de-tai-lab.* – /api/lab-topics (tìm kiếm, lọc)
 │   │   └── 09-13-bai-toan-rd/         # bai-toan-rd.* – /api/student-rd-problems
 │   └── dn/
 │       ├── 01-ban-lam-viec/           # ban-lam-viec.* – /api/business-dashboard
 │       ├── 08-hop-thu-ket-noi/        # hop-thu.* – /api/business-inbox
 │       └── 09-16-dam-phan/            # dam-phan.* – /api/business-negotiations
-├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, test:team-invite, test:team-manage, seed:dn-files
+├── scripts/                       # test:public, test:sv-rd, test:auth, test:team-join, test:team-profile, test:team-invite, test:team-manage, test:lab-topics, seed:dn-files
 ├── .env.example                   # mẫu biến môi trường (file .env thật không commit)
 └── package.json
 ```
@@ -69,6 +69,7 @@ npm start                # http://localhost:3000   (npm run dev: tự khởi đ�
 | `GET` / `POST` | `/api/auth/me`, `/api/auth/logout` | Người dùng của phiên → 200 `{ user }` / 401 `UNAUTHENTICATED`; đăng xuất → 204 (thu hồi phiên) |
 | `POST` | `/api/auth/password-reset/request|verify|confirm` | Quên mật khẩu: gửi mã 6 số (202, gửi lại sau 60 giây, mã in ra log máy chủ vì chưa có dịch vụ email) → xác thực mã (200 `{ resetToken }`, 400 `INVALID_CODE`, 410 `CODE_EXPIRED`) → đặt mật khẩu mới (204, 400 `WEAK_PASSWORD`, 410 `TOKEN_EXPIRED`; thu hồi mọi phiên cũ) |
 | `POST` | `/api/lab-applications` | SV (người đăng nhập; `AUTH_MODE=test` không kèm phiên thì dùng `TEST_STUDENT_ID`) ứng tuyển đề tài `{ "topicId": 9001 }` |
+| `GET` | `/api/lab-topics?q=&faculty=&field=&page=&pageSize=` | SV-07: đề tài Lab `Open` / `Filled` còn hạn. `q` ≤ 100 ký tự, tìm theo tên, mô tả, Lab, kỹ năng, GV, đối tác (không phân biệt dấu, mọi từ phải khớp); `faculty` = khoa của Lab (không có Lab thì khoa của GV); `pageSize` 1–24 (mặc định 6); trang vượt quá → trang cuối. → `{ total, page, pageSize, totalPages, items, filters, summary, faculties, fields }`; `fields` có số đề tài tính trước khi áp lĩnh vực; mỗi đề tài có `isFull`, `remaining`, `applied` (người xem đã ứng tuyển). 400 `INVALID_INPUT` |
 | `GET` | `/api/student-skills` | Danh sách kỹ năng trên hồ sơ SV: `{ skills: [{ skillId, name, level, category }] }` |
 | `POST` | `/api/student-skills` | Thêm kỹ năng `{ "name", "level": 1-5, "category": "ai"\|"lang"\|"infra" }` → 201; trùng → 409 `ALREADY_EXISTS` |
 | `DELETE` | `/api/student-skills/:skillId` | Xóa kỹ năng khỏi hồ sơ → 204; không có → 404 `SKILL_NOT_FOUND` |
@@ -152,7 +153,7 @@ Hồ sơ nhóm: dữ liệu thử `database/seed_team_profile.sql`; kiểm thử
 
 **Thành viên, tin tuyển, thành tích nhóm:** cần migration `013`. Rời nhóm, mời ra, chuyển quyền, lưu / đóng / xóa tin chạy bằng hàm CSDL (khóa dòng nhóm); chỉ mục `ux_team_member_leader` chặn hai Leader. Thành tích nhóm là tự khai, ghi thẳng bằng service. Thành viên được chỉ định bằng MSSV, không nhận `studentId`. `GET /api/student-teams/:teamId` trả thêm `portfolio { achievements, works }`; `.../applications` trả thêm `responseRate`. Kiểm thử: `npm run test:team-manage`.
 
-Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
+Phân quyền: `/api/student-*`, `/api/lab-applications`, `/api/lab-topics`, `/api/profile-visibility` chỉ cho vai trò `Student`, `/api/business-*` chỉ cho `Business` (sai vai trò → 403 `FORBIDDEN_ROLE`; không có phiên và `AUTH_MODE=session` → 401 `UNAUTHENTICATED`). Kiểm thử API công khai: `npm run test:public` (chỉ đọc). Kiểm thử đăng nhập: `npm run test:auth` (cần migration 007 + `database/seed_auth.sql`; khởi động lại máy chủ trước mỗi lần).
 
 Kiểm thử API bài toán R&D phía SV (cần máy chủ đang chạy, đã chạy migration 006 + `database/seed_sv_rd.sql`): `npm run test:sv-rd` (tự dọn dữ liệu đã tạo).
 

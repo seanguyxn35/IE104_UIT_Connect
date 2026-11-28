@@ -12,6 +12,7 @@ database/
 ├── seed_showcase.sql        # tài nguyên đã / chưa thẩm định (ID 9301–9306) cho mục "Công trình trưng bày trên CV"
 ├── seed_team_applications.sql  # đơn xin vào nhóm 9301 (tin 9401–9402, đơn 9411–9417); chạy SAU seed_dn, seed_showcase, migration 009
 ├── seed_team_profile.sql    # hồ sơ nhóm 9301: tôn chỉ, khoa, 3 lĩnh vực, kỹ năng, cố vấn GV 9201; chạy SAU migration 010
+├── seed_lab_topics.sql      # 12 đề tài Lab 9011–9022 cho Chợ ghép nhóm (SV-07): tìm kiếm, lọc; chạy SAU seed, seed_dn
 ├── seed_dn.sql              # Dữ liệu thử luồng Doanh nghiệp (DN 9501, 5 bài toán, 15 proposal); chạy lại để đặt lại
 ├── seed_auth.sql            # Đăng nhập: Admin 9001, mật khẩu thử MatKhau@123, email SV dạng MSSV; chạy SAU seed_sv_rd.sql
 ├── seed_sv_rd.sql           # Bài toán R&D phía SV (SV-09/13): 15 bài của DN/Lab khác, chi tiết đề bài V-Tech, nhóm thử 9821–9823; chạy SAU seed_dn.sql
